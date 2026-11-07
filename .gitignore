@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Local design refs / visual compare artifacts
+design/
+compare-out/
+scripts/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
