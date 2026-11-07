@@ -1,0 +1,51 @@
+{
+  "name": "pUser",
+  "title": "User Information",
+  "background": "assets/pages/01_user_info.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "01_user_info.png" },
+    {
+      "type": "Text",
+      "objname": "tOp",
+      "x": 100,
+      "y": 290,
+      "w": 280,
+      "h": 36,
+      "txt": "OP001",
+      "pco": 65535,
+      "note": "Overlay teks Operator ID; sesuaikan posisi di Editor"
+    },
+    {
+      "type": "Text",
+      "objname": "tProj",
+      "x": 100,
+      "y": 390,
+      "w": 280,
+      "h": 36,
+      "txt": "HK Tower",
+      "pco": 65535
+    },
+    {
+      "type": "Text",
+      "objname": "tDate",
+      "x": 100,
+      "y": 490,
+      "w": 280,
+      "h": 36,
+      "txt": "28-09-2026",
+      "pco": 65535
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mSave",
+      "x": 84,
+      "y": 625,
+      "w": 312,
+      "h": 57,
+      "events": { "touchpress": "page pMain" }
+    }
+  ],
+  "events": {
+    "mSave.touchpress": "events/pUser_mSave.txt"
+  }
+}

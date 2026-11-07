@@ -1,0 +1,14 @@
+{
+  "name": "pSet",
+  "title": "Settings",
+  "background": "assets/pages/15_settings.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "15_settings.png" },
+    { "type": "TouchCap", "objname": "mBack", "x": 84, "y": 700, "w": 150, "h": 44, "events": { "touchpress": "page pMain" } },
+    { "type": "TouchCap", "objname": "mSave", "x": 245, "y": 700, "w": 150, "h": 44, "events": { "touchpress": "page pMain" } }
+  ],
+  "events": {
+    "mBack.touchpress": "events/nav_pMain.txt",
+    "mSave.touchpress": "events/nav_pMain.txt"
+  }
+}

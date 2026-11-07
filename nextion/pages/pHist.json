@@ -1,0 +1,14 @@
+{
+  "name": "pHist",
+  "title": "Test History",
+  "background": "assets/pages/13_history.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "13_history.png" },
+    { "type": "TouchCap", "objname": "mBack", "x": 84, "y": 720, "w": 150, "h": 44, "events": { "touchpress": "page pKuat" } },
+    { "type": "TouchCap", "objname": "mDetail", "x": 245, "y": 720, "w": 150, "h": 44, "events": { "touchpress": "page pHistD" } }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pHist_mBack.txt",
+    "mDetail.touchpress": "events/pHist_mDetail.txt"
+  }
+}

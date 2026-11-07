@@ -1,0 +1,54 @@
+{
+  "name": "pMain",
+  "title": "Main Menu",
+  "background": "assets/pages/02_main_menu.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "02_main_menu.png" },
+    {
+      "type": "TouchCap",
+      "objname": "mBase",
+      "x": 85,
+      "y": 330,
+      "w": 310,
+      "h": 64,
+      "label": "BASELINE",
+      "events": { "touchpress": "page pBase" }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mKuat",
+      "x": 85,
+      "y": 409,
+      "w": 310,
+      "h": 64,
+      "label": "KUAT TEKAN",
+      "events": { "touchpress": "page pKuat" }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mSet",
+      "x": 85,
+      "y": 488,
+      "w": 310,
+      "h": 64,
+      "label": "SETTINGS",
+      "events": { "touchpress": "page pSet" }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mDev",
+      "x": 85,
+      "y": 567,
+      "w": 310,
+      "h": 64,
+      "label": "DEVICE INFO",
+      "events": { "touchpress": "page pDev" }
+    }
+  ],
+  "events": {
+    "mBase.touchpress": "events/pMain_mBase.txt",
+    "mKuat.touchpress": "events/pMain_mKuat.txt",
+    "mSet.touchpress": "events/pMain_mSet.txt",
+    "mDev.touchpress": "events/pMain_mDev.txt"
+  }
+}

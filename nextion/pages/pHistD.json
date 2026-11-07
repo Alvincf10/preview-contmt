@@ -1,0 +1,12 @@
+{
+  "name": "pHistD",
+  "title": "Result Detail History",
+  "background": "assets/pages/14_history_detail.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "14_history_detail.png" },
+    { "type": "TouchCap", "objname": "mBack", "x": 84, "y": 720, "w": 312, "h": 44, "events": { "touchpress": "page pHist" } }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pHistD_mBack.txt"
+  }
+}

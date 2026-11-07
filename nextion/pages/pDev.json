@@ -1,0 +1,12 @@
+{
+  "name": "pDev",
+  "title": "Device Info",
+  "background": "assets/pages/16_device_info.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "16_device_info.png" },
+    { "type": "TouchCap", "objname": "mBack", "x": 84, "y": 720, "w": 312, "h": 44, "events": { "touchpress": "page pMain" } }
+  ],
+  "events": {
+    "mBack.touchpress": "events/nav_pMain.txt"
+  }
+}

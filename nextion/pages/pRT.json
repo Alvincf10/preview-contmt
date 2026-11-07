@@ -1,0 +1,19 @@
+{
+  "name": "pRT",
+  "title": "Real Time Measurement",
+  "background": "assets/pages/11_realtime.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "11_realtime.png" },
+    { "type": "Text", "objname": "tS1", "x": 50, "y": 320, "w": 100, "h": 30, "txt": "25.6", "pco": 65535 },
+    { "type": "Text", "objname": "tS2", "x": 190, "y": 320, "w": 100, "h": 30, "txt": "25.8", "pco": 65535 },
+    { "type": "Text", "objname": "tS3", "x": 330, "y": 320, "w": 100, "h": 30, "txt": "25.7", "pco": 65535 },
+    { "type": "Text", "objname": "tAvg", "x": 280, "y": 400, "w": 120, "h": 30, "txt": "25.7", "pco": 65535 },
+    { "type": "TouchCap", "objname": "mBack", "x": 84, "y": 700, "w": 150, "h": 44, "events": { "touchpress": "page pSelB" } },
+    { "type": "TouchCap", "objname": "mNext", "x": 245, "y": 700, "w": 150, "h": 44, "events": { "touchpress": "page pStr" } }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pRT_mBack.txt",
+    "mNext.touchpress": "events/pRT_mNext.txt"
+  },
+  "note": "Update tS1/tS2/tS3/tAvg dari MCU via serial: tS1.txt=\"25.6\""
+}

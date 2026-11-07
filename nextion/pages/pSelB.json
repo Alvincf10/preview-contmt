@@ -1,0 +1,14 @@
+{
+  "name": "pSelB",
+  "title": "Select Baseline",
+  "background": "assets/pages/10_select_baseline.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "10_select_baseline.png" },
+    { "type": "TouchCap", "objname": "mBack", "x": 84, "y": 700, "w": 150, "h": 44, "events": { "touchpress": "page pKuat" } },
+    { "type": "TouchCap", "objname": "mSelect", "x": 245, "y": 700, "w": 150, "h": 44, "events": { "touchpress": "page pRT" } }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pSelB_mBack.txt",
+    "mSelect.touchpress": "events/pSelB_mSelect.txt"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "pKuat",
+  "title": "Kuat Tekan",
+  "background": "assets/pages/09_kuat_tekan.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "09_kuat_tekan.png" },
+    { "type": "TouchCap", "objname": "mStart", "x": 90, "y": 320, "w": 300, "h": 58, "label": "START TEST", "events": { "touchpress": "page pSelB" } },
+    { "type": "TouchCap", "objname": "mHist", "x": 90, "y": 400, "w": 300, "h": 58, "label": "HISTORY", "events": { "touchpress": "page pHist" } },
+    { "type": "TouchCap", "objname": "mBack", "x": 90, "y": 480, "w": 300, "h": 58, "label": "BACK", "events": { "touchpress": "page pMain" } }
+  ],
+  "events": {
+    "mStart.touchpress": "events/pKuat_mStart.txt",
+    "mHist.touchpress": "events/pKuat_mHist.txt",
+    "mBack.touchpress": "events/nav_pMain.txt"
+  }
+}

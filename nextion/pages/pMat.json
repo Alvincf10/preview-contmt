@@ -1,0 +1,32 @@
+{
+  "name": "pMat",
+  "title": "Material Data",
+  "background": "assets/pages/05_material_data.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "05_material_data.png" },
+    {
+      "type": "TouchCap",
+      "objname": "mBack",
+      "x": 84,
+      "y": 596,
+      "w": 150,
+      "h": 40,
+      "label": "BACK",
+      "events": { "touchpress": "page pNewB" }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mNext",
+      "x": 248,
+      "y": 596,
+      "w": 165,
+      "h": 40,
+      "label": "NEXT",
+      "events": { "touchpress": "page pMatu" }
+    }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pMat_mBack.txt",
+    "mNext.touchpress": "events/pMat_mNext.txt"
+  }
+}

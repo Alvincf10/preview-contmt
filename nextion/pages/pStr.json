@@ -1,0 +1,15 @@
+{
+  "name": "pStr",
+  "title": "Strength Prediction Result",
+  "background": "assets/pages/12_strength_result.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "12_strength_result.png" },
+    { "type": "Text", "objname": "tFc", "x": 160, "y": 300, "w": 160, "h": 48, "txt": "35.4", "pco": 65535 },
+    { "type": "TouchCap", "objname": "mBack", "x": 84, "y": 700, "w": 150, "h": 44, "events": { "touchpress": "page pRT" } },
+    { "type": "TouchCap", "objname": "mSave", "x": 245, "y": 700, "w": 150, "h": 44, "events": { "touchpress": "page pHist" } }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pStr_mBack.txt",
+    "mSave.touchpress": "events/pStr_mSave.txt"
+  }
+}

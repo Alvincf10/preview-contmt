@@ -1,0 +1,36 @@
+{
+  "name": "ConMT",
+  "title": "Concrete Maturity Monitoring System",
+  "display": {
+    "width": 480,
+    "height": 800,
+    "orientation": "portrait",
+    "note": "Di Nextion Editor: New Project → Custom → 480 x 800. Model panel sesuaikan (Enhanced/Discovery)."
+  },
+  "editor": {
+    "tool": "Nextion Editor (Windows)",
+    "emulator": "Debug → Simulate / built-in emulator",
+    "output": [".HMI project", ".TFT compile for device"]
+  },
+  "strategy": "image-based",
+  "strategyDetail": "Setiap page memakai PNG design penuh sebagai background. Interaksi via TouchCap (hotspot). Field dinamis (teks/angka) ditambah komponen Text/Number di atas gambar bila perlu.",
+  "pages": [
+    { "id": 0, "name": "pInit", "file": "pages/pInit.json", "asset": "assets/pages/00_init.png" },
+    { "id": 1, "name": "pUser", "file": "pages/pUser.json", "asset": "assets/pages/01_user_info.png" },
+    { "id": 2, "name": "pMain", "file": "pages/pMain.json", "asset": "assets/pages/02_main_menu.png" },
+    { "id": 3, "name": "pBase", "file": "pages/pBase.json", "asset": "assets/pages/03_baseline.png" },
+    { "id": 4, "name": "pNewB", "file": "pages/pNewB.json", "asset": "assets/pages/04_new_baseline.png" },
+    { "id": 5, "name": "pMat", "file": "pages/pMat.json", "asset": "assets/pages/05_material_data.png" },
+    { "id": 6, "name": "pMatu", "file": "pages/pMatu.json", "asset": "assets/pages/06_maturity_data.png" },
+    { "id": 7, "name": "pBaseR", "file": "pages/pBaseR.json", "asset": "assets/pages/07_baseline_result.png" },
+    { "id": 8, "name": "pSaveB", "file": "pages/pSaveB.json", "asset": "assets/pages/08_saved_baseline.png" },
+    { "id": 9, "name": "pKuat", "file": "pages/pKuat.json", "asset": "assets/pages/09_kuat_tekan.png" },
+    { "id": 10, "name": "pSelB", "file": "pages/pSelB.json", "asset": "assets/pages/10_select_baseline.png" },
+    { "id": 11, "name": "pRT", "file": "pages/pRT.json", "asset": "assets/pages/11_realtime.png" },
+    { "id": 12, "name": "pStr", "file": "pages/pStr.json", "asset": "assets/pages/12_strength_result.png" },
+    { "id": 13, "name": "pHist", "file": "pages/pHist.json", "asset": "assets/pages/13_history.png" },
+    { "id": 14, "name": "pHistD", "file": "pages/pHistD.json", "asset": "assets/pages/14_history_detail.png" },
+    { "id": 15, "name": "pSet", "file": "pages/pSet.json", "asset": "assets/pages/15_settings.png" },
+    { "id": 16, "name": "pDev", "file": "pages/pDev.json", "asset": "assets/pages/16_device_info.png" }
+  ]
+}

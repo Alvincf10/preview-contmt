@@ -1,0 +1,47 @@
+{
+  "name": "pInit",
+  "title": "Initialization",
+  "background": "assets/pages/00_init.png",
+  "components": [
+    {
+      "type": "Picture",
+      "objname": "bg",
+      "x": 0,
+      "y": 0,
+      "w": 480,
+      "h": 800,
+      "pic": "00_init.png",
+      "note": "Set as page background atau Picture full-screen"
+    },
+    {
+      "type": "ProgressBar",
+      "objname": "j0",
+      "x": 100,
+      "y": 430,
+      "w": 280,
+      "h": 10,
+      "val": 0,
+      "note": "Opsional: progress bar di atas gambar; sesuaikan Y dari Figma"
+    },
+    {
+      "type": "Text",
+      "objname": "tPct",
+      "x": 340,
+      "y": 400,
+      "w": 60,
+      "h": 24,
+      "txt": "0%",
+      "font": 0
+    },
+    {
+      "type": "Timer",
+      "objname": "tm0",
+      "tim": 500,
+      "en": 1,
+      "note": "Timer init → page pUser"
+    }
+  ],
+  "events": {
+    "tm0.timer": "events/pInit_tm0.txt"
+  }
+}

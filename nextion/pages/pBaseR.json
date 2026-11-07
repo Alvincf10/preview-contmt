@@ -1,0 +1,33 @@
+{
+  "name": "pBaseR",
+  "title": "Baseline Calculation Result",
+  "background": "assets/pages/07_baseline_result.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "07_baseline_result.png" },
+    {
+      "type": "TouchCap",
+      "objname": "mBack",
+      "x": 18,
+      "y": 78,
+      "w": 90,
+      "h": 36,
+      "label": "BACK",
+      "events": { "touchpress": "page pMatu" }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mSave",
+      "x": 140,
+      "y": 736,
+      "w": 200,
+      "h": 48,
+      "label": "SAVE",
+      "note": "Tombol SAVE compact di tengah (~200px), bukan full-width",
+      "events": { "touchpress": "page pSaveB" }
+    }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pBaseR_mBack.txt",
+    "mSave.touchpress": "events/pBaseR_mSave.txt"
+  }
+}

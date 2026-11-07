@@ -1,0 +1,32 @@
+{
+  "name": "pMatu",
+  "title": "Maturity Data Input",
+  "background": "assets/pages/06_maturity_data.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "06_maturity_data.png" },
+    {
+      "type": "TouchCap",
+      "objname": "mBack",
+      "x": 70,
+      "y": 653,
+      "w": 150,
+      "h": 42,
+      "label": "BACK",
+      "events": { "touchpress": "page pMat" }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mGen",
+      "x": 241,
+      "y": 653,
+      "w": 183,
+      "h": 42,
+      "label": "GENERATE BASELINE",
+      "events": { "touchpress": "page pBaseR" }
+    }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pMatu_mBack.txt",
+    "mGen.touchpress": "events/pMatu_mGen.txt"
+  }
+}

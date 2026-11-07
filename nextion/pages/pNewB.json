@@ -1,0 +1,74 @@
+{
+  "name": "pNewB",
+  "title": "New Baseline",
+  "background": "assets/pages/04_new_baseline.png",
+  "note": "Dropdown suhu di Nextion: pakai Text + TouchCap buka page/keyboard ATAU Number komponen. Jangan harapkan HTML select.",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "04_new_baseline.png" },
+    {
+      "type": "Text",
+      "objname": "tName",
+      "x": 100,
+      "y": 280,
+      "w": 280,
+      "h": 36,
+      "txt": "Beton Fc30 BP HKSS Marunda",
+      "pco": 65535
+    },
+    {
+      "type": "Text",
+      "objname": "tFc",
+      "x": 100,
+      "y": 370,
+      "w": 200,
+      "h": 36,
+      "txt": "30",
+      "pco": 65535
+    },
+    {
+      "type": "Text",
+      "objname": "tTemp",
+      "x": 100,
+      "y": 460,
+      "w": 200,
+      "h": 36,
+      "txt": "-20",
+      "pco": 65535,
+      "note": "Nilai datum temperature. Ubah via keyboard / list page."
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mTemp",
+      "x": 90,
+      "y": 450,
+      "w": 240,
+      "h": 42,
+      "label": "open temp picker",
+      "note": "Opsional: page pTempList dengan opsi -20/-10/0/10 lalu print tTemp.txt"
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mBack",
+      "x": 84,
+      "y": 597,
+      "w": 150,
+      "h": 40,
+      "label": "BACK",
+      "events": { "touchpress": "page pBase" }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mNext",
+      "x": 245,
+      "y": 597,
+      "w": 164,
+      "h": 40,
+      "label": "NEXT",
+      "events": { "touchpress": "page pMat" }
+    }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pNewB_mBack.txt",
+    "mNext.touchpress": "events/pNewB_mNext.txt"
+  }
+}

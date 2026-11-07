@@ -1,0 +1,43 @@
+{
+  "name": "pBase",
+  "title": "Baseline",
+  "background": "assets/pages/03_baseline.png",
+  "components": [
+    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "03_baseline.png" },
+    {
+      "type": "TouchCap",
+      "objname": "mBack",
+      "x": 18,
+      "y": 78,
+      "w": 90,
+      "h": 36,
+      "label": "BACK",
+      "events": { "touchpress": "page pMain" }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mNew",
+      "x": 82,
+      "y": 330,
+      "w": 316,
+      "h": 122,
+      "label": "NEW BASELINE",
+      "events": { "touchpress": "page pNewB" }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mSaved",
+      "x": 82,
+      "y": 467,
+      "w": 316,
+      "h": 113,
+      "label": "SAVED BASELINE",
+      "events": { "touchpress": "page pSaveB" }
+    }
+  ],
+  "events": {
+    "mBack.touchpress": "events/pBase_mBack.txt",
+    "mNew.touchpress": "events/pBase_mNew.txt",
+    "mSaved.touchpress": "events/pBase_mSaved.txt"
+  }
+}

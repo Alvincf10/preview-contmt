@@ -1,0 +1,32 @@
+page,objname,label,x,y,w,h,event
+pUser,mSave,SAVE,84,625,312,57,page pMain
+pMain,mBase,BASELINE,85,330,310,64,page pBase
+pMain,mKuat,KUAT TEKAN,85,409,310,64,page pKuat
+pMain,mSet,SETTINGS,85,488,310,64,page pSet
+pMain,mDev,DEVICE INFO,85,567,310,64,page pDev
+pBase,mBack,BACK,18,78,90,36,page pMain
+pBase,mNew,NEW BASELINE,82,330,316,122,page pNewB
+pBase,mSaved,SAVED BASELINE,82,467,316,113,page pSaveB
+pNewB,mBack,BACK,84,597,150,40,page pBase
+pNewB,mNext,NEXT,245,597,164,40,page pMat
+pMat,mBack,BACK,84,596,150,40,page pNewB
+pMat,mNext,NEXT,248,596,165,40,page pMatu
+pMatu,mBack,BACK,70,653,150,42,page pMat
+pMatu,mGen,GENERATE BASELINE,241,653,183,42,page pBaseR
+pBaseR,mBack,BACK,18,78,90,36,page pMatu
+pBaseR,mSave,SAVE,140,736,200,48,page pSaveB
+pKuat,mStart,START TEST,90,320,300,58,page pSelB
+pKuat,mHist,HISTORY,90,400,300,58,page pHist
+pKuat,mBack,BACK,90,480,300,58,page pMain
+pSelB,mBack,BACK,84,700,150,44,page pKuat
+pSelB,mSelect,SELECT,245,700,150,44,page pRT
+pRT,mBack,BACK,84,700,150,44,page pSelB
+pRT,mNext,NEXT,245,700,150,44,page pStr
+pStr,mBack,BACK,84,700,150,44,page pRT
+pStr,mSave,SAVE RESULT,245,700,150,44,page pHist
+pHist,mBack,BACK,84,720,150,44,page pKuat
+pHist,mDetail,VIEW DETAIL,245,720,150,44,page pHistD
+pHistD,mBack,BACK,84,720,312,44,page pHist
+pSet,mBack,BACK,84,700,150,44,page pMain
+pSet,mSave,SAVE,245,700,150,44,page pMain
+pDev,mBack,BACK,84,720,312,44,page pMain
