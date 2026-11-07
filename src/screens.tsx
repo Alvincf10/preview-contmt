@@ -611,7 +611,7 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
       <div className="br-stage">
         <header className="br-title-block">
           <h1 className="br-title">BASELINE CALCULATION RESULT</h1>
-          <div className="panel-rule" />
+          <div className="panel-rule panel-rule-short br-title-rule" />
         </header>
 
         <div className="br-cards">
@@ -646,8 +646,8 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
               <span className="num">3</span>
               <h3>Equation and Coefficient</h3>
             </div>
-            <div className="br-inner">
-              <div className="equation">fc = −61.967 + 9.4932 ln(M)</div>
+            <div className="br-inner br-inner-eq">
+              <div className="br-equation">fc = −61.967 + 9.4932 ln(M)</div>
               <div className="br-kv">
                 <span>Coefficient a</span>
                 <span className="br-colon">:</span>
@@ -664,9 +664,8 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
 
         <div className="br-save">
           <BtnPrimary
-            compact
             className="br-save-btn"
-            iconLeft={<IconSave className="ico ico-md" />}
+            iconLeft={<IconSave className="ico ico-md ico-white" />}
             onClick={save}
           >
             SAVE
@@ -793,47 +792,68 @@ export function KuatTekanMenuScreen({ go }: Props) {
 }
 
 export function SelectBaselineScreen({ state, setState, go }: Props) {
+  const select = (id: string) => setState((s) => ({ ...s, selectedBaselineId: id }))
+
   return (
     <Screen
       title="SELECT BASELINE"
       footer={
         <NavFooter
           onBack={() => go('kuatTekanMenu')}
-          onNext={() => go('realtime')}
+          onNext={() => {
+            if (!state.selectedBaselineId) return
+            go('realtime')
+          }}
           nextLabel="SELECT"
         />
       }
     >
       <div className="stack gap-sm">
-        {state.baselines.map((b) => (
-          <div
-            key={b.id}
-            className={`baseline-card selectable${state.selectedBaselineId === b.id ? ' selected' : ''}`}
-          >
-            <IconDatabase className="ico ico-accent card-ico" />
-            <div className="baseline-card-body">
-              <strong>{b.name}</strong>
-              <div className="triple">
-                <span>
-                  Target Fc' <b>{b.targetFc} MPa</b>
-                </span>
-                <span>
-                  Datum Temp. <b>{b.datumTemp} °C</b>
-                </span>
-                <span>
-                  Created <b>{b.createdAt}</b>
-                </span>
-              </div>
-            </div>
-            <button
-              type="button"
-              className="mini-btn orange"
-              onClick={() => setState((s) => ({ ...s, selectedBaselineId: b.id }))}
+        {state.baselines.map((b) => {
+          const selected = state.selectedBaselineId === b.id
+          return (
+            <div
+              key={b.id}
+              role="button"
+              tabIndex={0}
+              aria-pressed={selected}
+              className={`baseline-card selectable${selected ? ' selected' : ''}`}
+              onClick={() => select(b.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  select(b.id)
+                }
+              }}
             >
-              SELECT
-            </button>
-          </div>
-        ))}
+              <IconDatabase className="ico ico-accent card-ico" />
+              <div className="baseline-card-body">
+                <strong>{b.name}</strong>
+                <div className="triple">
+                  <span>
+                    Target Fc' <b>{b.targetFc} MPa</b>
+                  </span>
+                  <span>
+                    Datum Temp. <b>{b.datumTemp} °C</b>
+                  </span>
+                  <span>
+                    Created <b>{b.createdAt}</b>
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                className={`mini-btn orange${selected ? ' active' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  select(b.id)
+                }}
+              >
+                SELECT
+              </button>
+            </div>
+          )
+        })}
       </div>
     </Screen>
   )
@@ -861,22 +881,25 @@ export function RealtimeScreen({ state, go }: Props) {
   return (
     <Screen
       title="REAL TIME MEASUREMENT"
+      className="screen-realtime"
+      rule="short"
       footer={<NavFooter onBack={() => go('selectBaseline')} onNext={() => go('strengthResult')} />}
     >
-      <div className="stack">
-        <div className="info-card">
-          <IconDoc className="ico ico-accent" />
-          <div>
-            <div>
-              Baseline Name: <b>{baseline?.name}</b>
-            </div>
-            <div className="split-line">
-              <span>
-                Target Fc': <b>{baseline?.targetFc} MPa</b>
-              </span>
-              <span>
-                Datum Temp.: <b>{baseline?.datumTemp} °C</b>
-              </span>
+      <div className="stack rt-stack">
+        <div className="info-card rt-baseline">
+          <IconDoc className="ico ico-accent rt-baseline-ico" />
+          <div className="rt-baseline-body">
+            <span className="rt-label">Baseline Name</span>
+            <strong className="rt-baseline-name">{baseline?.name}</strong>
+            <div className="rt-baseline-split">
+              <div>
+                <span className="rt-label">Target Fc'</span>
+                <b>{baseline?.targetFc} MPa</b>
+              </div>
+              <div>
+                <span className="rt-label">Datum Temp.</span>
+                <b>{baseline?.datumTemp} °C</b>
+              </div>
             </div>
           </div>
         </div>
@@ -902,7 +925,7 @@ export function RealtimeScreen({ state, go }: Props) {
             <IconClock className="ico ico-accent" />
             REAL TIME MONITORING
           </div>
-          <div className="monitor-grid">
+          <div className="monitor-grid three">
             <div>
               <span>Elapsed Time</span>
               <strong>
@@ -918,7 +941,10 @@ export function RealtimeScreen({ state, go }: Props) {
             </div>
             <div>
               <span>Status</span>
-              <StatusPill>RUNNING</StatusPill>
+              <StatusPill>
+                <span className="status-spin" aria-hidden />
+                RUNNING
+              </StatusPill>
             </div>
           </div>
         </div>
@@ -1346,10 +1372,10 @@ function Stepper({
       {label ? <span>{label}</span> : null}
       <strong>{value}</strong>
       <div className="stepper-arrows">
-        <button type="button" onClick={onUp}>
+        <button type="button" aria-label="Increase" onClick={onUp}>
           ▴
         </button>
-        <button type="button" onClick={onDown}>
+        <button type="button" aria-label="Decrease" onClick={onDown}>
           ▾
         </button>
       </div>

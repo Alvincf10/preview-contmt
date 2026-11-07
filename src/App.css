@@ -376,11 +376,13 @@ select {
   border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
+/* Baseline Calculation Result — measured from design PNG 480×800
+   cards x≈28 w≈424; SAVE ≈277×36; title rule ≈82px short */
 .br-back {
   position: absolute;
   z-index: 3;
   top: calc(var(--brand-h) + 24px);
-  left: 36px;
+  left: 28px;
 }
 
 .br-stage {
@@ -390,23 +392,31 @@ select {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  padding: 0 36px 14px;
+  padding: 0 28px 14px;
   overflow: hidden;
 }
 
 .br-title-block {
   flex-shrink: 0;
-  /* Clears absolute BACK chip (24px offset + ~34px height + gap) */
   margin-top: 62px;
-  margin-bottom: 10px;
+  margin-bottom: 28px;
 }
 
 .br-title {
   margin: 0;
-  font-size: 20px;
-  font-weight: var(--fw-bold);
-  letter-spacing: 0.02em;
+  font-size: 18px;
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.03em;
   line-height: 1.15;
+  text-align: center;
+}
+
+.br-title-block .br-title-rule {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 8px;
+  width: 82px;
+  height: 3px;
 }
 
 .br-cards {
@@ -414,7 +424,7 @@ select {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   overflow: hidden;
 }
 
@@ -424,10 +434,23 @@ select {
   gap: 6px;
   min-height: 0;
   flex: 0 1 auto;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--line);
   background: rgba(18, 22, 28, 0.82);
   padding: 8px 10px 8px;
+}
+
+.br-card:nth-child(1) {
+  flex: 0 1 175px;
+}
+
+.br-card:nth-child(2) {
+  flex: 1 1 212px;
+  max-height: 212px;
+}
+
+.br-card:nth-child(3) {
+  flex: 0 0 127px;
 }
 
 .br-card-head {
@@ -455,10 +478,19 @@ select {
   background: rgba(0, 0, 0, 0.22);
   padding: 2px 10px;
   min-height: 0;
+  overflow: hidden;
 }
 
 .br-inner-chart {
   padding: 4px 4px 2px;
+  flex: 1 1 auto;
+}
+
+.br-inner-eq {
+  padding: 6px 10px 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .br-kv {
@@ -493,28 +525,49 @@ select {
   overflow-wrap: anywhere;
 }
 
-.br-inner .equation {
-  margin: 6px 0 4px;
-  text-align: left;
+.br-equation {
+  margin: 0 0 6px;
+  padding: 8px 10px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.01em;
+  color: var(--orange);
+  border: 1.5px solid var(--orange);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
 }
 
 .br-save {
   flex-shrink: 0;
-  margin-top: 10px;
+  margin-top: 8px;
   display: flex;
   justify-content: center;
 }
 
-.br-save-btn {
-  width: 200px;
-  min-height: 48px;
-  border-radius: 12px;
-  gap: 10px;
-  padding: 0 22px;
+.btn.btn-orange.br-save-btn {
+  width: 277px;
+  min-height: 40px;
+  height: 40px;
+  border-radius: 10px;
+  gap: 0;
+  padding: 0 0 0 14px;
+  justify-content: flex-start;
 }
 
-.br-save-btn .btn-label {
-  flex: 0 0 auto;
+.btn.btn-orange.br-save-btn .btn-divider {
+  margin: 0 12px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.btn.btn-orange.br-save-btn .btn-label {
+  flex: 1;
+  text-align: center;
+  padding-right: 28px;
+  font-size: 15px;
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.06em;
 }
 
 .stack {
@@ -1237,6 +1290,7 @@ select {
 .baseline-card.selectable,
 .history-card.selectable {
   cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .baseline-card.selectable:hover {
@@ -1245,8 +1299,13 @@ select {
 
 .baseline-card.selected,
 .history-card.selected {
-  border-color: var(--orange);
-  box-shadow: 0 0 0 1px var(--orange);
+  border: 2px solid var(--orange);
+  box-shadow: 0 0 0 1px rgba(255, 127, 0, 0.35);
+  background: rgba(255, 127, 0, 0.08);
+}
+
+.mini-btn.orange.active {
+  box-shadow: inset 0 0 0 1px #fff;
 }
 
 .baseline-card-body {
@@ -1399,11 +1458,24 @@ select {
 
 .avg-bar {
   display: grid;
-  grid-template-columns: 24px 1fr auto;
+  grid-template-columns: 24px auto 1fr;
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  border-color: rgba(255, 127, 0, 0.55);
+  border: 1.5px solid rgba(242, 124, 10, 0.85);
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.avg-bar span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.avg-bar strong {
+  justify-self: start;
+  color: #fff;
+  font-size: 18px;
+  font-weight: var(--fw-heavy);
 }
 
 .monitor-card {
@@ -1422,7 +1494,7 @@ select {
 .monitor-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 0;
 }
 
 .monitor-grid > div,
@@ -1431,7 +1503,7 @@ select {
   flex-direction: column;
   gap: 4px;
   align-items: flex-start;
-  padding: 4px 6px;
+  padding: 4px 8px;
   border-right: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 11px;
   color: var(--muted);
@@ -1446,6 +1518,7 @@ select {
 .detail-grid strong {
   color: #fff;
   font-size: 14px;
+  font-weight: var(--fw-heavy);
 }
 
 .monitor-grid small {
@@ -1458,7 +1531,6 @@ select {
 .monitor-grid.three > div {
   align-items: center;
   text-align: center;
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .status-pill {
@@ -1481,6 +1553,175 @@ select {
 .status-pill .ico {
   width: 14px;
   height: 14px;
+}
+
+.status-spin {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  animation: status-spin 0.8s linear infinite;
+}
+
+@keyframes status-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Real Time Measurement — design PNG 480×800
+   panel ≈442×500 @ y211; title ~17px one-line; short rule ~50px */
+.screen-realtime .stage {
+  display: block;
+  position: relative;
+  padding: 0;
+}
+
+.screen-realtime .panel {
+  position: absolute;
+  top: 147px; /* 211 - brand 64 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 442px;
+  max-width: 442px;
+  margin: 0;
+  max-height: none;
+}
+
+.screen-realtime .panel-head {
+  padding: 18px 16px 0;
+}
+
+.screen-realtime .panel-title {
+  font-size: 17px;
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.screen-realtime .panel-rule {
+  width: 50px;
+  height: 3px;
+  margin-top: 8px;
+}
+
+.screen-realtime .panel-body {
+  padding: 12px 16px 8px;
+  flex: 0 0 auto;
+}
+
+.screen-realtime .panel-footer {
+  padding: 8px 16px 14px;
+}
+
+.screen-realtime .rt-stack {
+  gap: 10px;
+  margin: 0;
+}
+
+.screen-realtime .rt-baseline {
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  padding: 10px 12px;
+  align-items: start;
+}
+
+.screen-realtime .rt-baseline-ico {
+  width: 52px;
+  height: 52px;
+  margin-top: 2px;
+}
+
+.screen-realtime .rt-baseline-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.screen-realtime .rt-label {
+  font-size: 11px;
+  font-weight: var(--fw-regular);
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+.screen-realtime .rt-baseline-name {
+  font-size: 14px;
+  font-weight: var(--fw-heavy);
+  color: #fff;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.screen-realtime .rt-baseline-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.screen-realtime .rt-baseline-split > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 10px;
+}
+
+.screen-realtime .rt-baseline-split > div:first-child {
+  padding-left: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.screen-realtime .rt-baseline-split b {
+  font-size: 13px;
+  font-weight: var(--fw-heavy);
+  color: #fff;
+}
+
+.screen-realtime .sensor-box {
+  padding: 8px 4px 10px;
+  gap: 3px;
+}
+
+.screen-realtime .sensor-box span {
+  color: rgba(242, 124, 10, 0.95);
+  font-size: 11px;
+  font-weight: var(--fw-medium);
+}
+
+.screen-realtime .sensor-box strong {
+  font-size: 16px;
+  font-weight: var(--fw-heavy);
+}
+
+.screen-realtime .avg-bar {
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  gap: 10px;
+}
+
+.screen-realtime .avg-bar strong {
+  font-size: 17px;
+}
+
+.screen-realtime .monitor-head {
+  font-size: 12px;
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
+}
+
+.screen-realtime .monitor-grid strong {
+  font-size: 15px;
+}
+
+.screen-realtime .status-pill {
+  margin-top: 2px;
 }
 
 .predict-box {
@@ -1934,6 +2175,9 @@ select {
 .stepper-arrows {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  margin: -4px -2px -4px 0;
 }
 
 .stepper-arrows button {
@@ -1942,8 +2186,18 @@ select {
   color: var(--orange);
   cursor: pointer;
   line-height: 1;
-  padding: 0;
+  min-width: 28px;
+  min-height: 22px;
+  padding: 0 4px;
   font-size: 12px;
+  display: grid;
+  place-items: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.stepper-arrows button:active {
+  color: var(--orange-deep);
+  transform: scale(0.92);
 }
 
 .info-bar {
