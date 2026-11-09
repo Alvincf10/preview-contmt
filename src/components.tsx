@@ -21,7 +21,7 @@ export function Screen({
   overlay,
   bodyClassName,
   className,
-  rule = 'full',
+  rule = 'short',
 }: {
   title?: string
   subtitle?: string

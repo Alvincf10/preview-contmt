@@ -221,21 +221,16 @@ select {
   font-size: 30px;
 }
 
-/* Design default: rule spans content width (Main/User/Baseline ≈292–312px) */
-.panel-rule {
-  width: 100%;
+/* Title accent rule — short, left-aligned on every screen */
+.panel-rule,
+.panel-rule-short {
+  width: 72px;
   height: 3px;
-  margin-top: 14px;
+  margin-top: 10px;
+  margin-left: 0;
+  margin-right: auto;
   background: var(--orange);
   border-radius: 1px;
-}
-
-.panel-rule-short {
-  width: 78px;
-  height: 4px;
-  margin-top: 8px;
-  margin-right: auto;
-  border-radius: 2px;
 }
 
 .panel-sub {
