@@ -1883,12 +1883,49 @@ select {
   margin-bottom: 8px;
 }
 
+.screen-realtime .rt-time-row {
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.screen-realtime .rt-time-row > div,
+.screen-realtime .rt-metrics-row > div {
+  align-items: flex-start;
+  text-align: left;
+  padding: 2px 8px;
+}
+
+.screen-realtime .rt-time-row > div:first-child,
+.screen-realtime .rt-metrics-row > div:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  padding-left: 2px;
+}
+
+.screen-realtime .rt-time-row > div:last-child,
+.screen-realtime .rt-metrics-row > div:last-child {
+  padding-right: 2px;
+  text-align: right;
+  align-items: flex-end;
+  border-right: none;
+}
+
+.screen-realtime .rt-metrics-row {
+  grid-template-columns: 1fr 1fr;
+}
+
 .screen-realtime .monitor-grid > div {
   padding: 2px 6px;
 }
 
 .screen-realtime .monitor-grid strong {
   font-size: 14px;
+}
+
+.screen-realtime .rt-clock {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
 }
 
 .screen-realtime .status-pill {

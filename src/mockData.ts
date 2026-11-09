@@ -72,6 +72,13 @@ export const initialState: AppState = {
     },
   ],
   selectedBaselineId: 'b1',
+  measurement: {
+    pourStartMs: null,
+    endMs: null,
+    avgTemp: 25.7,
+    maturityIndex: 0,
+    sensorTemps: [25.6, 25.8, 25.7],
+  },
   history: [
     {
       id: 'h1',

@@ -57,6 +57,14 @@ export type TestRecord = {
   status: 'COMPLETED' | 'RUNNING'
 }
 
+export type MeasurementSession = {
+  pourStartMs: number | null
+  endMs: number | null
+  avgTemp: number
+  maturityIndex: number
+  sensorTemps: [number, number, number]
+}
+
 export type AppState = {
   operatorId: string
   projectName: string
@@ -79,6 +87,7 @@ export type AppState = {
   }
   baselines: Baseline[]
   selectedBaselineId: string | null
+  measurement: MeasurementSession
   history: TestRecord[]
   selectedHistoryId: string | null
   settings: {

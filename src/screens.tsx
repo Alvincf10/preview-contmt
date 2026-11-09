@@ -833,6 +833,16 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
           onBack={() => go('kuatTekanMenu')}
           onNext={() => {
             if (!state.selectedBaselineId) return
+            setState((s) => ({
+              ...s,
+              measurement: {
+                pourStartMs: null,
+                endMs: null,
+                avgTemp: 25.7,
+                maturityIndex: 0,
+                sensorTemps: [25.6, 25.8, 25.7],
+              },
+            }))
             go('realtime')
           }}
           nextLabel="SELECT"
@@ -892,30 +902,82 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
   )
 }
 
-export function RealtimeScreen({ state, go }: Props) {
+function formatClock(d: Date) {
+  const hh = String(d.getHours()).padStart(2, '0')
+  const mm = String(d.getMinutes()).padStart(2, '0')
+  const ss = String(d.getSeconds()).padStart(2, '0')
+  return `${hh}:${mm}:${ss}`
+}
+
+function formatElapsed(totalSec: number) {
+  const sec = Math.max(0, Math.floor(totalSec))
+  const hh = String(Math.floor(sec / 3600)).padStart(2, '0')
+  const mm = String(Math.floor((sec % 3600) / 60)).padStart(2, '0')
+  const ss = String(sec % 60).padStart(2, '0')
+  return `${hh}:${mm}:${ss}`
+}
+
+export function RealtimeScreen({ state, setState, go }: Props) {
   const baseline = selectedBaseline(state)
-  const [temps, setTemps] = useState([25.6, 25.8, 25.7])
-  const [elapsed, setElapsed] = useState(3 * 3600 + 25 * 60 + 10)
+  const [temps, setTemps] = useState<[number, number, number]>([25.6, 25.8, 25.7])
+  const pourStartRef = useRef(
+    state.measurement.pourStartMs ? new Date(state.measurement.pourStartMs) : new Date(),
+  )
+  const [now, setNow] = useState(() => new Date())
+  const [elapsed, setElapsed] = useState(() =>
+    state.measurement.pourStartMs
+      ? Math.max(0, Math.floor((Date.now() - state.measurement.pourStartMs) / 1000))
+      : 0,
+  )
+
+  useEffect(() => {
+    const startMs = pourStartRef.current.getTime()
+    setState((s) =>
+      s.measurement.pourStartMs === startMs
+        ? s
+        : {
+            ...s,
+            measurement: { ...s.measurement, pourStartMs: startMs, endMs: null },
+          },
+    )
+  }, [setState])
 
   useEffect(() => {
     const t = window.setInterval(() => {
       setElapsed((e) => e + 1)
-      setTemps((prev) => prev.map((v) => +(v + (Math.random() - 0.5) * 0.15).toFixed(1)))
+      setNow(new Date())
+      setTemps((prev) =>
+        prev.map((v) => +(v + (Math.random() - 0.5) * 0.15).toFixed(1)) as [number, number, number],
+      )
     }, 1000)
     return () => window.clearInterval(t)
   }, [])
 
   const avg = +(temps.reduce((a, b) => a + b, 0) / temps.length).toFixed(1)
-  const hh = String(Math.floor(elapsed / 3600)).padStart(2, '0')
-  const mm = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0')
-  const ss = String(elapsed % 60).padStart(2, '0')
   const maturity = Math.round(elapsed / 10)
+  const pourStart = formatClock(pourStartRef.current)
+  const currentTime = formatClock(now)
+
+  const goToResult = () => {
+    const endMs = Date.now()
+    setState((s) => ({
+      ...s,
+      measurement: {
+        pourStartMs: pourStartRef.current.getTime(),
+        endMs,
+        avgTemp: avg,
+        maturityIndex: maturity,
+        sensorTemps: temps,
+      },
+    }))
+    go('strengthResult')
+  }
 
   return (
     <Screen
       title="REAL TIME MEASUREMENT"
       className="screen-realtime"
-      footer={<NavFooter onBack={() => go('selectBaseline')} onNext={() => go('strengthResult')} />}
+      footer={<NavFooter onBack={() => go('selectBaseline')} onNext={goToResult} />}
     >
       <div className="stack rt-stack">
         <div className="info-card rt-baseline">
@@ -960,13 +1022,17 @@ export function RealtimeScreen({ state, go }: Props) {
             <IconClock className="ico ico-accent" />
             REAL TIME MONITORING
           </div>
-          <div className="monitor-grid three">
+          <div className="monitor-grid two rt-time-row">
             <div>
-              <span>Elapsed Time</span>
-              <strong>
-                {hh}:{mm}:{ss}
-              </strong>
+              <span>Initial Pour Time</span>
+              <strong>{pourStart}</strong>
             </div>
+            <div>
+              <span>Current Time</span>
+              <strong className="rt-clock">{currentTime}</strong>
+            </div>
+          </div>
+          <div className="monitor-grid two rt-metrics-row">
             <div>
               <span>Maturity Index</span>
               <strong>
@@ -991,6 +1057,12 @@ export function RealtimeScreen({ state, go }: Props) {
 export function StrengthResultScreen({ state, setState, go }: Props) {
   const baseline = selectedBaseline(state)
   const strength = 35.4
+  const m = state.measurement
+  const pourStartMs = m.pourStartMs ?? Date.now()
+  const endMs = m.endMs ?? Date.now()
+  const elapsedLabel = formatElapsed((endMs - pourStartMs) / 1000)
+  const avgTemp = m.avgTemp
+  const maturityIndex = m.maturityIndex
 
   const save = () => {
     setState((s) => ({
@@ -1001,12 +1073,12 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
           testId: `TEST-${String(s.history.length + 1).padStart(3, '0')}`,
           baselineName: baseline?.name ?? '—',
           date: fmtDate(s.date),
-          time: '10:24:15',
+          time: formatClock(new Date(endMs)),
           strengthMpa: strength,
-          avgTemp: 25.7,
-          maturityIndex: 1245,
-          elapsed: '03:25:10',
-          sensorTemps: [25.6, 25.8, 25.7],
+          avgTemp,
+          maturityIndex,
+          elapsed: elapsedLabel,
+          sensorTemps: s.measurement.sensorTemps,
           operatorId: s.operatorId,
           project: s.projectName,
           targetFc: baseline?.targetFc ?? 0,
@@ -1062,20 +1134,20 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
           <div className="sr-metric">
             <IconThermo className="ico ico-accent" />
             <span>Average Temperature</span>
-            <strong>25.7 °C</strong>
+            <strong>{avgTemp.toFixed(1)} °C</strong>
           </div>
           <div className="sr-metric">
             <IconChart className="ico ico-accent" />
             <span>Maturity Index</span>
             <strong>
-              1,245
+              {maturityIndex.toLocaleString()}
               <small>°C·hour</small>
             </strong>
           </div>
           <div className="sr-metric">
             <IconClock className="ico ico-accent" />
             <span>Elapsed Time</span>
-            <strong>03:25:10</strong>
+            <strong>{elapsedLabel}</strong>
           </div>
         </div>
 
