@@ -115,27 +115,27 @@ export function UserInfoScreen({ state, setState, go }: Props) {
     <Screen
       title="USER INFORMATION"
       footer={
-        <BtnPrimary block iconLeft={<IconSave className="ico ico-md" />} onClick={() => go('main')}>
+        <BtnPrimary block iconLeft={<IconSave className="ico ico-xl ico-white" />} onClick={() => go('main')}>
           SAVE
         </BtnPrimary>
       }
     >
       <div className="stack">
-        <FieldBlock label="Operator ID" icon={<IconUser className="ico ico-sm ico-white" />}>
+        <FieldBlock label="Operator ID" icon={<IconUser className="ico ico-xl ico-white" />}>
           <TextInput
             value={state.operatorId}
             placeholder="Enter Operator ID"
             onChange={(e) => setState((s) => ({ ...s, operatorId: e.target.value }))}
           />
         </FieldBlock>
-        <FieldBlock label="Project Name" icon={<IconDoc className="ico ico-sm ico-white" />}>
+        <FieldBlock label="Project Name" icon={<IconDoc className="ico ico-xl ico-white" />}>
           <TextInput
             value={state.projectName}
             placeholder="Enter Project Name"
             onChange={(e) => setState((s) => ({ ...s, projectName: e.target.value }))}
           />
         </FieldBlock>
-        <FieldBlock label="Date" icon={<IconCalendar className="ico ico-sm ico-white" />}>
+        <FieldBlock label="Date" icon={<IconCalendar className="ico ico-xl ico-white" />}>
           <div className="input-with-icon">
             <TextInput
               type="date"
@@ -214,6 +214,7 @@ export function NewBaselineScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="NEW BASELINE"
+      rule="short"
       footer={<NavFooter onBack={() => go('baselineMenu')} onNext={() => go('materialData')} />}
     >
       <div className="stack">
@@ -283,6 +284,7 @@ export function MaterialDataScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="MATERIAL DATA"
+      rule="short"
       footer={<NavFooter onBack={() => go('newBaseline')} onNext={() => go('maturityData')} />}
     >
       <div className="stack">
@@ -292,7 +294,7 @@ export function MaterialDataScreen({ state, setState, go }: Props) {
         <div className="material-row readonly">
           <span>W/C Ratio</span>
           <input className="text-input compact" value={wc} readOnly />
-          <span className="hint">Auto Calculated</span>
+          <UnitBox>Auto Calculated</UnitBox>
         </div>
         <MaterialRow
           label="Coarse Aggregate"
@@ -665,7 +667,7 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
         <div className="br-save">
           <BtnPrimary
             className="br-save-btn"
-            iconLeft={<IconSave className="ico ico-md ico-white" />}
+            iconLeft={<IconSave className="ico ico-xl ico-white" />}
             onClick={save}
           >
             SAVE
@@ -677,11 +679,28 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
 }
 
 export function SavedBaselineScreen({ state, setState, go }: Props) {
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
   const select = (id: string) => setState((s) => ({ ...s, selectedBaselineId: id }))
+  const pending = state.baselines.find((b) => b.id === pendingDeleteId) ?? null
+
+  const confirmDelete = () => {
+    if (!pendingDeleteId) return
+    const id = pendingDeleteId
+    setPendingDeleteId(null)
+    setState((s) => {
+      const next = s.baselines.filter((x) => x.id !== id)
+      return {
+        ...s,
+        baselines: next,
+        selectedBaselineId: s.selectedBaselineId === id ? next[0]?.id ?? null : s.selectedBaselineId,
+      }
+    })
+  }
 
   return (
     <Screen
       title="SAVED BASELINE"
+      rule="short"
       footer={
         <NavFooter
           onBack={() => go('baselineMenu')}
@@ -691,6 +710,26 @@ export function SavedBaselineScreen({ state, setState, go }: Props) {
           }}
           nextLabel="SELECT"
         />
+      }
+      overlay={
+        pending ? (
+          <ConfirmDialog
+            title="Delete baseline?"
+            body={
+              <>
+                <div>
+                  <strong>{pending.name}</strong>
+                </div>
+                <div>
+                  Target Fc&apos;: {pending.targetFc} MPa · Datum: {pending.datumTemp} °C
+                </div>
+                <p>This baseline will be removed from the saved list.</p>
+              </>
+            }
+            onCancel={() => setPendingDeleteId(null)}
+            onConfirm={confirmDelete}
+          />
+        ) : null
       }
     >
       <div className="stack gap-sm">
@@ -712,7 +751,6 @@ export function SavedBaselineScreen({ state, setState, go }: Props) {
             >
               <IconDatabase className="ico ico-accent card-ico" />
               <div className="baseline-card-body">
-                <span className="mini-label">Baseline Name</span>
                 <strong>{b.name}</strong>
                 <div className="triple">
                   <span>
@@ -729,7 +767,7 @@ export function SavedBaselineScreen({ state, setState, go }: Props) {
               <div className="card-actions">
                 <button
                   type="button"
-                  className="mini-btn orange"
+                  className={`mini-btn orange${selected ? ' active' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation()
                     select(b.id)
@@ -742,15 +780,7 @@ export function SavedBaselineScreen({ state, setState, go }: Props) {
                   className="mini-btn dark"
                   onClick={(e) => {
                     e.stopPropagation()
-                    setState((s) => {
-                      const next = s.baselines.filter((x) => x.id !== b.id)
-                      return {
-                        ...s,
-                        baselines: next,
-                        selectedBaselineId:
-                          s.selectedBaselineId === b.id ? next[0]?.id ?? null : s.selectedBaselineId,
-                      }
-                    })
+                    setPendingDeleteId(b.id)
                   }}
                 >
                   DELETE
@@ -797,6 +827,7 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="SELECT BASELINE"
+      rule="short"
       footer={
         <NavFooter
           onBack={() => go('kuatTekanMenu')}
@@ -841,16 +872,18 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
                   </span>
                 </div>
               </div>
-              <button
-                type="button"
-                className={`mini-btn orange${selected ? ' active' : ''}`}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  select(b.id)
-                }}
-              >
-                SELECT
-              </button>
+              <div className="card-actions">
+                <button
+                  type="button"
+                  className={`mini-btn orange${selected ? ' active' : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    select(b.id)
+                  }}
+                >
+                  SELECT
+                </button>
+              </div>
             </div>
           )
         })}
@@ -882,7 +915,6 @@ export function RealtimeScreen({ state, go }: Props) {
     <Screen
       title="REAL TIME MEASUREMENT"
       className="screen-realtime"
-      rule="short"
       footer={<NavFooter onBack={() => go('selectBaseline')} onNext={() => go('strengthResult')} />}
     >
       <div className="stack rt-stack">
@@ -907,7 +939,7 @@ export function RealtimeScreen({ state, go }: Props) {
         <div className="sensor-row">
           {temps.map((t, i) => (
             <div key={i} className="sensor-box">
-              <IconThermo className="ico ico-accent" />
+              <IconThermo className="ico ico-accent ico-md" />
               <span>Sensor {i + 1}</span>
               <strong>{t.toFixed(1)} °C</strong>
             </div>
@@ -915,9 +947,12 @@ export function RealtimeScreen({ state, go }: Props) {
         </div>
 
         <div className="avg-bar">
-          <IconChart className="ico ico-accent" />
-          <span>Average</span>
+          <div className="avg-bar-left">
+            <IconChart className="ico ico-accent" />
+            <span>Average</span>
+          </div>
           <strong>{avg.toFixed(1)} °C</strong>
+          <span className="avg-bar-spacer" aria-hidden />
         </div>
 
         <div className="monitor-card">
@@ -987,17 +1022,19 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="STRENGTH PREDICTION RESULT"
+      className="screen-strength-result"
+      rule="short"
       footer={
         <NavFooter onBack={() => go('realtime')} onNext={save} nextLabel="SAVE RESULT" />
       }
     >
-      <div className="stack">
-        <div className="info-card">
-          <IconDoc className="ico ico-accent" />
-          <div>
+      <div className="stack sr-stack">
+        <div className="info-card sr-baseline">
+          <IconDoc className="ico ico-accent sr-baseline-ico" />
+          <div className="sr-baseline-body">
             <span className="mini-label">Baseline Name</span>
-            <strong>{baseline?.name}</strong>
-            <div className="split-line">
+            <strong className="sr-baseline-name">{baseline?.name}</strong>
+            <div className="split-line sr-baseline-split">
               <span>
                 <span className="mini-label">Target Fc'</span>
                 <b>{baseline?.targetFc} MPa</b>
@@ -1011,27 +1048,31 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
         </div>
 
         <div className="predict-box">
-          <IconChart className="ico ico-accent" />
-          <div>
+          <div className="predict-box-left">
+            <IconChart className="ico ico-accent" />
+          </div>
+          <div className="predict-box-main">
             <span className="mini-label">Predicted Fc'</span>
             <strong className="huge">{strength.toFixed(1)} MPa</strong>
           </div>
+          <span className="predict-box-spacer" aria-hidden />
         </div>
 
-        <div className="monitor-grid three">
-          <div>
+        <div className="sr-metrics">
+          <div className="sr-metric">
             <IconThermo className="ico ico-accent" />
             <span>Average Temperature</span>
             <strong>25.7 °C</strong>
           </div>
-          <div>
+          <div className="sr-metric">
             <IconChart className="ico ico-accent" />
             <span>Maturity Index</span>
             <strong>
-              1,245 <small>°C·hour</small>
+              1,245
+              <small>°C·hour</small>
             </strong>
           </div>
-          <div>
+          <div className="sr-metric">
             <IconClock className="ico ico-accent" />
             <span>Elapsed Time</span>
             <strong>03:25:10</strong>
@@ -1043,7 +1084,10 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
             <span className="with-ico">
               <IconCheck className="ico ico-accent" /> Prediction Status
             </span>
-            <StatusPill>READY</StatusPill>
+            <StatusPill>
+              <span className="status-spin" aria-hidden />
+              READY
+            </StatusPill>
           </div>
           <p className="footnote">
             <IconInfo className="ico ico-muted" /> Prediction generated from selected baseline and
@@ -1061,6 +1105,8 @@ export function HistoryScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="TEST HISTORY"
+      className="screen-history"
+      rule="short"
       footer={
         <NavFooter
           onBack={() => go('kuatTekanMenu')}
@@ -1072,7 +1118,7 @@ export function HistoryScreen({ state, setState, go }: Props) {
         />
       }
     >
-      <div className="stack gap-sm">
+      <div className="stack gap-sm history-list">
         {state.history.map((h) => (
           <button
             key={h.id}
@@ -1081,32 +1127,36 @@ export function HistoryScreen({ state, setState, go }: Props) {
             onClick={() => setState((s) => ({ ...s, selectedHistoryId: h.id }))}
           >
             <div className="history-top">
-              <div>
+              <div className="history-field">
                 <span className="mini-label">Test ID</span>
                 <strong>{h.testId}</strong>
               </div>
-              <div className="grow">
+              <div className="history-field grow">
                 <span className="mini-label">Baseline Name</span>
                 <strong>{h.baselineName}</strong>
               </div>
               <span className="detail-link">
-                DETAIL <span>›</span>
+                DETAIL <span aria-hidden>›</span>
               </span>
             </div>
             <div className="history-bottom">
-              <div>
+              <div className="history-field">
                 <span className="mini-label">Predicted Strength</span>
                 <strong className="orange-text">
-                  {h.strengthMpa.toFixed(1)} <span>MPa</span>
+                  {h.strengthMpa.toFixed(1)}
+                  <span> MPa</span>
                 </strong>
               </div>
-              <div>
+              <div className="history-field">
                 <span className="mini-label">Date</span>
                 <strong>{h.date}</strong>
               </div>
-              <StatusPill tone="green">
-                <IconCheck className="ico" /> COMPLETED
-              </StatusPill>
+              <div className="history-field history-status">
+                <span className="mini-label">Status</span>
+                <StatusPill tone="green">
+                  <IconCheck className="ico" /> COMPLETED
+                </StatusPill>
+              </div>
             </div>
           </button>
         ))}
@@ -1277,7 +1327,7 @@ export function SettingsScreen({ state, setState, go }: Props) {
       <div className="stack">
         <div className="boxed">
           <div className="boxed-title">
-            <IconClock className="ico ico-md ico-accent" /> TIMER SETTING
+            <IconClock className="ico ico-xl ico-accent" /> TIMER SETTING
           </div>
           <div className="timer-row">
             <Stepper
@@ -1307,11 +1357,11 @@ export function SettingsScreen({ state, setState, go }: Props) {
 
         <div className="boxed">
           <div className="boxed-title">
-            <IconGear className="ico ico-md ico-accent" /> SYSTEM OPTIONS
+            <IconGear className="ico ico-xl ico-accent" /> SYSTEM OPTIONS
           </div>
           <div className="option-row">
             <span className="with-ico">
-              <IconSun className="ico ico-sm ico-accent" /> Brightness
+              <IconSun className="ico ico-xl ico-accent" /> Brightness
             </span>
             <Stepper
               compact
@@ -1322,7 +1372,7 @@ export function SettingsScreen({ state, setState, go }: Props) {
           </div>
           <div className="option-row">
             <span className="with-ico">
-              <IconSound className="ico ico-sm ico-accent" /> Sound
+              <IconSound className="ico ico-xl ico-accent" /> Sound
             </span>
             <Toggle
               on={s.sound}
@@ -1336,7 +1386,7 @@ export function SettingsScreen({ state, setState, go }: Props) {
           </div>
           <div className="option-row">
             <span className="with-ico">
-              <IconDoc className="ico ico-sm ico-accent" /> Auto Save
+              <IconDoc className="ico ico-xl ico-accent" /> Auto Save
             </span>
             <Toggle
               on={s.autoSave}
@@ -1395,7 +1445,9 @@ export function DeviceInfoScreen({ go }: Props) {
   return (
     <Screen
       title="DEVICE INFO"
+      className="screen-device-info"
       subtitle="System and hardware information."
+      rule="short"
       footer={
         <BtnGhost block withChevron onClick={() => go('main')}>
           BACK
@@ -1403,21 +1455,22 @@ export function DeviceInfoScreen({ go }: Props) {
       }
     >
       <div className="stack gap-sm">
-        <InfoRow icon={<IconDevice className="ico ico-accent" />} label="Device Name" value="ConMT Concrete Maturity System" />
-        <InfoRow icon={<IconDoc className="ico ico-accent" />} label="Device ID" value="CNMT-HK-001" />
-        <InfoRow icon={<IconGear className="ico ico-accent" />} label="Firmware Version" value="V1.0.3" />
-        <InfoRow icon={<IconChip className="ico ico-accent" />} label="Hardware" value="Nexion Touch Display" />
-        <InfoRow icon={<IconThermo className="ico ico-accent" />} label="Sensor Channels" value="3 Temperature Inputs" />
-        <InfoRow icon={<IconDatabase className="ico ico-accent" />} label="Communication" value="Serial / Modbus" />
-        <div className="info-row">
-          <IconCheck className="ico ico-accent" />
-          <div>
-            <span className="mini-label">Status</span>
-            <StatusPill>READY</StatusPill>
-          </div>
+        <InfoRow icon={<IconDevice className="ico ico-xl ico-accent" />} label="Device Name" value="ConMT Concrete Maturity System" />
+        <InfoRow icon={<IconDoc className="ico ico-xl ico-accent" />} label="Device ID" value="CNMT-HK-001" />
+        <InfoRow icon={<IconGear className="ico ico-xl ico-accent" />} label="Firmware Version" value="V1.0.3" />
+        <InfoRow icon={<IconChip className="ico ico-xl ico-accent" />} label="Hardware" value="Nexion Touch Display" />
+        <InfoRow icon={<IconThermo className="ico ico-xl ico-accent" />} label="Sensor Channels" value="3 Temperature Inputs" />
+        <InfoRow icon={<IconDatabase className="ico ico-xl ico-accent" />} label="Communication" value="Serial / Modbus" />
+        <div className="info-row info-row-status">
+          <IconCheck className="ico ico-xl ico-accent" />
+          <span className="info-status-label">Status</span>
+          <StatusPill>
+            <span className="status-spin" aria-hidden />
+            READY
+          </StatusPill>
         </div>
         <div className="about-box">
-          <IconDoc className="ico ico-accent" />
+          <IconDoc className="ico ico-xl ico-accent" />
           <div>
             <strong>ABOUT</strong>
             <p>
