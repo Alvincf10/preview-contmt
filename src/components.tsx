@@ -1,5 +1,45 @@
-import type { InputHTMLAttributes, ReactNode } from 'react'
-import { IconChevronRight, UiIcon } from './icons'
+import { useEffect, useState, type InputHTMLAttributes, type ReactNode } from 'react'
+import { IconChevronRight, IconThermo, UiIcon } from './icons'
+
+export function TempStrip({
+  temps,
+  live = true,
+}: {
+  temps: [number, number, number]
+  live?: boolean
+}) {
+  const [values, setValues] = useState(temps)
+
+  useEffect(() => {
+    setValues(temps)
+  }, [temps])
+
+  useEffect(() => {
+    if (!live) return
+    const t = window.setInterval(() => {
+      setValues((prev) =>
+        prev.map((v) => +(v + (Math.random() - 0.5) * 0.12).toFixed(1)) as [
+          number,
+          number,
+          number,
+        ],
+      )
+    }, 1000)
+    return () => window.clearInterval(t)
+  }, [live])
+
+  return (
+    <div className="temp-strip" aria-label="Live sensor temperatures">
+      {values.map((t, i) => (
+        <div key={i} className="temp-strip-cell">
+          <IconThermo className="ico ico-accent temp-strip-ico" />
+          <span className="temp-strip-label">S{i + 1}</span>
+          <strong className="temp-strip-value">{t.toFixed(1)}°</strong>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 export function PhoneShell({ children }: { children: ReactNode }) {
   return (

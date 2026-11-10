@@ -32,6 +32,7 @@ Paket ini = **blueprint + aset + kode event** supaya kamu bisa rakit cepat di la
 - **HTML `select` tidak ada di Nextion.** Untuk Datum Temperature, pakai Text + list page / Number / keyboard Nextion.
 - Data sensor realtime: MCU kirim perintah serial, contoh:  
   `tS1.txt="25.6"` + `0xFF 0xFF 0xFF`
+- **pMatu SENSOR flow:** tap field Temperature (`mTempN` → `va0.val=N`) lalu `mSensor` mengirim `SEN` ke MCU. MCU tulis rata-rata ke `tTN.txt` (contoh `tT3.txt="25.7"`) + update `tHint.txt`. `mAddDay` mengirim `ADD`.
 - Koordinat TouchCap di JSON adalah titik awal dari Figma; fine-tune 2–4px di Editor bila perlu.
 - Emulator web React di root project tetap untuk preview UI; folder `nextion/` untuk target panel.
 

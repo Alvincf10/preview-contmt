@@ -10,6 +10,7 @@ import {
   Screen,
   SectionTitle,
   StatusPill,
+  TempStrip,
   TextInput,
   UnitBox,
 } from './components'
@@ -179,7 +180,7 @@ export function MainMenuScreen({ go }: Props) {
   )
 }
 
-export function BaselineMenuScreen({ go }: Props) {
+export function BaselineMenuScreen({ state, go }: Props) {
   return (
     <Screen
       title="BASELINE"
@@ -191,6 +192,7 @@ export function BaselineMenuScreen({ go }: Props) {
       }
     >
       <div className="stack baseline-menu-stack">
+        <TempStrip temps={state.measurement.sensorTemps} />
         <MenuRow
           icon={<IconBaselineNew className="ico ico-baseline-new ico-white" />}
           label="NEW BASELINE"
@@ -407,6 +409,9 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
   const [pendingDelete, setPendingDelete] = useState<number | null>(null)
   const [focusDayIndex, setFocusDayIndex] = useState<number | null>(null)
   const [dayDraft, setDayDraft] = useState<{ i: number; value: string } | null>(null)
+  const [activeRow, setActiveRow] = useState<number | null>(null)
+  const [sensorHint, setSensorHint] = useState<string | null>(null)
+  const [sensorBusy, setSensorBusy] = useState(false)
   const dayInputRefs = useRef<(HTMLInputElement | null)[]>([])
 
   useEffect(() => {
@@ -415,6 +420,16 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
     dayInputRefs.current[focusDayIndex]?.select()
     setFocusDayIndex(null)
   }, [focusDayIndex, rows.length])
+
+  useEffect(() => {
+    if (activeRow != null && activeRow >= rows.length) setActiveRow(null)
+  }, [activeRow, rows.length])
+
+  useEffect(() => {
+    if (!sensorHint) return
+    const t = window.setTimeout(() => setSensorHint(null), 2200)
+    return () => window.clearTimeout(t)
+  }, [sensorHint])
 
   const setRows = (next: MaturityRow[]) =>
     setState((s) => ({ ...s, baselineDraft: { ...s.baselineDraft, rows: next } }))
@@ -442,6 +457,34 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
     const focusAt = next.findIndex((r) => r.day === day)
     setRows(next)
     setFocusDayIndex(focusAt)
+    setActiveRow(focusAt)
+  }
+
+  const readSensorIntoActiveRow = () => {
+    if (activeRow == null || !rows[activeRow]) {
+      setSensorHint('Select a temperature row first')
+      return
+    }
+    const target = activeRow
+    const day = rows[target].day
+    setSensorBusy(true)
+    // Preview: average of live sensor channels. On device, MCU pushes via serial.
+    window.setTimeout(() => {
+      const temps = state.measurement.sensorTemps
+      const avg = temps.reduce((a, b) => a + b, 0) / temps.length
+      const reading = avg.toFixed(1)
+      setState((s) => ({
+        ...s,
+        baselineDraft: {
+          ...s.baselineDraft,
+          rows: s.baselineDraft.rows.map((r, idx) =>
+            idx === target ? { ...r, temperature: reading } : r,
+          ),
+        },
+      }))
+      setSensorHint(`Day ${day}: ${reading} °C from sensor`)
+      setSensorBusy(false)
+    }, 450)
   }
 
   const confirmDelete = () => {
@@ -450,6 +493,8 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
       return
     }
     setRows(rows.filter((_, idx) => idx !== pendingDelete))
+    if (activeRow === pendingDelete) setActiveRow(null)
+    else if (activeRow != null && pendingDelete < activeRow) setActiveRow(activeRow - 1)
     setPendingDelete(null)
   }
 
@@ -499,7 +544,11 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
             </thead>
             <tbody>
               {rows.map((r, i) => (
-                <tr key={`${r.day}-${i}`}>
+                <tr
+                  key={`${r.day}-${i}`}
+                  className={activeRow === i ? 'maturity-row-active' : undefined}
+                  onClick={() => setActiveRow(i)}
+                >
                   <td>
                     <input
                       ref={(el) => {
@@ -508,7 +557,10 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
                       className="day-input"
                       inputMode="decimal"
                       value={dayDraft?.i === i ? dayDraft.value : String(r.day)}
-                      onFocus={() => setDayDraft({ i, value: String(r.day) })}
+                      onFocus={() => {
+                        setActiveRow(i)
+                        setDayDraft({ i, value: String(r.day) })
+                      }}
                       onChange={(e) => setDayDraft({ i, value: e.target.value })}
                       onBlur={() => commitDay(i, dayDraft?.i === i ? dayDraft.value : String(r.day))}
                     />
@@ -522,11 +574,16 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
                       : r.timeH}
                   </td>
                   <td>
-                    <input value={r.fcLab} onChange={(e) => updateField(i, 'fcLab', e.target.value)} />
+                    <input
+                      value={r.fcLab}
+                      onFocus={() => setActiveRow(i)}
+                      onChange={(e) => updateField(i, 'fcLab', e.target.value)}
+                    />
                   </td>
                   <td>
                     <input
                       value={r.temperature}
+                      onFocus={() => setActiveRow(i)}
                       onChange={(e) => updateField(i, 'temperature', e.target.value)}
                     />
                   </td>
@@ -536,7 +593,10 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
                       className="row-del"
                       aria-label={`Delete day ${r.day}`}
                       disabled={!canDelete}
-                      onClick={() => setPendingDelete(i)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setPendingDelete(i)
+                      }}
                     >
                       ×
                     </button>
@@ -546,13 +606,30 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
             </tbody>
           </table>
         </div>
-        <button type="button" className="add-day-btn" onClick={addDay}>
-          + ADD DAY
-        </button>
+        <div className="maturity-actions">
+          <button type="button" className="add-day-btn" onClick={addDay}>
+            + ADD DAY
+          </button>
+          <button
+            type="button"
+            className="sensor-btn"
+            onClick={readSensorIntoActiveRow}
+            disabled={sensorBusy}
+            aria-label="Read temperature sensor into selected row"
+          >
+            <IconThermo className="ico ico-accent ico-md" />
+            {sensorBusy ? 'READING…' : 'SENSOR'}
+          </button>
+        </div>
         <div className="info-box">
           <div>Datum Temperature: {state.baselineDraft.datumTemp} °C</div>
           <div>Formula: M = Σ(T − T₀)Δt</div>
-          <p>Input laboratory compressive strength and average concrete temperature.</p>
+          <p>
+            {sensorHint ??
+              (activeRow == null
+                ? 'Tap a row, then SENSOR to fill Temperature (°C).'
+                : `Active: Day ${rows[activeRow]?.day} — SENSOR fills this row.`)}
+          </p>
         </div>
       </div>
     </Screen>
@@ -794,13 +871,15 @@ export function SavedBaselineScreen({ state, setState, go }: Props) {
   )
 }
 
-export function KuatTekanMenuScreen({ go }: Props) {
+export function KuatTekanMenuScreen({ state, go }: Props) {
   return (
     <Screen
       title="KUAT TEKAN"
+      className="screen-kuat-tekan-menu"
       subtitle="Select menu to begin compressive strength prediction."
     >
-      <div className="stack">
+      <div className="stack kuat-tekan-menu-stack">
+        <TempStrip temps={state.measurement.sensorTemps} />
         <button type="button" className="dark-menu-row" onClick={() => go('selectBaseline')}>
           <UiIcon name="kuat-start" size="lg" className="ico-accent" />
           <strong>START TEST</strong>

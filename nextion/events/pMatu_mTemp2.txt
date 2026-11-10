@@ -1,0 +1,2 @@
+va0.val=2
+tHint.txt="Active row 2 — tap SENSOR"
