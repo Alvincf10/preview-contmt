@@ -386,21 +386,34 @@ function AdmixRow({
 }
 
 const MIN_MATURITY_ROWS = 3
+const DEFAULT_DAY0_TIME_H = 0.5
+/** Day 0 early-age times: every half hour up to (but not including) Day 1. */
+const DAY0_TIME_OPTIONS: number[] = Array.from({ length: 47 }, (_, i) =>
+  Number(((i + 1) * 0.5).toFixed(1)),
+)
 
 function timeFromDay(day: number): number {
-  if (day === 0) return 0.01
+  if (day === 0) return DEFAULT_DAY0_TIME_H
   return Number((day * 24).toFixed(2))
 }
 
-function nextAvailableDay(rows: MaturityRow[]): number {
-  const used = new Set(rows.map((r) => r.day))
-  let d = 0
-  while (used.has(d)) d += 1
-  return d
+function snapDay0Time(h: number): number {
+  if (DAY0_TIME_OPTIONS.includes(h)) return h
+  return DAY0_TIME_OPTIONS.reduce((best, opt) =>
+    Math.abs(opt - h) < Math.abs(best - h) ? opt : best,
+  )
+}
+
+/** Next half-hour slot not already used by an existing Day 0 row. */
+function nextDay0Time(rows: MaturityRow[]): number {
+  const used = new Set(
+    rows.filter((r) => r.day === 0).map((r) => snapDay0Time(r.timeH)),
+  )
+  return DAY0_TIME_OPTIONS.find((h) => !used.has(h)) ?? DEFAULT_DAY0_TIME_H
 }
 
 function sortMaturityRows(rows: MaturityRow[]): MaturityRow[] {
-  return [...rows].sort((a, b) => a.day - b.day)
+  return [...rows].sort((a, b) => a.day - b.day || a.timeH - b.timeH)
 }
 
 export function MaturityDataScreen({ state, setState, go }: Props) {
@@ -438,26 +451,48 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
     setRows(rows.map((r, idx) => (idx === i ? { ...r, [key]: value } : r)))
   }
 
+  const updateDay0Time = (i: number, timeH: number) => {
+    setRows(
+      sortMaturityRows(
+        rows.map((r, idx) => (idx === i && r.day === 0 ? { ...r, timeH } : r)),
+      ),
+    )
+  }
+
   const commitDay = (i: number, raw: string) => {
     const day = Number(raw)
     let next = rows
-    if (Number.isFinite(day) && day >= 0 && !rows.some((r, idx) => idx !== i && r.day === day)) {
-      next = rows.map((r, idx) => (idx === i ? { ...r, day, timeH: timeFromDay(day) } : r))
+    // Day 0 may repeat (early-age samples at different hours). Other days stay unique.
+    const dayTaken =
+      day !== 0 && rows.some((r, idx) => idx !== i && r.day === day)
+    if (Number.isFinite(day) && day >= 0 && !dayTaken) {
+      next = rows.map((r, idx) => {
+        if (idx !== i) return r
+        const timeH =
+          day === 0
+            ? r.day === 0
+              ? snapDay0Time(r.timeH)
+              : nextDay0Time(rows.filter((_, j) => j !== i))
+            : timeFromDay(day)
+        return { ...r, day, timeH }
+      })
     }
     setRows(sortMaturityRows(next))
     setDayDraft(null)
   }
 
   const addDay = () => {
-    const day = nextAvailableDay(rows)
+    const timeH = nextDay0Time(rows)
     const next = sortMaturityRows([
       ...rows,
-      { day, timeH: timeFromDay(day), fcLab: '', temperature: '' },
+      { day: 0, timeH, fcLab: '', temperature: '' },
     ])
-    const focusAt = next.findIndex((r) => r.day === day)
+    const focusAt = next.findIndex(
+      (r) => r.day === 0 && r.timeH === timeH && r.fcLab === '' && r.temperature === '',
+    )
     setRows(next)
-    setFocusDayIndex(focusAt)
-    setActiveRow(focusAt)
+    setFocusDayIndex(focusAt >= 0 ? focusAt : next.length - 1)
+    setActiveRow(focusAt >= 0 ? focusAt : next.length - 1)
   }
 
   const readSensorIntoActiveRow = () => {
@@ -566,12 +601,35 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
                     />
                   </td>
                   <td className="time-cell">
-                    {dayDraft?.i === i &&
-                    dayDraft.value.trim() !== '' &&
-                    Number.isFinite(Number(dayDraft.value)) &&
-                    Number(dayDraft.value) >= 0
-                      ? timeFromDay(Number(dayDraft.value))
-                      : r.timeH}
+                    {r.day === 0 &&
+                    !(
+                      dayDraft?.i === i &&
+                      dayDraft.value.trim() !== '' &&
+                      Number.isFinite(Number(dayDraft.value)) &&
+                      Number(dayDraft.value) > 0
+                    ) ? (
+                      <select
+                        className="time-select"
+                        value={snapDay0Time(r.timeH)}
+                        aria-label="Day 0 time in hours"
+                        onClick={(e) => e.stopPropagation()}
+                        onFocus={() => setActiveRow(i)}
+                        onChange={(e) => updateDay0Time(i, Number(e.target.value))}
+                      >
+                        {DAY0_TIME_OPTIONS.map((h) => (
+                          <option key={h} value={h}>
+                            {h}
+                          </option>
+                        ))}
+                      </select>
+                    ) : dayDraft?.i === i &&
+                      dayDraft.value.trim() !== '' &&
+                      Number.isFinite(Number(dayDraft.value)) &&
+                      Number(dayDraft.value) >= 0 ? (
+                      timeFromDay(Number(dayDraft.value))
+                    ) : (
+                      r.timeH
+                    )}
                   </td>
                   <td>
                     <input
@@ -638,10 +696,22 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
 
 export function BaselineResultScreen({ state, setState, go }: Props) {
   const d = state.baselineDraft
-  const points = d.rows.map((r) => ({
-    x: Math.max(Number(r.timeH) * 25, 10),
-    y: Number(r.fcLab) || 0,
-  }))
+  const datumTemp = Number(d.datumTemp)
+  const t0 = Number.isFinite(datumTemp) ? datumTemp : -20
+  // M ≈ (T − T₀)·t  — same Index Maturitas used on the lab Excel curve
+  const points = d.rows
+    .map((r) => {
+      const t = Number(r.temperature)
+      const timeH = Number(r.timeH)
+      const temp = Number.isFinite(t) ? t : 28
+      const hours = Number.isFinite(timeH) ? timeH : 0
+      return {
+        x: Math.max((temp - t0) * hours, 0),
+        y: Number(r.fcLab) || 0,
+      }
+    })
+    .filter((p) => p.x > 0 || p.y > 0)
+    .sort((a, b) => a.x - b.x)
 
   const save = () => {
     setState((s) => {

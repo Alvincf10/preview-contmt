@@ -19,7 +19,7 @@ export const initialState: AppState = {
     flyAshPct: '15',
     flyAshBrand: 'Holcim',
     rows: [
-      { day: 0, timeH: 0.01, fcLab: '5.2', temperature: '27.4' },
+      { day: 0, timeH: 0.5, fcLab: '5.2', temperature: '27.4' },
       { day: 1, timeH: 24, fcLab: '12.8', temperature: '28.1' },
       { day: 3, timeH: 72, fcLab: '21.0', temperature: '29.0' },
       { day: 7, timeH: 168, fcLab: '34.6', temperature: '30.2' },

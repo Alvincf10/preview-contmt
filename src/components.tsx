@@ -297,6 +297,22 @@ export function ConfirmDialog({
   )
 }
 
+const MATURITY_X_MAJOR = 5000
+const MATURITY_X_MINOR = 2500
+const MATURITY_Y_MAJOR = 10
+const MATURITY_Y_MINOR = 5
+
+function formatMaturityTick(v: number): string {
+  if (v === 0) return '0'
+  if (v % 1000 === 0) return `${v / 1000}k`
+  return v.toLocaleString('en-US')
+}
+
+function rangeStep(max: number, step: number): number[] {
+  const n = Math.floor(max / step)
+  return Array.from({ length: n + 1 }, (_, i) => i * step)
+}
+
 export function MaturityChart({
   points,
   compact,
@@ -305,45 +321,93 @@ export function MaturityChart({
   compact?: boolean
 }) {
   const w = 400
-  const h = compact ? 132 : 190
-  const padL = 34
-  const padR = 12
+  const h = compact ? 160 : 210
+  const padL = 36
+  const padR = 14
   const padT = 10
-  const padB = 28
-  const logMin = 1
-  const logMax = 5
+  const padB = 36
   const maxY = 50
-  const sx = (x: number) =>
-    padL + ((Math.log10(Math.max(x, 1)) - logMin) / (logMax - logMin)) * (w - padL - padR)
+  const dataMaxX = Math.max(0, ...points.map((p) => p.x))
+  // Linear axis like lab Excel: major X every 5000 °C·h, dense helper grid
+  const maxX = Math.max(
+    MATURITY_X_MAJOR * 4,
+    Math.ceil(dataMaxX / MATURITY_X_MAJOR) * MATURITY_X_MAJOR,
+  )
+  const xMajor = rangeStep(maxX, MATURITY_X_MAJOR)
+  const xMinor = rangeStep(maxX, MATURITY_X_MINOR)
+  const yMajor = rangeStep(maxY, MATURITY_Y_MAJOR)
+  const yMinor = rangeStep(maxY, MATURITY_Y_MINOR)
+  const sorted = [...points].sort((a, b) => a.x - b.x)
+  const sx = (x: number) => padL + (x / maxX) * (w - padL - padR)
   const sy = (y: number) => padT + (1 - y / maxY) * (h - padT - padB)
-  const d = points
+  const d = sorted
     .map((p, i) => `${i === 0 ? 'M' : 'L'} ${sx(p.x).toFixed(1)} ${sy(p.y).toFixed(1)}`)
     .join(' ')
   const midY = padT + (h - padT - padB) / 2
+  const labelEvery = xMajor.length > 9 ? 2 : 1
 
   return (
     <svg className="chart" viewBox={`0 0 ${w} ${h}`} role="img" aria-label="Maturity chart">
-      {[0, 10, 20, 30, 40, 50].map((y) => (
-        <g key={y}>
-          <line x1={padL} y1={sy(y)} x2={w - padR} y2={sy(y)} className="chart-grid" />
+      {/* Minor helper grid (Excel-style) */}
+      {yMinor.map((y) =>
+        y % MATURITY_Y_MAJOR === 0 ? null : (
+          <line
+            key={`hy-min-${y}`}
+            x1={padL}
+            y1={sy(y)}
+            x2={w - padR}
+            y2={sy(y)}
+            className="chart-grid-minor"
+          />
+        ),
+      )}
+      {xMinor.map((x) =>
+        x % MATURITY_X_MAJOR === 0 ? null : (
+          <line
+            key={`vx-min-${x}`}
+            x1={sx(x)}
+            y1={padT}
+            x2={sx(x)}
+            y2={h - padB}
+            className="chart-grid-minor"
+          />
+        ),
+      )}
+      {/* Major grid + labels */}
+      {yMajor.map((y) => (
+        <g key={`hy-${y}`}>
+          <line x1={padL} y1={sy(y)} x2={w - padR} y2={sy(y)} className="chart-grid-major" />
           <text x={padL - 5} y={sy(y) + 3} textAnchor="end" className="chart-tick">
             {y}
           </text>
         </g>
       ))}
-      {[1, 2, 3, 4, 5].map((exp) => (
-        <text
-          key={exp}
-          x={sx(10 ** exp)}
-          y={h - 16}
-          textAnchor="middle"
-          className="chart-tick"
-        >
-          {`10${'¹²³⁴⁵'[exp - 1]}`}
-        </text>
+      {xMajor.map((x) => (
+        <line
+          key={`vx-${x}`}
+          x1={sx(x)}
+          y1={padT}
+          x2={sx(x)}
+          y2={h - padB}
+          className="chart-grid-major"
+        />
       ))}
+      {xMajor.map((x, i) =>
+        i % labelEvery === 0 ? (
+          <text key={`xl-${x}`} x={sx(x)} y={h - padB + 14} textAnchor="middle" className="chart-tick">
+            {formatMaturityTick(x)}
+          </text>
+        ) : null,
+      )}
+      <rect
+        x={padL}
+        y={padT}
+        width={w - padL - padR}
+        height={h - padT - padB}
+        className="chart-frame"
+      />
       <path d={d} className="chart-line" fill="none" />
-      {points.map((p) => (
+      {sorted.map((p) => (
         <circle key={`${p.x}-${p.y}`} cx={sx(p.x)} cy={sy(p.y)} r={4} className="chart-dot" />
       ))}
       <text
@@ -353,7 +417,12 @@ export function MaturityChart({
       >
         Compressive Strength (MPa)
       </text>
-      <text x={(padL + w - padR) / 2} y={h - 2} textAnchor="middle" className="chart-axis-label">
+      <text
+        x={(padL + w - padR) / 2}
+        y={h - 4}
+        textAnchor="middle"
+        className="chart-axis-label"
+      >
         Maturity Index, M (°C·hour)
       </text>
     </svg>
