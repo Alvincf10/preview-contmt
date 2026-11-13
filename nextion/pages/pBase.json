@@ -3,16 +3,55 @@
   "title": "Baseline",
   "background": "assets/pages/03_baseline.png",
   "components": [
-    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "03_baseline.png" },
+    {
+      "type": "Picture",
+      "objname": "bg",
+      "x": 0,
+      "y": 0,
+      "w": 480,
+      "h": 800,
+      "pic": "03_baseline.png"
+    },
+    {
+      "type": "Text",
+      "objname": "tClock",
+      "x": 14,
+      "y": 70,
+      "w": 88,
+      "h": 28,
+      "txt": "14:32",
+      "font": 0,
+      "pco": 65535,
+      "bco": 1055,
+      "sta": "cropimage",
+      "note": "Jam pojok kiri bawah strip logo. MCU: tClock.txt=\"HH:MM\". Salin ke setiap page."
+    },
+    {
+      "type": "Text",
+      "objname": "tBatt",
+      "x": 378,
+      "y": 70,
+      "w": 88,
+      "h": 28,
+      "txt": "87%",
+      "font": 0,
+      "pco": 65535,
+      "bco": 1055,
+      "sta": "cropimage",
+      "note": "Baterai pojok kanan. MCU: tBatt.txt=\"87%\". Opsional Picture pBatt di x=352 y=72."
+    },
     {
       "type": "TouchCap",
       "objname": "mBack",
       "x": 18,
-      "y": 78,
+      "y": 104,
       "w": 90,
       "h": 36,
       "label": "BACK",
-      "events": { "touchpress": "page pMain" }
+      "events": {
+        "touchpress": "page pMain"
+      },
+      "note": "Digeser di bawah status corners."
     },
     {
       "type": "TouchCap",
@@ -22,7 +61,9 @@
       "w": 316,
       "h": 122,
       "label": "NEW BASELINE",
-      "events": { "touchpress": "page pNewB" }
+      "events": {
+        "touchpress": "page pNewB"
+      }
     },
     {
       "type": "TouchCap",
@@ -32,7 +73,9 @@
       "w": 316,
       "h": 113,
       "label": "SAVED BASELINE",
-      "events": { "touchpress": "page pSaveB" }
+      "events": {
+        "touchpress": "page pSaveB"
+      }
     }
   ],
   "events": {

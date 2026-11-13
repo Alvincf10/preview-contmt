@@ -30,6 +30,12 @@ export type Baseline = {
   retarder: { pct: number; brand: string }
   accelerator: { pct: number; brand: string }
   flyAsh: { pct: number; brand: string }
+  /** Maturity lab table captured at save time (optional on older saves). */
+  rows?: MaturityRow[]
+  /** Log fit fc = a + b·ln(M) from lab points (optional on older saves). */
+  coeffA?: number
+  coeffB?: number
+  r2?: number
 }
 
 export type MaturityRow = {
@@ -60,19 +66,28 @@ export type TestRecord = {
 export type MeasurementSession = {
   pourStartMs: number | null
   endMs: number | null
+  /** Rata-rata suhu saat tombol START ditekan (suhu awal penuangan). */
+  initialPourTemp: number | null
   avgTemp: number
   maturityIndex: number
   sensorTemps: [number, number, number]
 }
 
+/** How the user entered the maturity / generate-baseline wizard. */
+export type BaselineEntry = 'create' | 'saved'
+
 export type AppState = {
   operatorId: string
   projectName: string
   date: string
+  /** 'create' = New Baseline wizard; 'saved' = opened from SAVED BASELINE. */
+  baselineEntry: BaselineEntry
   baselineDraft: {
     name: string
     targetFc: string
     datumTemp: string
+    /** Pour start clock HH:MM — UI shows actual time; timeH = elapsed from this. */
+    pourClock: string
     cement: string
     water: string
     coarseAgg: string

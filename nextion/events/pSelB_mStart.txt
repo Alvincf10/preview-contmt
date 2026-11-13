@@ -1,0 +1,2 @@
+// START: capture sensor avg as initial pour temp, then go realtime
+page pRT

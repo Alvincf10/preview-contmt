@@ -13,7 +13,7 @@
     "output": [".HMI project", ".TFT compile for device"]
   },
   "strategy": "image-based",
-  "strategyDetail": "Setiap page memakai PNG design penuh sebagai background. Interaksi via TouchCap (hotspot). Field dinamis (teks/angka) ditambah komponen Text/Number di atas gambar bila perlu.",
+  "strategyDetail": "Setiap page memakai PNG design penuh sebagai background. Interaksi via TouchCap (hotspot). Field dinamis (teks/angka) ditambah komponen Text/Number di atas gambar bila perlu. Status HUD wajib di setiap page: tClock (kiri y70) + tBatt (kanan y70) — lihat shared/statusCorners.json. MCU update global: tClock.txt / tBatt.txt.",
   "pages": [
     { "id": 0, "name": "pInit", "file": "pages/pInit.json", "asset": "assets/pages/00_init.png" },
     { "id": 1, "name": "pUser", "file": "pages/pUser.json", "asset": "assets/pages/01_user_info.png" },

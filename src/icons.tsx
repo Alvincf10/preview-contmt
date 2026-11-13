@@ -194,6 +194,19 @@ export function IconClock({ className }: IconProps) {
   )
 }
 
+/** Nextion-friendly battery glyph: body + tip, fill level via CSS var --batt-pct. */
+export function IconBattery({ className, pct = 80 }: IconProps & { pct?: number }) {
+  const level = Math.max(0, Math.min(100, pct))
+  const fillW = 12.5 * (level / 100)
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="2.5" y="7" width="16" height="10" rx="1.6" stroke="currentColor" strokeWidth="1.45" />
+      <path d="M19.5 10v4h1.2a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H19.5Z" fill="currentColor" />
+      <rect x="4.2" y="8.7" width={fillW} height="6.6" rx="0.8" fill="currentColor" opacity={0.95} />
+    </svg>
+  )
+}
+
 export function IconCheck({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>

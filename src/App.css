@@ -19,6 +19,10 @@
   --hmi-w: 480px;
   --hmi-h: 800px;
   --brand-h: 64px;
+  /* Status HUD band below brand strip (offset + pill height + gap) */
+  --status-top: 10px;
+  --status-h: 26px;
+  --status-clear: calc(var(--status-top) + var(--status-h) + 8px);
   --panel-x: 50px;
   --panel-w: 380px;
   --panel-pad-x: 16px;
@@ -130,11 +134,81 @@ select {
   /* Logos are baked into Background.png white strip */
 }
 
+/* Status HUD: below white logo strip, on dark sky — best contrast for Nextion Text objs */
+.status-corners {
+  position: absolute;
+  z-index: 4;
+  top: calc(var(--brand-h) + var(--status-top));
+  left: 14px;
+  right: 14px;
+  height: var(--status-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.status-clock,
+.status-batt {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--status-h);
+  padding: 0 8px;
+  border-radius: 6px;
+  background: rgba(8, 12, 18, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  color: #fff;
+  line-height: 1;
+}
+
+.status-clock-ico {
+  width: 13px;
+  height: 13px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.status-clock-value {
+  font-size: 13px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.status-batt-ico {
+  width: 15px;
+  height: 15px;
+  color: #fff;
+}
+
+.status-batt-pct {
+  font-size: 12px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.status-batt-mid .status-batt-ico,
+.status-batt-mid .status-batt-pct {
+  color: #ffcc66;
+}
+
+.status-batt-low .status-batt-ico,
+.status-batt-low .status-batt-pct {
+  color: #ff6b4a;
+}
+
 .top-left-slot {
   position: absolute;
   z-index: 3;
   top: calc(var(--brand-h) + 14px);
   left: 18px;
+}
+
+/* Keep BACK chip clear of clock/battery corners */
+.screen.has-status .top-left-slot {
+  top: calc(var(--brand-h) + var(--status-clear) + 4px);
 }
 
 .stage {
@@ -146,6 +220,11 @@ select {
   align-items: center;
   justify-content: center;
   padding: 12px var(--panel-x) 24px;
+}
+
+/* Push panel below status HUD so titles / content never collide with clock/battery */
+.screen.has-status .stage {
+  padding-top: var(--status-clear);
 }
 
 .back-chip {
@@ -315,7 +394,7 @@ select {
    panel y=240 · 346×366 · pad-x 15
    BACK outside panel ~y90; cards h≈122/113 gap 15 */
 .screen-baseline-menu .top-left-slot {
-  top: calc(var(--brand-h) + 26px); /* ~y90 */
+  top: calc(var(--brand-h) + var(--status-clear) + 4px);
   left: 30px;
 }
 
@@ -442,7 +521,7 @@ select {
 .br-back {
   position: absolute;
   z-index: 3;
-  top: calc(var(--brand-h) + 16px);
+  top: calc(var(--brand-h) + var(--status-clear) + 4px);
   left: 28px;
 }
 
@@ -459,9 +538,9 @@ select {
 
 .br-title-block {
   flex-shrink: 0;
-  /* BACK ≈34px @ top 16 → bottom ~50; keep ~22px gap under chip */
-  margin-top: 78px;
-  margin-bottom: 12px;
+  /* Clear status band + BACK chip (~34px) + gap */
+  margin-top: calc(var(--status-clear) + 42px);
+  margin-bottom: 10px;
 }
 
 .br-title {
@@ -1127,7 +1206,37 @@ select {
 
 .maturity-table-edit th:nth-child(2),
 .maturity-table-edit td:nth-child(2) {
-  width: 18%;
+  width: 20%;
+}
+
+.pour-clock-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.pour-clock-input {
+  width: 72px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  padding: 0 6px;
+}
+
+.pour-clock-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.pour-clock-eq {
+  color: var(--muted);
+  font-size: 11px;
 }
 
 .maturity-table-edit th:nth-child(3),
@@ -1160,6 +1269,8 @@ select {
   padding: 0 4px;
   font-variant-numeric: tabular-nums;
   cursor: pointer;
+  font: inherit;
+  font-size: 11px;
 }
 
 .maturity-table .time-select:disabled {
@@ -1170,6 +1281,48 @@ select {
 .maturity-table .time-select:focus {
   outline: none;
   border-color: var(--accent);
+}
+
+/* In-panel clock picker — avoids native <select> overflowing the 480×800 HMI */
+.time-picker-sheet {
+  width: min(300px, 86%);
+  max-height: min(420px, 72%);
+  display: flex;
+  flex-direction: column;
+}
+
+.time-picker-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 8px 0 4px;
+  padding: 2px 2px 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.time-picker-option {
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+.time-picker-option.is-selected {
+  border-color: var(--accent);
+  background: rgba(242, 124, 10, 0.22);
+  color: #fff;
+}
+
+.time-picker-option:hover {
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .maturity-table .day-input {
@@ -1260,6 +1413,55 @@ select {
 .sensor-btn .ico {
   width: 16px;
   height: 16px;
+}
+
+.add-sheet-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.add-sheet-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-sheet-option {
+  width: 100%;
+  text-align: left;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  padding: 12px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.add-sheet-option strong {
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+}
+
+.add-sheet-option span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.add-sheet-option:hover {
+  border-color: var(--orange);
+  background: rgba(242, 124, 10, 0.14);
+}
+
+.add-sheet .confirm-actions {
+  justify-content: stretch;
+}
+
+.add-sheet .confirm-actions .btn {
+  width: 100%;
 }
 
 .confirm-overlay {
@@ -1437,6 +1639,15 @@ select {
 .chart-line {
   stroke: var(--orange);
   stroke-width: 2.4;
+}
+
+/* Excel-style logarithmic trendline: fc = a + b·ln(M) */
+.chart-line-log {
+  stroke: rgba(255, 176, 96, 0.85);
+  stroke-width: 1.75;
+  stroke-dasharray: 5 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .chart-dot {
@@ -1811,14 +2022,15 @@ select {
 
 .screen-realtime .panel {
   position: absolute;
-  top: 140px;
+  /* Keep sky breathing room; still clear of status HUD (~44px) */
+  top: 100px;
   bottom: auto;
   left: 50%;
   transform: translateX(-50%);
   width: 424px;
   max-width: calc(100% - 28px);
   margin: 0;
-  max-height: calc(var(--hmi-h) - 140px - 12px);
+  max-height: calc(var(--hmi-h) - var(--brand-h) - 112px);
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -2022,21 +2234,75 @@ select {
 }
 
 .screen-realtime .monitor-card {
-  padding: 10px 10px 8px;
+  padding: 10px 12px 12px;
 }
 
 .screen-realtime .monitor-head {
   font-size: 11px;
   font-weight: var(--fw-heavy);
   letter-spacing: 0.03em;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.screen-realtime .rt-time-row {
+/* Balanced 2×2: Pour Time | Current Time / Initial Temp | Status */
+.screen-realtime .rt-monitor-grid {
+  display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-bottom: 8px;
-  padding-bottom: 8px;
+  grid-template-rows: auto auto;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(12, 16, 22, 0.45);
+}
+
+.screen-realtime .rt-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  min-height: 58px;
+  padding: 10px 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.screen-realtime .rt-cell:nth-child(2n) {
+  border-right: none;
+}
+
+.screen-realtime .rt-cell:nth-child(n + 3) {
+  border-bottom: none;
+}
+
+.screen-realtime .rt-cell-end {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.screen-realtime .rt-cell-label {
+  font-size: 11px;
+  font-weight: var(--fw-regular);
+  color: rgba(255, 255, 255, 0.62);
+  line-height: 1.2;
+}
+
+.screen-realtime .rt-cell-value {
+  font-size: 15px;
+  font-weight: var(--fw-bold);
+  color: #fff;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.screen-realtime .rt-pour-temp {
+  color: #fff;
+}
+
+.screen-realtime .rt-cell-end .status-pill {
+  margin-top: 0;
 }
 
 .screen-realtime .rt-time-row > div,

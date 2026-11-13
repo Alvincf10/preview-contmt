@@ -1,13 +1,21 @@
 import type { AppState } from './types'
 
+function initialPourClock(date = new Date()): string {
+  const h = String(date.getHours()).padStart(2, '0')
+  const m = String(date.getMinutes()).padStart(2, '0')
+  return `${h}:${m}`
+}
+
 export const initialState: AppState = {
   operatorId: 'OP001',
   projectName: 'HK Tower',
   date: '2026-09-28',
+  baselineEntry: 'create',
   baselineDraft: {
     name: 'Beton Fc30 BP HKSS Marunda',
     targetFc: '30',
     datumTemp: '-20',
+    pourClock: initialPourClock(),
     cement: '450',
     water: '180',
     coarseAgg: '1020',
@@ -18,13 +26,29 @@ export const initialState: AppState = {
     acceleratorBrand: '-',
     flyAshPct: '15',
     flyAshBrand: 'Holcim',
+    // From Syarat Kroscek … ConMT.xlsx — Day 0 (0–6 h) temp-only + lab (orange) rows
     rows: [
-      { day: 0, timeH: 0.5, fcLab: '5.2', temperature: '27.4' },
-      { day: 1, timeH: 24, fcLab: '12.8', temperature: '28.1' },
-      { day: 3, timeH: 72, fcLab: '21.0', temperature: '29.0' },
-      { day: 7, timeH: 168, fcLab: '34.6', temperature: '30.2' },
-      { day: 14, timeH: 336, fcLab: '39.8', temperature: '29.8' },
-      { day: 28, timeH: 672, fcLab: '43.1', temperature: '28.9' },
+      { day: 0, timeH: 0, fcLab: '', temperature: '33.81' },
+      { day: 0, timeH: 0.5, fcLab: '', temperature: '31.81' },
+      { day: 0, timeH: 1, fcLab: '', temperature: '29.54' },
+      { day: 0, timeH: 1.5, fcLab: '', temperature: '29.22' },
+      { day: 0, timeH: 2, fcLab: '', temperature: '29.18' },
+      { day: 0, timeH: 2.5, fcLab: '', temperature: '29.19' },
+      { day: 0, timeH: 3, fcLab: '', temperature: '29.15' },
+      { day: 0, timeH: 3.5, fcLab: '', temperature: '28.80' },
+      { day: 0, timeH: 4, fcLab: '', temperature: '29.60' },
+      { day: 0, timeH: 4.5, fcLab: '', temperature: '27.91' },
+      { day: 0, timeH: 5, fcLab: '', temperature: '27.67' },
+      { day: 0, timeH: 5.5, fcLab: '', temperature: '28.29' },
+      { day: 0, timeH: 6, fcLab: '', temperature: '28.31' },
+      { day: 1, timeH: 24, fcLab: '12.98', temperature: '31.81' },
+      { day: 2, timeH: 48, fcLab: '16.11', temperature: '29.33' },
+      { day: 5, timeH: 120, fcLab: '27.96', temperature: '28.90' },
+      { day: 7, timeH: 168, fcLab: '33.11', temperature: '28.66' },
+      { day: 14, timeH: 336, fcLab: '33.03', temperature: '30.15' },
+      { day: 21, timeH: 504, fcLab: '34.11', temperature: '30.40' },
+      { day: 24, timeH: 576, fcLab: '35.13', temperature: '31.79' },
+      { day: 28, timeH: 672, fcLab: '36.90', temperature: '30.61' },
     ],
   },
   baselines: [
@@ -75,6 +99,7 @@ export const initialState: AppState = {
   measurement: {
     pourStartMs: null,
     endMs: null,
+    initialPourTemp: null,
     avgTemp: 25.7,
     maturityIndex: 0,
     sensorTemps: [25.6, 25.8, 25.7],

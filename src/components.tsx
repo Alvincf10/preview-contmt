@@ -1,5 +1,41 @@
-import { useEffect, useState, type InputHTMLAttributes, type ReactNode } from 'react'
-import { IconChevronRight, IconThermo, UiIcon } from './icons'
+import { useEffect, useId, useState, type InputHTMLAttributes, type ReactNode } from 'react'
+import { IconBattery, IconChevronRight, IconClock, IconThermo, UiIcon } from './icons'
+
+function pad2(n: number) {
+  return String(n).padStart(2, '0')
+}
+
+/** Clock left + battery right — sits on dark sky under the white brand strip (Nextion-friendly). */
+export function StatusCorners({
+  batteryPct = 87,
+}: {
+  batteryPct?: number
+}) {
+  const [now, setNow] = useState(() => new Date())
+
+  useEffect(() => {
+    const tick = () => setNow(new Date())
+    tick()
+    const t = window.setInterval(tick, 1000)
+    return () => window.clearInterval(t)
+  }, [])
+
+  const clock = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`
+  const battTone = batteryPct <= 20 ? 'low' : batteryPct <= 40 ? 'mid' : 'ok'
+
+  return (
+    <div className="status-corners" aria-label="Status">
+      <div className="status-clock">
+        <IconClock className="ico status-clock-ico" />
+        <span className="status-clock-value">{clock}</span>
+      </div>
+      <div className={`status-batt status-batt-${battTone}`}>
+        <IconBattery className="ico status-batt-ico" pct={batteryPct} />
+        <span className="status-batt-pct">{batteryPct}%</span>
+      </div>
+    </div>
+  )
+}
 
 export function TempStrip({
   temps,
@@ -62,6 +98,8 @@ export function Screen({
   bodyClassName,
   className,
   rule = 'short',
+  showStatus = true,
+  batteryPct = 87,
 }: {
   title?: string
   subtitle?: string
@@ -75,11 +113,15 @@ export function Screen({
   bodyClassName?: string
   className?: string
   rule?: 'full' | 'short'
+  /** Jam kiri + baterai kanan di bawah strip logo — tampil di setiap menu. */
+  showStatus?: boolean
+  batteryPct?: number
 }) {
   return (
-    <div className={`screen${className ? ` ${className}` : ''}`}>
+    <div className={`screen${showStatus ? ' has-status' : ''}${className ? ` ${className}` : ''}`}>
       <div className="screen-bg" aria-hidden />
       <div className="brand-bar" aria-hidden />
+      {showStatus ? <StatusCorners batteryPct={batteryPct} /> : null}
       {topLeft ? <div className="top-left-slot">{topLeft}</div> : null}
       <div className="stage">
         <div className={`panel${scroll ? '' : ' panel-fixed'}${bare ? ' panel-bare' : ''}`}>
@@ -313,13 +355,44 @@ function rangeStep(max: number, step: number): number[] {
   return Array.from({ length: n + 1 }, (_, i) => i * step)
 }
 
+/** Log curve fc = a + b·ln(M) — dashed trendline like Excel. */
+function logTrendPath(
+  a: number,
+  b: number,
+  maxX: number,
+  sx: (x: number) => number,
+  sy: (y: number) => number,
+): string {
+  // Start where predicted fc crosses ~0 (Excel curve rises from lower-left)
+  const xZero = b !== 0 ? Math.exp(-a / b) : 1
+  const x0 = Math.min(Math.max(xZero, 1), maxX * 0.02)
+  const steps = 64
+  const pts: { x: number; y: number }[] = []
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps
+    const x = x0 + (maxX - x0) * t
+    if (x <= 0) continue
+    const y = a + b * Math.log(x)
+    if (!Number.isFinite(y)) continue
+    pts.push({ x, y })
+  }
+  if (pts.length < 2) return ''
+  return pts
+    .map((p, i) => `${i === 0 ? 'M' : 'L'} ${sx(p.x).toFixed(1)} ${sy(p.y).toFixed(1)}`)
+    .join(' ')
+}
+
 export function MaturityChart({
   points,
   compact,
+  fit,
 }: {
   points: { x: number; y: number }[]
   compact?: boolean
+  /** Nurse-Saul log fit: fc = a + b·ln(M). Draws dashed trendline when present. */
+  fit?: { a: number; b: number } | null
 }) {
+  const clipId = useId().replace(/:/g, '')
   const w = 400
   const h = compact ? 160 : 210
   const padL = 36
@@ -343,11 +416,20 @@ export function MaturityChart({
   const d = sorted
     .map((p, i) => `${i === 0 ? 'M' : 'L'} ${sx(p.x).toFixed(1)} ${sy(p.y).toFixed(1)}`)
     .join(' ')
+  const dLog =
+    fit && Number.isFinite(fit.a) && Number.isFinite(fit.b)
+      ? logTrendPath(fit.a, fit.b, maxX, sx, sy)
+      : ''
   const midY = padT + (h - padT - padB) / 2
   const labelEvery = xMajor.length > 9 ? 2 : 1
 
   return (
     <svg className="chart" viewBox={`0 0 ${w} ${h}`} role="img" aria-label="Maturity chart">
+      <defs>
+        <clipPath id={clipId}>
+          <rect x={padL} y={padT} width={w - padL - padR} height={h - padT - padB} />
+        </clipPath>
+      </defs>
       {/* Minor helper grid (Excel-style) */}
       {yMinor.map((y) =>
         y % MATURITY_Y_MAJOR === 0 ? null : (
@@ -406,10 +488,14 @@ export function MaturityChart({
         height={h - padT - padB}
         className="chart-frame"
       />
-      <path d={d} className="chart-line" fill="none" />
-      {sorted.map((p) => (
-        <circle key={`${p.x}-${p.y}`} cx={sx(p.x)} cy={sy(p.y)} r={4} className="chart-dot" />
-      ))}
+      <g clipPath={`url(#${clipId})`}>
+        {/* Dashed log trendline (Excel logarithmic fit) under natural polyline */}
+        {dLog ? <path d={dLog} className="chart-line-log" fill="none" /> : null}
+        <path d={d} className="chart-line" fill="none" />
+        {sorted.map((p) => (
+          <circle key={`${p.x}-${p.y}`} cx={sx(p.x)} cy={sy(p.y)} r={4} className="chart-dot" />
+        ))}
+      </g>
       <text
         className="chart-axis-label"
         textAnchor="middle"

@@ -3,7 +3,43 @@
   "title": "Main Menu",
   "background": "assets/pages/02_main_menu.png",
   "components": [
-    { "type": "Picture", "objname": "bg", "x": 0, "y": 0, "w": 480, "h": 800, "pic": "02_main_menu.png" },
+    {
+      "type": "Picture",
+      "objname": "bg",
+      "x": 0,
+      "y": 0,
+      "w": 480,
+      "h": 800,
+      "pic": "02_main_menu.png"
+    },
+    {
+      "type": "Text",
+      "objname": "tClock",
+      "x": 14,
+      "y": 70,
+      "w": 88,
+      "h": 28,
+      "txt": "14:32",
+      "font": 0,
+      "pco": 65535,
+      "bco": 1055,
+      "sta": "cropimage",
+      "note": "Jam pojok kiri bawah strip logo. MCU: tClock.txt=\"HH:MM\". Salin ke setiap page."
+    },
+    {
+      "type": "Text",
+      "objname": "tBatt",
+      "x": 378,
+      "y": 70,
+      "w": 88,
+      "h": 28,
+      "txt": "87%",
+      "font": 0,
+      "pco": 65535,
+      "bco": 1055,
+      "sta": "cropimage",
+      "note": "Baterai pojok kanan. MCU: tBatt.txt=\"87%\". Opsional Picture pBatt di x=352 y=72."
+    },
     {
       "type": "TouchCap",
       "objname": "mBase",
@@ -12,7 +48,9 @@
       "w": 310,
       "h": 64,
       "label": "BASELINE",
-      "events": { "touchpress": "page pBase" }
+      "events": {
+        "touchpress": "page pBase"
+      }
     },
     {
       "type": "TouchCap",
@@ -22,7 +60,9 @@
       "w": 310,
       "h": 64,
       "label": "KUAT TEKAN",
-      "events": { "touchpress": "page pKuat" }
+      "events": {
+        "touchpress": "page pKuat"
+      }
     },
     {
       "type": "TouchCap",
@@ -32,7 +72,9 @@
       "w": 310,
       "h": 64,
       "label": "SETTINGS",
-      "events": { "touchpress": "page pSet" }
+      "events": {
+        "touchpress": "page pSet"
+      }
     },
     {
       "type": "TouchCap",
@@ -42,7 +84,9 @@
       "w": 310,
       "h": 64,
       "label": "DEVICE INFO",
-      "events": { "touchpress": "page pDev" }
+      "events": {
+        "touchpress": "page pDev"
+      }
     }
   ],
   "events": {

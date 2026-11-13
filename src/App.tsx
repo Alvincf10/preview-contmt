@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { PhoneShell } from './components'
-import { initialState } from './mockData'
 import {
   BaselineMenuScreen,
   BaselineResultScreen,
@@ -20,6 +19,7 @@ import {
   StrengthResultScreen,
   UserInfoScreen,
 } from './screens'
+import { loadAppState, persistAppState } from './storage'
 import type { AppState, ScreenId } from './types'
 import './App.css'
 
@@ -71,13 +71,17 @@ function readScreenParam(): ScreenId {
 
 export default function App() {
   const [screen, setScreen] = useState<ScreenId>(() => readScreenParam())
-  const [state, setStateRaw] = useState<AppState>(initialState)
+  const [state, setStateRaw] = useState<AppState>(() => loadAppState())
   const [compare, setCompare] = useState(() =>
     new URLSearchParams(window.location.search).get('compare') === '1',
   )
 
   const setState = useCallback((updater: (s: AppState) => AppState) => {
-    setStateRaw(updater)
+    setStateRaw((prev) => {
+      const next = updater(prev)
+      persistAppState(next)
+      return next
+    })
   }, [])
 
   const go = useCallback((id: ScreenId) => {
