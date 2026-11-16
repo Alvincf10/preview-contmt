@@ -87,6 +87,7 @@ export function PhoneShell({ children }: { children: ReactNode }) {
 
 export function Screen({
   title,
+  titleAside,
   subtitle,
   children,
   footer,
@@ -102,6 +103,8 @@ export function Screen({
   batteryPct = 87,
 }: {
   title?: string
+  /** Optional control rendered to the right of the title (e.g. info button). */
+  titleAside?: ReactNode
   subtitle?: string
   children: ReactNode
   footer?: ReactNode
@@ -130,7 +133,10 @@ export function Screen({
               {back ? <div className="panel-back">{back}</div> : null}
               {title ? (
                 <>
-                  <h1 className="panel-title">{title}</h1>
+                  <h1 className="panel-title">
+                    <span className="panel-title-text">{title}</span>
+                    {titleAside ? <span className="panel-title-aside">{titleAside}</span> : null}
+                  </h1>
                   <div className={`panel-rule${rule === 'short' ? ' panel-rule-short' : ''}`} />
                   {subtitle ? <p className="panel-sub">{subtitle}</p> : null}
                 </>
@@ -413,9 +419,6 @@ export function MaturityChart({
   const sorted = [...points].sort((a, b) => a.x - b.x)
   const sx = (x: number) => padL + (x / maxX) * (w - padL - padR)
   const sy = (y: number) => padT + (1 - y / maxY) * (h - padT - padB)
-  const d = sorted
-    .map((p, i) => `${i === 0 ? 'M' : 'L'} ${sx(p.x).toFixed(1)} ${sy(p.y).toFixed(1)}`)
-    .join(' ')
   const dLog =
     fit && Number.isFinite(fit.a) && Number.isFinite(fit.b)
       ? logTrendPath(fit.a, fit.b, maxX, sx, sy)
@@ -489,9 +492,8 @@ export function MaturityChart({
         className="chart-frame"
       />
       <g clipPath={`url(#${clipId})`}>
-        {/* Dashed log trendline (Excel logarithmic fit) under natural polyline */}
+        {/* Dashed log trendline only — data shown as scatter dots */}
         {dLog ? <path d={dLog} className="chart-line-log" fill="none" /> : null}
-        <path d={d} className="chart-line" fill="none" />
         {sorted.map((p) => (
           <circle key={`${p.x}-${p.y}`} cx={sx(p.x)} cy={sy(p.y)} r={4} className="chart-dot" />
         ))}

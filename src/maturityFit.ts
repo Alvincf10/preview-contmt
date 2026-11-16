@@ -98,3 +98,64 @@ export function formatCoeff(v: number, digits = 4): string {
   if (Object.is(rounded, -0) || rounded === 0) return (0).toFixed(digits)
   return rounded < 0 ? `−${Math.abs(rounded).toFixed(digits)}` : rounded.toFixed(digits)
 }
+
+/** Excel FKZ row: factor keyed by lab age day. */
+export type FkzFactor = { day: number; fkz: number }
+
+/**
+ * Excel FKZ = 1/(1+Error) = fcAktual / fcPrediksi Nurse–Saul.
+ * Built only for ages that have crushing-test fc (same idea as sheet FKZ table).
+ */
+export function computeFkzFactors(
+  samples: { day: number; timeH: number; temp: number; fc: number }[],
+  t0: number,
+  a: number,
+  b: number,
+): FkzFactor[] {
+  const withM = accumulateNurseSaulM(samples, t0)
+  const byDay = new Map<number, number>()
+  for (const s of withM) {
+    if (!(s.fc > 0) || !(s.m > 0)) continue
+    const pred = a + b * Math.log(s.m)
+    if (!(pred > 0) || !Number.isFinite(pred)) continue
+    const fkz = s.fc / pred
+    if (!Number.isFinite(fkz) || fkz <= 0) continue
+    byDay.set(s.day, fkz)
+  }
+  return [...byDay.entries()]
+    .map(([day, fkz]) => ({ day, fkz }))
+    .sort((x, y) => x.day - y.day)
+}
+
+/**
+ * Exact day match; if missing, use next calibrated day forward
+ * (e.g. FKZ on 5 & 7, day 6 empty → use day 7). Past last age → last FKZ.
+ * No factors → 1 (no correction).
+ */
+export function lookupFkz(factors: FkzFactor[] | undefined, day: number): number {
+  if (!factors?.length || !Number.isFinite(day)) return 1
+  const sorted = [...factors]
+    .filter((f) => f.fkz > 0 && Number.isFinite(f.fkz))
+    .sort((a, b) => a.day - b.day)
+  if (sorted.length === 0) return 1
+  const exact = sorted.find((f) => f.day === day)
+  if (exact) return exact.fkz
+  const next = sorted.find((f) => f.day > day)
+  if (next) return next.fkz
+  return sorted[sorted.length - 1].fkz
+}
+
+/**
+ * Excel: fc_FKZ = (a + b·ln(M)) · FKZ; floor at 0.
+ */
+export function predictFcWithFkz(
+  maturity: number,
+  a: number,
+  b: number,
+  fkz = 1,
+): number {
+  if (!(maturity > 0) || !Number.isFinite(a) || !Number.isFinite(b)) return 0
+  const raw = a + b * Math.log(maturity)
+  const factor = Number.isFinite(fkz) && fkz > 0 ? fkz : 1
+  return Math.max(0, raw * factor)
+}

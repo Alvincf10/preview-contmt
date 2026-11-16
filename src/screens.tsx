@@ -40,11 +40,14 @@ import {
 import { DATUM_TEMPS } from './mockData'
 import {
   accumulateNurseSaulM,
+  computeFkzFactors,
   fitLogMaturity,
   formatCoeff,
   formatFcEquation,
+  lookupFkz,
   nurseSaulIntervalDm,
   nurseSaulMaturityLocked,
+  predictFcWithFkz,
 } from './maturityFit'
 import type { AppState, ScreenId } from './types'
 
@@ -54,10 +57,30 @@ type Props = {
   go: (id: ScreenId) => void
 }
 
+function pad2(n: number) {
+  return String(n).padStart(2, '0')
+}
+
 function fmtDate(iso: string) {
   const [y, m, d] = iso.split('-')
   if (!d) return iso
   return `${d}-${m}-${y}`
+}
+
+function todayIso(date = new Date()): string {
+  return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`
+}
+
+/** Prefer app date field when it is ISO; otherwise device today. */
+function resolvePourDate(appDate: string): string {
+  return /^\d{4}-\d{2}-\d{2}$/.test(appDate.trim()) ? appDate.trim() : todayIso()
+}
+
+/** DD-MM-YYYY (createdAt) → YYYY-MM-DD */
+function createdAtToIso(createdAt: string): string | null {
+  const m = /^(\d{2})-(\d{2})-(\d{4})$/.exec(createdAt.trim())
+  if (!m) return null
+  return `${m[3]}-${m[2]}-${m[1]}`
 }
 
 function selectedBaseline(state: AppState) {
@@ -89,7 +112,7 @@ export function SplashScreen({ go }: Props) {
         <img className="init-logo" src="/conmt-logo.png" alt="ConMT" />
 
         <h1 className="init-title">
-          <span>CONCRETE MATURITY</span>
+          <span>CONCRETE MATURITY TEST</span>
           <span className="init-title-accent">MONITORING SYSTEM</span>
         </h1>
         <div className="panel-rule init-rule" />
@@ -209,7 +232,12 @@ export function BaselineMenuScreen({ state, setState, go }: Props) {
           onClick={() => {
             setState((s) => ({
               ...s,
-              baselineDraft: { ...s.baselineDraft, pourClock: nowPourClock() },
+              baselineEntry: 'create',
+              baselineDraft: {
+                ...s.baselineDraft,
+                pourDate: resolvePourDate(s.date),
+                pourClock: nowPourClock(),
+              },
             }))
             go('newBaseline')
           }}
@@ -475,6 +503,63 @@ function elapsedToClock(pourClock: string, timeH: number): string {
   return formatHHMM(p.h * 60 + p.m + Math.round(timeH * 60))
 }
 
+/**
+ * Wall clock HH:MM → elapsed age hours for a given lab day.
+ * Offset within the day is measured from pour start; wraps past midnight.
+ */
+function clockToTimeH(pourClock: string, clockRaw: string, day: number): number | null {
+  const p = parseHHMM(normalizePourClock(pourClock))
+  const c = parseHHMM(clockRaw)
+  if (!p || !c || !Number.isFinite(day) || day < 0) return null
+  let deltaMin = c.h * 60 + c.m - (p.h * 60 + p.m)
+  if (deltaMin < 0) deltaMin += 24 * 60
+  return Number((day * 24 + deltaMin / 60).toFixed(4))
+}
+
+function parseIsoDate(iso: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim())
+  if (!m) return null
+  const dt = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+  return Number.isNaN(dt.getTime()) ? null : dt
+}
+
+function pourStartMs(pourDate: string, pourClock: string): number | null {
+  const d = parseIsoDate(pourDate)
+  const p = parseHHMM(normalizePourClock(pourClock))
+  if (!d || !p) return null
+  d.setHours(p.h, p.m, 0, 0)
+  return d.getTime()
+}
+
+const WEEKDAYS_ID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'] as const
+
+function weekdayId(date: Date): string {
+  return WEEKDAYS_ID[date.getDay()] ?? '—'
+}
+
+/** Absolute calendar date + clock for a maturity row from locked pour start. */
+function rowSchedule(
+  pourDate: string,
+  pourClock: string,
+  timeH: number,
+): { weekday: string; date: string; time: string } {
+  const start = pourStartMs(pourDate, pourClock)
+  if (start == null) {
+    const d = parseIsoDate(pourDate)
+    return {
+      weekday: d ? weekdayId(d) : '—',
+      date: fmtDate(pourDate),
+      time: elapsedToClock(pourClock, timeH),
+    }
+  }
+  const at = new Date(start + Math.round(timeH * 3600 * 1000))
+  return {
+    weekday: weekdayId(at),
+    date: `${pad2(at.getDate())}-${pad2(at.getMonth() + 1)}-${at.getFullYear()}`,
+    time: formatHHMM(at.getHours() * 60 + at.getMinutes()),
+  }
+}
+
 /** Next half-hour slot not already used by an existing Day 0 row. */
 function nextDay0Time(rows: MaturityRow[]): number {
   const used = new Set(
@@ -497,13 +582,18 @@ function sortMaturityRows(rows: MaturityRow[]): MaturityRow[] {
 
 export function MaturityDataScreen({ state, setState, go }: Props) {
   const rows = state.baselineDraft.rows
+  const pourDate =
+    state.baselineDraft.pourDate && /^\d{4}-\d{2}-\d{2}$/.test(state.baselineDraft.pourDate)
+      ? state.baselineDraft.pourDate
+      : resolvePourDate(state.date)
   const pourClock = normalizePourClock(state.baselineDraft.pourClock || nowPourClock())
   const canDelete = rows.length > MIN_MATURITY_ROWS
   const [pendingDelete, setPendingDelete] = useState<number | null>(null)
   const [addSheetOpen, setAddSheetOpen] = useState(false)
-  const [timePickerRow, setTimePickerRow] = useState<number | null>(null)
+  const [scheduleOpen, setScheduleOpen] = useState(false)
   const [focusDayIndex, setFocusDayIndex] = useState<number | null>(null)
   const [dayDraft, setDayDraft] = useState<{ i: number; value: string } | null>(null)
+  const [timeDraft, setTimeDraft] = useState<{ i: number; value: string } | null>(null)
   const [clockDraft, setClockDraft] = useState<string | null>(null)
   const [activeRow, setActiveRow] = useState<number | null>(null)
   const [sensorHint, setSensorHint] = useState<string | null>(null)
@@ -511,10 +601,10 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
   const dayInputRefs = useRef<(HTMLInputElement | null)[]>([])
   const nextLab = nextLabDay(rows)
   const clockLabel = (timeH: number) => elapsedToClock(pourClock, timeH)
-  const timePickerValue =
-    timePickerRow != null && rows[timePickerRow]?.day === 0
-      ? snapDay0Time(rows[timePickerRow].timeH)
-      : null
+  const scheduleRows = sortMaturityRows(rows).map((r) => ({
+    day: r.day,
+    ...rowSchedule(pourDate, pourClock, r.timeH),
+  }))
 
   useEffect(() => {
     if (focusDayIndex == null) return
@@ -540,12 +630,22 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
     setRows(rows.map((r, idx) => (idx === i ? { ...r, [key]: value } : r)))
   }
 
-  const updateDay0Time = (i: number, timeH: number) => {
-    setRows(
-      sortMaturityRows(
-        rows.map((r, idx) => (idx === i && r.day === 0 ? { ...r, timeH } : r)),
-      ),
-    )
+  const commitTime = (i: number, raw: string) => {
+    const row = rows[i]
+    if (!row) {
+      setTimeDraft(null)
+      return
+    }
+    const draftDay =
+      dayDraft?.i === i && dayDraft.value.trim() !== '' ? Number(dayDraft.value) : NaN
+    const day = Number.isFinite(draftDay) && draftDay >= 0 ? draftDay : row.day
+    const timeH = clockToTimeH(pourClock, raw, day)
+    if (timeH != null) {
+      setRows(
+        sortMaturityRows(rows.map((r, idx) => (idx === i ? { ...r, timeH } : r))),
+      )
+    }
+    setTimeDraft(null)
   }
 
   const commitDay = (i: number, raw: string) => {
@@ -681,6 +781,16 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="MATURITY DATA INPUT"
+      titleAside={
+        <button
+          type="button"
+          className="title-info-btn"
+          aria-label="Sample schedule"
+          onClick={() => setScheduleOpen(true)}
+        >
+          <IconInfo className="ico ico-xl" />
+        </button>
+      }
       footer={
         <NavFooter
           onBack={() =>
@@ -745,46 +855,47 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
               </div>
             </div>
           </div>
-        ) : timePickerRow != null && timePickerValue != null ? (
+        ) : scheduleOpen ? (
           <div
             className="confirm-overlay"
             role="presentation"
-            onClick={() => setTimePickerRow(null)}
+            onClick={() => setScheduleOpen(false)}
           >
             <div
-              className="confirm-dialog time-picker-sheet"
+              className="confirm-dialog schedule-sheet"
               role="dialog"
               aria-modal="true"
-              aria-labelledby="time-picker-title"
+              aria-labelledby="schedule-sheet-title"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 id="time-picker-title" className="confirm-title">
-                Select time
+              <h2 id="schedule-sheet-title" className="confirm-title">
+                Sample schedule
               </h2>
-              <p className="add-sheet-hint">From start {pourClock} (jam 0)</p>
-              <div className="time-picker-list" role="listbox" aria-label="Clock times">
-                {DAY0_TIME_OPTIONS.map((h) => {
-                  const selected = h === timePickerValue
-                  return (
-                    <button
-                      key={h}
-                      type="button"
-                      role="option"
-                      aria-selected={selected}
-                      className={`time-picker-option${selected ? ' is-selected' : ''}`}
-                      onClick={() => {
-                        updateDay0Time(timePickerRow, h)
-                        setActiveRow(timePickerRow)
-                        setTimePickerRow(null)
-                      }}
-                    >
-                      {clockLabel(h)}
-                    </button>
-                  )
-                })}
+              <p className="add-sheet-hint">
+                Locked from start {fmtDate(pourDate)} {pourClock}
+              </p>
+              <div className="schedule-list" role="list">
+                <div className="schedule-row schedule-row-head" role="presentation">
+                  <span>Day</span>
+                  <span>Hari</span>
+                  <span>Date</span>
+                  <span>Time</span>
+                </div>
+                {scheduleRows.map((r, i) => (
+                  <div
+                    key={`${r.day}-${r.date}-${r.time}-${i}`}
+                    className="schedule-row"
+                    role="listitem"
+                  >
+                    <span>{r.day}</span>
+                    <span>{r.weekday}</span>
+                    <span>{r.date}</span>
+                    <span>{r.time}</span>
+                  </div>
+                ))}
               </div>
-              <div className="confirm-actions">
-                <BtnGhost onClick={() => setTimePickerRow(null)}>CANCEL</BtnGhost>
+              <div className="confirm-actions confirm-actions-single">
+                <BtnGhost onClick={() => setScheduleOpen(false)}>CLOSE</BtnGhost>
               </div>
             </div>
           </div>
@@ -827,33 +938,34 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
                     />
                   </td>
                   <td className="time-cell">
-                    {r.day === 0 &&
-                    !(
-                      dayDraft?.i === i &&
-                      dayDraft.value.trim() !== '' &&
-                      Number.isFinite(Number(dayDraft.value)) &&
-                      Number(dayDraft.value) > 0
-                    ) ? (
-                      <button
-                        type="button"
-                        className="time-select"
-                        aria-label="Day 0 clock time"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setActiveRow(i)
-                          setTimePickerRow(i)
-                        }}
-                      >
-                        {clockLabel(snapDay0Time(r.timeH))}
-                      </button>
-                    ) : dayDraft?.i === i &&
-                      dayDraft.value.trim() !== '' &&
-                      Number.isFinite(Number(dayDraft.value)) &&
-                      Number(dayDraft.value) >= 0 ? (
-                      clockLabel(timeFromDay(Number(dayDraft.value)))
-                    ) : (
-                      clockLabel(r.timeH)
-                    )}
+                    <input
+                      className="time-select"
+                      inputMode="numeric"
+                      placeholder="HH:MM"
+                      aria-label={`Clock time day ${r.day}`}
+                      value={
+                        timeDraft?.i === i
+                          ? timeDraft.value
+                          : dayDraft?.i === i &&
+                              dayDraft.value.trim() !== '' &&
+                              Number.isFinite(Number(dayDraft.value)) &&
+                              Number(dayDraft.value) >= 0
+                            ? clockLabel(timeFromDay(Number(dayDraft.value)))
+                            : clockLabel(r.timeH)
+                      }
+                      onClick={(e) => e.stopPropagation()}
+                      onFocus={() => {
+                        setActiveRow(i)
+                        setTimeDraft({ i, value: clockLabel(r.timeH) })
+                      }}
+                      onChange={(e) => setTimeDraft({ i, value: e.target.value })}
+                      onBlur={() =>
+                        commitTime(
+                          i,
+                          timeDraft?.i === i ? timeDraft.value : clockLabel(r.timeH),
+                        )
+                      }
+                    />
                   </td>
                   <td>
                     <input
@@ -942,10 +1054,18 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
       const timeH = Number(r.timeH)
       const temp = Number(r.temperature)
       const fc = Number(r.fcLab)
+      const day = Number(r.day)
       if (!Number.isFinite(timeH) || !Number.isFinite(temp)) return null
-      return { timeH, temp, fc }
+      return {
+        day: Number.isFinite(day) ? day : 0,
+        timeH,
+        temp,
+        fc: Number.isFinite(fc) ? fc : 0,
+      }
     })
-    .filter((s): s is { timeH: number; temp: number; fc: number } => s != null)
+    .filter(
+      (s): s is { day: number; timeH: number; temp: number; fc: number } => s != null,
+    )
   const withM = accumulateNurseSaulM(samples, t0)
   const points = withM
     .filter((s) => Number.isFinite(s.fc) && s.fc > 0 && s.m > 0)
@@ -953,6 +1073,10 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
     .sort((a, b) => a.x - b.x)
 
   const fit = fitLogMaturity(points)
+  const fkzFactors =
+    fit && Number.isFinite(fit.a) && Number.isFinite(fit.b)
+      ? computeFkzFactors(samples, t0, fit.a, fit.b)
+      : []
 
   const save = () => {
     setState((s) => {
@@ -973,10 +1097,16 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
             retarder: { pct: Number(d.retarderPct) || 0, brand: d.retarderBrand },
             accelerator: { pct: Number(d.acceleratorPct) || 0, brand: d.acceleratorBrand },
             flyAsh: { pct: Number(d.flyAshPct) || 0, brand: d.flyAshBrand },
+            pourDate:
+              d.pourDate && /^\d{4}-\d{2}-\d{2}$/.test(d.pourDate)
+                ? d.pourDate
+                : resolvePourDate(s.date),
+            pourClock: normalizePourClock(d.pourClock || nowPourClock()),
             rows: d.rows.map((r) => ({ ...r })),
             coeffA: fit?.a,
             coeffB: fit?.b,
             r2: fit?.r2,
+            fkzFactors,
           },
           ...s.baselines,
         ],
@@ -1045,6 +1175,7 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
               <div className="br-equation">
                 {fit ? formatFcEquation(fit.a, fit.b) : 'fc = a + b ln(M)'}
               </div>
+              <div className="br-equation br-equation-fkz">fc_FKZ = fc · FKZ</div>
               <div className="br-kv">
                 <span>Coefficient a</span>
                 <span className="br-colon">:</span>
@@ -1059,6 +1190,11 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
                 <span>R²</span>
                 <span className="br-colon">:</span>
                 <strong>{fit ? formatCoeff(fit.r2, 4) : '—'}</strong>
+              </div>
+              <div className="br-kv">
+                <span>FKZ ages</span>
+                <span className="br-colon">:</span>
+                <strong>{fkzFactors.length > 0 ? fkzFactors.length : '—'}</strong>
               </div>
             </div>
           </section>
@@ -1106,7 +1242,40 @@ export function SavedBaselineScreen({ state, setState, go }: Props) {
           onBack={() => go('baselineMenu')}
           onNext={() => {
             if (!state.selectedBaselineId) return
-            setState((s) => ({ ...s, baselineEntry: 'saved' }))
+            setState((s) => {
+              const b = s.baselines.find((x) => x.id === s.selectedBaselineId)
+              if (!b) return { ...s, baselineEntry: 'saved' }
+              const pourDate =
+                (b.pourDate && /^\d{4}-\d{2}-\d{2}$/.test(b.pourDate) && b.pourDate) ||
+                createdAtToIso(b.createdAt) ||
+                s.baselineDraft.pourDate ||
+                resolvePourDate(s.date)
+              return {
+                ...s,
+                baselineEntry: 'saved',
+                baselineDraft: {
+                  ...s.baselineDraft,
+                  name: b.name,
+                  targetFc: String(b.targetFc),
+                  datumTemp: String(b.datumTemp),
+                  pourDate,
+                  pourClock: b.pourClock
+                    ? normalizePourClock(b.pourClock)
+                    : s.baselineDraft.pourClock || nowPourClock(),
+                  cement: String(b.cement),
+                  water: String(b.water),
+                  coarseAgg: String(b.coarseAgg),
+                  fineAgg: String(b.fineAgg),
+                  retarderPct: String(b.retarder.pct),
+                  retarderBrand: b.retarder.brand,
+                  acceleratorPct: String(b.accelerator.pct),
+                  acceleratorBrand: b.accelerator.brand,
+                  flyAshPct: String(b.flyAsh.pct),
+                  flyAshBrand: b.flyAsh.brand,
+                  rows: b.rows?.length ? b.rows.map((r) => ({ ...r })) : s.baselineDraft.rows,
+                },
+              }
+            })
             go('maturityData')
           }}
           nextLabel="SELECT"
@@ -1249,6 +1418,7 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
         avgTemp: initialPourTemp,
         maturityIndex: 0,
         sensorTemps,
+        logs: [{ day: 0, atMs: pourStartMs, temp: initialPourTemp }],
       },
     }))
     go('realtime')
@@ -1326,12 +1496,21 @@ function formatClock(d: Date) {
   return `${hh}:${mm}:${ss}`
 }
 
+function formatDayMonthYear(d: Date) {
+  return `${pad2(d.getDate())}-${pad2(d.getMonth() + 1)}-${d.getFullYear()}`
+}
+
 function formatElapsed(totalSec: number) {
   const sec = Math.max(0, Math.floor(totalSec))
   const hh = String(Math.floor(sec / 3600)).padStart(2, '0')
   const mm = String(Math.floor((sec % 3600) / 60)).padStart(2, '0')
   const ss = String(sec % 60).padStart(2, '0')
   return `${hh}:${mm}:${ss}`
+}
+
+function nextAutoLogDay(logs: { day: number }[]): number {
+  if (logs.length === 0) return 0
+  return Math.max(...logs.map((l) => l.day)) + 1
 }
 
 export function RealtimeScreen({ state, setState, go }: Props) {
@@ -1344,12 +1523,14 @@ export function RealtimeScreen({ state, setState, go }: Props) {
   )
   const initialPourTemp = state.measurement.initialPourTemp
   const datumTemp = baseline?.datumTemp ?? -20
+  const logs = state.measurement.logs ?? []
   const [now, setNow] = useState(() => new Date())
-  const [elapsed, setElapsed] = useState(() =>
-    state.measurement.pourStartMs
-      ? Math.max(0, Math.floor((Date.now() - state.measurement.pourStartMs) / 1000))
-      : 0,
-  )
+  const [dayHint, setDayHint] = useState<string | null>(null)
+  const [logDraft, setLogDraft] = useState<{
+    key: string
+    field: 'time' | 'temp'
+    value: string
+  } | null>(null)
   // Excel Σ: accumulate dM each second with trapezoid ((T_prev+T_now)/2 − T₀)·Δt
   const maturityRef = useRef(0)
   const prevTempRef = useRef(initialPourTemp ?? averageReadableTemps(temps)?.avg ?? 0)
@@ -1357,31 +1538,48 @@ export function RealtimeScreen({ state, setState, go }: Props) {
 
   useEffect(() => {
     const startMs = pourStartRef.current.getTime()
-    setState((s) =>
-      s.measurement.pourStartMs === startMs
-        ? s
-        : {
-            ...s,
-            measurement: { ...s.measurement, pourStartMs: startMs, endMs: null },
-          },
-    )
+    setState((s) => {
+      const hasDay0 = (s.measurement.logs ?? []).some((l) => l.day === 0)
+      const pourTemp = s.measurement.initialPourTemp ?? 0
+      const nextLogs =
+        hasDay0 || s.measurement.pourStartMs == null
+          ? s.measurement.logs ?? []
+          : [{ day: 0, atMs: startMs, temp: pourTemp }, ...(s.measurement.logs ?? [])]
+      if (s.measurement.pourStartMs === startMs && hasDay0) return s
+      return {
+        ...s,
+        measurement: {
+          ...s.measurement,
+          pourStartMs: startMs,
+          endMs: null,
+          logs: nextLogs.length ? nextLogs : [{ day: 0, atMs: startMs, temp: pourTemp }],
+        },
+      }
+    })
   }, [setState])
 
   // If realtime resumed mid-session, catch up M for elapsed so far (one Excel interval).
   useEffect(() => {
     if (caughtUpRef.current) return
     caughtUpRef.current = true
+    const startMs = pourStartRef.current.getTime()
+    const elapsedSec = Math.max(0, Math.floor((Date.now() - startMs) / 1000))
     const tStart = initialPourTemp ?? averageReadableTemps(temps)?.avg ?? 0
     const tNow = averageReadableTemps(temps)?.avg ?? tStart
-    if (elapsed > 0) {
-      maturityRef.current = nurseSaulMaturityLocked(tStart, tNow, datumTemp, elapsed)
+    if (elapsedSec > 0) {
+      maturityRef.current = nurseSaulMaturityLocked(tStart, tNow, datumTemp, elapsedSec)
       prevTempRef.current = tNow
     }
   }, [])
 
   useEffect(() => {
+    if (!dayHint) return
+    const t = window.setTimeout(() => setDayHint(null), 2200)
+    return () => window.clearTimeout(t)
+  }, [dayHint])
+
+  useEffect(() => {
     const t = window.setInterval(() => {
-      setElapsed((e) => e + 1)
       setNow(new Date())
       setTemps((prev) => {
         const next = prev.map((v) => +(v + (Math.random() - 0.5) * 0.15).toFixed(1)) as [
@@ -1401,24 +1599,121 @@ export function RealtimeScreen({ state, setState, go }: Props) {
   }, [datumTemp])
 
   const avg = averageReadableTemps(temps)?.avg ?? 0
-  const pourStart = formatClock(pourStartRef.current)
-  const currentTime = formatClock(now)
+  const pourStart = pourStartRef.current
+  const pourDateLabel = formatDayMonthYear(pourStart)
+  const pourTimeLabel = formatClock(pourStart)
+  const currentDateLabel = formatDayMonthYear(now)
+  const currentTimeLabel = formatClock(now)
+  const nextDay = nextAutoLogDay(logs)
+
+  const logKey = (l: { day: number; atMs: number }) => `${l.day}-${l.atMs}`
+
+  const upsertLog = (day: number) => {
+    const atMs = Date.now()
+    const temp = avg
+    setState((s) => {
+      const prev = s.measurement.logs ?? []
+      const without = prev.filter((l) => l.day !== day)
+      const next = [...without, { day, atMs, temp }].sort((a, b) => a.day - b.day || a.atMs - b.atMs)
+      return {
+        ...s,
+        measurement: { ...s.measurement, logs: next, sensorTemps: temps },
+      }
+    })
+    setDayHint(`Day ${day} logged @ ${formatClock(new Date(atMs))} · ${temp.toFixed(1)} °C`)
+  }
+
+  const addDayAuto = () => upsertLog(nextDay)
+
+  const commitLogTemp = (day: number, atMs: number, raw: string) => {
+    const temp = Number(raw)
+    if (!Number.isFinite(temp)) {
+      setLogDraft(null)
+      return
+    }
+    setState((s) => ({
+      ...s,
+      measurement: {
+        ...s.measurement,
+        logs: (s.measurement.logs ?? []).map((l) =>
+          l.day === day && l.atMs === atMs ? { ...l, temp } : l,
+        ),
+        initialPourTemp: day === 0 ? temp : s.measurement.initialPourTemp,
+      },
+    }))
+    setLogDraft(null)
+  }
+
+  const commitLogTime = (day: number, atMs: number, raw: string) => {
+    const m = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/.exec(String(raw).trim())
+    if (!m) {
+      setLogDraft(null)
+      return
+    }
+    const hh = Number(m[1])
+    const mm = Number(m[2])
+    const ss = m[3] != null ? Number(m[3]) : 0
+    if (hh > 23 || mm > 59 || ss > 59) {
+      setLogDraft(null)
+      return
+    }
+    const next = new Date(atMs)
+    next.setHours(hh, mm, ss, 0)
+    const nextMs = next.getTime()
+    if (day === 0) pourStartRef.current = new Date(nextMs)
+    setState((s) => ({
+      ...s,
+      measurement: {
+        ...s.measurement,
+        pourStartMs: day === 0 ? nextMs : s.measurement.pourStartMs,
+        logs: (s.measurement.logs ?? []).map((l) =>
+          l.day === day && l.atMs === atMs ? { ...l, atMs: nextMs } : l,
+        ),
+      },
+    }))
+    setLogDraft(null)
+  }
+
+  const maturityFromLogs = (endMs: number, liveTemp: number) => {
+    const startMs = pourStartRef.current.getTime()
+    const pourAvg = initialPourTemp ?? liveTemp
+    const points = [...logs]
+      .map((l) => ({
+        timeH: Math.max(0, (l.atMs - startMs) / 3600),
+        temp: l.temp,
+      }))
+      .sort((a, b) => a.timeH - b.timeH)
+    const liveTimeH = Math.max(0, (endMs - startMs) / 3600)
+    const last = points[points.length - 1]
+    if (!last || liveTimeH > last.timeH + 1 / 3600) {
+      points.push({ timeH: liveTimeH, temp: liveTemp })
+    }
+    if (points.length < 2) {
+      return nurseSaulMaturityLocked(pourAvg, liveTemp, datumTemp, (endMs - startMs) / 1000)
+    }
+    const withM = accumulateNurseSaulM(points, datumTemp)
+    return withM[withM.length - 1]?.m ?? 0
+  }
 
   const goToResult = () => {
-    const endMs = Date.now()
-    // Average Temperature di result = suhu awal penuangan (freeze saat START), bukan avg live saat NEXT.
+    const startMs = pourStartRef.current.getTime()
+    // Elapsed / result lock to last logged checkpoint (not NEXT click time).
+    const lastLogMs =
+      logs.length > 0 ? Math.max(...logs.map((l) => l.atMs)) : Date.now()
+    const endMs = Math.max(startMs, lastLogMs)
+    const lastTemp =
+      logs.length > 0
+        ? [...logs].sort((a, b) => b.atMs - a.atMs)[0]?.temp ?? avg
+        : avg
     const pourAvg = initialPourTemp ?? avg
-    // Prefer live Σ; fallback one Excel interval start→lock if accum still ~0 but elapsed > 0.
-    let m = maturityRef.current
-    if (m < 1e-9 && elapsed > 0) {
-      m = nurseSaulMaturityLocked(pourAvg, avg, datumTemp, elapsed)
-    }
+    let m = maturityFromLogs(endMs, lastTemp)
+    if (m < 1e-9) m = maturityRef.current
     const maturityIndex = Math.round(m)
     setState((s) => ({
       ...s,
       measurement: {
         ...s.measurement,
-        pourStartMs: pourStartRef.current.getTime(),
+        pourStartMs: startMs,
         endMs,
         avgTemp: pourAvg,
         maturityIndex,
@@ -1477,14 +1772,22 @@ export function RealtimeScreen({ state, setState, go }: Props) {
             <IconClock className="ico ico-accent" />
             REAL TIME MONITORING
           </div>
-          <div className="rt-monitor-grid" role="group" aria-label="Pour monitoring">
+          <div className="rt-monitor-grid rt-monitor-grid-3" role="group" aria-label="Pour monitoring">
+            <div className="rt-cell">
+              <span className="rt-cell-label">Initial Pour Date</span>
+              <strong className="rt-cell-value">{pourDateLabel}</strong>
+            </div>
+            <div className="rt-cell rt-cell-end">
+              <span className="rt-cell-label">Current Date</span>
+              <strong className="rt-cell-value">{currentDateLabel}</strong>
+            </div>
             <div className="rt-cell">
               <span className="rt-cell-label">Initial Pour Time</span>
-              <strong className="rt-cell-value">{pourStart}</strong>
+              <strong className="rt-cell-value">{pourTimeLabel}</strong>
             </div>
             <div className="rt-cell rt-cell-end">
               <span className="rt-cell-label">Current Time</span>
-              <strong className="rt-cell-value rt-clock">{currentTime}</strong>
+              <strong className="rt-cell-value rt-clock">{currentTimeLabel}</strong>
             </div>
             <div className="rt-cell">
               <span className="rt-cell-label">Initial Temp.</span>
@@ -1493,14 +1796,107 @@ export function RealtimeScreen({ state, setState, go }: Props) {
               </strong>
             </div>
             <div className="rt-cell rt-cell-end">
-              <span className="rt-cell-label">Status</span>
-              <StatusPill>
-                <span className="status-spin" aria-hidden />
-                RUNNING
-              </StatusPill>
+              <span className="rt-cell-label">Current Temp.</span>
+              <strong className="rt-cell-value">{avg.toFixed(1)} °C</strong>
             </div>
           </div>
         </div>
+
+        <div className="rt-day-actions">
+          <button type="button" className="rt-day-btn" onClick={addDayAuto}>
+            + ADD DAY
+          </button>
+        </div>
+
+        <div className="rt-log-card" aria-label="Logged days">
+          <div className="rt-log-head">
+            <IconCalendar className="ico ico-accent ico-sm" />
+            LOGGED DAYS
+          </div>
+          {logs.length > 0 ? (
+            <table className="rt-log-table">
+              <thead>
+                <tr>
+                  <th>Day</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Temp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...logs]
+                  .sort((a, b) => a.day - b.day || a.atMs - b.atMs)
+                  .map((l) => {
+                    const at = new Date(l.atMs)
+                    const key = logKey(l)
+                    const timeValue =
+                      logDraft?.key === key && logDraft.field === 'time'
+                        ? logDraft.value
+                        : formatClock(at)
+                    const tempValue =
+                      logDraft?.key === key && logDraft.field === 'temp'
+                        ? logDraft.value
+                        : l.temp.toFixed(1)
+                    return (
+                      <tr key={key}>
+                        <td>{l.day}</td>
+                        <td>{formatDayMonthYear(at)}</td>
+                        <td>
+                          <input
+                            className="rt-log-input"
+                            inputMode="numeric"
+                            aria-label={`Day ${l.day} time`}
+                            value={timeValue}
+                            onFocus={() =>
+                              setLogDraft({ key, field: 'time', value: formatClock(at) })
+                            }
+                            onChange={(e) =>
+                              setLogDraft({ key, field: 'time', value: e.target.value })
+                            }
+                            onBlur={() =>
+                              commitLogTime(
+                                l.day,
+                                l.atMs,
+                                logDraft?.key === key && logDraft.field === 'time'
+                                  ? logDraft.value
+                                  : formatClock(at),
+                              )
+                            }
+                          />
+                        </td>
+                        <td>
+                          <input
+                            className="rt-log-input"
+                            inputMode="decimal"
+                            aria-label={`Day ${l.day} temperature`}
+                            value={tempValue}
+                            onFocus={() =>
+                              setLogDraft({ key, field: 'temp', value: l.temp.toFixed(1) })
+                            }
+                            onChange={(e) =>
+                              setLogDraft({ key, field: 'temp', value: e.target.value })
+                            }
+                            onBlur={() =>
+                              commitLogTemp(
+                                l.day,
+                                l.atMs,
+                                logDraft?.key === key && logDraft.field === 'temp'
+                                  ? logDraft.value
+                                  : String(l.temp),
+                              )
+                            }
+                          />
+                        </td>
+                      </tr>
+                    )
+                  })}
+              </tbody>
+            </table>
+          ) : (
+            <p className="rt-log-empty">No days logged yet. Tap ADD DAY.</p>
+          )}
+        </div>
+        {dayHint ? <p className="rt-day-hint">{dayHint}</p> : null}
       </div>
     </Screen>
   )
@@ -1508,14 +1904,34 @@ export function RealtimeScreen({ state, setState, go }: Props) {
 
 export function StrengthResultScreen({ state, setState, go }: Props) {
   const baseline = selectedBaseline(state)
-  const strength = 35.4
   const m = state.measurement
   const pourStartMs = m.pourStartMs ?? Date.now()
-  const endMs = m.endMs ?? Date.now()
+  const logs = m.logs ?? []
+  const lastLogMs =
+    logs.length > 0 ? Math.max(...logs.map((l) => l.atMs)) : (m.endMs ?? Date.now())
+  const endMs = Math.max(pourStartMs, lastLogMs)
+  // Elapsed = last logged checkpoint − initial pour (not NEXT click).
   const elapsedLabel = formatElapsed((endMs - pourStartMs) / 1000)
   // Suhu awal penuangan (saat START) — sama dengan Initial Temp. di realtime.
   const avgTemp = m.initialPourTemp ?? m.avgTemp
   const maturityIndex = m.maturityIndex
+  const lastLogDay =
+    logs.length > 0
+      ? [...logs].sort((a, b) => b.atMs - a.atMs)[0]?.day ?? 0
+      : 0
+  const fkz = lookupFkz(baseline?.fkzFactors, lastLogDay)
+  const strength =
+    baseline?.coeffA != null &&
+    baseline?.coeffB != null &&
+    Number.isFinite(baseline.coeffA) &&
+    Number.isFinite(baseline.coeffB)
+      ? predictFcWithFkz(maturityIndex, baseline.coeffA, baseline.coeffB, fkz)
+      : 0
+  const targetFc = baseline?.targetFc ?? 0
+  const strengthPct =
+    targetFc > 0 && Number.isFinite(strength)
+      ? Math.max(0, (strength / targetFc) * 100)
+      : null
 
   const save = () => {
     setState((s) => ({
@@ -1537,6 +1953,10 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
           targetFc: baseline?.targetFc ?? 0,
           datumTemp: baseline?.datumTemp ?? 0,
           status: 'COMPLETED',
+          logs: (s.measurement.logs ?? []).map((l) => ({ ...l })),
+          coeffA: baseline?.coeffA,
+          coeffB: baseline?.coeffB,
+          fkzFactors: baseline?.fkzFactors?.map((f) => ({ ...f })),
         },
         ...s.history,
       ],
@@ -1578,7 +1998,12 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
           </div>
           <div className="predict-box-main">
             <span className="mini-label">Predicted Fc'</span>
-            <strong className="huge">{strength.toFixed(1)} MPa</strong>
+            <strong className="huge">
+              {strength.toFixed(1)} MPa
+              {strengthPct != null ? (
+                <span className="predict-pct"> ({strengthPct.toFixed(0)}%)</span>
+              ) : null}
+            </strong>
           </div>
           <span className="predict-box-spacer" aria-hidden />
         </div>
@@ -1597,27 +2022,6 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
               <small>°C·hour</small>
             </strong>
           </div>
-          <div className="sr-metric">
-            <IconClock className="ico ico-accent" />
-            <span>Elapsed Time</span>
-            <strong>{elapsedLabel}</strong>
-          </div>
-        </div>
-
-        <div className="status-card">
-          <div className="row-between">
-            <span className="with-ico">
-              <IconCheck className="ico ico-accent" /> Prediction Status
-            </span>
-            <StatusPill>
-              <span className="status-spin" aria-hidden />
-              READY
-            </StatusPill>
-          </div>
-          <p className="footnote">
-            <IconInfo className="ico ico-muted" /> Prediction generated from selected baseline and
-            real-time temperature measurement.
-          </p>
         </div>
       </div>
     </Screen>
@@ -1626,6 +2030,11 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
 
 export function HistoryScreen({ state, setState, go }: Props) {
   const selected = state.selectedHistoryId ?? state.history[0]?.id
+
+  const openDetail = (id: string) => {
+    setState((s) => ({ ...s, selectedHistoryId: id }))
+    go('historyDetail')
+  }
 
   return (
     <Screen
@@ -1636,62 +2045,97 @@ export function HistoryScreen({ state, setState, go }: Props) {
         <NavFooter
           onBack={() => go('kuatTekanMenu')}
           onNext={() => {
-            setState((s) => ({ ...s, selectedHistoryId: selected }))
-            go('historyDetail')
+            if (!selected) return
+            openDetail(selected)
           }}
-          nextLabel="VIEW DETAIL"
+          nextLabel="VIEW LOG"
         />
       }
     >
       <div className="stack gap-sm history-list">
-        {state.history.map((h) => (
-          <button
-            key={h.id}
-            type="button"
-            className={`history-card${selected === h.id ? ' selected' : ''}`}
-            onClick={() => setState((s) => ({ ...s, selectedHistoryId: h.id }))}
-          >
-            <div className="history-top">
-              <div className="history-field">
-                <span className="mini-label">Test ID</span>
-                <strong>{h.testId}</strong>
+        {state.history.map((h) => {
+          const logCount = h.logs?.length ?? 0
+          return (
+            <button
+              key={h.id}
+              type="button"
+              className={`history-card${selected === h.id ? ' selected' : ''}`}
+              onClick={() => openDetail(h.id)}
+            >
+              <div className="history-top">
+                <div className="history-field">
+                  <span className="mini-label">Test ID</span>
+                  <strong>{h.testId}</strong>
+                </div>
+                <div className="history-field grow">
+                  <span className="mini-label">Baseline Name</span>
+                  <strong>{h.baselineName}</strong>
+                </div>
+                <span className="detail-link">
+                  LOG <span aria-hidden>›</span>
+                </span>
               </div>
-              <div className="history-field grow">
-                <span className="mini-label">Baseline Name</span>
-                <strong>{h.baselineName}</strong>
+              <div className="history-bottom">
+                <div className="history-field">
+                  <span className="mini-label">Predicted Strength</span>
+                  <strong className="orange-text">
+                    {Math.max(0, h.strengthMpa).toFixed(1)}
+                    <span> MPa</span>
+                  </strong>
+                </div>
+                <div className="history-field">
+                  <span className="mini-label">Date</span>
+                  <strong>{h.date}</strong>
+                </div>
+                <div className="history-field history-logs">
+                  <span className="mini-label">Logged Days</span>
+                  <strong>
+                    {logCount > 0 ? `${logCount} day${logCount > 1 ? 's' : ''}` : '—'}
+                  </strong>
+                </div>
               </div>
-              <span className="detail-link">
-                DETAIL <span aria-hidden>›</span>
-              </span>
-            </div>
-            <div className="history-bottom">
-              <div className="history-field">
-                <span className="mini-label">Predicted Strength</span>
-                <strong className="orange-text">
-                  {h.strengthMpa.toFixed(1)}
-                  <span> MPa</span>
-                </strong>
-              </div>
-              <div className="history-field">
-                <span className="mini-label">Date</span>
-                <strong>{h.date}</strong>
-              </div>
-              <div className="history-field history-status">
-                <span className="mini-label">Status</span>
-                <StatusPill tone="green">
-                  <IconCheck className="ico" /> COMPLETED
-                </StatusPill>
-              </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          )
+        })}
       </div>
     </Screen>
   )
 }
 
+/** Per-log Nurse–Saul M + Predicted Fc (× FKZ) from checkpoints. */
+function enrichHistoryLogs(
+  logs: { day: number; atMs: number; temp: number }[],
+  datumTemp: number,
+  coeffA?: number,
+  coeffB?: number,
+  fkzFactors?: { day: number; fkz: number }[],
+) {
+  const sorted = [...logs].sort((a, b) => a.day - b.day || a.atMs - b.atMs)
+  if (sorted.length === 0) return []
+  const t0 = sorted[0].atMs
+  const samples = sorted.map((l) => ({
+    ...l,
+    timeH: Math.max(0, (l.atMs - t0) / 3600),
+  }))
+  const withM = accumulateNurseSaulM(samples, datumTemp)
+  const canPredict =
+    coeffA != null &&
+    coeffB != null &&
+    Number.isFinite(coeffA) &&
+    Number.isFinite(coeffB)
+  return withM.map((row) => {
+    const maturity = Math.round(row.m)
+    const predictedFc = canPredict
+      ? predictFcWithFkz(maturity, coeffA, coeffB, lookupFkz(fkzFactors, row.day))
+      : null
+    return { ...row, maturity, predictedFc }
+  })
+}
+
 export function HistoryDetailScreen({ state, go }: Props) {
   const h = state.history.find((x) => x.id === state.selectedHistoryId) ?? state.history[0]
+  const [openLogKey, setOpenLogKey] = useState<string | null>(null)
+
   if (!h) {
     return (
       <Screen title="RESULT DETAIL HISTORY" footer={<NavFooter onBack={() => go('history')} />}>
@@ -1700,10 +2144,15 @@ export function HistoryDetailScreen({ state, go }: Props) {
     )
   }
 
+  const baselineMatch = state.baselines.find((b) => b.name === h.baselineName)
+  const coeffA = h.coeffA ?? baselineMatch?.coeffA
+  const coeffB = h.coeffB ?? baselineMatch?.coeffB
+  const fkzFactors = h.fkzFactors ?? baselineMatch?.fkzFactors
+  const logRows = enrichHistoryLogs(h.logs ?? [], h.datumTemp, coeffA, coeffB, fkzFactors)
+
   return (
     <Screen
       title="RESULT DETAIL HISTORY"
-      scroll={false}
       bodyClassName="rdh-body"
       footer={
         <div className="rdh-footer">
@@ -1766,6 +2215,66 @@ export function HistoryDetailScreen({ state, go }: Props) {
         </div>
 
         <div className="rdh-section">
+          <div className="rdh-label">LOGGED DAYS</div>
+          <div className="rdh-card rdh-log-card">
+            {logRows.length > 0 ? (
+              <div className="rdh-log-accordion" role="list">
+                {logRows.map((l) => {
+                  const key = `${l.day}-${l.atMs}`
+                  const open = openLogKey === key
+                  const at = new Date(l.atMs)
+                  return (
+                    <div key={key} className={`rdh-log-item${open ? ' is-open' : ''}`} role="listitem">
+                      <button
+                        type="button"
+                        className="rdh-log-toggle"
+                        aria-expanded={open}
+                        onClick={() => setOpenLogKey(open ? null : key)}
+                      >
+                        <span className="rdh-log-day">Day {l.day}</span>
+                        <span className="rdh-log-summary">
+                          {formatDayMonthYear(at)} · {formatClock(at)}
+                        </span>
+                        <span className="rdh-log-chevron" aria-hidden>
+                          {open ? '▴' : '▾'}
+                        </span>
+                      </button>
+                      {open ? (
+                        <div className="rdh-log-panel">
+                          <div className="rdh-log-kv">
+                            <span>Time</span>
+                            <strong>{formatClock(at)}</strong>
+                          </div>
+                          <div className="rdh-log-kv">
+                            <span>Temperature</span>
+                            <strong>{l.temp.toFixed(1)} °C</strong>
+                          </div>
+                          <div className="rdh-log-kv">
+                            <span>Maturity Index</span>
+                            <strong>
+                              {l.maturity.toLocaleString()}
+                              <small> °C·h</small>
+                            </strong>
+                          </div>
+                          <div className="rdh-log-kv rdh-log-fc">
+                            <span>Predicted Fc'</span>
+                            <strong>
+                              {l.predictedFc != null ? `${l.predictedFc.toFixed(1)} MPa` : '—'}
+                            </strong>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <p className="rdh-log-empty">No day logs saved for this test.</p>
+            )}
+          </div>
+        </div>
+
+        <div className="rdh-section">
           <div className="rdh-label">SENSOR DATA</div>
           <div className="rdh-sensor-strip">
             {h.sensorTemps.map((t, i) => (
@@ -1785,12 +2294,7 @@ export function HistoryDetailScreen({ state, go }: Props) {
 
         <div className="rdh-section">
           <div className="rdh-label">CALCULATION</div>
-          <div className="rdh-calc">
-            <div className="rdh-cell">
-              <IconClock className="ico ico-accent" />
-              <span>Elapsed Time</span>
-              <strong>{h.elapsed}</strong>
-            </div>
+          <div className="rdh-calc rdh-calc-2">
             <div className="rdh-cell">
               <IconChart className="ico ico-accent" />
               <span>Maturity Index</span>
@@ -1800,23 +2304,15 @@ export function HistoryDetailScreen({ state, go }: Props) {
             <div className="rdh-cell rdh-predict">
               <IconChart className="ico ico-accent" />
               <span>Predicted Strength</span>
-              <strong>{h.strengthMpa.toFixed(1)} MPa</strong>
+              <strong>{Math.max(0, h.strengthMpa).toFixed(1)} MPa</strong>
             </div>
           </div>
-        </div>
-
-        <div className="rdh-status">
-          <span className="with-ico">
-            <IconCheck className="ico ico-accent" /> Status
-          </span>
-          <StatusPill>{h.status}</StatusPill>
         </div>
 
         <div className="rdh-note">
           <IconInfo className="ico ico-muted" />
           <p>
-            This is a saved historical result from a previous test. Data is retrieved from the
-            history menu.
+            Day logs are the checkpoints saved during realtime measurement (ADD DAY / MANUAL).
           </p>
         </div>
       </div>
@@ -1980,9 +2476,9 @@ export function DeviceInfoScreen({ go }: Props) {
       }
     >
       <div className="stack gap-sm">
-        <InfoRow icon={<IconDevice className="ico ico-xl ico-accent" />} label="Device Name" value="ConMT Concrete Maturity System" />
-        <InfoRow icon={<IconDoc className="ico ico-xl ico-accent" />} label="Device ID" value="CNMT-HK-001" />
-        <InfoRow icon={<IconGear className="ico ico-xl ico-accent" />} label="Firmware Version" value="V1.0.3" />
+        <InfoRow icon={<IconDevice className="ico ico-xl ico-accent" />} label="Device Name" value="Concrete Maturity Test" />
+        <InfoRow icon={<IconDoc className="ico ico-xl ico-accent" />} label="Device ID" value="HK ConMT" />
+        <InfoRow icon={<IconGear className="ico ico-xl ico-accent" />} label="Firmware Version" value="V1.0.1" />
         <InfoRow icon={<IconChip className="ico ico-xl ico-accent" />} label="Hardware" value="Nexion Touch Display" />
         <InfoRow icon={<IconThermo className="ico ico-xl ico-accent" />} label="Sensor Channels" value="3 Temperature Inputs" />
         <InfoRow icon={<IconDatabase className="ico ico-xl ico-accent" />} label="Communication" value="Serial / Modbus" />

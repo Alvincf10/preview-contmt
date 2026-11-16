@@ -31,6 +31,10 @@ export function loadAppState(): AppState {
       baselineDraft: {
         ...initialState.baselineDraft,
         ...draft,
+        pourDate:
+          typeof draft.pourDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(draft.pourDate.trim())
+            ? draft.pourDate.trim()
+            : initialState.baselineDraft.pourDate,
         pourClock:
           typeof draft.pourClock === 'string' && draft.pourClock.trim()
             ? draft.pourClock
@@ -45,6 +49,9 @@ export function loadAppState(): AppState {
         sensorTemps: Array.isArray(measurement.sensorTemps)
           ? (measurement.sensorTemps as AppState['measurement']['sensorTemps'])
           : initialState.measurement.sensorTemps,
+        logs: Array.isArray(measurement.logs)
+          ? (measurement.logs as AppState['measurement']['logs'])
+          : initialState.measurement.logs,
       },
       settings: {
         ...initialState.settings,

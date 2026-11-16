@@ -294,6 +294,40 @@ select {
   font-weight: var(--fw-heavy);
   letter-spacing: 0.04em;
   line-height: 1.05;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-title-text {
+  min-width: 0;
+}
+
+.panel-title-aside {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.title-info-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--muted);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.title-info-btn:hover,
+.title-info-btn:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  color: #fff;
 }
 
 .panel-head-back .panel-title {
@@ -683,6 +717,14 @@ select {
   border: 1.5px solid var(--orange);
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.35);
+}
+
+.br-equation-fkz {
+  margin-top: -2px;
+  font-size: 12px;
+  font-weight: var(--fw-semibold);
+  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 .br-save {
@@ -1268,61 +1310,13 @@ select {
   text-align: center;
   padding: 0 4px;
   font-variant-numeric: tabular-nums;
-  cursor: pointer;
   font: inherit;
   font-size: 11px;
-}
-
-.maturity-table .time-select:disabled {
-  opacity: 0.7;
-  cursor: default;
 }
 
 .maturity-table .time-select:focus {
   outline: none;
   border-color: var(--accent);
-}
-
-/* In-panel clock picker — avoids native <select> overflowing the 480×800 HMI */
-.time-picker-sheet {
-  width: min(300px, 86%);
-  max-height: min(420px, 72%);
-  display: flex;
-  flex-direction: column;
-}
-
-.time-picker-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  max-height: 260px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  margin: 8px 0 4px;
-  padding: 2px 2px 6px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.time-picker-option {
-  height: 36px;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  background: rgba(0, 0, 0, 0.35);
-  color: var(--text);
-  font-variant-numeric: tabular-nums;
-  font-size: 13px;
-  font-weight: var(--fw-semibold);
-  cursor: pointer;
-}
-
-.time-picker-option.is-selected {
-  border-color: var(--accent);
-  background: rgba(242, 124, 10, 0.22);
-  color: #fff;
-}
-
-.time-picker-option:hover {
-  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .maturity-table .day-input {
@@ -1513,8 +1507,58 @@ select {
   margin-top: 4px;
 }
 
+.confirm-actions-single {
+  grid-template-columns: 1fr;
+}
+
 .confirm-actions .btn {
   min-height: 44px;
+}
+
+.schedule-sheet {
+  width: min(380px, 92%);
+  max-height: min(460px, 78%);
+  display: flex;
+  flex-direction: column;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 280px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 4px 0 2px;
+  padding-right: 2px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.schedule-row {
+  display: grid;
+  grid-template-columns: 36px 58px 1fr 52px;
+  gap: 6px;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.28);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.schedule-row-head {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  min-height: 22px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .info-box {
@@ -2030,11 +2074,11 @@ select {
   width: 424px;
   max-width: calc(100% - 28px);
   margin: 0;
+  height: calc(var(--hmi-h) - var(--brand-h) - 112px);
   max-height: calc(var(--hmi-h) - var(--brand-h) - 112px);
   display: flex;
   flex-direction: column;
   min-height: 0;
-  height: auto;
 }
 
 .screen-realtime .panel-head {
@@ -2062,15 +2106,19 @@ select {
 
 .screen-realtime .panel-body {
   padding: 10px 14px 4px;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   min-height: 0;
-  overflow: visible;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .screen-realtime .panel-footer {
-  padding: 4px 14px 12px;
+  padding: 8px 14px 12px;
   flex-shrink: 0;
   margin-top: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(12, 16, 22, 0.55);
 }
 
 .screen-realtime .rt-stack {
@@ -2244,7 +2292,7 @@ select {
   margin-bottom: 10px;
 }
 
-/* Balanced 2×2: Pour Time | Current Time / Initial Temp | Status */
+/* Left = initial pour · Right = current (3×2: date / time / temp) */
 .screen-realtime .rt-monitor-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2256,14 +2304,18 @@ select {
   background: rgba(12, 16, 22, 0.45);
 }
 
+.screen-realtime .rt-monitor-grid-3 {
+  grid-template-rows: auto auto auto;
+}
+
 .screen-realtime .rt-cell {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   gap: 5px;
-  min-height: 58px;
-  padding: 10px 12px;
+  min-height: 52px;
+  padding: 8px 12px;
   border-right: 1px solid rgba(255, 255, 255, 0.12);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
@@ -2272,7 +2324,11 @@ select {
   border-right: none;
 }
 
-.screen-realtime .rt-cell:nth-child(n + 3) {
+.screen-realtime .rt-monitor-grid:not(.rt-monitor-grid-3) .rt-cell:nth-child(n + 3) {
+  border-bottom: none;
+}
+
+.screen-realtime .rt-monitor-grid-3 .rt-cell:nth-child(n + 5) {
   border-bottom: none;
 }
 
@@ -2289,7 +2345,7 @@ select {
 }
 
 .screen-realtime .rt-cell-value {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: var(--fw-bold);
   color: #fff;
   line-height: 1.15;
@@ -2301,8 +2357,126 @@ select {
   color: #fff;
 }
 
-.screen-realtime .rt-cell-end .status-pill {
-  margin-top: 0;
+.screen-realtime .rt-day-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.screen-realtime .rt-day-btn {
+  min-height: 42px;
+  border-radius: 10px;
+  border: 1px solid var(--accent);
+  background: rgba(242, 124, 10, 0.18);
+  color: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.screen-realtime .rt-log-card {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(12, 16, 22, 0.45);
+  padding: 8px 10px 10px;
+}
+
+.screen-realtime .rt-log-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: var(--fw-heavy);
+  letter-spacing: 0.03em;
+}
+
+.screen-realtime .rt-log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.screen-realtime .rt-log-table th {
+  text-align: left;
+  font-size: 9px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 4px 6px;
+}
+
+.screen-realtime .rt-log-table th:last-child,
+.screen-realtime .rt-log-table td:last-child {
+  text-align: right;
+}
+
+.screen-realtime .rt-log-table td {
+  padding: 5px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-weight: var(--fw-semibold);
+}
+
+.screen-realtime .rt-log-input {
+  width: 100%;
+  max-width: 78px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  text-align: right;
+  padding: 0 6px;
+  font: inherit;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.screen-realtime .rt-log-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.screen-realtime .rt-log-table td:nth-child(3) .rt-log-input {
+  max-width: 88px;
+  text-align: center;
+}
+
+.screen-realtime .rt-log-empty {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.screen-realtime .rt-day-hint {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.manual-day-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.manual-day-field input {
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
 }
 
 .screen-realtime .rt-time-row > div,
@@ -2501,6 +2675,13 @@ select {
   color: #fff;
 }
 
+.screen-strength-result .predict-pct {
+  font-size: 18px;
+  font-weight: var(--fw-bold);
+  color: var(--orange);
+  letter-spacing: 0.02em;
+}
+
 .screen-strength-result .predict-box-spacer {
   width: 1px;
   height: 1px;
@@ -2510,7 +2691,7 @@ select {
 
 .screen-strength-result .sr-metrics {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 0;
   border-radius: 12px;
   border: 1px solid var(--line);
@@ -2686,23 +2867,11 @@ select {
   overflow-wrap: anywhere;
 }
 
-.history-status {
+.history-logs {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding-right: 2px;
-}
-
-.history-status .status-pill {
-  height: 26px;
-  padding: 0 10px;
-  font-size: 10px;
-  gap: 5px;
-}
-
-.history-status .status-pill .ico {
-  width: 12px;
-  height: 12px;
 }
 
 .grow {
@@ -2776,7 +2945,7 @@ select {
   gap: 6px;
   min-height: 0;
   flex: 1;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .rdh-meta {
@@ -2849,6 +3018,102 @@ select {
   border-radius: 10px;
   border: 1px solid var(--line);
   background: var(--panel-inner);
+}
+
+.rdh-log-card {
+  padding: 6px 8px 8px;
+}
+
+.rdh-log-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rdh-log-item {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.rdh-log-item.is-open {
+  border-color: rgba(242, 124, 10, 0.55);
+}
+
+.rdh-log-toggle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 56px 1fr 18px;
+  gap: 8px;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rdh-log-day {
+  font-size: 12px;
+  font-weight: var(--fw-bold);
+}
+
+.rdh-log-summary {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.rdh-log-chevron {
+  color: var(--orange);
+  font-size: 12px;
+  text-align: center;
+}
+
+.rdh-log-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 10px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+}
+
+.rdh-log-kv {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rdh-log-kv span {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.rdh-log-kv strong {
+  font-size: 13px;
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.rdh-log-kv strong small {
+  font-size: 10px;
+  font-weight: var(--fw-regular);
+  color: var(--muted);
+}
+
+.rdh-log-fc strong {
+  color: var(--orange);
+}
+
+.rdh-log-empty {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
 }
 
 .rdh-baseline {
@@ -2926,6 +3191,10 @@ select {
   background: var(--panel-inner);
   overflow: visible;
   padding: 4px;
+}
+
+.rdh-calc-2 {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .rdh-calc > .rdh-cell {

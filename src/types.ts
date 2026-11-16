@@ -32,10 +32,16 @@ export type Baseline = {
   flyAsh: { pct: number; brand: string }
   /** Maturity lab table captured at save time (optional on older saves). */
   rows?: MaturityRow[]
+  /** Pour / casting calendar date YYYY-MM-DD — locked at create/save. */
+  pourDate?: string
+  /** Pour start clock HH:MM — locked with pourDate for schedule lookup. */
+  pourClock?: string
   /** Log fit fc = a + b·ln(M) from lab points (optional on older saves). */
   coeffA?: number
   coeffB?: number
   r2?: number
+  /** Excel FKZ factors by lab day: fc_FKZ = fc_NS · FKZ. */
+  fkzFactors?: { day: number; fkz: number }[]
 }
 
 export type MaturityRow = {
@@ -43,6 +49,13 @@ export type MaturityRow = {
   timeH: number
   fcLab: string
   temperature: string
+}
+
+/** Logged sample for multi-day realtime maturity (Nurse–Saul checkpoints). */
+export type MeasurementLogPoint = {
+  day: number
+  atMs: number
+  temp: number
 }
 
 export type TestRecord = {
@@ -61,6 +74,13 @@ export type TestRecord = {
   targetFc: number
   datumTemp: number
   status: 'COMPLETED' | 'RUNNING'
+  /** Day checkpoints captured during realtime (optional on older history). */
+  logs?: MeasurementLogPoint[]
+  /** Baseline log-fit coeffs at save time — for per-log Predicted Fc. */
+  coeffA?: number
+  coeffB?: number
+  /** Excel FKZ factors copied from baseline at save time. */
+  fkzFactors?: { day: number; fkz: number }[]
 }
 
 export type MeasurementSession = {
@@ -71,6 +91,8 @@ export type MeasurementSession = {
   avgTemp: number
   maturityIndex: number
   sensorTemps: [number, number, number]
+  /** Day checkpoints: Day 0 at pour, then ADD DAY auto/manual. */
+  logs: MeasurementLogPoint[]
 }
 
 /** How the user entered the maturity / generate-baseline wizard. */
@@ -86,6 +108,8 @@ export type AppState = {
     name: string
     targetFc: string
     datumTemp: string
+    /** Pour / casting calendar date YYYY-MM-DD — locked; Day 0 date does not drift. */
+    pourDate: string
     /** Pour start clock HH:MM — UI shows actual time; timeH = elapsed from this. */
     pourClock: string
     cement: string
