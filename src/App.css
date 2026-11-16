@@ -600,7 +600,8 @@ select {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .br-card {
@@ -608,16 +609,16 @@ select {
   flex-direction: column;
   gap: 6px;
   min-height: 0;
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   border-radius: 14px;
   border: 1px solid var(--line);
   background: rgba(18, 22, 28, 0.82);
   padding: 10px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .br-card:nth-child(1) {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
 }
 
 .br-card:nth-child(2) {
@@ -658,7 +659,8 @@ select {
   background: rgba(0, 0, 0, 0.22);
   padding: 2px 10px;
   min-height: 0;
-  overflow: hidden;
+  overflow: visible;
+  flex: 0 0 auto;
 }
 
 .br-inner-chart {
@@ -2357,6 +2359,57 @@ select {
   color: #fff;
 }
 
+.screen-realtime .rt-live-strip {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 0;
+  border-radius: 10px;
+  border: 1px solid rgba(242, 124, 10, 0.45);
+  overflow: hidden;
+  background: rgba(242, 124, 10, 0.12);
+}
+
+.screen-realtime .rt-live-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.screen-realtime .rt-live-cell:last-child {
+  border-right: none;
+}
+
+.screen-realtime .rt-live-cell span {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: var(--fw-regular);
+}
+
+.screen-realtime .rt-live-cell strong {
+  font-size: 16px;
+  font-weight: var(--fw-bold);
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+
+.screen-realtime .rt-live-cell strong small {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--muted);
+}
+
+.screen-realtime .rt-live-fc strong {
+  color: var(--orange);
+}
+
+.screen-realtime .rt-live-pct {
+  color: var(--orange);
+  font-weight: var(--fw-bold);
+}
+
 .screen-realtime .rt-day-actions {
   display: grid;
   grid-template-columns: 1fr;
@@ -2376,6 +2429,13 @@ select {
   cursor: pointer;
 }
 
+.screen-realtime .rt-day-btn-ghost {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.28);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
 .screen-realtime .rt-log-card {
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -2391,6 +2451,106 @@ select {
   font-size: 11px;
   font-weight: var(--fw-heavy);
   letter-spacing: 0.03em;
+}
+
+.screen-realtime .rt-log-count {
+  margin-left: auto;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(242, 124, 10, 0.2);
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen-realtime .rt-log-hint {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px dashed rgba(242, 124, 10, 0.35);
+  background: rgba(242, 124, 10, 0.08);
+  font-size: 11px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.screen-realtime .rt-log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.screen-realtime .rt-log-item {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.28);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.screen-realtime .rt-log-item-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.screen-realtime .rt-log-day {
+  font-size: 13px;
+  font-weight: var(--fw-bold);
+  color: #fff;
+}
+
+.screen-realtime .rt-log-when {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.screen-realtime .rt-log-item-edit {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.screen-realtime .rt-log-item-edit label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.screen-realtime .rt-log-item-edit .rt-log-input {
+  max-width: none;
+  text-align: left;
+}
+
+.screen-realtime .rt-log-item-metrics {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  font-variant-numeric: tabular-nums;
+}
+
+.screen-realtime .rt-log-item-metrics b {
+  color: #fff;
+  font-weight: var(--fw-bold);
+}
+
+.screen-realtime .rt-log-item-metrics .rt-log-fc b {
+  color: var(--orange);
 }
 
 .screen-realtime .rt-log-table {
@@ -2422,6 +2582,23 @@ select {
   font-weight: var(--fw-semibold);
 }
 
+.screen-realtime .rt-log-table-metrics th:nth-child(4),
+.screen-realtime .rt-log-table-metrics td:nth-child(4),
+.screen-realtime .rt-log-table-metrics th:nth-child(5),
+.screen-realtime .rt-log-table-metrics td:nth-child(5) {
+  text-align: right;
+}
+
+.screen-realtime .rt-log-metric {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.screen-realtime .rt-log-fc {
+  color: var(--orange);
+}
+
 .screen-realtime .rt-log-input {
   width: 100%;
   max-width: 78px;
@@ -2442,8 +2619,13 @@ select {
   border-color: var(--accent);
 }
 
-.screen-realtime .rt-log-table td:nth-child(3) .rt-log-input {
-  max-width: 88px;
+.screen-realtime .rt-log-table-metrics td:nth-child(2) .rt-log-input {
+  max-width: 72px;
+  text-align: center;
+}
+
+.screen-realtime .rt-log-table-metrics td:nth-child(3) .rt-log-input {
+  max-width: 64px;
   text-align: center;
 }
 
@@ -2676,8 +2858,9 @@ select {
 }
 
 .screen-strength-result .predict-pct {
-  font-size: 18px;
+  font-size: 34px;
   font-weight: var(--fw-bold);
+  line-height: 1;
   color: var(--orange);
   letter-spacing: 0.02em;
 }
@@ -3047,7 +3230,7 @@ select {
   grid-template-columns: 56px 1fr 18px;
   gap: 8px;
   align-items: center;
-  min-height: 40px;
+  min-height: 44px;
   padding: 8px 10px;
   border: 0;
   background: transparent;
@@ -3063,9 +3246,18 @@ select {
 }
 
 .rdh-log-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
   font-size: 11px;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+}
+
+.rdh-log-metrics {
+  color: #fff;
+  font-weight: var(--fw-semibold);
 }
 
 .rdh-log-chevron {

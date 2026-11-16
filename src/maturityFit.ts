@@ -103,8 +103,21 @@ export function formatCoeff(v: number, digits = 4): string {
 export type FkzFactor = { day: number; fkz: number }
 
 /**
- * Excel FKZ = 1/(1+Error) = fcAktual / fcPrediksi Nurse–Saul.
- * Built only for ages that have crushing-test fc (same idea as sheet FKZ table).
+ * Excel FAKTOR KOREKSI ZAKKI from Error = (fc_NS − fc_lab) / fc_lab:
+ * - Error > 0            → FKZ = 1 / (1 + Error)
+ * - −10% < Error ≤ 0%    → FKZ = 1
+ * - Error ≤ −10%         → FKZ = 1 + (|Error| − 10%)
+ */
+export function fkzFromError(error: number): number {
+  if (!Number.isFinite(error)) return 1
+  if (error > 0) return 1 / (1 + error)
+  if (error > -0.1) return 1
+  return 1 + (Math.abs(error) - 0.1)
+}
+
+/**
+ * Build per-age FKZ using Excel piecewise rules (not raw fc_lab/fc_NS).
+ * Only ages with crushing-test fc are calibrated.
  */
 export function computeFkzFactors(
   samples: { day: number; timeH: number; temp: number; fc: number }[],
@@ -118,7 +131,8 @@ export function computeFkzFactors(
     if (!(s.fc > 0) || !(s.m > 0)) continue
     const pred = a + b * Math.log(s.m)
     if (!(pred > 0) || !Number.isFinite(pred)) continue
-    const fkz = s.fc / pred
+    const error = (pred - s.fc) / s.fc
+    const fkz = fkzFromError(error)
     if (!Number.isFinite(fkz) || fkz <= 0) continue
     byDay.set(s.day, fkz)
   }

@@ -1513,6 +1513,37 @@ function nextAutoLogDay(logs: { day: number }[]): number {
   return Math.max(...logs.map((l) => l.day)) + 1
 }
 
+/** One checkpoint per day from baseline maturity rows (Excel demo fill). */
+function demoLogsFromBaseline(
+  rows: MaturityRow[] | undefined,
+  pourStartMs: number,
+): { day: number; atMs: number; temp: number }[] {
+  if (!rows?.length) return []
+  const byDay = new Map<number, { timeH: number; temp: number }>()
+  for (const r of rows) {
+    const day = Number(r.day)
+    const timeH = Number(r.timeH)
+    const temp = Number(r.temperature)
+    if (!Number.isFinite(day) || !Number.isFinite(timeH) || !Number.isFinite(temp)) continue
+    const prev = byDay.get(day)
+    if (day === 0) {
+      if (!prev || timeH < prev.timeH) byDay.set(day, { timeH, temp })
+      continue
+    }
+    const target = day * 24
+    if (!prev || Math.abs(timeH - target) < Math.abs(prev.timeH - target)) {
+      byDay.set(day, { timeH, temp })
+    }
+  }
+  return [...byDay.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([day, v]) => ({
+      day,
+      atMs: pourStartMs + Math.round(Math.max(0, v.timeH) * 3_600_000),
+      temp: v.temp,
+    }))
+}
+
 export function RealtimeScreen({ state, setState, go }: Props) {
   const baseline = selectedBaseline(state)
   const [temps, setTemps] = useState<[number, number, number]>(
@@ -1524,6 +1555,17 @@ export function RealtimeScreen({ state, setState, go }: Props) {
   const initialPourTemp = state.measurement.initialPourTemp
   const datumTemp = baseline?.datumTemp ?? -20
   const logs = state.measurement.logs ?? []
+  const logRows = useMemo(
+    () =>
+      enrichHistoryLogs(
+        logs,
+        datumTemp,
+        baseline?.coeffA,
+        baseline?.coeffB,
+        baseline?.fkzFactors,
+      ),
+    [logs, datumTemp, baseline?.coeffA, baseline?.coeffB, baseline?.fkzFactors],
+  )
   const [now, setNow] = useState(() => new Date())
   const [dayHint, setDayHint] = useState<string | null>(null)
   const [logDraft, setLogDraft] = useState<{
@@ -1608,22 +1650,49 @@ export function RealtimeScreen({ state, setState, go }: Props) {
 
   const logKey = (l: { day: number; atMs: number }) => `${l.day}-${l.atMs}`
 
-  const upsertLog = (day: number) => {
+  const addDayAuto = () => {
+    // Prefer Excel/baseline temp for that day when available (demo-friendly).
+    const row = baseline?.rows?.find((r) => Number(r.day) === nextDay)
+    const tempFromBaseline = row ? Number(row.temperature) : NaN
     const atMs = Date.now()
-    const temp = avg
+    const temp = Number.isFinite(tempFromBaseline) ? tempFromBaseline : avg
+    const startMs = pourStartRef.current.getTime()
+    const scheduledMs =
+      nextDay > 0 ? startMs + nextDay * 24 * 3_600_000 : atMs
     setState((s) => {
       const prev = s.measurement.logs ?? []
-      const without = prev.filter((l) => l.day !== day)
-      const next = [...without, { day, atMs, temp }].sort((a, b) => a.day - b.day || a.atMs - b.atMs)
+      const without = prev.filter((l) => l.day !== nextDay)
+      const next = [...without, { day: nextDay, atMs: scheduledMs, temp }].sort(
+        (a, b) => a.day - b.day || a.atMs - b.atMs,
+      )
       return {
         ...s,
         measurement: { ...s.measurement, logs: next, sensorTemps: temps },
       }
     })
-    setDayHint(`Day ${day} logged @ ${formatClock(new Date(atMs))} · ${temp.toFixed(1)} °C`)
+    setDayHint(`Day ${nextDay} logged · ${temp.toFixed(1)} °C`)
   }
 
-  const addDayAuto = () => upsertLog(nextDay)
+  const fillDemoDays = () => {
+    const startMs = pourStartRef.current.getTime()
+    const demo = demoLogsFromBaseline(baseline?.rows, startMs)
+    if (demo.length < 2) {
+      setDayHint('Baseline has no demo temperature rows.')
+      return
+    }
+    setState((s) => ({
+      ...s,
+      measurement: {
+        ...s.measurement,
+        pourStartMs: startMs,
+        endMs: null,
+        logs: demo,
+        sensorTemps: temps,
+        initialPourTemp: demo[0]?.temp ?? s.measurement.initialPourTemp,
+      },
+    }))
+    setDayHint(`Loaded ${demo.length} demo days from baseline / Excel`)
+  }
 
   const commitLogTemp = (day: number, atMs: number, raw: string) => {
     const temp = Number(raw)
@@ -1679,11 +1748,11 @@ export function RealtimeScreen({ state, setState, go }: Props) {
     const pourAvg = initialPourTemp ?? liveTemp
     const points = [...logs]
       .map((l) => ({
-        timeH: Math.max(0, (l.atMs - startMs) / 3600),
+        timeH: Math.max(0, (l.atMs - startMs) / 3_600_000),
         temp: l.temp,
       }))
       .sort((a, b) => a.timeH - b.timeH)
-    const liveTimeH = Math.max(0, (endMs - startMs) / 3600)
+    const liveTimeH = Math.max(0, (endMs - startMs) / 3_600_000)
     const last = points[points.length - 1]
     if (!last || liveTimeH > last.timeH + 1 / 3600) {
       points.push({ timeH: liveTimeH, temp: liveTemp })
@@ -1723,6 +1792,14 @@ export function RealtimeScreen({ state, setState, go }: Props) {
     go('strengthResult')
   }
 
+  const lastLog = logRows.length > 0 ? logRows[logRows.length - 1] : null
+  const liveM = lastLog?.maturity ?? Math.round(maturityRef.current)
+  const liveFc = lastLog?.predictedFc ?? null
+  const targetFc = baseline?.targetFc ?? 0
+  const livePct =
+    liveFc != null && targetFc > 0 ? Math.max(0, (liveFc / targetFc) * 100) : null
+  const canFillDemo = (baseline?.rows?.length ?? 0) > 1
+
   return (
     <Screen
       title="REAL TIME MEASUREMENT"
@@ -1745,6 +1822,25 @@ export function RealtimeScreen({ state, setState, go }: Props) {
                 <b>{baseline?.datumTemp} °C</b>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="rt-live-strip" aria-label="Live prediction">
+          <div className="rt-live-cell">
+            <span>Maturity M</span>
+            <strong>
+              {liveM.toLocaleString()}
+              <small> °C·h</small>
+            </strong>
+          </div>
+          <div className="rt-live-cell rt-live-fc">
+            <span>Predicted Fc'</span>
+            <strong>
+              {liveFc != null ? `${liveFc.toFixed(1)} MPa` : '—'}
+              {livePct != null ? (
+                <span className="rt-live-pct"> ({livePct.toFixed(0)}%)</span>
+              ) : null}
+            </strong>
           </div>
         </div>
 
@@ -1804,94 +1900,116 @@ export function RealtimeScreen({ state, setState, go }: Props) {
 
         <div className="rt-day-actions">
           <button type="button" className="rt-day-btn" onClick={addDayAuto}>
-            + ADD DAY
+            + ADD DAY {nextDay > 0 ? `(Day ${nextDay})` : ''}
           </button>
+          {canFillDemo ? (
+            <button type="button" className="rt-day-btn rt-day-btn-ghost" onClick={fillDemoDays}>
+              LOAD EXCEL DEMO DAYS
+            </button>
+          ) : null}
         </div>
 
         <div className="rt-log-card" aria-label="Logged days">
           <div className="rt-log-head">
             <IconCalendar className="ico ico-accent ico-sm" />
-            LOGGED DAYS
+            <span>LOGGED DAYS</span>
+            <span className="rt-log-count">{logRows.length}</span>
           </div>
-          {logs.length > 0 ? (
-            <table className="rt-log-table">
-              <thead>
-                <tr>
-                  <th>Day</th>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Temp</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...logs]
-                  .sort((a, b) => a.day - b.day || a.atMs - b.atMs)
-                  .map((l) => {
-                    const at = new Date(l.atMs)
-                    const key = logKey(l)
-                    const timeValue =
-                      logDraft?.key === key && logDraft.field === 'time'
-                        ? logDraft.value
-                        : formatClock(at)
-                    const tempValue =
-                      logDraft?.key === key && logDraft.field === 'temp'
-                        ? logDraft.value
-                        : l.temp.toFixed(1)
-                    return (
-                      <tr key={key}>
-                        <td>{l.day}</td>
-                        <td>{formatDayMonthYear(at)}</td>
-                        <td>
-                          <input
-                            className="rt-log-input"
-                            inputMode="numeric"
-                            aria-label={`Day ${l.day} time`}
-                            value={timeValue}
-                            onFocus={() =>
-                              setLogDraft({ key, field: 'time', value: formatClock(at) })
-                            }
-                            onChange={(e) =>
-                              setLogDraft({ key, field: 'time', value: e.target.value })
-                            }
-                            onBlur={() =>
-                              commitLogTime(
-                                l.day,
-                                l.atMs,
-                                logDraft?.key === key && logDraft.field === 'time'
-                                  ? logDraft.value
-                                  : formatClock(at),
-                              )
-                            }
-                          />
-                        </td>
-                        <td>
-                          <input
-                            className="rt-log-input"
-                            inputMode="decimal"
-                            aria-label={`Day ${l.day} temperature`}
-                            value={tempValue}
-                            onFocus={() =>
-                              setLogDraft({ key, field: 'temp', value: l.temp.toFixed(1) })
-                            }
-                            onChange={(e) =>
-                              setLogDraft({ key, field: 'temp', value: e.target.value })
-                            }
-                            onBlur={() =>
-                              commitLogTemp(
-                                l.day,
-                                l.atMs,
-                                logDraft?.key === key && logDraft.field === 'temp'
-                                  ? logDraft.value
-                                  : String(l.temp),
-                              )
-                            }
-                          />
-                        </td>
-                      </tr>
-                    )
-                  })}
-              </tbody>
-            </table>
+          {logRows.length === 1 && logRows[0]?.day === 0 ? (
+            <p className="rt-log-hint">
+              Day 0 = saat tuang (M = 0). Tekan ADD DAY atau LOAD EXCEL DEMO DAYS untuk isi hari
+              berikutnya.
+            </p>
+          ) : null}
+          {logRows.length > 0 ? (
+            <div className="rt-log-list" role="list">
+              {logRows.map((l) => {
+                const at = new Date(l.atMs)
+                const key = logKey(l)
+                const timeValue =
+                  logDraft?.key === key && logDraft.field === 'time'
+                    ? logDraft.value
+                    : formatClock(at)
+                const tempValue =
+                  logDraft?.key === key && logDraft.field === 'temp'
+                    ? logDraft.value
+                    : l.temp.toFixed(1)
+                const pct =
+                  l.predictedFc != null && targetFc > 0
+                    ? Math.max(0, (l.predictedFc / targetFc) * 100)
+                    : null
+                return (
+                  <div key={key} className="rt-log-item" role="listitem">
+                    <div className="rt-log-item-top">
+                      <strong className="rt-log-day">Day {l.day}</strong>
+                      <span className="rt-log-when">{formatDayMonthYear(at)}</span>
+                    </div>
+                    <div className="rt-log-item-edit">
+                      <label>
+                        <span>Time</span>
+                        <input
+                          className="rt-log-input"
+                          inputMode="numeric"
+                          aria-label={`Day ${l.day} time`}
+                          value={timeValue}
+                          onFocus={() =>
+                            setLogDraft({ key, field: 'time', value: formatClock(at) })
+                          }
+                          onChange={(e) =>
+                            setLogDraft({ key, field: 'time', value: e.target.value })
+                          }
+                          onBlur={() =>
+                            commitLogTime(
+                              l.day,
+                              l.atMs,
+                              logDraft?.key === key && logDraft.field === 'time'
+                                ? logDraft.value
+                                : formatClock(at),
+                            )
+                          }
+                        />
+                      </label>
+                      <label>
+                        <span>Temp °C</span>
+                        <input
+                          className="rt-log-input"
+                          inputMode="decimal"
+                          aria-label={`Day ${l.day} temperature`}
+                          value={tempValue}
+                          onFocus={() =>
+                            setLogDraft({ key, field: 'temp', value: l.temp.toFixed(1) })
+                          }
+                          onChange={(e) =>
+                            setLogDraft({ key, field: 'temp', value: e.target.value })
+                          }
+                          onBlur={() =>
+                            commitLogTemp(
+                              l.day,
+                              l.atMs,
+                              logDraft?.key === key && logDraft.field === 'temp'
+                                ? logDraft.value
+                                : String(l.temp),
+                            )
+                          }
+                        />
+                      </label>
+                    </div>
+                    <div className="rt-log-item-metrics">
+                      <span>
+                        M <b>{l.maturity.toLocaleString()}</b>
+                      </span>
+                      <span className="rt-log-fc">
+                        Fc'{' '}
+                        <b>
+                          {l.predictedFc != null ? l.predictedFc.toFixed(1) : '—'}
+                          {pct != null ? ` (${pct.toFixed(0)}%)` : ''}
+                        </b>
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           ) : (
             <p className="rt-log-empty">No days logged yet. Tap ADD DAY.</p>
           )}
@@ -2115,7 +2233,7 @@ function enrichHistoryLogs(
   const t0 = sorted[0].atMs
   const samples = sorted.map((l) => ({
     ...l,
-    timeH: Math.max(0, (l.atMs - t0) / 3600),
+    timeH: Math.max(0, (l.atMs - t0) / 3_600_000),
   }))
   const withM = accumulateNurseSaulM(samples, datumTemp)
   const canPredict =
@@ -2126,7 +2244,7 @@ function enrichHistoryLogs(
   return withM.map((row) => {
     const maturity = Math.round(row.m)
     const predictedFc = canPredict
-      ? predictFcWithFkz(maturity, coeffA, coeffB, lookupFkz(fkzFactors, row.day))
+      ? predictFcWithFkz(row.m, coeffA, coeffB, lookupFkz(fkzFactors, row.day))
       : null
     return { ...row, maturity, predictedFc }
   })
@@ -2223,6 +2341,16 @@ export function HistoryDetailScreen({ state, go }: Props) {
                   const key = `${l.day}-${l.atMs}`
                   const open = openLogKey === key
                   const at = new Date(l.atMs)
+                  const pct =
+                    l.predictedFc != null && h.targetFc > 0
+                      ? Math.max(0, (l.predictedFc / h.targetFc) * 100)
+                      : null
+                  const fcLabel =
+                    l.predictedFc != null
+                      ? pct != null
+                        ? `${l.predictedFc.toFixed(1)} (${pct.toFixed(0)}%)`
+                        : l.predictedFc.toFixed(1)
+                      : '—'
                   return (
                     <div key={key} className={`rdh-log-item${open ? ' is-open' : ''}`} role="listitem">
                       <button
@@ -2233,7 +2361,14 @@ export function HistoryDetailScreen({ state, go }: Props) {
                       >
                         <span className="rdh-log-day">Day {l.day}</span>
                         <span className="rdh-log-summary">
-                          {formatDayMonthYear(at)} · {formatClock(at)}
+                          <span>
+                            {formatDayMonthYear(at)} · {formatClock(at)} · {l.temp.toFixed(1)}°C
+                          </span>
+                          <span className="rdh-log-metrics">
+                            M {l.maturity.toLocaleString()}
+                            {' · '}
+                            Fc' {fcLabel}
+                          </span>
                         </span>
                         <span className="rdh-log-chevron" aria-hidden>
                           {open ? '▴' : '▾'}
@@ -2259,7 +2394,11 @@ export function HistoryDetailScreen({ state, go }: Props) {
                           <div className="rdh-log-kv rdh-log-fc">
                             <span>Predicted Fc'</span>
                             <strong>
-                              {l.predictedFc != null ? `${l.predictedFc.toFixed(1)} MPa` : '—'}
+                              {l.predictedFc != null
+                                ? pct != null
+                                  ? `${l.predictedFc.toFixed(1)} MPa (${pct.toFixed(0)}%)`
+                                  : `${l.predictedFc.toFixed(1)} MPa`
+                                : '—'}
                             </strong>
                           </div>
                         </div>
@@ -2304,7 +2443,12 @@ export function HistoryDetailScreen({ state, go }: Props) {
             <div className="rdh-cell rdh-predict">
               <IconChart className="ico ico-accent" />
               <span>Predicted Strength</span>
-              <strong>{Math.max(0, h.strengthMpa).toFixed(1)} MPa</strong>
+              <strong>
+                {Math.max(0, h.strengthMpa).toFixed(1)} MPa
+                {h.targetFc > 0
+                  ? ` (${Math.max(0, (h.strengthMpa / h.targetFc) * 100).toFixed(0)}%)`
+                  : ''}
+              </strong>
             </div>
           </div>
         </div>
