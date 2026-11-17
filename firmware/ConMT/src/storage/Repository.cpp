@@ -2,6 +2,17 @@
 #include "Repository.h"
 #include <string.h>
 namespace conmt {
+Status Record::number(Field f,Real& out) { return repo_.number(field(f),out); }
+Status Record::integer(Field f,uint32_t& out) { return repo_.integer(field(f),out); }
+Status Record::time(Field f,uint64_t& out) { return repo_.time(field(f),out); }
+Status Record::text(Field f,char* out,uint16_t capacity) { return repo_.text(field(f),out,capacity); }
+Status Record::putNumber(Field f,Real value) { return repo_.putNumber(field(f),value); }
+Status Record::putInteger(Field f,uint32_t value) { return repo_.putInteger(field(f),value); }
+Status Record::putTime(Field f,uint64_t value) { return repo_.putTime(field(f),value); }
+Status Record::putText(Field f,const char* value,uint16_t capacity) { return repo_.putText(field(f),value,capacity); }
+Status Record::erase(Field f) { return repo_.journal().erase(field(f)); }
+Status Record::get(Field f,uint8_t* out,uint16_t& size) { return repo_.journal().get(field(f),out,size); }
+Status Record::put(Field f,const uint8_t* value,uint16_t size) { return repo_.journal().put(field(f),value,size); }
 Status Repository::number(const Key& k,Real& v) {
     uint8_t b[8]; uint16_t n=8; Status s=journal_.get(k,b,n); if(s!=Status::Ok) return s;
     if(n!=8) return Status::Corrupt;

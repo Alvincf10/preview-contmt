@@ -33,6 +33,24 @@ public:
     void reset() override;
     Status next(Row& out) override;
 };
+class Record {
+    Repository& repo_;
+    Key key_;
+    const Key& field(Field value) { key_.field=value; return key_; }
+public:
+    Record(Repository& repo,Kind kind,uint32_t object) : repo_(repo),key_(kind,object) {}
+    Status number(Field field,Real& out);
+    Status integer(Field field,uint32_t& out);
+    Status time(Field field,uint64_t& out);
+    Status text(Field field,char* out,uint16_t capacity);
+    Status putNumber(Field field,Real value);
+    Status putInteger(Field field,uint32_t value);
+    Status putTime(Field field,uint64_t value);
+    Status putText(Field field,const char* value,uint16_t capacity);
+    Status erase(Field field);
+    Status get(Field field,uint8_t* out,uint16_t& size);
+    Status put(Field field,const uint8_t* value,uint16_t size);
+};
 Status nextPoint(Repository& repo,Kind kind,uint32_t object,const Point* after,Point& out);
 Status replayPoints(Repository& repo,Kind kind,uint32_t object,Real datum,Real& maturity,Point& last);
 }

@@ -37,17 +37,31 @@ static const char commands[] CM_ROM =
 ;
 static const uint8_t argumentCounts[] CM_ROM = {255,0,1,1,0,2,0,0,0,0,3,1,2,1,1,0,0,1,0,1,128,1,3,0,0,1,1,2,2,1,0,0,2};
 Command commandFromText(const char* text) {
-    const char* name=commands;
-    for(uint8_t id=1;id<sizeof(argumentCounts);++id) {
+    return Command(flashToken(text,commands,sizeof(argumentCounts)-1));
+}
+uint8_t flashToken(const char* text,const char* name,uint8_t count) {
+    for(uint8_t id=1;id<=count;++id) {
 #ifdef __AVR__
-        if(!strcmp_P(text,name)) return Command(id);
+        if(!strcmp_P(text,name)) return id;
         name+=strlen_P(name)+1;
 #else
-        if(!strcmp(text,name)) return Command(id);
+        if(!strcmp(text,name)) return id;
         name+=strlen(name)+1;
 #endif
     }
-    return Command::Unknown;
+    return 0;
+}
+bool allowedPage(Command command,uint8_t page) {
+#define P(n) (1UL<<(n))
+    static const uint32_t pages[] CM_ROM={
+        0,0x1ffffUL,0x1ffffUL,0x1ffffUL,P(1),P(1)|P(4)|P(5)|P(6),P(3),
+        P(6),P(6),P(6),P(6),P(6),P(6),P(6),P(6),P(6),P(7),P(8)|P(10),P(8),P(8),P(10),
+        P(11),P(11),P(11),P(12),P(13),P(6)|P(8)|P(10)|P(11)|P(13)|P(14),
+        P(15),P(15),P(15),P(15),P(10),P(11)
+    };
+#undef P
+    uint8_t id=uint8_t(command);
+    return id<sizeof(pages)/sizeof(pages[0])&&page<17&&(flashValue(pages+id)&(1UL<<page));
 }
 bool validArguments(Command command,uint8_t count) {
     uint8_t id=uint8_t(command);
