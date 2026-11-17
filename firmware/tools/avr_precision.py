@@ -42,6 +42,7 @@ source.write_text(r'''
 #include "core/Flash.h"
 #include "core/Command.h"
 #include "core/Calendar.h"
+#include "core/Text.h"
 #include <avr/io.h>
 #include <stdlib.h>
 using namespace conmt;
@@ -109,6 +110,10 @@ int main() {
     if(commandFromText("RESULT_SAVE")!=Command::RESULT_SAVE||!allowedPage(Command::RESULT_SAVE,12)||allowedPage(Command::RESULT_SAVE,11)) fail();
     formatReal(value,sizeof(value),36.5,1); if(strcmp(value,"36.5")) fail();
     formatReal(value,sizeof(value),4.125,2); if(strcmp(value,"4.13")) fail();
+    formatUnsigned(value,sizeof(value),4294967295UL); if(strcmp(value,"4294967295")) fail();
+    formatHms(value,sizeof(value),123456,59,9,0); if(strcmp(value,"123456:59:09")) fail();
+    formatUnsigned(value,5,123456); if(strcmp(value,"1234")) fail();
+    Text(value,sizeof(value)).flash(CM_LITERAL("fc = ")).ram("-29.125").character(' ').number(41); if(strcmp(value,"fc = -29.125 41")) fail();
     uint64_t date; if(parseDate("2024-02-29",date)!=Status::Ok) fail(); char clock[12];
     if(calendarText(date+45296000ULL,value,sizeof(value),clock,sizeof(clock))!=Status::Ok||strcmp(value,"2024-02-29")||strcmp(clock,"12:34:56")) fail();
 #endif
@@ -116,7 +121,7 @@ int main() {
 }
 ''')
 sources = [source] + [root / 'ConMT/src' / path for path in [
-    'storage/Journal.cpp', 'storage/DiskIndex.cpp', 'storage/RecordCodec.cpp', 'core/Types.cpp', 'core/Flash.cpp', 'core/Command.cpp', 'core/Calendar.cpp']]
+    'storage/Journal.cpp', 'storage/DiskIndex.cpp', 'storage/RecordCodec.cpp', 'core/Types.cpp', 'core/Flash.cpp', 'core/Text.cpp', 'core/Command.cpp', 'core/Calendar.cpp']]
 for name, defines in [('precision', []), ('records', ['-DCONMT_RECORD_CHECK=1'])]:
     command = [str(compiler), '-mmcu=atmega328p', '-Os', '-flto', '-std=gnu++11', '-fno-exceptions',
                '-fno-rtti', '-ffunction-sections', '-fdata-sections', '-I' + str(root / 'ConMT/src'),

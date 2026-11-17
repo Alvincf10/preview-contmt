@@ -2,6 +2,7 @@
 #include "Transport.h"
 #include "Presenter.h"
 #include "../core/Command.h"
+#include "../core/Text.h"
 #include <stdio.h>
 #include <string.h>
 namespace conmt {
@@ -35,7 +36,7 @@ Status Transport::encode() {
 Status Transport::numeric(const char* component,uint32_t value) {
     if(txSize_) return Status::Busy;
     copyFlash(component_,sizeof(component_),component);
-    CM_FMT(value_,sizeof(value_),"%lu",(unsigned long)value);
+    formatUnsigned(value_,sizeof(value_),value);
     componentSize_=uint8_t(strlen(component_)); valueSize_=uint8_t(strlen(value_)); txMode_=1;
     txAt_=0; txSize_=uint8_t(componentSize_+valueSize_+8); return Status::Ok;
 }
@@ -96,7 +97,7 @@ void Transport::accept(const Frame& f) {
 bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,size_t vc) {
     value[0]=0;
     if(i==0) { char date[12]; Time now=app_.clock().now(); if(now.valid) calendarText(now.wallMs,date,sizeof(date),value,vc); else CM_TEXT(value,vc,"--"); CM_TEXT(component,cc,"tClock"); return true; }
-    if(i==1) { uint8_t battery; Status s=app_.devices().battery(battery); if(s==Status::Ok) CM_FMT(value,vc,"%u%%",unsigned(battery)); else CM_TEXT(value,vc,"--"); CM_TEXT(component,cc,"tBatt"); return true; }
+    if(i==1) { uint8_t battery; Status s=app_.devices().battery(battery); if(s==Status::Ok) Text(value,vc).number(battery).character('%'); else CM_TEXT(value,vc,"--"); CM_TEXT(component,cc,"tBatt"); return true; }
     if(i==2) { formatStatus(value,vc,ack_==Status::Ok?app_.status():ack_); CM_TEXT(component,cc,"tMsg"); return true; }
     i-=3;
     if(app_.page()==Page::RT) {
@@ -105,7 +106,7 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
             if(sensorStatus_!=Status::Ok||(i<3&&!(sensorMask_&(1u<<i)))) CM_TEXT(value,vc,"--"); else formatReal(value,vc,i==3?averageCache_:sensorCache_[i],1);
             return true;
         }
-        if(i<6) { char date[12],clock[12]; Time now=app_.clock().now(); if(now.valid) calendarText(now.wallMs,date,sizeof(date),clock,sizeof(clock)); else { CM_COPY(date,"--"); CM_COPY(clock,"--"); } CM_TEXT(component,cc,"tNowD"); if(i==5) CM_TEXT(component,cc,"tNowT"); CM_FMT(value,vc,"%s",i==4?date:clock); return true; }
+        if(i<6) { char date[12],clock[12]; Time now=app_.clock().now(); if(now.valid) calendarText(now.wallMs,date,sizeof(date),clock,sizeof(clock)); else { CM_COPY(date,"--"); CM_COPY(clock,"--"); } CM_TEXT(component,cc,"tNowD"); if(i==5) CM_TEXT(component,cc,"tNowT"); copyRam(value,vc,i==4?date:clock); return true; }
         i-=6;
     }
     Presenter presenter(app_); return presenter.field(i,component,cc,value,vc);
@@ -137,7 +138,7 @@ void Transport::poll(uint32_t now) {
     if(phase_==1) { numeric(CM_LITERAL("pInit.vBoot"),app_.bootToken()); ++phase_; return; }
     if(phase_==2) {
         if(actualPage_!=uint8_t(app_.page())) {
-            CM_COPY(component_,"page"); CM_FMT(value_,sizeof(value_),"%u",unsigned(app_.page()));
+            CM_COPY(component_,"page"); formatUnsigned(value_,sizeof(value_),uint8_t(app_.page()));
             componentSize_=4; valueSize_=uint8_t(strlen(value_)); txMode_=2; txAt_=0; txSize_=uint8_t(componentSize_+valueSize_+4); actualPage_=uint8_t(app_.page());
         }
         ++phase_; return;

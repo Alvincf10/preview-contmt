@@ -23,9 +23,17 @@
       "stackFrames": {
         "START": 122,
         "storePreview": 66,
-        "codecTransfer": 30
+        "codecTransfer": 28
       },
       "decision": "Retain compatible streaming codec; no full storage job or latency claim"
+    },
+    {
+      "stage": "P5 bounded text formatter",
+      "flash": 75794,
+      "staticRam": 1502,
+      "deltaFlash": -1170,
+      "tests": "14/14 host64,host32,ASan/UBSan; AVR precision/record descriptors and both41row datasets PASS; UART snapshot unchanged",
+      "decision": "Retain; preserve dtostrf/strtod and rounding, remove varargs formatting from AVR production paths"
     }
   ]
 }

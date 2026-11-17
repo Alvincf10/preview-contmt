@@ -1,5 +1,6 @@
 #include "Flash.h"
 #include "Types.h"
+#include "Text.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -90,7 +91,7 @@ void formatReal(char* out,size_t n,Real v,uint8_t digits) {
     if (!finite(v) || digits>6 || fabs(v)>Real(1e12)) { CM_TEXT(out,n,"--"); return; }
     v=fixedTie(v,digits);
 #ifdef __AVR__
-    char b[28]; dtostrf(v,0,digits,b); CM_FMT(out,n,"%s",b);
+    char b[28]; dtostrf(v,0,digits,b); copyRam(out,n,b);
 #else
     CM_FMT(out,n,"%.*f",int(digits),double(v==0?0:v));
 #endif

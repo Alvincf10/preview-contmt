@@ -1,6 +1,7 @@
 #include "../core/Flash.h"
 #include "Controller.h"
 #include "../core/Command.h"
+#include "../core/Text.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -696,7 +697,7 @@ Status Controller::dispatch(const char* verb,const char* a,const char* b,const c
             else if(CM_EQ(a,"second")) value=int(settings_.intervalSeconds%60);
             else return Status::Invalid;
             value+=b[0]=='-'?-step:step; if(value<0) value=0; if(value>max) value=max;
-            char text[8]; CM_FMT(text,sizeof(text),"%u",unsigned(value)); result=setting(a,text,op); break;
+            char text[8]; formatUnsigned(text,sizeof(text),value); result=setting(a,text,op); break;
         }
         case Command::SETTINGS_TOGGLE:
             if(CM_EQ(a,"sound")) result=setting(a,settings_.sound?"0":"1",op);

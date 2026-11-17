@@ -1,5 +1,6 @@
 #include "Presenter.h"
 #include "../core/Flash.h"
+#include "../core/Text.h"
 #include <string.h>
 namespace conmt {
 namespace {
@@ -31,12 +32,12 @@ static const Descriptor settings[] CM_ROM={D("tInterval",SettingInterval,Interva
 static const Descriptor device[] CM_ROM={D("tVersion",Version,Exists),D("tMcu",Mcu,Exists),D("tProtocol",Protocol,Exists)};
 #undef D
 static void missing(char* value,size_t capacity) { CM_TEXT(value,capacity,"--"); }
-static void integerText(char* value,size_t capacity,uint32_t number) { CM_FMT(value,capacity,"%lu",(unsigned long)number); }
+static void integerText(char* value,size_t capacity,uint32_t number) { formatUnsigned(value,capacity,number); }
 static void calendar(uint64_t at,Op op,char* value,size_t capacity) __attribute__((noinline));
 static void calendar(uint64_t at,Op op,char* value,size_t capacity) {
     char date[12],clock[12]; calendarText(at,date,sizeof(date),clock,sizeof(clock));
-    if(op==Stamp) CM_FMT(value,capacity,"%s %s",date,clock);
-    else CM_FMT(value,capacity,"%s",op==Date||op==DateBlank?date:clock);
+    if(op==Stamp) conmt::Text(value,capacity).ram(date).character(' ').ram(clock);
+    else copyRam(value,capacity,op==Date||op==DateBlank?date:clock);
 }
 static Status modelText(Repository& repo,Kind kind,uint32_t object,Op op,char* value,size_t capacity) __attribute__((noinline));
 static Status modelText(Repository& repo,Kind kind,uint32_t object,Op op,char* value,size_t capacity) {
@@ -44,7 +45,7 @@ static Status modelText(Repository& repo,Kind kind,uint32_t object,Op op,char* v
     if(op==ModelCount) integerText(value,capacity,fit.n);
     else if(op==Equation) {
         char a[28],b[28]; formatReal(a,sizeof(a),fit.a,3); formatReal(b,sizeof(b),fabs(fit.b),4);
-        CM_FMT(value,capacity,"fc = %s %c %s ln(M)",a,fit.b<0?'-':'+',b);
+        conmt::Text(value,capacity).flash(CM_LITERAL("fc = ")).ram(a).character(' ').character(fit.b<0?'-':'+').character(' ').ram(b).flash(CM_LITERAL(" ln(M)"));
     } else formatCoeff(value,capacity,op==ModelA?fit.a:(op==ModelB?fit.b:fit.r2),4);
     return Status::Ok;
 }
@@ -65,7 +66,7 @@ static Status metric(Controller& app,Kind kind,uint32_t object,uint32_t point,Op
         case Elapsed: {
             uint64_t start; st=app.repository().time(Key(kind,object,Field::Start),start); if(st!=Status::Ok) return Status::Ok;
             uint64_t sec=(result.endMs-start)/1000;
-            CM_FMT(value,capacity,"%lu:%02u:%02u",(unsigned long)(sec/3600),unsigned(sec/60%60),unsigned(sec%60)); return Status::Ok;
+            formatHms(value,capacity,uint32_t(sec/3600),uint8_t(sec/60%60),uint8_t(sec%60),0); return Status::Ok;
         }
         default: break;
     }
@@ -80,8 +81,8 @@ static Status sensorText(Repository& repo,Kind kind,uint32_t object,uint8_t chan
 }
 static void settingText(const Settings& settings,Op op,char* value,size_t capacity) {
     uint32_t h=settings.intervalSeconds/3600,m=settings.intervalSeconds/60%60,s=settings.intervalSeconds%60;
-    if(op==SettingInterval) CM_FMT(value,capacity,"%02u:%02u:%02u",unsigned(h),unsigned(m),unsigned(s));
-    else if(op>=SettingHour) CM_FMT(value,capacity,"%02u",unsigned(op==SettingHour?h:(op==SettingMinute?m:s)));
+    if(op==SettingInterval) formatHms(value,capacity,h,uint8_t(m),uint8_t(s));
+    else if(op>=SettingHour) formatUnsigned(value,capacity,op==SettingHour?h:(op==SettingMinute?m:s),2);
     else integerText(value,capacity,op==SettingBrightness?settings.brightness:(op==SettingSound?settings.sound:settings.autoSave));
 }
 static void scalar(Controller& app,Kind kind,uint32_t object,Op op,Field field,char* value,size_t capacity) {

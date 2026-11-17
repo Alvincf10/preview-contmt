@@ -1,5 +1,6 @@
 #include "Flash.h"
 #include "Calendar.h"
+#include "Text.h"
 #include <string.h>
 #include <stdio.h>
 namespace conmt {
@@ -46,8 +47,8 @@ Status calendarText(uint64_t at,char* date,size_t ds,char* clock,size_t cs) {
     unsigned y=1970,m=1;
     while(y<2200 && days>=unsigned(leap(y)?366:365)) { days-=leap(y)?366:365; ++y; }
     while(m<12 && days>=daysIn(y,m)) { days-=daysIn(y,m); ++m; }
-    CM_FMT(date,ds,"%04u-%02u-%02u",y,m,unsigned(days+1));
-    CM_FMT(clock,cs,"%02u:%02u:%02u",unsigned(sec/3600),unsigned(sec/60%60),unsigned(sec%60));
+    Text(date,ds).number(y,4).character('-').number(m,2).character('-').number(days+1,2);
+    formatHms(clock,cs,sec/3600,uint8_t(sec/60%60),uint8_t(sec%60));
     return Status::Ok;
 }
 }
