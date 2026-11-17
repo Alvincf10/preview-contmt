@@ -44,12 +44,7 @@ Status Controller::load() {
     if(token<boot_) token=boot_;
     if(token==UINT32_MAX) return Status::Capacity;
     boot_=token+1; TRY(begin(0)); TRY(repo_.putInteger(Key(Kind::System,0,Field::State),boot_)); TRY(finish(Status::Ok));
-    uint32_t n=0;
-    s=repo_.integer(Key(Kind::Settings,0,Field::Interval),n); if(s==Status::Ok) settings_.intervalSeconds=n; else if(s!=Status::Missing) return s;
-    s=repo_.integer(Key(Kind::Settings,0,Field::Brightness),n); if(s==Status::Ok) { if(n>100||n%5) return Status::Corrupt; settings_.brightness=uint8_t(n); } else if(s!=Status::Missing) return s;
-    s=repo_.integer(Key(Kind::Settings,0,Field::Sound),n); if(s==Status::Ok) { if(n>1) return Status::Corrupt; settings_.sound=n!=0; } else if(s!=Status::Missing) return s;
-    s=repo_.integer(Key(Kind::Settings,0,Field::AutoSave),n); if(s==Status::Ok) { if(n>1) return Status::Corrupt; settings_.autoSave=n!=0; } else if(s!=Status::Missing) return s;
-    if(settings_.intervalSeconds>86399 || settings_.brightness>100 || settings_.brightness%5) return Status::Corrupt;
+    TRY(loadSettings(repo_,settings_));
     devices_.brightness(settings_.brightness); devices_.sound(settings_.sound);
     if(session_) {
         Status saved=repo_.number(Key(Kind::Session,session_,Field::Result,1),liveM_);
@@ -159,42 +154,35 @@ Status Controller::reanchorLive(const SensorFrame& frame,const Average& avg,cons
     liveM_=rebased; liveCompensation_=0; lastTemp_=avg.operational; lastWall_=sampled;
     lastMono_=lastFrameMono_=frame.sampledMonoMs; sampleKnown_=true; replayLive_=false; return Status::Ok;
 }
-Status Controller::mutateField(Kind k,uint32_t o,Field f,const char* value,const uint64_t& op) {
-    Record record(repo_,k,o);
+Status Controller::mutateField(const FieldRule& rule,const char* value,const uint64_t& op) {
+    Record record(repo_,rule.kind,rule.kind==Kind::User?0:draft_);
     Real v=0; uint64_t at=0; Status s;
-    bool text=f==Field::Name||f==Field::Operator||f==Field::Project||f==Field::Date||f==Field::RetarderBrand||f==Field::AcceleratorBrand||f==Field::FlyAshBrand;
-    if(f==Field::Date) TRY(parseDate(value,at));
-    if(text && !safeText(value,(f==Field::Operator||f==Field::RetarderBrand||f==Field::AcceleratorBrand||f==Field::FlyAshBrand)?33:65)) return Status::Invalid;
+    bool text=rule.format==InputFormat::Text||rule.format==InputFormat::Date;
+    if(rule.format==InputFormat::Date) TRY(parseDate(value,at));
+    if(text && !safeText(value,rule.capacity)) return Status::Invalid;
     if(!text) {
         TRY(parseReal(value,v));
-        if(f==Field::Datum) { if(v!=-20&&v!=-10&&v!=0&&v!=10) return Status::Invalid; }
-        else if(v<0 || (f==Field::Target && v==0)) return Status::Invalid;
+        if(rule.format==InputFormat::Datum) { if(v!=-20&&v!=-10&&v!=0&&v!=10) return Status::Invalid; }
+        else if(v<0 || (rule.format==InputFormat::Positive && v==0)) return Status::Invalid;
     }
     TRY(begin(op));
-    s=text?record.putText(f,value,(f==Field::Operator||f==Field::RetarderBrand||f==Field::AcceleratorBrand||f==Field::FlyAshBrand)?33:65):record.putNumber(f,v);
-    if(s==Status::Ok && k==Kind::Draft) s=record.erase(Field::Model);
+    s=text?record.putText(rule.field,value,rule.capacity):record.putNumber(rule.field,v);
+    if(s==Status::Ok && rule.kind==Kind::Draft) s=record.erase(Field::Model);
     return finish(s);
 }
 Status Controller::setField(const char* key,const char* value,const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
-    if(CM_EQ(key,"operator")) return mutateField(Kind::User,0,Field::Operator,value,op);
-    if(CM_EQ(key,"project")) return mutateField(Kind::User,0,Field::Project,value,op);
-    if(CM_EQ(key,"date")) return mutateField(Kind::User,0,Field::Date,value,op);
+    FieldRule rule; bool known=fieldRule(key,rule);
+    if(known&&rule.kind==Kind::User) return mutateField(rule,value,op);
     if(!draft_) return Status::Missing;
-    if(CM_EQ(key,"pourDate")||CM_EQ(key,"pourClock")) {
+    if(!known) return Status::Invalid;
+    if(rule.format==InputFormat::PourDate||rule.format==InputFormat::PourClock) {
         uint64_t at=0; TRY(record.time(Field::Pour,at));
-        if(CM_EQ(key,"pourDate")) { uint64_t day; TRY(parseDate(value,day)); at=day+at%86400000ULL; }
+        if(rule.format==InputFormat::PourDate) { uint64_t day; TRY(parseDate(value,day)); at=day+at%86400000ULL; }
         else { uint32_t sec; TRY(parseClock(value,sec)); at=at/86400000ULL*86400000ULL+uint64_t(sec)*1000; }
         TRY(begin(op)); return finish(record.putTime(Field::Pour,at));
     }
-    Field field;
-#define F(name,f) if(CM_EQ(key,name)) field=Field::f; else
-    F("name",Name) F("target",Target) F("datum",Datum) F("cement",Cement) F("water",Water)
-    F("coarse",Coarse) F("fine",Fine) F("retarderPct",RetarderPct) F("retarderBrand",RetarderBrand)
-    F("acceleratorPct",AcceleratorPct) F("acceleratorBrand",AcceleratorBrand) F("flyAshPct",FlyAshPct) F("flyAshBrand",FlyAshBrand)
-    return Status::Invalid;
-#undef F
-    return mutateField(Kind::Draft,draft_,field,value,op);
+    return mutateField(rule,value,op);
 }
 Status Controller::newBaseline(const uint64_t& op) {
     if(!mounted_) return Status::Absent;
@@ -557,18 +545,7 @@ Status Controller::historyAt(uint32_t slot,uint32_t& id) {
 }
 Status Controller::setting(const char* name,const char* value,const uint64_t& op) {
     uint32_t v; TRY(parseU32(value,v)); Field field;
-    if(CM_EQ(name,"hour")||CM_EQ(name,"minute")||CM_EQ(name,"second")) {
-        if(v>(CM_EQ(name,"hour")?23u:59u)) return Status::Invalid;
-        if(CM_EQ(name,"hour")) v=v*3600+settings_.intervalSeconds%3600;
-        else if(CM_EQ(name,"minute")) v=settings_.intervalSeconds/3600*3600+v*60+settings_.intervalSeconds%60;
-        else v=settings_.intervalSeconds/60*60+v;
-        field=Field::Interval;
-    }
-    else if(CM_EQ(name,"interval")) { if(v>86399) return Status::Invalid; field=Field::Interval; }
-    else if(CM_EQ(name,"brightness")) { if(v>100||v%5) return Status::Invalid; field=Field::Brightness; }
-    else if(CM_EQ(name,"sound")) { if(v>1) return Status::Invalid; field=Field::Sound; }
-    else if(CM_EQ(name,"autoSave")) { if(v>1) return Status::Invalid; field=Field::AutoSave; }
-    else return Status::Invalid;
+    TRY(settingValue(name,settings_,v,field));
     Status hardware=Status::Ok;
     if(field==Field::Brightness) hardware=devices_.brightness(uint8_t(v));
     if(field==Field::Sound) hardware=devices_.sound(v!=0);
@@ -589,10 +566,7 @@ Status Controller::setting(const char* name,const char* value,const uint64_t& op
         if(field==Field::Sound) devices_.sound(settings_.sound);
         return saved;
     }
-    if(field==Field::Interval) settings_.intervalSeconds=v;
-    if(field==Field::Brightness) settings_.brightness=uint8_t(v);
-    if(field==Field::Sound) settings_.sound=v!=0;
-    if(field==Field::AutoSave) settings_.autoSave=v!=0;
+    assignSetting(settings_,field,v);
     return Status::Ok;
 }
 bool Controller::validNavigation(Page destination) const {

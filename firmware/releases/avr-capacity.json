@@ -1,9 +1,9 @@
 {
   "purpose": "capacity probe, never upload",
   "compiler": "avr-g++ (GCC) 7.3.0",
-  "flashBytes": 75794,
+  "flashBytes": 75414,
   "staticRamBytes": 1502,
-  "physicalFlashRemaining": -43026,
+  "physicalFlashRemaining": -42646,
   "staticRamRemaining": 546,
   "fitsStaticLimits": false,
   "includes": "shared core/controller/HMI/real SD with disk index/HardwareSerial/confirmed battery adapter; probe clock/sensor/brightness/sound ports",

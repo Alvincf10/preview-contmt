@@ -2,10 +2,11 @@
 #include "../storage/Repository.h"
 #include "../core/Calendar.h"
 #include "TransactionOps.h"
+#include "FieldRules.h"
+#include "Settings.h"
 namespace conmt {
 enum class Page : uint8_t { Init, User, Main, Base, NewB, Mat, Matu, BaseR, SaveB, Kuat, SelB, RT, Str, Hist, HistD, Set, Dev };
 enum class SessionState : uint8_t { Idle, Active, Preview, Completed, Suspended };
-struct Settings { uint32_t intervalSeconds; uint8_t brightness; bool sound,autoSave; };
 class Controller {
     Repository& repo_; ClockPort& clock_; SensorPort& sensors_; DevicePort& devices_;
     Page page_;
@@ -22,7 +23,7 @@ class Controller {
     Status finish(Status st);
     Status begin(const uint64_t& op);
     Status transact(const TxStep* steps,uint8_t count,const Entity& source,const Entity& destination,const void* data,const uint64_t& op);
-    Status mutateField(Kind k,uint32_t o,Field f,const char* value,const uint64_t& op);
+    Status mutateField(const FieldRule& rule,const char* value,const uint64_t& op);
     Status setting(const char* key,const char* value,const uint64_t& op);
     Status validateDraft();
     Status earlySlot(uint32_t excluding,Real& hours);

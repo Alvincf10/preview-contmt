@@ -34,6 +34,14 @@
       "deltaFlash": -1170,
       "tests": "14/14 host64,host32,ASan/UBSan; AVR precision/record descriptors and both41row datasets PASS; UART snapshot unchanged",
       "decision": "Retain; preserve dtostrf/strtod and rounding, remove varargs formatting from AVR production paths"
+    },
+    {
+      "stage": "P1 field and settings descriptors",
+      "flash": 75414,
+      "staticRam": 1502,
+      "deltaFlash": -380,
+      "tests": "15/15 host64/host32/ASan/UBSan;300baseline trace lines per native precision including120fault cases;AVR input/settings table smoke PASS",
+      "decision": "Retain shared validation and loading; savings too small to extrapolate wholesale controller conversion"
     }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "baselineCommit": "520a74fe7db226c1933ff580c860c2bcc575ff19",
+  "traceSourceSha256": "765ca73eb9fd41977166a5c7e4c9f7af1a8e0a130e46676820cce7e384e38b52",
+  "traceSha256": "776c81ae3da4608cb6f9d1a4241f1cd3e59536facedb1a93adbed255293eb124",
+  "lines": 300,
+  "realBits": 32,
+  "scope": "Public workflows including schema1 bytes/status/navigation and120write-cut scenarios, indexed and unindexed. Not hardware."
+}

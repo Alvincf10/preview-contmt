@@ -43,6 +43,8 @@ source.write_text(r'''
 #include "core/Command.h"
 #include "core/Calendar.h"
 #include "core/Text.h"
+#include "app/FieldRules.h"
+#include "app/Settings.h"
 #include <avr/io.h>
 #include <stdlib.h>
 using namespace conmt;
@@ -108,6 +110,20 @@ int main() {
     static const char prefix[] PROGMEM="tDay"; indexedName(value,sizeof(value),prefix,5); if(strcmp(value,"tDay5")) fail();
     formatStatus(value,sizeof(value),Status::ConfirmRequired); if(strcmp(value,"ConfirmRequired")) fail();
     if(commandFromText("RESULT_SAVE")!=Command::RESULT_SAVE||!allowedPage(Command::RESULT_SAVE,12)||allowedPage(Command::RESULT_SAVE,11)) fail();
+    FieldRule rule;
+    if(!fieldRule("operator",rule)||rule.kind!=Kind::User||rule.capacity!=33||rule.field!=Field::Operator) fail();
+    if(!fieldRule("flyAshBrand",rule)||rule.kind!=Kind::Draft||rule.capacity!=33||rule.field!=Field::FlyAshBrand) fail();
+    if(!fieldRule("target",rule)||rule.format!=InputFormat::Positive||fieldRule("unknown",rule)) fail();
+    Settings settings={300,80,true,false}; Field field; uint32_t setting=2;
+    if(settingValue("hour",settings,setting,field)!=Status::Ok||setting!=7500||field!=Field::Interval) fail();
+    assignSetting(settings,field,setting); setting=13;
+    if(settingValue("minute",settings,setting,field)!=Status::Ok||setting!=7980) fail();
+    assignSetting(settings,field,setting); setting=9;
+    if(settingValue("second",settings,setting,field)!=Status::Ok||setting!=7989) fail();
+    assignSetting(settings,field,setting); setting=50;
+    if(settingValue("brightness",settings,setting,field)!=Status::Ok) fail();
+    assignSetting(settings,field,setting); if(settings.brightness!=50||settings.intervalSeconds!=7989||!settings.sound||settings.autoSave) fail();
+    setting=255; if(settingValue("sound",settings,setting,field)!=Status::Invalid) fail();
     formatReal(value,sizeof(value),36.5,1); if(strcmp(value,"36.5")) fail();
     formatReal(value,sizeof(value),4.125,2); if(strcmp(value,"4.13")) fail();
     formatUnsigned(value,sizeof(value),4294967295UL); if(strcmp(value,"4294967295")) fail();
@@ -121,7 +137,7 @@ int main() {
 }
 ''')
 sources = [source] + [root / 'ConMT/src' / path for path in [
-    'storage/Journal.cpp', 'storage/DiskIndex.cpp', 'storage/RecordCodec.cpp', 'core/Types.cpp', 'core/Flash.cpp', 'core/Text.cpp', 'core/Command.cpp', 'core/Calendar.cpp']]
+    'storage/Journal.cpp', 'storage/DiskIndex.cpp', 'storage/RecordCodec.cpp', 'app/FieldRules.cpp', 'app/Settings.cpp', 'core/Types.cpp', 'core/Flash.cpp', 'core/Text.cpp', 'core/Command.cpp', 'core/Calendar.cpp']]
 for name, defines in [('precision', []), ('records', ['-DCONMT_RECORD_CHECK=1'])]:
     command = [str(compiler), '-mmcu=atmega328p', '-Os', '-flto', '-std=gnu++11', '-fno-exceptions',
                '-fno-rtti', '-ffunction-sections', '-fdata-sections', '-I' + str(root / 'ConMT/src'),
