@@ -1,0 +1,506 @@
+{
+  "scope": "Unique address/size symbols; LTO attribution is approximate. Unnamed padding is not attributed.",
+  "textGroups": {
+    "Runtime/SDK/constants": 9111,
+    "Controller": 28108,
+    "ConMT other": 13599,
+    "Transport": 10214,
+    "Repository": 4042,
+    "Journal": 6904,
+    "SdFile": 3360,
+    "Sd2Card": 1334,
+    "SdVolume": 2152,
+    "DiskIndex": 1268
+  },
+  "largestText": [
+    {
+      "address": 55058,
+      "bytes": 6568,
+      "type": "t",
+      "names": [
+        "conmt::Transport::renderField(unsigned int, char*, unsigned int, char*, unsigned int) [clone .constprop.12]"
+      ]
+    },
+    {
+      "address": 63296,
+      "bytes": 2746,
+      "type": "t",
+      "names": [
+        "conmt::Controller::dispatch(char const*, char const*, char const*, char const*, unsigned long long)"
+      ]
+    },
+    {
+      "address": 39876,
+      "bytes": 2012,
+      "type": "t",
+      "names": [
+        "conmt::Controller::load()"
+      ]
+    },
+    {
+      "address": 50998,
+      "bytes": 1978,
+      "type": "t",
+      "names": [
+        "conmt::Controller::start(bool, unsigned long long)"
+      ]
+    },
+    {
+      "address": 70974,
+      "bytes": 1972,
+      "type": "t",
+      "names": [
+        "conmt::Controller::editCheckpoint(unsigned long, char const*, char const*, unsigned long long)"
+      ]
+    },
+    {
+      "address": 47636,
+      "bytes": 1502,
+      "type": "t",
+      "names": [
+        "conmt::Controller::tickImpl() [clone .constprop.36]"
+      ]
+    },
+    {
+      "address": 72946,
+      "bytes": 1312,
+      "type": "t",
+      "names": [
+        "conmt::Controller::editRow(unsigned long, char const*, char const*, unsigned long long)"
+      ]
+    },
+    {
+      "address": 23102,
+      "bytes": 1166,
+      "type": "t",
+      "names": [
+        "conmt::Journal::locate(conmt::Key const&, unsigned long&, unsigned int&)"
+      ]
+    },
+    {
+      "address": 66042,
+      "bytes": 1146,
+      "type": "t",
+      "names": [
+        "conmt::Transport::accept(conmt::Frame const&) [clone .constprop.14]"
+      ]
+    },
+    {
+      "address": 20386,
+      "bytes": 1130,
+      "type": "t",
+      "names": [
+        "conmt::Journal::verify(unsigned long, unsigned long, unsigned long&, unsigned long&, unsigned long long&, bool)"
+      ]
+    },
+    {
+      "address": 17188,
+      "bytes": 1038,
+      "type": "t",
+      "names": [
+        "conmt::FitJob::step()"
+      ]
+    },
+    {
+      "address": 62330,
+      "bytes": 966,
+      "type": "t",
+      "names": [
+        "conmt::Controller::setField(char const*, char const*, unsigned long long)"
+      ]
+    },
+    {
+      "address": 46120,
+      "bytes": 940,
+      "type": "t",
+      "names": [
+        "conmt::Controller::addCheckpoint(double, unsigned long long)"
+      ]
+    },
+    {
+      "address": 75596,
+      "bytes": 918,
+      "type": "T",
+      "names": [
+        "vfprintf"
+      ]
+    },
+    {
+      "address": 34522,
+      "bytes": 876,
+      "type": "t",
+      "names": [
+        "conmt::Controller::reconcileGap(char const*, char const*, unsigned long long)"
+      ]
+    },
+    {
+      "address": 29540,
+      "bytes": 844,
+      "type": "t",
+      "names": [
+        "conmt::Controller::setting(char const*, char const*, unsigned long long)"
+      ]
+    },
+    {
+      "address": 67322,
+      "bytes": 828,
+      "type": "t",
+      "names": [
+        "conmt::Transport::poll(unsigned long) [clone .constprop.10]"
+      ]
+    },
+    {
+      "address": 37650,
+      "bytes": 794,
+      "type": "t",
+      "names": [
+        "conmt::Controller::replayResult(conmt::Kind, unsigned long, unsigned long, conmt::Result&, double&)"
+      ]
+    },
+    {
+      "address": 49164,
+      "bytes": 788,
+      "type": "t",
+      "names": [
+        "conmt::Controller::newBaseline(unsigned long long)"
+      ]
+    },
+    {
+      "address": 21928,
+      "bytes": 768,
+      "type": "t",
+      "names": [
+        "conmt::Journal::findOperation(unsigned long long, conmt::Key&)"
+      ]
+    },
+    {
+      "address": 43614,
+      "bytes": 744,
+      "type": "t",
+      "names": [
+        "conmt::Repository::putSensors(conmt::Kind, unsigned long, conmt::SensorFrame const&, conmt::Average const&, conmt::Time const&, conmt::Field) [clone .constprop.38]"
+      ]
+    },
+    {
+      "address": 42648,
+      "bytes": 734,
+      "type": "t",
+      "names": [
+        "conmt::Controller::saveResult(unsigned long long)"
+      ]
+    },
+    {
+      "address": 8482,
+      "bytes": 734,
+      "type": "t",
+      "names": [
+        "SdFile::write(void const*, unsigned int)"
+      ]
+    },
+    {
+      "address": 28748,
+      "bytes": 726,
+      "type": "t",
+      "names": [
+        "conmt::Journal::commit()"
+      ]
+    },
+    {
+      "address": 26662,
+      "bytes": 724,
+      "type": "t",
+      "names": [
+        "conmt::Journal::scan()"
+      ]
+    },
+    {
+      "address": 33034,
+      "bytes": 714,
+      "type": "t",
+      "names": [
+        "conmt::nextPoint(conmt::Repository&, conmt::Kind, unsigned long, conmt::Point const*, conmt::Point&)"
+      ]
+    },
+    {
+      "address": 45408,
+      "bytes": 712,
+      "type": "t",
+      "names": [
+        "conmt::Controller::addRow(bool, unsigned long long)"
+      ]
+    },
+    {
+      "address": 76514,
+      "bytes": 696,
+      "type": "T",
+      "names": [
+        "dtoa_prf"
+      ]
+    },
+    {
+      "address": 35758,
+      "bytes": 674,
+      "type": "t",
+      "names": [
+        "conmt::StoredRows::next(conmt::Row&)"
+      ]
+    },
+    {
+      "address": 31224,
+      "bytes": 656,
+      "type": "t",
+      "names": [
+        "conmt::Controller::markGap(unsigned long long, unsigned long long)"
+      ]
+    },
+    {
+      "address": 36432,
+      "bytes": 654,
+      "type": "t",
+      "names": [
+        "conmt::lookupRows(conmt::RowSource&, double, conmt::Fit const&, double, conmt::Selection&) [clone .constprop.41]"
+      ]
+    },
+    {
+      "address": 74324,
+      "bytes": 650,
+      "type": "T",
+      "names": [
+        "strtod"
+      ]
+    },
+    {
+      "address": 42006,
+      "bytes": 642,
+      "type": "t",
+      "names": [
+        "conmt::Controller::readResult(conmt::Kind, unsigned long, conmt::Result&)"
+      ]
+    },
+    {
+      "address": 44782,
+      "bytes": 626,
+      "type": "t",
+      "names": [
+        "conmt::Controller::fillEarly(unsigned long long)"
+      ]
+    },
+    {
+      "address": 24268,
+      "bytes": 616,
+      "type": "t",
+      "names": [
+        "conmt::Journal::copy(conmt::Key const&, conmt::Key const&, unsigned int)"
+      ]
+    },
+    {
+      "address": 33748,
+      "bytes": 584,
+      "type": "t",
+      "names": [
+        "conmt::replayPoints(conmt::Repository&, conmt::Kind, unsigned long, double, double&, conmt::Point&) [clone .constprop.32]"
+      ]
+    },
+    {
+      "address": 39306,
+      "bytes": 570,
+      "type": "t",
+      "names": [
+        "conmt::Controller::saveBaseline(unsigned long long)"
+      ]
+    },
+    {
+      "address": 61762,
+      "bytes": 568,
+      "type": "t",
+      "names": [
+        "conmt::Controller::mutateField(conmt::Kind, unsigned long, conmt::Field, char const*, unsigned long long)"
+      ]
+    },
+    {
+      "address": 28048,
+      "bytes": 544,
+      "type": "t",
+      "names": [
+        "conmt::Parser::feed(unsigned char, unsigned long, conmt::Frame&) [clone .constprop.19]"
+      ]
+    },
+    {
+      "address": 3608,
+      "bytes": 518,
+      "type": "t",
+      "names": [
+        "__static_initialization_and_destruction_0(int, int) [clone .constprop.4]"
+      ]
+    }
+  ],
+  "largestStatic": [
+    {
+      "address": 8389622,
+      "bytes": 512,
+      "type": "b",
+      "names": [
+        "SdVolume::cacheBuffer_"
+      ]
+    },
+    {
+      "address": 8389228,
+      "bytes": 394,
+      "type": "b",
+      "names": [
+        "transport"
+      ]
+    },
+    {
+      "address": 8390287,
+      "bytes": 157,
+      "type": "b",
+      "names": [
+        "Serial"
+      ]
+    },
+    {
+      "address": 8389116,
+      "bytes": 108,
+      "type": "b",
+      "names": [
+        "storage"
+      ]
+    },
+    {
+      "address": 8390199,
+      "bytes": 88,
+      "type": "b",
+      "names": [
+        "controller"
+      ]
+    },
+    {
+      "address": 8390134,
+      "bytes": 41,
+      "type": "b",
+      "names": [
+        "journal"
+      ]
+    },
+    {
+      "address": 8390175,
+      "bytes": 22,
+      "type": "b",
+      "names": [
+        "batteryDevices"
+      ]
+    },
+    {
+      "address": 8388994,
+      "bytes": 18,
+      "type": "d",
+      "names": [
+        "vtable for HardwareSerial"
+      ]
+    },
+    {
+      "address": 8388924,
+      "bytes": 18,
+      "type": "d",
+      "names": [
+        "vtable for conmt::SdIndexStorage"
+      ]
+    },
+    {
+      "address": 8388942,
+      "bytes": 18,
+      "type": "d",
+      "names": [
+        "vtable for conmt::SdStorage"
+      ]
+    },
+    {
+      "address": 8388887,
+      "bytes": 12,
+      "type": "d",
+      "names": [
+        "vtable for ProbeDevices"
+      ]
+    },
+    {
+      "address": 8388982,
+      "bytes": 12,
+      "type": "d",
+      "names": [
+        "vtable for SdFile"
+      ]
+    },
+    {
+      "address": 8388970,
+      "bytes": 12,
+      "type": "d",
+      "names": [
+        "vtable for conmt::BatteryDevices"
+      ]
+    },
+    {
+      "address": 8388960,
+      "bytes": 10,
+      "type": "d",
+      "names": [
+        "vtable for conmt::ArduinoUart"
+      ]
+    },
+    {
+      "address": 8388899,
+      "bytes": 8,
+      "type": "d",
+      "names": [
+        "vtable for ProbeSensors"
+      ]
+    },
+    {
+      "address": 8388916,
+      "bytes": 8,
+      "type": "d",
+      "names": [
+        "vtable for conmt::StoredRows"
+      ]
+    },
+    {
+      "address": 8388907,
+      "bytes": 6,
+      "type": "d",
+      "names": [
+        "vtable for ProbeClock"
+      ]
+    },
+    {
+      "address": 8388866,
+      "bytes": 4,
+      "type": "d",
+      "names": [
+        "SdVolume::cacheBlockNumber_"
+      ]
+    },
+    {
+      "address": 8389099,
+      "bytes": 4,
+      "type": "b",
+      "names": [
+        "SdVolume::cacheMirrorBlock_"
+      ]
+    },
+    {
+      "address": 8389110,
+      "bytes": 4,
+      "type": "b",
+      "names": [
+        "timer0_millis"
+      ]
+    }
+  ],
+  "engineeringBudget": {
+    "flashBytesAllFeatures": 30720,
+    "staticSramBytes": 1280,
+    "physicalFlashBytes": 32768,
+    "physicalSramBytes": 2048
+  },
+  "stackProof": "Non-LTO frames in avr-stack.json are not a nested call-chain or interrupt watermark."
+}
