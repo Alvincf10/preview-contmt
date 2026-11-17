@@ -20,7 +20,7 @@ enum class Field : uint8_t {
     Cement, Water, Coarse, Fine, RetarderPct, RetarderBrand, AcceleratorPct,
     AcceleratorBrand, FlyAshPct, FlyAshBrand, MaxRow, Row, Model,
     BaselineRef, Start, InitialTemp, State, Gap, Result, Sensors,
-    Interval, Brightness, Sound, AutoSave, ClockIssue, GapStart, GapEnd, PreviewSensors, DayInput, TempInput, FcInput
+    Interval, Brightness, Sound, AutoSave, ClockIssue, GapStart, GapEnd, PreviewSensors, DayInput, TempInput, FcInput, ClockAdjustment
 };
 struct Key {
     Kind kind; uint32_t object; Field field; uint32_t index;

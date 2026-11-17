@@ -6,7 +6,7 @@
 #include <stdio.h>
 namespace conmt {
 #define TRY(expr) do { Status st_=(expr); if(st_!=Status::Ok) return st_; } while(0)
-Controller::Controller(Repository& r,ClockPort& c,SensorPort& s,DevicePort& d) : repo_(r),clock_(c),sensors_(s),devices_(d),page_(Page::Init),draft_(0),selected_(0),session_(0),history_(0),view_(1),cursor_(0),boot_(0),focusedRow_(0),savedEntry_(false),mounted_(false),sampleKnown_(false),gapLatched_(false),inGap_(false),loading_(false),lastMono_(0),lastSaveMono_(0),lastFrameMono_(0),lastWall_(0),lastTemp_(0),liveM_(0),liveCompensation_(0),settings_{300,80,true,false},status_(Status::Ok),health_(Status::Ok) {}
+Controller::Controller(Repository& r,ClockPort& c,SensorPort& s,DevicePort& d) : repo_(r),clock_(c),sensors_(s),devices_(d),page_(Page::Init),draft_(0),selected_(0),session_(0),history_(0),view_(1),cursor_(0),boot_(0),focusedRow_(0),savedEntry_(false),mounted_(false),sampleKnown_(false),gapLatched_(false),inGap_(false),loading_(false),replayLive_(false),lastMono_(0),lastSaveMono_(0),lastFrameMono_(0),lastWall_(0),lastTemp_(0),liveM_(0),liveCompensation_(0),settings_{300,80,true,false},status_(Status::Ok),health_(Status::Ok) {}
 Status Controller::finish(Status s) {
     if(s==Status::Ok) s=repo_.journal().commit(); else repo_.journal().abort();
     if(s==Status::Ok) ++view_;
@@ -21,7 +21,7 @@ Status Controller::newConnection() {
     TRY(begin(0)); TRY(finish(repo_.putInteger(Key(Kind::System,0,Field::State),boot_+1))); ++boot_; return Status::Ok;
 }
 Status Controller::boot() {
-    mounted_=false; loading_=true; sampleKnown_=false; gapLatched_=false; inGap_=false;
+    mounted_=false; loading_=true; sampleKnown_=false; gapLatched_=false; inGap_=false; replayLive_=false;
     liveM_=liveCompensation_=0; selected_=session_=draft_=0;
     page_=Page::User;
     Status st=load(); loading_=false;
@@ -58,7 +58,7 @@ Status Controller::load() {
             else if(frameStatus==Status::Missing) TRY(repo_.time(Key(Kind::Session,session_,Field::Start),start));
             else return frameStatus==Status::Ok?Status::Corrupt:frameStatus;
             uint64_t sessionStart; TRY(repo_.time(Key(Kind::Session,session_,Field::Start),sessionStart)); if(start<sessionStart) start=sessionStart;
-            TRY(markGap(start,clock_.now().valid?clock_.now().wallMs:start));
+            TRY(markGap(start,clock_.now().valid?clock_.now().wallMs:start,ClockCause::Restart));
             TRY(begin(0)); TRY(finish(repo_.putInteger(Key(Kind::Session,session_,Field::State),uint32_t(SessionState::Suspended))));
             gapLatched_=true; inGap_=true;
         }
@@ -89,8 +89,9 @@ Status Controller::persistSample(const SensorFrame& f,const Average& a,const Tim
     if(s==Status::Ok) s=repo_.putNumber(Key(Kind::Session,session_,Field::Result,1),liveM_);
     s=finish(s); if(s==Status::Ok) lastSaveMono_=t.monoMs; return s;
 }
-Status Controller::markGap(uint64_t start,uint64_t end) {
+Status Controller::markGap(uint64_t start,uint64_t end,ClockCause cause) {
     Record record(repo_,Kind::Session,session_);
+    uint8_t event[21]; event[0]=uint8_t(cause); put64(event+1,start); put64(event+9,end); put32(event+17,clock_.now().monoMs);
     if(start>end) { uint64_t swap=start; start=end; end=swap; }
     uint32_t existing=0; Status st=record.integer(Field::Gap,existing);
     if(st!=Status::Ok && st!=Status::Missing) return st;
@@ -98,6 +99,7 @@ Status Controller::markGap(uint64_t start,uint64_t end) {
     TRY(begin(0)); Status s=record.putInteger(Field::Gap,1);
     if(s==Status::Ok) s=record.putTime(Field::GapStart,start);
     if(s==Status::Ok) s=record.putTime(Field::GapEnd,end);
+    if(s==Status::Ok&&cause!=ClockCause::None) s=record.put(Field::ClockAdjustment,event,sizeof(event));
     TRY(finish(s)); gapLatched_=true; return Status::Ok;
 }
 Status Controller::tick() {
@@ -113,14 +115,19 @@ Status Controller::tickImpl() {
     if(ss!=SessionState::Active && ss!=SessionState::Preview) return Status::Ok;
     Average avg; SensorFrame f; Status s=getAverage(avg,&f);
     bool gap=s!=Status::Ok || !t.valid;
+    ClockCause cause=!t.valid?ClockCause::Invalid:ClockCause::Sensor;
+    if(replayLive_&&!gap) return reanchorLive(f,avg,t);
     if(sampleKnown_) {
         uint32_t dt=t.monoMs-lastMono_;
-        if(dt>5000) gap=true;
-        if(t.wallMs<lastWall_ || (t.wallMs-lastWall_>uint64_t(dt)+2000) || (uint64_t(dt)>t.wallMs-lastWall_+2000)) gap=true;
+        if(dt>5000) { gap=true; if(t.valid&&s==Status::Ok) cause=ClockCause::SampleDelay; }
+        if(t.valid) {
+            if(t.wallMs<lastWall_ || uint64_t(dt)>t.wallMs-lastWall_+2000) { gap=true; cause=ClockCause::Backward; }
+            else if(t.wallMs-lastWall_>uint64_t(dt)+2000) { gap=true; cause=ClockCause::Forward; }
+        }
     }
     if(gap) {
         sampleKnown_=false;
-        if(!inGap_) { TRY(markGap(lastWall_,t.valid?t.wallMs:lastWall_)); inGap_=true; }
+        if(!inGap_) { TRY(markGap(lastWall_,t.valid?t.wallMs:lastWall_,cause)); inGap_=true; }
         return status_=t.valid?(s==Status::Ok?Status::NoClock:s):Status::NoClock;
     }
     if(inGap_) { TRY(markGap(lastWall_,t.wallMs)); inGap_=false; }
@@ -136,6 +143,17 @@ Status Controller::tickImpl() {
     lastTemp_=avg.operational; lastFrameMono_=f.sampledMonoMs; lastMono_=f.sampledMonoMs; lastWall_=sampledWall; sampleKnown_=true;
     if(settings_.autoSave && settings_.intervalSeconds && uint32_t(t.monoMs-lastSaveMono_)>=settings_.intervalSeconds*1000UL) return persistSample(f,avg,t);
     return Status::Ok;
+}
+Status Controller::reanchorLive(const SensorFrame& frame,const Average& avg,const Time& now) {
+    Real datum,maturity; Point last;
+    TRY(repo_.number(Key(Kind::Session,session_,Field::Datum),datum));
+    TRY(replayPoints(repo_,Kind::Session,session_,datum,maturity,last));
+    uint32_t age=now.monoMs-frame.sampledMonoMs; if(now.wallMs<age) return Status::NoClock;
+    uint64_t sampled=now.wallMs-age; if(sampled<last.atMs) return Status::NoClock;
+    Real rebased=positive(maturity+interval(last.temp,avg.operational,datum,Real(sampled-last.atMs)/3600000));
+    if(!finite(rebased)) return Status::Invalid;
+    liveM_=rebased; liveCompensation_=0; lastTemp_=avg.operational; lastWall_=sampled;
+    lastMono_=lastFrameMono_=frame.sampledMonoMs; sampleKnown_=true; replayLive_=false; return Status::Ok;
 }
 Status Controller::mutateField(Kind k,uint32_t o,Field f,const char* value,uint64_t op) {
     Record record(repo_,k,o);
@@ -398,7 +416,7 @@ Status Controller::start(bool confirmed,uint64_t op) {
     PUT(repo_.putPoint(Kind::Session,id,p)); PUT(repo_.putInteger(Key(Kind::Session,id,Field::MaxRow),1));
     PUT(repo_.putInteger(Key(Kind::Session,id,Field::Gap),0));
     PUT(repo_.putSensors(Kind::Session,id,frame,avg,t));
-    TRY(finish(s)); session_=id; liveM_=0; liveCompensation_=0; lastTemp_=avg.operational; lastWall_=t.wallMs; lastMono_=t.monoMs; lastSaveMono_=t.monoMs; lastFrameMono_=frame.sampledMonoMs; sampleKnown_=true; gapLatched_=false; inGap_=false; health_=Status::Ok; cursor_=0; page_=Page::RT; return Status::Ok;
+    TRY(finish(s)); replayLive_=false; session_=id; liveM_=0; liveCompensation_=0; lastTemp_=avg.operational; lastWall_=t.wallMs; lastMono_=t.monoMs; lastSaveMono_=t.monoMs; lastFrameMono_=frame.sampledMonoMs; sampleKnown_=true; gapLatched_=false; inGap_=false; health_=Status::Ok; cursor_=0; page_=Page::RT; return Status::Ok;
 }
 Status Controller::addCheckpoint(Real day,uint64_t op) {
     Record record(repo_,Kind::Session,session_);
@@ -439,7 +457,7 @@ Status Controller::editCheckpoint(uint32_t id,const char* field,const char* valu
     if(id==1) { PUT(record.putTime(Field::Start,p.atMs)); PUT(record.putNumber(Field::InitialTemp,p.temp)); }
     PUT(record.erase(Field::Result));
     if(ss!=SessionState::Suspended) PUT(record.putInteger(Field::State,uint32_t(SessionState::Active)));
-    return finish(s);
+    TRY(finish(s)); replayLive_=true; sampleKnown_=false; return Status::Ok;
 }
 Status Controller::prepareResult(uint64_t op) {
     Record record(repo_,Kind::Session,session_);

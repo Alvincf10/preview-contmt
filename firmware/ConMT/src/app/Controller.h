@@ -15,7 +15,7 @@ class Controller {
     Repository& repo_; ClockPort& clock_; SensorPort& sensors_; DevicePort& devices_;
     Page page_;
     uint32_t draft_,selected_,session_,history_,view_,cursor_,boot_,focusedRow_;
-    bool savedEntry_,mounted_,sampleKnown_,gapLatched_,inGap_,loading_;
+    bool savedEntry_,mounted_,sampleKnown_,gapLatched_,inGap_,loading_,replayLive_;
     uint32_t lastMono_,lastSaveMono_,lastFrameMono_;
     uint64_t lastWall_;
     Real lastTemp_,liveM_,liveCompensation_;
@@ -23,7 +23,7 @@ class Controller {
     Status status_,health_;
     Status load();
     Status tickImpl();
-    Status markGap(uint64_t start,uint64_t end);
+    Status markGap(uint64_t start,uint64_t end,ClockCause cause=ClockCause::None);
     Status finish(Status st);
     Status begin(uint64_t op);
     Status mutateField(Kind k,uint32_t o,Field f,const char* value,uint64_t op);
@@ -38,6 +38,7 @@ class Controller {
     Status reconcileGap(const char* confirmed,const char* reason,uint64_t operation) __attribute__((noinline));
     Status cloneDraft(uint32_t from,uint64_t op);
     Status persistSample(const SensorFrame& frame,const Average& avg,const Time& now);
+    Status reanchorLive(const SensorFrame& frame,const Average& avg,const Time& now) __attribute__((noinline));
     bool validNavigation(Page p) const;
 public:
     Controller(Repository& r,ClockPort& c,SensorPort& s,DevicePort& d);

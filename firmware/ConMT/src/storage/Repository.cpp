@@ -94,7 +94,7 @@ Status Repository::copyScalar(const Key& from,const Key& to,uint16_t expected) {
     return journal_.copy(from,to,expected);
 }
 Status Repository::copy(Kind from,uint32_t src,Kind to,uint32_t dst) {
-    for(uint8_t f=uint8_t(Field::Exists);f<=uint8_t(Field::FcInput);++f) {
+    for(uint8_t f=uint8_t(Field::Exists);f<=uint8_t(Field::ClockAdjustment);++f) {
         if(Field(f)==Field::Row||Field(f)==Field::DayInput||Field(f)==Field::TempInput||Field(f)==Field::FcInput) continue;
         Status s=journal_.copy(Key(from,src,Field(f)),Key(to,dst,Field(f)));
         if(s==Status::Missing) continue;

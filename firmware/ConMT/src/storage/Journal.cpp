@@ -10,24 +10,53 @@ void put64(uint8_t* p,uint64_t n) { for(uint8_t i=0;i<8;++i) p[i]=uint8_t(n>>(i*
 uint16_t get16(const uint8_t* p) { return uint16_t(p[0])|uint16_t(p[1])<<8; }
 uint32_t get32(const uint8_t* p) { uint32_t n=0; for(uint8_t i=0;i<4;++i) n|=uint32_t(p[i])<<(8*i); return n; }
 uint64_t get64(const uint8_t* p) { uint64_t n=0; for(uint8_t i=0;i<8;++i) n|=uint64_t(p[i])<<(8*i); return n; }
-void putReal(uint8_t* b,Real n) {
-    uint64_t bits=0;
-    if (n!=0 && finite(n)) {
-        int exponent; Real f=frexp(fabs(n),&exponent);
-        if(exponent>=-1021) {
-            uint64_t significand=uint64_t(ldexp(f,53));
-            bits=(uint64_t(exponent+1022)<<52)|(significand&0xfffffffffffffULL);
-        } else bits=uint64_t(ldexp(f,exponent+1074));
+void putReal(uint8_t* bytes,Real value) {
+    static_assert(sizeof(Real)==4||sizeof(Real)==8,"IEEE binary32/binary64 required");
+    if(sizeof(Real)==8) {
+        uint64_t bits=0; if(finite(value)) memcpy(&bits,&value,sizeof(Real));
+        else if(signbit(value)) bits=1ULL<<63;
+        put64(bytes,bits); return;
     }
-    if(signbit(n)) bits|=1ULL<<63;
-    put64(b,bits);
+    uint32_t bits=0; memcpy(&bits,&value,4);
+    uint16_t exponent=uint16_t((bits>>23)&255); uint32_t fraction=bits&0x7fffffUL;
+    memset(bytes,0,8); bytes[7]=uint8_t(bits>>24)&128;
+    if(exponent==255||(!exponent&&!fraction)) return;
+    if(exponent) exponent+=896;
+    else {
+        exponent=897;
+        while(!(fraction&0x800000UL)) { fraction<<=1; --exponent; }
+        fraction&=0x7fffffUL;
+    }
+    bytes[3]=uint8_t(fraction<<5); bytes[4]=uint8_t(fraction>>3); bytes[5]=uint8_t(fraction>>11);
+    bytes[6]=uint8_t((fraction>>19)|(exponent<<4)); bytes[7]|=uint8_t(exponent>>4);
 }
-Real getReal(const uint8_t* b) {
-    uint64_t bits=get64(b), fraction=bits&0xfffffffffffffULL;
-    uint16_t exp=uint16_t((bits>>52)&2047);
-    if(exp==2047) return NAN;
-    Real result=exp?ldexp(Real(fraction|(1ULL<<52)),int(exp)-1075):ldexp(Real(fraction),-1074);
-    return bits>>63?-result:result;
+Real getReal(const uint8_t* bytes) {
+    uint16_t exponent=(uint16_t(bytes[7]&127)<<4)|(bytes[6]>>4);
+    if(exponent==2047) return NAN;
+    if(sizeof(Real)==8) { uint64_t bits=get64(bytes); Real value; memcpy(&value,&bits,sizeof(Real)); return value; }
+    uint32_t sign=uint32_t(bytes[7]&128)<<24, result=sign;
+    int shift=1023+(-126)-int(exponent);
+    if(exponent&&shift<=24) {
+        uint32_t mantissa=0x800000UL|(uint32_t(bytes[6]&15)<<19)|(uint32_t(bytes[5])<<11)|(uint32_t(bytes[4])<<3)|(bytes[3]>>5);
+        bool roundUp;
+        if(shift>0) {
+            uint32_t discarded=mantissa&((1UL<<shift)-1),half=1UL<<(shift-1);
+            mantissa>>=shift;
+            bool tail=(bytes[3]&31)||bytes[2]||bytes[1]||bytes[0];
+            roundUp=discarded>half||(discarded==half&&(tail||(mantissa&1)));
+            exponent=0;
+        } else {
+            roundUp=(bytes[3]&16)&&((bytes[3]&15)||bytes[2]||bytes[1]||bytes[0]||(mantissa&1));
+            exponent-=896;
+        }
+        if(roundUp) ++mantissa;
+        if(!exponent) result|=mantissa;
+        else {
+            if(mantissa==0x1000000UL) { mantissa>>=1; ++exponent; }
+            result|=exponent>=255?0x7f800000UL:(uint32_t(exponent)<<23)|(mantissa&0x7fffffUL);
+        }
+    }
+    Real value; memcpy(&value,&result,4); return value;
 }
 Status Journal::verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,uint64_t& op,bool footer) {
     if(at>limit || limit-at<32) return Status::Corrupt;

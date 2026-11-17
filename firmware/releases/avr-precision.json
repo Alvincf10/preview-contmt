@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "target": "Emulated ATmega328P",
+  "codecCases": 620,
+  "covers": [
+    "binary64-to-binary32 rounding",
+    "subnormals",
+    "signed zero",
+    "binary64 encoding",
+    "PROGMEM strings/tables",
+    "status/command lookup",
+    "decimal ties",
+    "leap date"
+  ],
+  "fullPresenterRuntimeVerified": false,
+  "physicalHardwareVerified": false
+}

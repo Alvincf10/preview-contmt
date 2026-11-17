@@ -41,6 +41,7 @@ struct Prediction {
     Prediction() : maturity(0),raw(0),factor(1),fc(0),referenceDay(0),hasReference(false) {}
 };
 enum class PointSource : uint8_t { Sensor, Manual, Import };
+enum class ClockCause : uint8_t { None, Invalid, Backward, Forward, SampleDelay, Sensor, Restart };
 struct Point {
     uint32_t id, revision;
     uint64_t atMs;
