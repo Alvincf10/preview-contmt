@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
+#include <limits>
 using namespace conmt;
 #define CHECK(x) do { if(!(x)) { std::cerr<<__LINE__<<" "<<#x<<'\n'; std::exit(1); } } while(0)
 #define OK(x) CHECK((x)==Status::Ok)
@@ -93,4 +94,55 @@ static void incomplete() {
     uint8_t out[4]; CHECK(first.read(out,5)==Status::Capacity); OK(first.read(out,2)); CHECK(out[0]==1&&out[1]==2);
     OK(second.read(out,4)); CHECK(out[3]==4); OK(first.read(out,2)); CHECK(out[0]==3&&out[1]==4);
 }
-int main() { layouts(false); layouts(true); atomicCuts(false); atomicCuts(true); incomplete(); std::cout<<"Schema1 byte layouts, invalid flags, bounded value I/O and800multi-record write cuts PASS\n"; }
+static bool integerField(Field f) {
+    return f==Field::Exists||f==Field::MaxRow||f==Field::BaselineRef||f==Field::State||f==Field::Gap||
+           f==Field::Interval||f==Field::Brightness||f==Field::Sound||f==Field::AutoSave;
+}
+static bool timeField(Field f) { return f==Field::Pour||f==Field::Created||f==Field::Start||f==Field::GapStart||f==Field::GapEnd; }
+static bool textField(Field f) {
+    return f==Field::Name||f==Field::Operator||f==Field::Project||f==Field::Date||f==Field::RetarderBrand||
+           f==Field::AcceleratorBrand||f==Field::FlyAshBrand||f==Field::ClockIssue||
+           f==Field::DayInput||f==Field::TempInput||f==Field::FcInput;
+}
+static void allFieldsAndExtremes() {
+    host::MemoryStorage io,index; io.sidecar=&index; Journal journal(io); Repository repo(journal); OK(journal.mount());
+    const uint32_t object=UINT32_MAX,indexId=UINT32_MAX;
+    const Real reals[]={-0.0,std::numeric_limits<Real>::denorm_min(),-std::numeric_limits<Real>::min(),std::numeric_limits<Real>::max(),-std::numeric_limits<Real>::max()};
+    const uint64_t times[]={0,1,7258118399999ULL,0x8000000000000000ULL,UINT64_MAX};
+    const uint32_t integers[]={0,1,0x7fffffffUL,0x80000000UL,UINT32_MAX};
+    const char* texts[]={"0","3.012500e1","Lab raw: 4.123456789012345678901234567890","2026-11-17","A B ! # $ % & ( ) + , - . / : ; < = > ? @ [ ] ^ _ ` { } ~"};
+    for(unsigned edge=0;edge<5;++edge) {
+        OK(journal.mount());
+        uint64_t operation=UINT64_MAX-edge; OK(journal.begin(operation));
+        for(unsigned kind=unsigned(Kind::User);kind<=unsigned(Kind::System);++kind) {
+            for(unsigned field=unsigned(Field::Exists);field<=unsigned(Field::ClockAdjustment);++field) {
+                Field f=Field(field); Key key(Kind(kind),object,f,indexId);
+                if(integerField(f)) OK(repo.putInteger(key,integers[edge]));
+                else if(timeField(f)) OK(repo.putTime(key,times[edge]));
+                else if(textField(f)) OK(repo.putText(key,texts[edge],65));
+                else if(f==Field::Row||f==Field::Model||f==Field::Result||f==Field::Sensors||f==Field::PreviewSensors||f==Field::ClockAdjustment) {
+                    uint8_t bytes[128]; for(unsigned i=0;i<sizeof(bytes);++i) bytes[i]=uint8_t(i+edge);
+                    OK(journal.put(key,bytes,f==Field::Row?37:(f==Field::Model?28:(f==Field::Result?73:(f==Field::ClockAdjustment?21:53)))));
+                } else OK(repo.putNumber(key,reals[edge]));
+            }
+        }
+        OK(journal.commit()); CHECK(get16(io.bytes.data()+4)==1&&get16(io.bytes.data()+6)==1);
+        Journal restart(io); Repository recovered(restart); OK(restart.mount());
+        Key first; OK(restart.findOperation(operation,first)); CHECK(first.kind==Kind::User&&first.object==object&&first.index==indexId);
+        for(unsigned kind=unsigned(Kind::User);kind<=unsigned(Kind::System);++kind) {
+            for(unsigned field=unsigned(Field::Exists);field<=unsigned(Field::ClockAdjustment);++field) {
+                Field f=Field(field); Key key(Kind(kind),object,f,indexId);
+                if(integerField(f)) { uint32_t n; OK(recovered.integer(key,n)); CHECK(n==integers[edge]); }
+                else if(timeField(f)) { uint64_t n; OK(recovered.time(key,n)); CHECK(n==times[edge]); }
+                else if(textField(f)) { char text[65]; OK(recovered.text(key,text,sizeof(text))); CHECK(!std::strcmp(text,texts[edge])); }
+                else if(f==Field::Row||f==Field::Model||f==Field::Result||f==Field::Sensors||f==Field::PreviewSensors||f==Field::ClockAdjustment) {
+                    uint8_t bytes[128]; uint16_t size=sizeof(bytes); OK(restart.get(key,bytes,size));
+                    CHECK(size==(f==Field::Row?37:(f==Field::Model?28:(f==Field::Result?73:(f==Field::ClockAdjustment?21:53)))));
+                    for(unsigned i=0;i<size;++i) CHECK(bytes[i]==uint8_t(i+edge));
+                } else { Real number; OK(recovered.number(key,number)); CHECK(number==reals[edge]&&std::signbit(number)==std::signbit(reals[edge])); }
+            }
+        }
+        uint32_t max; OK(restart.maxObject(Kind::Result,max)); CHECK(max==UINT32_MAX);
+    }
+}
+int main() { layouts(false); layouts(true); atomicCuts(false); atomicCuts(true); incomplete(); allFieldsAndExtremes(); std::cout<<"Schema1 byte layouts, all41fields across7kinds, native numeric extremes, invalid flags, bounded value I/O and800multi-record write cuts PASS\n"; }

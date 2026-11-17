@@ -31,7 +31,7 @@ ctest --test-dir firmware/build-float --output-on-failure
 
 Untuk AddressSanitizer/UndefinedBehaviorSanitizer tambahkan -DCONMT_SANITIZE=ON pada build terpisah.
 
-Dua belas suite test memeriksa core/codec, seluruh row dua fixture oracle, workflow/recovery/protocol, snapshot UART17page,65536pola codec dan editDay0/clock/reset saat ACK hilang. Fault test mencakup100batas byte scalar serta500batas streaming-copy; ini bukan uji listrik fisik. Matriks102skenario pada plan belum seluruhnya menjadi acceptance test perangkat.
+Lima belas suite test memeriksa core/codec, seluruh row dua fixture oracle, workflow/recovery/protocol, snapshot UART17page,65536pola codec, editDay0/clock/reset saat ACK hilang, seluruh41field dan nilai ekstrem, serta format teks terbatas. Fault test mencakup100batas byte scalar,500batas streaming-copy dan800batas multi-record. Perbandingan executable dengan520a74f mencakup120skenario gangguan penulisan per profil presisi. Ini bukan uji listrik fisik. Matriks102skenario pada plan belum seluruhnya menjadi acceptance test perangkat.
 
 ## Menjalankan controller melalui terminal
 
@@ -69,6 +69,6 @@ Jangan menyatakan production-ready atau semua acceptance selesai berdasarkan hos
 
 38cacat direproduksi dan dikoreksi, dengan65kasus audit PASS pada host64/host32/sanitizer. Daftar lengkap beserta bukti sebelum/sesudah ada pada [defects.md](reviews/2026-11-16-audit/defects.md). Manifest/event menggunakan CM1 contract2; panel pasangan wajib memakai revision yang sama.
 
-Build terkini memerlukan78.274byte flash dan1.502byte RAM statis, sehingga belum muat pada ATmega328P. Matriks102skenario mencatat76HOST_PASS,1EMULATED_PASS dan25skenario parsial/belum lulus. Source ini belum boleh diperlakukan sebagai release mesin.
+Probe terkini memerlukan75.414byte flash dan1.502byte RAM statis, sehingga belum muat pada ATmega328P. Penghematan dari520a74f sebesar2.860byte. Matriks102skenario mencatat77HOST_PASS,1EMULATED_PASS dan24skenario parsial/belum lulus. Probe masih belum memuat semua driver dan chart akhir; source ini belum boleh diperlakukan sebagai release mesin.
 
-Lanjutan implementasi terbaru: [optimasi dan koreksi sesi](reviews/2026-11-17-optimization/README.md). Seluruh12suite lulus pada tiga profil host; numerik dan620kasus precision/PROGMEM lulus di emulator AVR. Kapasitas target dan integrasi mesin masih belum lulus. Rencana lanjutan tersimpan lokal dalam docs/firmware-plan/08_REMAINING_AND_SIZE_PLAN.md yang sengaja tidak masuk Git.
+Lanjutan implementasi terbaru: [optimasi transaksi, codec dan formatter](reviews/2026-11-17-flash-fit/README.md). Seluruh15suite lulus pada tiga profil host; numerik,620kasus precision/PROGMEM dan image test record terpisah lulus di emulator AVR. Kapasitas target dan integrasi mesin masih belum lulus. Rencana eksekusi lokal docs/firmware-plan/09_FLASH_FIT_EXECUTION.md sengaja tidak masuk Git.

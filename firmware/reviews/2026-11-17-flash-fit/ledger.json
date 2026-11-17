@@ -4,7 +4,8 @@
     {
       "stage": "baseline",
       "flash": 78274,
-      "staticRam": 1502
+      "staticRam": 1502,
+      "retained": true
     },
     {
       "stage": "P1 four transaction workflows",
@@ -12,7 +13,8 @@
       "staticRam": 1500,
       "deltaFlash": -792,
       "tests": "12/12 host64,host32,ASan/UBSan; UART fixture unchanged",
-      "decision": "Retain measured shared foundation; insufficient savings to justify wholesale controller conversion yet"
+      "decision": "Retain measured shared foundation; insufficient savings to justify wholesale controller conversion yet",
+      "retained": true
     },
     {
       "stage": "P2 schema1 shared streaming record codec",
@@ -25,7 +27,8 @@
         "storePreview": 66,
         "codecTransfer": 28
       },
-      "decision": "Retain compatible streaming codec; no full storage job or latency claim"
+      "decision": "Retain compatible streaming codec; no full storage job or latency claim",
+      "retained": true
     },
     {
       "stage": "P5 bounded text formatter",
@@ -33,7 +36,8 @@
       "staticRam": 1502,
       "deltaFlash": -1170,
       "tests": "14/14 host64,host32,ASan/UBSan; AVR precision/record descriptors and both41row datasets PASS; UART snapshot unchanged",
-      "decision": "Retain; preserve dtostrf/strtod and rounding, remove varargs formatting from AVR production paths"
+      "decision": "Retain; preserve dtostrf/strtod and rounding, remove varargs formatting from AVR production paths",
+      "retained": true
     },
     {
       "stage": "P1 field and settings descriptors",
@@ -41,7 +45,44 @@
       "staticRam": 1502,
       "deltaFlash": -380,
       "tests": "15/15 host64/host32/ASan/UBSan;300baseline trace lines per native precision including120fault cases;AVR input/settings table smoke PASS",
-      "decision": "Retain shared validation and loading; savings too small to extrapolate wholesale controller conversion"
+      "decision": "Retain shared validation and loading; savings too small to extrapolate wholesale controller conversion",
+      "retained": true
+    },
+    {
+      "stage": "P5 repository ID references experiment",
+      "flash": 75260,
+      "staticRam": 1502,
+      "deltaFlash": -154,
+      "tests": "15/15 host64; wire/status/fault trace unchanged",
+      "decision": "Rejected: small flash saving increases several frames by2\u20136bytes, including fillEarly and readResult; restored value parameters from04f34f8. Not the retained production size.",
+      "retained": false,
+      "frameChanges": {
+        "Controller::readResult": [
+          4,
+          10
+        ],
+        "Controller::fillEarly": [
+          68,
+          74
+        ],
+        "Controller::editRow": [
+          105,
+          109
+        ],
+        "Presenter modelText": [
+          90,
+          93
+        ]
+      }
     }
-  ]
+  ],
+  "retainedResult": {
+    "flash": 75414,
+    "staticRam": 1502,
+    "physicalFlashDeficit": 42646,
+    "engineeringBudgetDeficit": 44694,
+    "runtimeStackVerified": false,
+    "allDriversLinked": false,
+    "productionReady": false
+  }
 }

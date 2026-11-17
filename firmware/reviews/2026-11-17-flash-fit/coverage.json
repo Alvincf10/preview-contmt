@@ -1,0 +1,831 @@
+{
+  "assessmentDate": "2026-11-17-flash-fit",
+  "source": "docs/firmware-plan/04_IMPLEMENTATION.md",
+  "total": 102,
+  "counts": {
+    "HOST_PASS": 77,
+    "EMULATED_PASS": 1,
+    "PARTIAL": 17,
+    "HARDWARE_PENDING": 3,
+    "NOT_IMPLEMENTED": 2,
+    "FAIL": 2
+  },
+  "scenarios": [
+    {
+      "id": "N01",
+      "scenario": "Tprev36, Tnow36.97, T0−20, dt0.5h",
+      "acceptance": "deltaM28.2425",
+      "status": "HOST_PASS",
+      "evidence": "tests.cpp; math_cases.cpp",
+      "note": "Delta28.2425 diuji langsung."
+    },
+    {
+      "id": "N02",
+      "scenario": "Tprev30, Tnow30, T00, dt0",
+      "acceptance": "deltaM0",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N03",
+      "scenario": "dt negatif atau suhu nonfinite pada fungsi parity",
+      "acceptance": "deltaM0; adapter melaporkan masalah input",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N04",
+      "scenario": "Titik (0h,10),(1h,10),(2h,−18), T00",
+      "acceptance": "M0,10,6; membuktikan interval negatif tidak dibuang",
+      "status": "HOST_PASS",
+      "evidence": "tests.cpp",
+      "note": "Interval negatif dikurangi dari M lalu akumulasi dibatasi minimum nol."
+    },
+    {
+      "id": "N05",
+      "scenario": "Lanjut titik (3h,−18) dari N04",
+      "acceptance": "M0 setelah clamp akumulasi",
+      "status": "HOST_PASS",
+      "evidence": "tests.cpp",
+      "note": "Interval negatif dikurangi dari M lalu akumulasi dibatasi minimum nol."
+    },
+    {
+      "id": "N06",
+      "scenario": "Titik pertama pada2h, kedua3h, T10/T00",
+      "acceptance": "M pertama0, M kedua10; tidak mengarang0..2h",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N07",
+      "scenario": "Timestamp input acak, suhu identik fixture",
+      "acceptance": "Setelah sort hasil sesuai fixture",
+      "status": "HOST_PASS",
+      "evidence": "audit C15",
+      "note": "Input stored acak diintegrasikan secara kronologis."
+    },
+    {
+      "id": "N08",
+      "scenario": "Timestamp kembar",
+      "acceptance": "Delta0, urutan stabil dan hasil deterministik",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N09",
+      "scenario": "Full41 baris Excel",
+      "acceptance": "Seluruh expectedM cocok, akhir33738.1425",
+      "status": "HOST_PASS",
+      "evidence": "reference_parity; full_reference_workflow",
+      "note": "Dua fixture41baris, a/b/R2/n, M/Fc/FKZ dibanding oracle TS per titik."
+    },
+    {
+      "id": "N10",
+      "scenario": "Full41 baris preview rounded",
+      "acceptance": "Akhir33738.7675; tidak dibanding full Excel sebagai input sama",
+      "status": "HOST_PASS",
+      "evidence": "reference_parity; full_reference_workflow",
+      "note": "Dua fixture41baris, a/b/R2/n, M/Fc/FKZ dibanding oracle TS per titik."
+    },
+    {
+      "id": "N11",
+      "scenario": "Full Excel regression",
+      "acceptance": "a−29.128726167437076, b6.527225174129162, R2.9357663569471288",
+      "status": "HOST_PASS",
+      "evidence": "reference_parity; full_reference_workflow",
+      "note": "Dua fixture41baris, a/b/R2/n, M/Fc/FKZ dibanding oracle TS per titik."
+    },
+    {
+      "id": "N12",
+      "scenario": "Fit kurang2pasangan atau semua M sama",
+      "acceptance": "Fit unavailable/null sesuai referensi",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N13",
+      "scenario": "Fc sama pada dua M berbeda",
+      "acceptance": "b0, R2=1 sesuai fungsi source",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N14",
+      "scenario": "Fc/M nonpositive pada input fit",
+      "acceptance": "Filter sesuai source; sensor-only row tetap masuk integrasi",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N15",
+      "scenario": "e0.2,0,−0.099,−0.1,−0.2",
+      "acceptance": "FKZ.833333333333,1,1,1,1.1",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N16",
+      "scenario": "Daftar faktor day5=.9, day7=1.1; query6",
+      "acceptance": "1.1, bukan interpolasi/nearest",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp; full_reference_workflow",
+      "note": "4→5,6→7,26→28 mengambil faktor saja; prediksi tetap memakai M pengujian."
+    },
+    {
+      "id": "N17",
+      "scenario": "Query di atas hari terakhir",
+      "acceptance": "Faktor terakhir",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N18",
+      "scenario": "Faktor empty/invalid; day nonfinite",
+      "acceptance": "Lookup fallback1 pada core; status adapter sesuai konteks",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N19",
+      "scenario": "Day sama beberapa valid lab rows",
+      "acceptance": "Faktor terakhir sesuai urutan time source",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N20",
+      "scenario": "M0, model invalid, raw Fc negatif",
+      "acceptance": "Prediction0 sesuai referensi; alasan tidak disamakan di UI",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N21",
+      "scenario": "Full Excel day1/day28",
+      "acceptance": "Fc14.8633333333 /38.7033333333",
+      "status": "HOST_PASS",
+      "evidence": "reference_parity; full_reference_workflow",
+      "note": "Dua fixture41baris, a/b/R2/n, M/Fc/FKZ dibanding oracle TS per titik."
+    },
+    {
+      "id": "N22",
+      "scenario": "Full Excel day3 vs W69",
+      "acceptance": "Selisih known0.000620700083; exception dilaporkan",
+      "status": "HOST_PASS",
+      "evidence": "audit-reference.mjs; workbook-evidence.json",
+      "note": "Pengecualian sel Excel day3 sebesar0.000620700083 dicatat; tidak di-hardcode ke rumus."
+    },
+    {
+      "id": "N23",
+      "scenario": "Target30, Fc38.7033333",
+      "acceptance": "Persentase129.011111%, tampilan129%, bukan100%",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Assertion edge cases untuk guard, filter, clamp, fit, lookup dan format."
+    },
+    {
+      "id": "N24",
+      "scenario": "Water165/cement385",
+      "acceptance": "W/C0.4285714286, display0.43",
+      "status": "HOST_PASS",
+      "evidence": "audit C07",
+      "note": "Water165/cement385 ditampilkan0.43."
+    },
+    {
+      "id": "N25",
+      "scenario": "Ubah material saja; data lab identik",
+      "acceptance": "Fit/FKZ tidak berubah",
+      "status": "HOST_PASS",
+      "evidence": "audit C08",
+      "note": "Perubahan material tidak mengubah fit."
+    },
+    {
+      "id": "N26",
+      "scenario": "Recompute fit dua-pass streaming",
+      "acceptance": "Sama dengan fungsi array TS",
+      "status": "HOST_PASS",
+      "evidence": "reference_parity; full_reference_workflow",
+      "note": "Dua fixture41baris, a/b/R2/n, M/Fc/FKZ dibanding oracle TS per titik."
+    },
+    {
+      "id": "N27",
+      "scenario": "serialize/decode koefisien + FKZ + replay",
+      "acceptance": "Hasil tetap dalam toleransi yang dikunci",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp; full_reference_workflow",
+      "note": "Fit/replay/snapshot setelah save/restart sama dalam toleransi; FKZ dihitung dari baseline immutable."
+    },
+    {
+      "id": "N28",
+      "scenario": "Result M raw vs Math.round(M)",
+      "acceptance": "Kedua expectation terpisah; policy hasil sesuai D04",
+      "status": "HOST_PASS",
+      "evidence": "audit C05",
+      "note": "M raw960.5 dan summary961 menghasilkan prediksi berbeda sesuai policy."
+    },
+    {
+      "id": "N29",
+      "scenario": "Target binary float/double",
+      "acceptance": "Semua fixture dijalankan pada target; report error maksimum",
+      "status": "EMULATED_PASS",
+      "evidence": "releases/avr-numeric.json",
+      "note": "AVR GCC/simavr2×41titik; bukan pengujian chip/peripheral fisik."
+    },
+    {
+      "id": "N30",
+      "scenario": "Graph sampling",
+      "acceptance": "Lab points dan raw log trendline; tidak keliru mengalikan FKZ pada seluruh kurva",
+      "status": "PARTIAL",
+      "evidence": "core/Chart.h; math_cases.cpp",
+      "note": "Sampler raw ln(M) ada; pipeline chart lab/panel belum lengkap."
+    },
+    {
+      "id": "V01",
+      "scenario": "Suhu kosong vs “0”",
+      "acceptance": "Missing vs valid0, tidak sama",
+      "status": "HOST_PASS",
+      "evidence": "tests.cpp; workflow.cpp",
+      "note": "String kosong berbeda dari suhu nol yang valid."
+    },
+    {
+      "id": "V02",
+      "scenario": "“36.5x”, “36,5”, NaN, Infinity, overflow",
+      "acceptance": "Tolak parse parsial; decimal grammar eksplisit",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Parse parsial, koma, NaN/Infinity, suffix dan overflow ditolak."
+    },
+    {
+      "id": "V03",
+      "scenario": "Nama panjang/delimiter/quote/control",
+      "acceptance": "Batas dan aturan konsisten keyboard/parser/storage",
+      "status": "PARTIAL",
+      "evidence": "math_cases.cpp; Parser",
+      "note": "Aturan core/codec/parser tersedia; keyboard dan batas input visual panel belum dibuktikan."
+    },
+    {
+      "id": "V04",
+      "scenario": "Target kosong/0/negatif",
+      "acceptance": "Tidak membagi nol; baseline usable tervalidasi",
+      "status": "HOST_PASS",
+      "evidence": "audit C09",
+      "note": "Target kosong/nol/negatif ditolak dan nilai committed bertahan."
+    },
+    {
+      "id": "V05",
+      "scenario": "Model absent/incomplete",
+      "acceptance": "Tidak mengambil koefisien atau rows baseline lain",
+      "status": "PARTIAL",
+      "evidence": "workflow.cpp; validateDraft/model",
+      "note": "Tidak mengambil model baseline lain; importer incomplete belum lengkap."
+    },
+    {
+      "id": "B01",
+      "scenario": "NEW → material → maturity → generate → save",
+      "acceptance": "Baseline baru committed lalu daftar",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp; full_reference_workflow",
+      "note": "NEW/input/GENERATE/SAVE benar-benar menghasilkan record committed."
+    },
+    {
+      "id": "B02",
+      "scenario": "SAVED SELECT → maturity → BACK",
+      "acceptance": "Kembali saved list, bukan material",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp",
+      "note": "Saved SELECT membuka maturity; BACK kembali ke daftar saved."
+    },
+    {
+      "id": "B03",
+      "scenario": "Edit saved → generate → save",
+      "acceptance": "ID baru; baseline lama/history utuh",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp; audit C03",
+      "note": "Edit saved menghasilkan draft dan SAVE ID baru; baseline lama utuh."
+    },
+    {
+      "id": "B04",
+      "scenario": "SAVE retransmit",
+      "acceptance": "Satu record per operasi; ACK bisa diulang",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp",
+      "note": "Retry operation ID yang sama tidak menambah baseline duplikat."
+    },
+    {
+      "id": "B05",
+      "scenario": "ADD DAY0/FILL0..6",
+      "acceptance": "Slot unik, data terisi tidak hilang",
+      "status": "HOST_PASS",
+      "evidence": "audit C01,A29,A42",
+      "note": "FILL mempertahankan data, repeatable dan slot Day0 sesuai snapping sumber."
+    },
+    {
+      "id": "B06",
+      "scenario": "Slot awal lengkap",
+      "acceptance": "Pesan jelas, tidak menambah slot0.5 ganda",
+      "status": "HOST_PASS",
+      "evidence": "audit C10",
+      "note": "Seluruh48slot penuh mengembalikan Capacity."
+    },
+    {
+      "id": "B07",
+      "scenario": "ADD LAB setelah day1,2,4",
+      "acceptance": "Day3 dipilih",
+      "status": "HOST_PASS",
+      "evidence": "audit C02",
+      "note": "Day3 mengisi celah day1,2,4; minimum3baris dan confirm penghapusan diuji."
+    },
+    {
+      "id": "B08",
+      "scenario": "Delete pada3row",
+      "acceptance": "Ditolak; di4row perlu konfirmasi lalu3",
+      "status": "HOST_PASS",
+      "evidence": "audit C02",
+      "note": "Day3 mengisi celah day1,2,4; minimum3baris dan confirm penghapusan diuji."
+    },
+    {
+      "id": "B09",
+      "scenario": "Sensor request lalu delete/sort/pagination",
+      "acceptance": "Respons tidak mengisi row lain",
+      "status": "PARTIAL",
+      "evidence": "audit C11,A21",
+      "note": "Stale view/revision overflow dilindungi; driver sensor asynchronous fisik belum ada."
+    },
+    {
+      "id": "B10",
+      "scenario": "Dua baseline nama sama",
+      "acceptance": "Selection/delete berdasar ID",
+      "status": "HOST_PASS",
+      "evidence": "audit A01,A02,A40; workflow.cpp",
+      "note": "Nama sama tetap ID berbeda; pilihan dan penghapusan berdasar ID."
+    },
+    {
+      "id": "B11",
+      "scenario": "41 baris dan lebih",
+      "acceptance": "Semua dapat diedit; viewport6 bukan capacity",
+      "status": "HOST_PASS",
+      "evidence": "full_reference_workflow; audit A41",
+      "note": "41baris, penambahan ke42, viewport kedua/akhir dan fokus row baru diuji."
+    },
+    {
+      "id": "B12",
+      "scenario": "GENERATE lalu edit draft sebelum SAVE",
+      "acceptance": "Revisi lama tidak disimpan sebagai model terbaru",
+      "status": "HOST_PASS",
+      "evidence": "audit C12",
+      "note": "Edit setelah GENERATE menghapus model lama dan menolak SAVE stale."
+    },
+    {
+      "id": "S01",
+      "scenario": "START valid",
+      "acceptance": "Snapshot baseline/waktu/suhu awal/Day0 sekali",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp",
+      "note": "START membekukan model/waktu/suhu awal dan satu Day0."
+    },
+    {
+      "id": "S02",
+      "scenario": "START tanpa kanal valid atau jam invalid",
+      "acceptance": "Tidak membuat sesi palsu",
+      "status": "HOST_PASS",
+      "evidence": "audit C06",
+      "note": "Tanpa sensor/jam valid tidak membuat sesi palsu."
+    },
+    {
+      "id": "S03",
+      "scenario": "Suhu kanal0C valid",
+      "acceptance": "Masuk average, tidak dianggap putus",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Suhu0C valid; average hanya kanal valid, operasional satu desimal sesuai sumber."
+    },
+    {
+      "id": "S04",
+      "scenario": "Satu/dua/tiga valid",
+      "acceptance": "Avg hanya valid; rounding sesuai D08",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Suhu0C valid; average hanya kanal valid, operasional satu desimal sesuai sumber."
+    },
+    {
+      "id": "S05",
+      "scenario": "No valid/stale",
+      "acceptance": "Unavailable dan gap, bukan0/random",
+      "status": "HOST_PASS",
+      "evidence": "audit A04,A05,A07,A16; workflow.cpp",
+      "note": "No sensor/stale/unavailable ditandai sebagai gap, tanpa data random."
+    },
+    {
+      "id": "S06",
+      "scenario": "BACK/forward/redraw/reset HMI",
+      "acceptance": "SessionId dan suhu awal tetap",
+      "status": "HOST_PASS",
+      "evidence": "audit C13; workflow.cpp",
+      "note": "Redraw/reset panel tidak memulai ulang sesi."
+    },
+    {
+      "id": "S07",
+      "scenario": "START kedua saat sesi aktif",
+      "acceptance": "Confirm replace; cancel mempertahankan",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp",
+      "note": "START kedua perlu confirm dan penolakan mempertahankan sesi."
+    },
+    {
+      "id": "S08",
+      "scenario": "Edit checkpoint suhu/jam",
+      "acceptance": "Downstream M/FKZ/Fc dihitung ulang",
+      "status": "HOST_PASS",
+      "evidence": "audit C17",
+      "note": "Edit suhu/jam checkpoint melakukan replay dan invalidasi preview."
+    },
+    {
+      "id": "S09",
+      "scenario": "Edit Day0",
+      "acceptance": "Awal sesi berubah terkontrol; validate semua timestamp",
+      "status": "HOST_PASS",
+      "evidence": "tests/session_edges.cpp; all three host profiles",
+      "note": "session_edges.cpp verifies corrected Day0 temperature/time, live reanchor, later integration, unchanged gap flag, and failed edit preserving prior point/revision."
+    },
+    {
+      "id": "S10",
+      "scenario": "NEXT dengan hanya Day0",
+      "acceptance": "Hasil sesuai D04, tidak salah konteks waktu",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp; audit C05",
+      "note": "NEXT mengunci waktu checkpoint; Day0 saja M0, tanpa liveM dari waktu lain."
+    },
+    {
+      "id": "S11",
+      "scenario": "NEXT saat waktu sekarang >checkpoint",
+      "acceptance": "End = checkpoint terakhir sesuai policy",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp; audit C05",
+      "note": "NEXT mengunci waktu checkpoint; Day0 saja M0, tanpa liveM dari waktu lain."
+    },
+    {
+      "id": "S12",
+      "scenario": "SAVE RESULT lalu History",
+      "acceptance": "Snapshot lengkap dan record baru terpilih",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp; audit A19,C19",
+      "note": "History dibuat setelah commit, sensor NEXT dibekukan, history terpilih."
+    },
+    {
+      "id": "S13",
+      "scenario": "Hapus/ganti baseline sesudah result",
+      "acceptance": "History angka tetap",
+      "status": "HOST_PASS",
+      "evidence": "full_reference_workflow",
+      "note": "History identik sesudah restart dan penghapusan logis baseline."
+    },
+    {
+      "id": "S14",
+      "scenario": "Record import tanpa snapshot",
+      "acceptance": "Incomplete, tidak lookup model by-name diam-diam",
+      "status": "PARTIAL",
+      "evidence": "model/checkpointResult",
+      "note": "Tidak ada lookup by-name; jalur import legacy/incomplete belum lengkap."
+    },
+    {
+      "id": "S15",
+      "scenario": "Produksi ADD DAY",
+      "acceptance": "Tidak future sample/lab/random tanpa label",
+      "status": "HOST_PASS",
+      "evidence": "audit A22; full_reference_workflow",
+      "note": "ADD memakai sensor/waktu saat ini dan day eksplisit; future observation ditolak."
+    },
+    {
+      "id": "T01",
+      "scenario": "Pour23:30, Day0 clock00:00",
+      "acceptance": "0.5h",
+      "status": "HOST_PASS",
+      "evidence": "tests.cpp",
+      "note": "Pour23:30→Day0 clock00:00 =0.5h."
+    },
+    {
+      "id": "T02",
+      "scenario": "Pour23:30, Day1 clock00:00",
+      "acceptance": "24.5h mengikuti clockToTimeH source",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp",
+      "note": "Pour23:30→Day1 clock00:00 =24.5h."
+    },
+    {
+      "id": "T03",
+      "scenario": "Calendar tanggal mustahil",
+      "acceptance": "Tolak, tidak dinormalisasi menjadi bulan berikutnya",
+      "status": "HOST_PASS",
+      "evidence": "math_cases.cpp; audit A36",
+      "note": "Tanggal mustahil dan jadwal di luar range ditolak/unavailable."
+    },
+    {
+      "id": "T04",
+      "scenario": "Clock rollback/forward saat aktif",
+      "acceptance": "Event adjustment, tidak merusak elapsed tanpa notice",
+      "status": "HOST_PASS",
+      "evidence": "tests/session_edges.cpp; all three host profiles",
+      "note": "session_edges.cpp verifies backward/forward/invalid clock events, no integration across jumps, durable cause/endpoints/monotonic stamp, ordered gap and blocked NEXT."
+    },
+    {
+      "id": "T05",
+      "scenario": "Loop stall1.7detik",
+      "acceptance": "Integrasi actual delta, bukan asumsi1detik",
+      "status": "HOST_PASS",
+      "evidence": "audit C16",
+      "note": "Stall1.7detik memakai delta sampel sebenarnya."
+    },
+    {
+      "id": "T06",
+      "scenario": "Counter monotonic rollover",
+      "acceptance": "Timeout/sampling tetap benar",
+      "status": "HOST_PASS",
+      "evidence": "audit C20; math_cases.cpp",
+      "note": "Acquisition dan freshness lolos rollover uint32."
+    },
+    {
+      "id": "T07",
+      "scenario": "Restart dengan gap",
+      "acceptance": "Recovery committed + gap; tidak klaim data lengkap",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp; audit A04,A18",
+      "note": "Restart mengembalikan committed record dan menandai gap yang belum selesai."
+    },
+    {
+      "id": "T08",
+      "scenario": "Urutan day dan timestamp bertentangan",
+      "acceptance": "Validasi eksplisit sebelum hasil",
+      "status": "HOST_PASS",
+      "evidence": "audit C21",
+      "note": "Day/waktu bertentangan ditolak sebelum model/checkpoint baru diterima."
+    },
+    {
+      "id": "W01",
+      "scenario": "Codec all fields roundtrip",
+      "acceptance": "Nilai/ID/version/precision dipertahankan",
+      "status": "HOST_PASS",
+      "evidence": "tests/record_codec.cpp; tests/real_codec.cpp; tests/transaction_trace.cpp",
+      "note": "Independent typed record wire layouts; all41field IDs across7kinds with native numeric extremes, signed zero, maximum object/index/time/operation IDs; restart and checkpoint byte parity. No hardware claim."
+    },
+    {
+      "id": "W02",
+      "scenario": "Tail file terpotong tiap offset penting",
+      "acceptance": "Tidak dibaca sebagai committed valid",
+      "status": "PARTIAL",
+      "evidence": "tests/disk_index.cpp; tests/battery.cpp; reviews/2026-11-17-production",
+      "note": "Added500byte cut positions over a three-entry128-byte streaming-copy transaction and100single-record cuts with indexing. Streamed codec adds800multi-record byte cuts covering Row/Point/Fit/Result/Sensors; full41row cuts and physical media remain open."
+    },
+    {
+      "id": "W03",
+      "scenario": "CRC/length/schema invalid",
+      "acceptance": "Status terpisah, tidak format otomatis",
+      "status": "PARTIAL",
+      "evidence": "workflow corruptionAndTime; audit A38",
+      "note": "Guard CRC/length/flag/finite ada; kombinasi schema/length rusak belum seluruhnya menjadi executable test."
+    },
+    {
+      "id": "W04",
+      "scenario": "Putus pada setiap langkah commit",
+      "acceptance": "Versi lama atau baru utuh, bukan campuran",
+      "status": "PARTIAL",
+      "evidence": "tests/disk_index.cpp; tests/battery.cpp; reviews/2026-11-17-production",
+      "note": "Multi-entry atomicity and40index-write cut budgets now tested on host; real FAT/power endurance and full41row offsets remain pending. Streamed codec adds800multi-record byte cuts covering Row/Point/Fit/Result/Sensors; full41row cuts and physical media remain open."
+    },
+    {
+      "id": "W05",
+      "scenario": "Metadata/index hilang",
+      "acceptance": "Scan rebuild committed records",
+      "status": "PARTIAL",
+      "evidence": "tests/disk_index.cpp; tests/battery.cpp; reviews/2026-11-17-production",
+      "note": "CMT.IDX is rebuilt from CRC-verified journal records on every mount; missing/corrupt/full sidecars are tested. Metadata A/B and bounded rebuild latency remain open."
+    },
+    {
+      "id": "W06",
+      "scenario": "SD absent/full/remove during save",
+      "acceptance": "SAVE gagal dengan alasan; retry/Back dapat dipakai",
+      "status": "PARTIAL",
+      "evidence": "workflow failures; audit A27,C19",
+      "note": "Absent/full/sync/rescan host tersedia; remove/reinsert media fisik belum diuji."
+    },
+    {
+      "id": "W07",
+      "scenario": "Commit sukses, ACK hilang, retry",
+      "acceptance": "Tidak membuat duplikat",
+      "status": "HOST_PASS",
+      "evidence": "workflow.cpp",
+      "note": "Operation ID durable dan retry SAVE RESULT tidak membuat duplikat."
+    },
+    {
+      "id": "W08",
+      "scenario": "autoSave false",
+      "acceptance": "Save manual tetap berfungsi; durability sesuai D06",
+      "status": "HOST_PASS",
+      "evidence": "audit A19,A43,C19; workflow.cpp",
+      "note": "AutoSave default false; manual SAVE tetap commit dan periodic recovery dapat diaktifkan eksplisit."
+    },
+    {
+      "id": "W09",
+      "scenario": "Banyak history/checkpoint",
+      "acceptance": "Streaming; RAM tidak tumbuh dengan seluruh database",
+      "status": "PARTIAL",
+      "evidence": "tests/disk_index.cpp; tests/battery.cpp; reviews/2026-11-17-production",
+      "note": "Max-object IDs now use the disk index, with CRC-verified scan fallback shared across queries; sorted cursors and worst-case chain/rebuild/save latency remain open."
+    },
+    {
+      "id": "W10",
+      "scenario": "First boot/reboot",
+      "acceptance": "Tidak menambah kembali demo seeds",
+      "status": "HOST_PASS",
+      "evidence": "workflow cold boot",
+      "note": "Cold boot/reboot tidak memasukkan demo seeds."
+    },
+    {
+      "id": "H01",
+      "scenario": "Frame satu byte per tick, terpecah",
+      "acceptance": "Parser menyusun benar tanpa blocking",
+      "status": "HOST_PASS",
+      "evidence": "workflow protocol; Parser",
+      "note": "Parser incremental/fragment/timeout dan TX credit terbatas diuji."
+    },
+    {
+      "id": "H02",
+      "scenario": "Dua frame sekaligus",
+      "acceptance": "Keduanya diproses berurutan",
+      "status": "HOST_PASS",
+      "evidence": "audit A44",
+      "note": "Frame terkoalesensi mendapat respons berurutan; stale command kedua diberi ACK penolakan."
+    },
+    {
+      "id": "H03",
+      "scenario": "Overflow, noise, field count salah",
+      "acceptance": "Recovery delimiter; next frame valid bisa masuk",
+      "status": "HOST_PASS",
+      "evidence": "workflow protocol; audit A08,A09",
+      "note": "Overflow/noise/arity dan recovery delimiter diuji."
+    },
+    {
+      "id": "H04",
+      "scenario": "Stale view/page/token",
+      "acceptance": "Tidak memutasi record salah; rerender",
+      "status": "HOST_PASS",
+      "evidence": "audit C11,A12,A26,A28",
+      "note": "View/page/boot/operation melindungi mutasi; BACK tidak bergantung view data lama."
+    },
+    {
+      "id": "H05",
+      "scenario": "Sensor refresh tinggi + rapid BACK",
+      "acceptance": "ACK/NAV/error tidak tertimpa refresh",
+      "status": "PARTIAL",
+      "evidence": "audit A10,A13,A39,A44",
+      "note": "Refresh/ACK correlation diperbaiki; burst nyata dan starvation selama operasi SD besar belum lulus."
+    },
+    {
+      "id": "H06",
+      "scenario": "Reset panel saat active/save",
+      "acceptance": "Handshake, tidak START/SAVE tambahan",
+      "status": "HOST_PASS",
+      "evidence": "audit A11,A12,C13",
+      "note": "PAGE_READY/reset panel mempertahankan ACK dan sesi aktif di host."
+    },
+    {
+      "id": "H07",
+      "scenario": "Reset MCU saat ACK hilang",
+      "acceptance": "Repository operationId mencegah duplikasi",
+      "status": "HOST_PASS",
+      "evidence": "tests/session_edges.cpp; all three host profiles",
+      "note": "session_edges.cpp commits RESULT_SAVE with zero TX credit, restarts controller/transport before ACK, retries original request through UART and verifies one identical result and original ACK boot/seq."
+    },
+    {
+      "id": "H08",
+      "scenario": "Model/versi protokol mismatch",
+      "acceptance": "Status jelas, tidak menafsirkan token sebagai aksi lain",
+      "status": "PARTIAL",
+      "evidence": "audit A32; HmiContractVersion=2",
+      "note": "Contract mismatch ditolak; identitas/model panel belum diketahui."
+    },
+    {
+      "id": "H09",
+      "scenario": "Actual SEN/ADD bytes",
+      "acceptance": "Capture membuktikan CRLF/literal dan parser pilihan",
+      "status": "HARDWARE_PENDING",
+      "evidence": "hmi/events",
+      "note": "Belum ada capture byte panel pasangan; LF snippet bukan bukti UART fisik."
+    },
+    {
+      "id": "H10",
+      "scenario": "Native panel response bercampur",
+      "acceptance": "Tidak menjadi AppCommand palsu",
+      "status": "HOST_PASS",
+      "evidence": "audit C18",
+      "note": "Native touch/string response sintetis tidak menjadi AppCommand."
+    },
+    {
+      "id": "U01",
+      "scenario": "Seluruh 17 halaman",
+      "acceptance": "Page ID/field/Back/Next sesuai tabel kontrak",
+      "status": "PARTIAL",
+      "evidence": "hmi/manifest.json; Controller",
+      "note": "17page dan197event tersedia; acceptance visual seluruh panel belum ada."
+    },
+    {
+      "id": "U02",
+      "scenario": "Save gagal",
+      "acceptance": "Tidak menampilkan sukses atau membuka history palsu",
+      "status": "HOST_PASS",
+      "evidence": "audit C19",
+      "note": "SAVE gagal mempertahankan page; tidak membuat history palsu; BACK/retry berhasil."
+    },
+    {
+      "id": "U03",
+      "scenario": "Font/unit/desimal/nama panjang",
+      "acceptance": "Terbaca pada panel, tanpa angka demo bertumpuk",
+      "status": "HARDWARE_PENDING",
+      "evidence": "hmi/README.md",
+      "note": "Font/unit/desimal/nama panjang/layout belum dibuktikan pada panel pasangan."
+    },
+    {
+      "id": "U04",
+      "scenario": "Datum/keyboard/date modal cancel",
+      "acceptance": "Nilai committed tidak berubah",
+      "status": "NOT_IMPLEMENTED",
+      "evidence": "hmi apply_* events",
+      "note": "Keyboard/date/datum/modal/Cancel visual belum dirakit; Apply saja belum memenuhi U04."
+    },
+    {
+      "id": "U05",
+      "scenario": "Empty baseline/history",
+      "acceptance": "Flow pembuatan dapat dimulai tanpa seed",
+      "status": "HOST_PASS",
+      "evidence": "workflow cold boot/new baseline",
+      "note": "Empty baseline/history dapat memulai flow tanpa seed."
+    },
+    {
+      "id": "U06",
+      "scenario": "Chart dan hasil dataset sama",
+      "acceptance": "Data/axis/model konsisten dengan React",
+      "status": "NOT_IMPLEMENTED",
+      "evidence": "core/Chart.h",
+      "note": "Renderer panel lab points/axis/kurva dan acceptance terhadap React belum lengkap."
+    },
+    {
+      "id": "U07",
+      "scenario": "Settings brightness/sound/interval",
+      "acceptance": "Efek nyata atau unavailable jujur",
+      "status": "PARTIAL",
+      "evidence": "audit A20,A31,C04",
+      "note": "Port settings dan rollback commit gagal diuji; efek fisik driver belum terverifikasi."
+    },
+    {
+      "id": "U08",
+      "scenario": "Battery/splash/deviceInfo",
+      "acceptance": "Status driver nyata, bukan87%/timer/READY statis",
+      "status": "PARTIAL",
+      "evidence": "tests/disk_index.cpp; tests/battery.cpp; reviews/2026-11-17-production",
+      "note": "A0 battery driver integrated using user-approved calibration520/877/991; electrical measurement and panel splash still pending."
+    },
+    {
+      "id": "P01",
+      "scenario": "Build target",
+      "acceptance": "FQBN/versions/command/map dicatat",
+      "status": "FAIL",
+      "evidence": "releases/avr-capacity.json",
+      "note": "Retained capacity probe75414flash bytes; physical limit32768. Verified board drivers/full chart remain absent; physical-region link fails."
+    },
+    {
+      "id": "P02",
+      "scenario": "RAM/stack/buffers bersama",
+      "acceptance": "Worst-case diukur, tidak hanya compile",
+      "status": "FAIL",
+      "evidence": "releases/avr-capacity.json; avr-stack.json",
+      "note": "Static SRAM1502bytes; several frames reduced but nested driver/ISR watermark unproven. An ID-reference experiment with higher frames was rejected."
+    },
+    {
+      "id": "P03",
+      "scenario": "Storage latency dan UART traffic",
+      "acceptance": "Sensor/Back tidak starvation",
+      "status": "PARTIAL",
+      "evidence": "Journal get/StoredRows; Transport poll",
+      "note": "Full scan/GENERATE/SAVE masih sinkron; worst-case latency dan prioritas layanan belum memenuhi gate produksi."
+    },
+    {
+      "id": "P04",
+      "scenario": "Soak run dan power cycle",
+      "acceptance": "Durasi/kondisi/passed tests dicatat, tidak klaim28hari dari test5menit",
+      "status": "HARDWARE_PENDING",
+      "evidence": "releases/status.json",
+      "note": "Belum ada soak/power cycle perangkat fisik; day26 virtual bukan run26hari."
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "hostTests": "PASS",
   "hostBinary32Tests": "PASS",
   "sanitizers": "PASS",
-  "ctestSuitesPerProfile": 12,
+  "ctestSuitesPerProfile": 15,
   "auditCasesPerProfile": 65,
   "reproducedDefectsCorrected": 38,
   "defectsBySeverity": {
@@ -12,16 +12,16 @@
     "Kritikal": 4
   },
   "planAcceptance": {
-    "HOST_PASS": 76,
+    "HOST_PASS": 77,
     "EMULATED_PASS": 1,
-    "PARTIAL": 18,
+    "PARTIAL": 17,
     "HARDWARE_PENDING": 3,
     "NOT_IMPLEMENTED": 2,
     "FAIL": 2
   },
   "avrNumericEmulation": "PASS",
   "avrCompleteFirmwareCapacity": "FAIL",
-  "flashBytes": 78274,
+  "flashBytes": 75414,
   "staticRamBytes": 1502,
   "runtimeStackVerified": false,
   "physicalHardwareVerified": false,
@@ -38,7 +38,7 @@
   "batteryCalibrationSource": "board-evidence/battery.json",
   "batteryHardwareVerified": false,
   "storageIndexRebuildHostTested": true,
-  "latestReview": "reviews/2026-11-17-optimization/README.md",
+  "latestReview": "reviews/2026-11-17-flash-fit/README.md",
   "implementationPausedForHandoff": false,
   "storageOperationIndexImplemented": true,
   "hmiWireSnapshotPages": 17,
@@ -50,5 +50,11 @@
   "clockAdjustmentHostVerified": true,
   "uartLostAckResetHostVerified": true,
   "storageMaximumIdIndexImplemented": true,
-  "implementationCommit": "0707959"
+  "implementationCommit": "04f34f8",
+  "sharedTransactionExecutorImplemented": true,
+  "streamedSchema1RecordCodecImplemented": true,
+  "schema1AllFieldRoundtripHostVerified": true,
+  "checkpointWorkflowParityHostVerified": true,
+  "checkpointWorkflowParityBaseline": "520a74f",
+  "boundedTextFormattingHostVerified": true
 }
