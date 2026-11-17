@@ -1,0 +1,161 @@
+#include "../core/Flash.h"
+#include "Repository.h"
+#include <string.h>
+namespace conmt {
+Status Repository::number(const Key& k,Real& v) {
+    uint8_t b[8]; uint16_t n=8; Status s=journal_.get(k,b,n); if(s!=Status::Ok) return s;
+    if(n!=8) return Status::Corrupt;
+    v=getReal(b); return finite(v)?Status::Ok:Status::Corrupt;
+}
+Status Repository::integer(const Key& k,uint32_t& v) {
+    uint8_t b[4]; uint16_t n=4; Status s=journal_.get(k,b,n); if(s!=Status::Ok) return s;
+    if(n!=4) return Status::Corrupt;
+    v=get32(b); return Status::Ok;
+}
+Status Repository::time(const Key& k,uint64_t& v) {
+    uint8_t b[8]; uint16_t n=8; Status s=journal_.get(k,b,n); if(s!=Status::Ok) return s;
+    if(n!=8) return Status::Corrupt;
+    v=get64(b); return Status::Ok;
+}
+Status Repository::text(const Key& k,char* v,uint16_t capacity) {
+    if(!capacity) return Status::Capacity;
+    uint16_t n=capacity-1; Status s=journal_.get(k,reinterpret_cast<uint8_t*>(v),n);
+    if(s!=Status::Ok) { v[0]=0; return s; }
+    v[n]=0; return safeText(v,capacity)?Status::Ok:Status::Corrupt;
+}
+Status Repository::putNumber(const Key& k,Real v) {
+    if(!finite(v)) return Status::Invalid;
+    uint8_t b[8]; putReal(b,v); return journal_.put(k,b,8);
+}
+Status Repository::putInteger(const Key& k,uint32_t v) { uint8_t b[4]; put32(b,v); return journal_.put(k,b,4); }
+Status Repository::putTime(const Key& k,uint64_t v) { uint8_t b[8]; put64(b,v); return journal_.put(k,b,8); }
+Status Repository::putText(const Key& k,const char* v,uint16_t cap) {
+    if(!safeText(v,cap)) return Status::Invalid;
+    if(!*v) return journal_.erase(k);
+    return journal_.put(k,reinterpret_cast<const uint8_t*>(v),uint16_t(strlen(v)));
+}
+Status Repository::row(Kind k,uint32_t o,uint32_t id,Row& r) {
+    uint8_t b[37]; uint16_t n=37; Status s=journal_.get(Key(k,o,Field::Row,id),b,n); if(s!=Status::Ok) return s;
+    if(n!=37 || (b[36]&~uint8_t(3))) return Status::Corrupt;
+    r.id=id; r.revision=get32(b); r.day=getReal(b+4); r.timeH=getReal(b+12); r.temp=getReal(b+20); r.fc=getReal(b+28); r.hasTemp=b[36]&1; r.hasFc=b[36]&2;
+    if(!finite(r.day)||r.day<0||!finite(r.timeH)||r.timeH<0||(r.hasTemp&&!finite(r.temp))||(r.hasFc&&!finite(r.fc))) return Status::Corrupt;
+    return Status::Ok;
+}
+Status Repository::putRow(Kind k,uint32_t o,const Row& r) {
+    if(!r.id||!finite(r.day)||r.day<0||!finite(r.timeH)||r.timeH<0||(r.hasTemp&&!finite(r.temp))||(r.hasFc&&(!finite(r.fc)||r.fc<0))) return Status::Invalid;
+    uint8_t b[37]; put32(b,r.revision); putReal(b+4,r.day); putReal(b+12,r.timeH); putReal(b+20,r.temp); putReal(b+28,r.fc); b[36]=(r.hasTemp?1:0)|(r.hasFc?2:0);
+    return journal_.put(Key(k,o,Field::Row,r.id),b,37);
+}
+Status Repository::point(Kind k,uint32_t o,uint32_t id,Point& p) {
+    uint8_t b[30]; uint16_t n=30; Status s=journal_.get(Key(k,o,Field::Row,id),b,n); if(s!=Status::Ok) return s;
+    if(n!=30||b[29]>2||(b[28]&~uint8_t(7))) return Status::Corrupt;
+    p.id=id; p.revision=get32(b); p.atMs=get64(b+4); p.day=getReal(b+12); p.temp=getReal(b+20); p.validMask=b[28]; p.source=PointSource(b[29]);
+    return finite(p.day)&&p.day>=0&&finite(p.temp)?Status::Ok:Status::Corrupt;
+}
+Status Repository::putPoint(Kind k,uint32_t o,const Point& p) {
+    if(!p.id||!finite(p.day)||p.day<0||!finite(p.temp)||(p.validMask&~uint8_t(7))||uint8_t(p.source)>2) return Status::Invalid;
+    uint8_t b[30]; put32(b,p.revision); put64(b+4,p.atMs); putReal(b+12,p.day); putReal(b+20,p.temp); b[28]=p.validMask; b[29]=uint8_t(p.source);
+    return journal_.put(Key(k,o,Field::Row,p.id),b,30);
+}
+Status Repository::model(Kind k,uint32_t o,Fit& f) {
+    uint8_t b[28]; uint16_t n=28; Status s=journal_.get(Key(k,o,Field::Model),b,n); if(s!=Status::Ok) return s;
+    if(n!=28) return Status::Corrupt;
+    f.a=getReal(b); f.b=getReal(b+8); f.r2=getReal(b+16); f.n=get32(b+24); f.valid=finite(f.a)&&finite(f.b)&&finite(f.r2)&&f.r2>=0&&f.r2<=1&&f.n>=2;
+    return f.valid?Status::Ok:Status::NoModel;
+}
+Status Repository::putModel(Kind k,uint32_t o,const Fit& f) {
+    if(!f.valid) return Status::NoModel;
+    if(!finite(f.a)||!finite(f.b)||!finite(f.r2)||f.r2<0||f.r2>1||f.n<2) return Status::Invalid;
+    uint8_t b[28]; putReal(b,f.a); putReal(b+8,f.b); putReal(b+16,f.r2); put32(b+24,f.n);
+    return journal_.put(Key(k,o,Field::Model),b,28);
+}
+Status Repository::putSensors(Kind k,uint32_t o,const SensorFrame& f,const Average& a,const Time& t,Field destination) {
+    uint32_t age=t.monoMs-f.sampledMonoMs;
+    if(!t.valid||t.wallMs<age) return Status::NoClock;
+    if(!a.mask||(a.mask&~uint8_t(7))||(a.mask&~f.validMask)||!finite(a.raw)||!finite(a.operational)) return Status::Invalid;
+    for(uint8_t i=0;i<3;++i) if((a.mask&(1u<<i))&&!finite(f.channel[i])) return Status::Invalid;
+    uint8_t b[53]; put64(b,t.wallMs-age); put32(b+8,f.sampledMonoMs);
+    for(uint8_t i=0;i<3;++i) putReal(b+12+8*i,f.channel[i]);
+    b[36]=a.mask; putReal(b+37,a.raw); putReal(b+45,a.operational);
+    return journal_.put(Key(k,o,destination),b,53);
+}
+Status Repository::copyScalar(const Key& from,const Key& to,uint16_t expected) {
+    uint8_t bytes[64]; uint16_t n=64; Status s=journal_.get(from,bytes,n);
+    if(s!=Status::Ok) return s;
+    if(expected&&n!=expected) return Status::Corrupt;
+    return journal_.put(to,bytes,n);
+}
+Status Repository::copy(Kind from,uint32_t src,Kind to,uint32_t dst) {
+    uint8_t b[128];
+    for(uint8_t f=uint8_t(Field::Exists);f<=uint8_t(Field::FcInput);++f) {
+        if(Field(f)==Field::Row||Field(f)==Field::DayInput||Field(f)==Field::TempInput||Field(f)==Field::FcInput) continue;
+        uint16_t n=128; Status s=journal_.get(Key(from,src,Field(f)),b,n);
+        if(s==Status::Missing) continue;
+        if(s!=Status::Ok) return s;
+        s=journal_.put(Key(to,dst,Field(f)),b,n); if(s!=Status::Ok) return s;
+    }
+    uint32_t max=0; Status st=integer(Key(from,src,Field::MaxRow),max);
+    if(st!=Status::Ok && st!=Status::Missing) return st;
+    for(uint32_t i=1;i<=max;++i) {
+        uint16_t n=128; st=journal_.get(Key(from,src,Field::Row,i),b,n);
+        if(st==Status::Missing) continue;
+        if(st!=Status::Ok) return st;
+        st=journal_.put(Key(to,dst,Field::Row,i),b,n); if(st!=Status::Ok) return st;
+        if(from==Kind::Draft||from==Kind::Baseline) {
+            for(uint8_t field=uint8_t(Field::DayInput);field<=uint8_t(Field::FcInput);++field) {
+                n=128; st=journal_.get(Key(from,src,Field(field),i),b,n);
+                if(st==Status::Missing) continue;
+                if(st!=Status::Ok) return st;
+                st=journal_.put(Key(to,dst,Field(field),i),b,n); if(st!=Status::Ok) return st;
+            }
+        }
+    }
+    return Status::Ok;
+}
+Status Repository::list(Kind k,uint32_t after,uint32_t& id) {
+    uint32_t max=0; Status st=journal_.maxObject(k,max); if(st!=Status::Ok) return st;
+    for(uint32_t i=after?(after>max?max:after-1):max;i;--i) {
+        uint32_t exists=0; st=integer(Key(k,i,Field::Exists),exists);
+        if(st==Status::Ok && exists) { id=i; return Status::Ok; }
+        if(st!=Status::Missing && st!=Status::Ok) return st;
+    }
+    return Status::Missing;
+}
+StoredRows::StoredRows(Repository& r,Kind k,uint32_t o,bool displayOrder) : repo_(r),kind_(k),object_(o),max_(0),lastId_(0),lastH_(0),lastDay_(0),first_(true),displayOrder_(displayOrder) { reset(); }
+void StoredRows::reset() { max_=0; lastId_=0; lastH_=lastDay_=0; first_=true; }
+Status StoredRows::next(Row& out) {
+    Status st=repo_.integer(Key(kind_,object_,Field::MaxRow),max_); if(st!=Status::Ok) return st;
+    bool found=false; Row candidate;
+    for(uint32_t id=1;id<=max_;++id) {
+        Row r; st=repo_.row(kind_,object_,id,r); if(st==Status::Missing) continue;
+        if(st!=Status::Ok) return st;
+        if(!first_ && (displayOrder_&&r.day!=lastDay_?r.day<lastDay_:(r.timeH<lastH_ || (r.timeH==lastH_ && r.id<=lastId_)))) continue;
+        if(!found || (displayOrder_&&r.day!=candidate.day?r.day<candidate.day:(r.timeH<candidate.timeH || (r.timeH==candidate.timeH && r.id<candidate.id)))) { candidate=r; found=true; }
+    }
+    if(!found) return Status::Missing;
+    out=candidate; lastH_=out.timeH; lastDay_=out.day; lastId_=out.id; first_=false; return Status::Ok;
+}
+Status nextPoint(Repository& r,Kind k,uint32_t o,const Point* after,Point& out) {
+    uint32_t max=0; Status st=r.integer(Key(k,o,Field::MaxRow),max); if(st!=Status::Ok) return st;
+    bool found=false; Point candidate;
+    for(uint32_t id=1;id<=max;++id) {
+        Point p; st=r.point(k,o,id,p); if(st==Status::Missing) continue;
+        if(st!=Status::Ok) return st;
+        if(after && (p.atMs<after->atMs || (p.atMs==after->atMs && p.id<=after->id))) continue;
+        if(!found || p.atMs<candidate.atMs || (p.atMs==candidate.atMs && p.id<candidate.id)) { candidate=p; found=true; }
+    }
+    if(!found) return Status::Missing;
+    out=candidate; return Status::Ok;
+}
+Status replayPoints(Repository& r,Kind k,uint32_t o,Real datum,Real& m,Point& last) {
+    Point p,previous; bool first=true; uint64_t start=0; Real lastDay=0;
+    Accumulator acc; Status st;
+    while((st=nextPoint(r,k,o,first?nullptr:&previous,p))==Status::Ok) {
+        if(!first && p.day<lastDay) return Status::Invalid;
+        if(first) start=p.atMs;
+        st=acc.add(Real(p.atMs-start)/Real(3600000),p.temp,datum); if(st!=Status::Ok) return st;
+        last=previous=p; lastDay=p.day; first=false;
+    }
+    m=acc.maturity(); return st==Status::Missing?(first?Status::Missing:Status::Ok):st;
+}
+}

@@ -1,0 +1,22 @@
+{
+  "sourceFiles": 245,
+  "filesChangedOrAddedSinceAuditStarted": 229,
+  "sourceFilesChanged": [
+    "ConMT/src/app/Controller.cpp",
+    "ConMT/src/app/Controller.h",
+    "ConMT/src/board/SdStorage.cpp",
+    "ConMT/src/board/SdStorage.h",
+    "ConMT/src/core/Calendar.cpp",
+    "ConMT/src/core/Calendar.h",
+    "ConMT/src/core/Types.cpp",
+    "ConMT/src/core/Types.h",
+    "ConMT/src/hmi/Transport.cpp",
+    "ConMT/src/hmi/Transport.h",
+    "ConMT/src/storage/Journal.cpp",
+    "ConMT/src/storage/Journal.h",
+    "ConMT/src/storage/Repository.cpp",
+    "ConMT/src/storage/Repository.h"
+  ],
+  "originalSourceVerification": "PASS",
+  "productionReady": false
+}

@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "target": "ATmega328P emulated, AVR double=32-bit",
+  "datasets": {
+    "fullPrecision": {
+      "maxMError": 0.002499999995052349,
+      "maxFcError": 8.235286649949103e-06,
+      "rows": 41
+    },
+    "previewRounded": {
+      "maxMError": 0.0024999999986903276,
+      "maxFcError": 5.874513121284508e-06,
+      "rows": 41
+    }
+  },
+  "physicalSensorsOrStorageTested": false
+}

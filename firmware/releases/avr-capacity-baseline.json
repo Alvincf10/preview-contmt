@@ -1,0 +1,36 @@
+{
+  "purpose": "capacity probe, never upload",
+  "compiler": "avr-g++ (GCC) 7.3.0",
+  "flashBytes": 80708,
+  "staticRamBytes": 1693,
+  "physicalFlashRemaining": -47940,
+  "staticRamRemaining": 355,
+  "fitsStaticLimits": false,
+  "includes": "shared core/controller/HMI/real SD/HardwareSerial; probe clock/sensor/device ports",
+  "excludes": "verified sensor/RTC/battery drivers, actual stack watermark",
+  "clockAssumption": "16MHz for capacity only; not board configuration",
+  "strategy": "baseline",
+  "compilerFlags": [
+    "-mmcu=atmega328p",
+    "-Os",
+    "-flto",
+    "-mcall-prologues",
+    "-fno-inline-small-functions",
+    "-fno-inline-functions-called-once",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-fno-exceptions",
+    "-fno-threadsafe-statics",
+    "-fno-rtti",
+    "-fstack-usage",
+    "-std=gnu++11",
+    "-DARDUINO=10819",
+    "-DARDUINO_ARCH_AVR",
+    "-DF_CPU=16000000UL"
+  ],
+  "nativeLinkPassed": false,
+  "physicalRegionLimits": {
+    "flash": 32768,
+    "sram": 2048
+  }
+}

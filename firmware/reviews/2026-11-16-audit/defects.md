@@ -1,0 +1,50 @@
+# Cacat yang direproduksi dan dikoreksi
+
+38 cacat ditemukan pada implementasi firmware ConMT baru. Setiap ID memiliki FAIL sebelum koreksi pada log *before*.txt dan PASS sesudah koreksi pada host-after.txt, binary32-after.txt serta sanitizer-after.txt. Ini tidak menghitung kasus kontrol yang sudah lulus sejak awal dan tidak berarti semua kebutuhan produksi sudah selesai.
+
+Tingkat keparahan berdasarkan dampak: Kritikal untuk kehilangan data/aksi atau komunikasi utama; Tinggi untuk integritas snapshot/pengukuran/protokol; Sedang untuk flow, tampilan, setting atau batas ekstrem.
+
+Jumlah: Sedang=17, Tinggi=17, Kritikal=4.
+
+| ID | Tingkat | Kategori | Sebelum | Koreksi | Acuan |
+|---|---|---|---|---|---|
+| A10 | Kritikal | HMI/menu | Refresh status menyalakan retry command lama | Pisahkan render flag dan outstanding command milik panel | 02 HMI ACK/retry; 04 H05 |
+| A12 | Kritikal | Protokol | Reset panel memakai ulang operation ID lama | Epoch koneksi baru dipersist tanpa merestart sesi | 02 idempotency/reset; 07 reconnect |
+| A38 | Kritikal | Storage | Blok committed korup dianggap tail lalu suffix terpotong | Bedakan committed corruption dari tail parsial dan blokir write | 01 recovery; 04 W02/W03 |
+| C14 | Kritikal | Storage | begin sebelum mount dapat truncate berkas yang sudah ada | Write wajib melewati mount yang berhasil | 01 transactional storage; 07 SD nyata |
+| A04 | Tinggi | Akuisisi | GapEnd berhenti pada sampel gagal pertama | Perpanjang gap sampai sampel valid kembali | 06 policy D07 |
+| A06 | Tinggi | Validasi | Brightness korup256 menyempit menjadi0 sebelum divalidasi | Periksa uint32 sebelum cast ke uint8 | 01 settings/input validation |
+| A07 | Tinggi | Akuisisi | Output average/mask tidak diinisialisasi ketika driver gagal | Kosongkan output sebelum mengembalikan error | 07 status driver nyata |
+| A11 | Tinggi | HMI/menu | PAGE_READY menghilangkan ACK command aktif | Pertahankan correlation sampai respons terkirim | 02 HMI handshake |
+| A13 | Tinggi | HMI/data | Generation baru bisa berisi campuran render lama/baru | Ulang render sebelum publish view generation | 02 view/revision contract |
+| A15 | Tinggi | Storage | Koefisien nonfinite terserialisasi menjadi nol | Validasi finite/range/n model sebelum encoding | 01 numeric/schema validation |
+| A16 | Tinggi | Akuisisi | Jumlah kanal finite dapat overflow menjadi average infinite | Validasi jumlah dan hasil pembulatan | 01 average/validity |
+| A17 | Tinggi | Jam/recovery | RTC rollback menghasilkan GapStart lebih besar dari GapEnd | Simpan batas terurut dan gabungkan rentang gap | 06 Clock/D07; 04 T04 |
+| A19 | Tinggi | Snapshot | Autosave setelah NEXT mengganti sensor history saat SAVE | Simpan PreviewSensors terpisah dan copy snapshot beku | 01 ResultPreview; 06 ResultPolicy |
+| A22 | Tinggi | Pengukuran | Edit checkpoint bisa mengaku observasi masa depan | Tolak timestamp setelah clock nyata saat ini | 06 D05; 07 no future samples |
+| A23 | Tinggi | Storage | Decoder result hanya memvalidasi sebagian angka | Validasi seluruh real field dan flag/range result | 01 schema; 04 W01/W03 |
+| A24 | Tinggi | Storage | Flag row tidak dikenal diterima | Tolak bit flag di luar schema | 01 schema/version |
+| A36 | Tinggi | Jam/validasi | Jam relatif sangat besar dicast ke timestamp overflow | Periksa range sebelum perkalian/cast kalender | 01 calendar validation; 04 T03 |
+| A37 | Tinggi | Akuisisi | Sampel segar sebelum START memberi false NoClock | Pisahkan timestamp sampel dan anchor integrasi | 06 real sample timestamp |
+| A39 | Tinggi | Protokol | ACK terlambat dapat membuka busy untuk request lebih baru | Panel clear busy hanya pada pasangan boot/seq ACK yang cocok | 02 correlation/retry |
+| A42 | Tinggi | Baseline/waktu | Edit day0 selalu memaksa0.5h dan dapat menduplikasi slot | Pertahankan slot tersnap atau cari slot kosong pertama | screens.tsx commitDay/nextDay0Time |
+| A44 | Tinggi | Protokol | Frame berikutnya dibuang saat ACK masih pending | Hentikan konsumsi RX sampai respons sebelumnya dikirim | 04 H02; 02 bounded single outstanding |
+| A01 | Sedang | Baseline | Daftar tersaji oldest-first | Urut newest-first sesuai source | screens.tsx SavedBaselineScreen |
+| A02 | Sedang | Baseline | Baseline terpilih hilang setelah reboot | Simpan dan pulihkan selected ID; fallback newest | screens.tsx selectedBaseline; plan session/repository |
+| A03 | Sedang | Presisi | Rounding printf berbeda dari JS pada exact half ties | Tangani tie biner tanpa membulatkan 2.675 secara palsu | screens.tsx toFixed; plan precision policy |
+| A05 | Sedang | Status | Status NoSensor tertinggal setelah sensor kembali | Pisahkan status kesehatan dan status aksi; tampilkan unresolved Gap | 06 policy D07 |
+| A09 | Sedang | Protokol | Argumen tambahan command diabaikan | Tolak arity yang tidak sesuai verb | 02 HMI grammar |
+| A14 | Sedang | Jam | Jam invalid ditampilkan00:00 | Tampilkan unavailable -- | 06 ClockPort validity |
+| A20 | Sedang | Settings | Efek brightness/sound berubah walau commit gagal | Rollback efek hardware ke nilai committed | 03 D06; 04 U07 |
+| A21 | Sedang | Validasi | Capture sensor membungkus row revision uint32 | Tolak ketika revision mencapai batas | 02 stable row revision |
+| A26 | Sedang | HMI/menu | BACK ditolak hanya karena data view sudah berubah | Izinkan navigasi BACK pada page/boot yang benar | 02 BACK/error navigation |
+| A29 | Sedang | Baseline | Deteksi slot Day0 memakai equality waktu mentah | Gunakan snapping half-hour dengan tie ke bawah | screens.tsx snapDay0Time |
+| A30 | Sedang | Baseline/UI | Urutan tabel hanya timeH | Pisahkan sort UI day/time dari sort integrasi waktu | screens.tsx sortMaturityRows |
+| A33 | Sedang | Presisi/UI | Suhu lab manual36.55 tampil36.5 | Simpan string input asli per row; display tidak mengubah nilai | screens.tsx MaturityRow.temperature |
+| A34 | Sedang | Presisi/UI | Fc lab manual14.86333 tampil14.9 | Simpan string Fc asli sampai save/reopen | screens.tsx MaturityRow.fcLab |
+| A35 | Sedang | Presisi/UI | Day pecahan1.25 tampil sebagai angka berbeda | Pertahankan representasi input day | screens.tsx commitDay |
+| A40 | Sedang | Baseline | Menghapus pilihan tidak memilih baseline pengganti | Persist newest remaining ID dalam transaksi penghapusan | screens.tsx confirmDelete |
+| A41 | Sedang | Baseline/UI | Row baru di luar viewport tidak langsung terlihat | Fokus ID baru dan pindah ke halaman row tersebut | screens.tsx focusNewRow |
+| A43 | Sedang | Policy | AutoSave boot true berbeda dari default offline yang dikunci | Default false; test autosave mengaktifkan setting secara eksplisit | 06 section4 default offline |
+
+Tes ada pada [audit.cpp](../../tests/audit.cpp). Koreksi utama berada pada [Controller](../../ConMT/src/app/Controller.cpp), [Transport](../../ConMT/src/hmi/Transport.cpp), [Repository](../../ConMT/src/storage/Repository.cpp), [Journal](../../ConMT/src/storage/Journal.cpp), [Types](../../ConMT/src/core/Types.cpp), [Calendar](../../ConMT/src/core/Calendar.cpp) dan [generator HMI](../../tools/generate_hmi.py).

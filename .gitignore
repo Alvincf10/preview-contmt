@@ -27,3 +27,21 @@ scripts/
 *.njsproj
 *.sln
 *.sw?
+
+# Local planning package; retained on disk, excluded from version control.
+/docs/firmware-plan/
+
+# Firmware build outputs and local execution logs.
+/firmware/build*/
+/firmware/releases/*-build.txt
+/firmware/releases/*-tests.txt
+/firmware/reviews/*/*before*.txt
+/firmware/reviews/*/*-after.txt
+/firmware/reviews/*/before-sha256.json
+*.o
+*.a
+*.elf
+*.hex
+*.map
+*.su
+__pycache__/

@@ -1,0 +1,1878 @@
+{
+  "protocol": "CM1",
+  "schema": 2,
+  "contractRevision": 2,
+  "maxFrameBytes": 192,
+  "frameLimitIncludesLf": true,
+  "numericDecimal": ".",
+  "reservedCharacters": [
+    "|",
+    "\"",
+    "\\",
+    "CR",
+    "LF"
+  ],
+  "panelCompileVerified": false,
+  "hardwareBaud": null,
+  "pages": [
+    {
+      "id": 0,
+      "name": "pInit",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg"
+      ],
+      "actions": {},
+      "postinitialize": "events/pInit_postinitialize.txt"
+    },
+    {
+      "id": 1,
+      "name": "pUser",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tOp",
+        "tProj",
+        "tDate"
+      ],
+      "actions": {
+        "mRetry": {
+          "verb": "STORAGE_RESCAN",
+          "args": []
+        },
+        "mSave": {
+          "verb": "USER_SAVE",
+          "args": []
+        },
+        "apply_tOp": {
+          "verb": "FIELD_SET",
+          "args": [
+            "operator",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tProj": {
+          "verb": "FIELD_SET",
+          "args": [
+            "project",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tDate": {
+          "verb": "FIELD_SET",
+          "args": [
+            "date",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        }
+      },
+      "postinitialize": "events/pUser_postinitialize.txt"
+    },
+    {
+      "id": 2,
+      "name": "pMain",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg"
+      ],
+      "actions": {
+        "mBase": {
+          "verb": "NAV",
+          "args": [
+            "3"
+          ]
+        },
+        "mKuat": {
+          "verb": "NAV",
+          "args": [
+            "9"
+          ]
+        },
+        "mSet": {
+          "verb": "NAV",
+          "args": [
+            "15"
+          ]
+        },
+        "mDev": {
+          "verb": "NAV",
+          "args": [
+            "16"
+          ]
+        }
+      },
+      "postinitialize": "events/pMain_postinitialize.txt"
+    },
+    {
+      "id": 3,
+      "name": "pBase",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mNew": {
+          "verb": "BASE_NEW",
+          "args": []
+        },
+        "mSaved": {
+          "verb": "NAV",
+          "args": [
+            "8"
+          ]
+        }
+      },
+      "postinitialize": "events/pBase_postinitialize.txt"
+    },
+    {
+      "id": 4,
+      "name": "pNewB",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tName",
+        "tFc",
+        "tTemp",
+        "tPDate",
+        "tPClock"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mNext": {
+          "verb": "NAV",
+          "args": [
+            "5"
+          ]
+        },
+        "apply_tName": {
+          "verb": "FIELD_SET",
+          "args": [
+            "name",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tFc": {
+          "verb": "FIELD_SET",
+          "args": [
+            "target",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tTemp": {
+          "verb": "FIELD_SET",
+          "args": [
+            "datum",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tPDate": {
+          "verb": "FIELD_SET",
+          "args": [
+            "pourDate",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tPClock": {
+          "verb": "FIELD_SET",
+          "args": [
+            "pourClock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        }
+      },
+      "postinitialize": "events/pNewB_postinitialize.txt"
+    },
+    {
+      "id": 5,
+      "name": "pMat",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tCem",
+        "tWat",
+        "tCoa",
+        "tFin",
+        "tRetP",
+        "tRetB",
+        "tAccP",
+        "tAccB",
+        "tFlyP",
+        "tFlyB",
+        "tWC"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mNext": {
+          "verb": "NAV",
+          "args": [
+            "6"
+          ]
+        },
+        "apply_tCem": {
+          "verb": "FIELD_SET",
+          "args": [
+            "cement",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tWat": {
+          "verb": "FIELD_SET",
+          "args": [
+            "water",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tCoa": {
+          "verb": "FIELD_SET",
+          "args": [
+            "coarse",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tFin": {
+          "verb": "FIELD_SET",
+          "args": [
+            "fine",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tRetP": {
+          "verb": "FIELD_SET",
+          "args": [
+            "retarderPct",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tRetB": {
+          "verb": "FIELD_SET",
+          "args": [
+            "retarderBrand",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tAccP": {
+          "verb": "FIELD_SET",
+          "args": [
+            "acceleratorPct",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tAccB": {
+          "verb": "FIELD_SET",
+          "args": [
+            "acceleratorBrand",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tFlyP": {
+          "verb": "FIELD_SET",
+          "args": [
+            "flyAshPct",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_tFlyB": {
+          "verb": "FIELD_SET",
+          "args": [
+            "flyAshBrand",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        }
+      },
+      "postinitialize": "events/pMat_postinitialize.txt"
+    },
+    {
+      "id": 6,
+      "name": "pMatu",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tDay0",
+        "tTim0",
+        "tFc0",
+        "tT0",
+        "tRid0",
+        "tDay1",
+        "tTim1",
+        "tFc1",
+        "tT1",
+        "tRid1",
+        "tDay2",
+        "tTim2",
+        "tFc2",
+        "tT2",
+        "tRid2",
+        "tDay3",
+        "tTim3",
+        "tFc3",
+        "tT3",
+        "tRid3",
+        "tDay4",
+        "tTim4",
+        "tFc4",
+        "tT4",
+        "tRid4",
+        "tDay5",
+        "tTim5",
+        "tFc5",
+        "tT5",
+        "tRid5",
+        "tHint"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mGen": {
+          "verb": "BASE_GENERATE",
+          "args": []
+        },
+        "mAddDay": {
+          "verb": "ROW_ADD_LAB",
+          "args": []
+        },
+        "mAddEarly": {
+          "verb": "ROW_ADD_EARLY",
+          "args": []
+        },
+        "mFill": {
+          "verb": "ROW_FILL_EARLY",
+          "args": []
+        },
+        "mPrev": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "PREV"
+          ]
+        },
+        "mMore": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "NEXT"
+          ]
+        },
+        "mSensor0": {
+          "verb": "ROW_SENSOR",
+          "args": [
+            "0"
+          ]
+        },
+        "mDeleteConfirm0": {
+          "verb": "ROW_DELETE",
+          "args": [
+            "0",
+            "1"
+          ]
+        },
+        "mSchedule0": {
+          "verb": "ROW_SCHEDULE",
+          "args": [
+            "0"
+          ]
+        },
+        "apply_day_0": {
+          "verb": "ROW_SET",
+          "args": [
+            "0",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_0": {
+          "verb": "ROW_SET",
+          "args": [
+            "0",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_timeH_0": {
+          "verb": "ROW_SET",
+          "args": [
+            "0",
+            "timeH",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_0": {
+          "verb": "ROW_SET",
+          "args": [
+            "0",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_fc_0": {
+          "verb": "ROW_SET",
+          "args": [
+            "0",
+            "fc",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "mSensor1": {
+          "verb": "ROW_SENSOR",
+          "args": [
+            "1"
+          ]
+        },
+        "mDeleteConfirm1": {
+          "verb": "ROW_DELETE",
+          "args": [
+            "1",
+            "1"
+          ]
+        },
+        "mSchedule1": {
+          "verb": "ROW_SCHEDULE",
+          "args": [
+            "1"
+          ]
+        },
+        "apply_day_1": {
+          "verb": "ROW_SET",
+          "args": [
+            "1",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_1": {
+          "verb": "ROW_SET",
+          "args": [
+            "1",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_timeH_1": {
+          "verb": "ROW_SET",
+          "args": [
+            "1",
+            "timeH",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_1": {
+          "verb": "ROW_SET",
+          "args": [
+            "1",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_fc_1": {
+          "verb": "ROW_SET",
+          "args": [
+            "1",
+            "fc",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "mSensor2": {
+          "verb": "ROW_SENSOR",
+          "args": [
+            "2"
+          ]
+        },
+        "mDeleteConfirm2": {
+          "verb": "ROW_DELETE",
+          "args": [
+            "2",
+            "1"
+          ]
+        },
+        "mSchedule2": {
+          "verb": "ROW_SCHEDULE",
+          "args": [
+            "2"
+          ]
+        },
+        "apply_day_2": {
+          "verb": "ROW_SET",
+          "args": [
+            "2",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_2": {
+          "verb": "ROW_SET",
+          "args": [
+            "2",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_timeH_2": {
+          "verb": "ROW_SET",
+          "args": [
+            "2",
+            "timeH",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_2": {
+          "verb": "ROW_SET",
+          "args": [
+            "2",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_fc_2": {
+          "verb": "ROW_SET",
+          "args": [
+            "2",
+            "fc",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "mSensor3": {
+          "verb": "ROW_SENSOR",
+          "args": [
+            "3"
+          ]
+        },
+        "mDeleteConfirm3": {
+          "verb": "ROW_DELETE",
+          "args": [
+            "3",
+            "1"
+          ]
+        },
+        "mSchedule3": {
+          "verb": "ROW_SCHEDULE",
+          "args": [
+            "3"
+          ]
+        },
+        "apply_day_3": {
+          "verb": "ROW_SET",
+          "args": [
+            "3",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_3": {
+          "verb": "ROW_SET",
+          "args": [
+            "3",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_timeH_3": {
+          "verb": "ROW_SET",
+          "args": [
+            "3",
+            "timeH",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_3": {
+          "verb": "ROW_SET",
+          "args": [
+            "3",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_fc_3": {
+          "verb": "ROW_SET",
+          "args": [
+            "3",
+            "fc",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "mSensor4": {
+          "verb": "ROW_SENSOR",
+          "args": [
+            "4"
+          ]
+        },
+        "mDeleteConfirm4": {
+          "verb": "ROW_DELETE",
+          "args": [
+            "4",
+            "1"
+          ]
+        },
+        "mSchedule4": {
+          "verb": "ROW_SCHEDULE",
+          "args": [
+            "4"
+          ]
+        },
+        "apply_day_4": {
+          "verb": "ROW_SET",
+          "args": [
+            "4",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_4": {
+          "verb": "ROW_SET",
+          "args": [
+            "4",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_timeH_4": {
+          "verb": "ROW_SET",
+          "args": [
+            "4",
+            "timeH",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_4": {
+          "verb": "ROW_SET",
+          "args": [
+            "4",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_fc_4": {
+          "verb": "ROW_SET",
+          "args": [
+            "4",
+            "fc",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "mSensor5": {
+          "verb": "ROW_SENSOR",
+          "args": [
+            "5"
+          ]
+        },
+        "mDeleteConfirm5": {
+          "verb": "ROW_DELETE",
+          "args": [
+            "5",
+            "1"
+          ]
+        },
+        "mSchedule5": {
+          "verb": "ROW_SCHEDULE",
+          "args": [
+            "5"
+          ]
+        },
+        "apply_day_5": {
+          "verb": "ROW_SET",
+          "args": [
+            "5",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_5": {
+          "verb": "ROW_SET",
+          "args": [
+            "5",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_timeH_5": {
+          "verb": "ROW_SET",
+          "args": [
+            "5",
+            "timeH",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_5": {
+          "verb": "ROW_SET",
+          "args": [
+            "5",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_fc_5": {
+          "verb": "ROW_SET",
+          "args": [
+            "5",
+            "fc",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        }
+      },
+      "postinitialize": "events/pMatu_postinitialize.txt"
+    },
+    {
+      "id": 7,
+      "name": "pBaseR",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tName",
+        "tTarget",
+        "tDatum",
+        "tA",
+        "tB",
+        "tR2",
+        "tCount",
+        "tEq",
+        "tCem",
+        "tWat",
+        "tCoa",
+        "tFin",
+        "tRetP",
+        "tRetB",
+        "tAccP",
+        "tAccB",
+        "tFlyP",
+        "tFlyB",
+        "tWC",
+        "tOp",
+        "tProj",
+        "tDate"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mSave": {
+          "verb": "BASE_SAVE",
+          "args": []
+        }
+      },
+      "postinitialize": "events/pBaseR_postinitialize.txt"
+    },
+    {
+      "id": 8,
+      "name": "pSaveB",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tId0",
+        "tName0",
+        "tVal0",
+        "tId1",
+        "tName1",
+        "tVal1",
+        "tId2",
+        "tName2",
+        "tVal2",
+        "tId3",
+        "tName3",
+        "tVal3",
+        "tId4",
+        "tName4",
+        "tVal4",
+        "tId5",
+        "tName5",
+        "tVal5",
+        "tSelName",
+        "tSelFc",
+        "tSelT",
+        "tSelR2",
+        "tSelId",
+        "tSelDate"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mSelect": {
+          "verb": "BASE_OPEN",
+          "args": []
+        },
+        "mDeleteConfirm": {
+          "verb": "BASE_DELETE",
+          "args": [
+            "1"
+          ]
+        },
+        "mPrev": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "PREV"
+          ]
+        },
+        "mMore": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "NEXT"
+          ]
+        },
+        "mPick0": {
+          "verb": "BASE_PICK",
+          "args": [
+            "0"
+          ]
+        },
+        "mPick1": {
+          "verb": "BASE_PICK",
+          "args": [
+            "1"
+          ]
+        },
+        "mPick2": {
+          "verb": "BASE_PICK",
+          "args": [
+            "2"
+          ]
+        },
+        "mPick3": {
+          "verb": "BASE_PICK",
+          "args": [
+            "3"
+          ]
+        },
+        "mPick4": {
+          "verb": "BASE_PICK",
+          "args": [
+            "4"
+          ]
+        },
+        "mPick5": {
+          "verb": "BASE_PICK",
+          "args": [
+            "5"
+          ]
+        }
+      },
+      "postinitialize": "events/pSaveB_postinitialize.txt"
+    },
+    {
+      "id": 9,
+      "name": "pKuat",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mStart": {
+          "verb": "NAV",
+          "args": [
+            "10"
+          ]
+        },
+        "mHist": {
+          "verb": "NAV",
+          "args": [
+            "13"
+          ]
+        }
+      },
+      "postinitialize": "events/pKuat_postinitialize.txt"
+    },
+    {
+      "id": 10,
+      "name": "pSelB",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tId0",
+        "tName0",
+        "tVal0",
+        "tId1",
+        "tName1",
+        "tVal1",
+        "tId2",
+        "tName2",
+        "tVal2",
+        "tId3",
+        "tName3",
+        "tVal3",
+        "tId4",
+        "tName4",
+        "tVal4",
+        "tId5",
+        "tName5",
+        "tVal5",
+        "tSelName",
+        "tSelFc",
+        "tSelT",
+        "tSelR2",
+        "tSelId",
+        "tSelDate"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mStart": {
+          "verb": "MEASURE_START",
+          "args": []
+        },
+        "mReplaceConfirm": {
+          "verb": "MEASURE_START",
+          "args": [
+            "1"
+          ]
+        },
+        "mResume": {
+          "verb": "SESSION_RESUME",
+          "args": []
+        },
+        "mPrev": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "PREV"
+          ]
+        },
+        "mMore": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "NEXT"
+          ]
+        },
+        "mPick0": {
+          "verb": "BASE_PICK",
+          "args": [
+            "0"
+          ]
+        },
+        "mPick1": {
+          "verb": "BASE_PICK",
+          "args": [
+            "1"
+          ]
+        },
+        "mPick2": {
+          "verb": "BASE_PICK",
+          "args": [
+            "2"
+          ]
+        },
+        "mPick3": {
+          "verb": "BASE_PICK",
+          "args": [
+            "3"
+          ]
+        },
+        "mPick4": {
+          "verb": "BASE_PICK",
+          "args": [
+            "4"
+          ]
+        },
+        "mPick5": {
+          "verb": "BASE_PICK",
+          "args": [
+            "5"
+          ]
+        }
+      },
+      "postinitialize": "events/pSelB_postinitialize.txt"
+    },
+    {
+      "id": 11,
+      "name": "pRT",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tS1",
+        "tS2",
+        "tS3",
+        "tAvg",
+        "tNowD",
+        "tNowT",
+        "tBase",
+        "tTarget",
+        "tDatum",
+        "tPDate",
+        "tPour",
+        "tInitTemp",
+        "tM",
+        "tFc",
+        "tPct",
+        "tElapsed",
+        "tRefDay",
+        "tDay0",
+        "tAt0",
+        "tTmp0",
+        "tCm0",
+        "tCf0",
+        "tDay1",
+        "tAt1",
+        "tTmp1",
+        "tCm1",
+        "tCf1",
+        "tDay2",
+        "tAt2",
+        "tTmp2",
+        "tCm2",
+        "tCf2",
+        "tDay3",
+        "tAt3",
+        "tTmp3",
+        "tCm3",
+        "tCf3",
+        "tDay4",
+        "tAt4",
+        "tTmp4",
+        "tCm4",
+        "tCf4",
+        "tDay5",
+        "tAt5",
+        "tTmp5",
+        "tCm5",
+        "tCf5"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mNext": {
+          "verb": "RESULT_PREPARE",
+          "args": []
+        },
+        "mAddDay": {
+          "verb": "CHECK_ADD",
+          "args": [
+            {
+              "text": "pInit.tDayInput"
+            }
+          ]
+        },
+        "mGapConfirm": {
+          "verb": "GAP_RECONCILE",
+          "args": [
+            "1",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "mPrev": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "PREV"
+          ]
+        },
+        "mMore": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "NEXT"
+          ]
+        },
+        "apply_day_0": {
+          "verb": "CHECK_SET",
+          "args": [
+            "0",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_0": {
+          "verb": "CHECK_SET",
+          "args": [
+            "0",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_date_0": {
+          "verb": "CHECK_SET",
+          "args": [
+            "0",
+            "date",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_0": {
+          "verb": "CHECK_SET",
+          "args": [
+            "0",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_day_1": {
+          "verb": "CHECK_SET",
+          "args": [
+            "1",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_1": {
+          "verb": "CHECK_SET",
+          "args": [
+            "1",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_date_1": {
+          "verb": "CHECK_SET",
+          "args": [
+            "1",
+            "date",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_1": {
+          "verb": "CHECK_SET",
+          "args": [
+            "1",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_day_2": {
+          "verb": "CHECK_SET",
+          "args": [
+            "2",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_2": {
+          "verb": "CHECK_SET",
+          "args": [
+            "2",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_date_2": {
+          "verb": "CHECK_SET",
+          "args": [
+            "2",
+            "date",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_2": {
+          "verb": "CHECK_SET",
+          "args": [
+            "2",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_day_3": {
+          "verb": "CHECK_SET",
+          "args": [
+            "3",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_3": {
+          "verb": "CHECK_SET",
+          "args": [
+            "3",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_date_3": {
+          "verb": "CHECK_SET",
+          "args": [
+            "3",
+            "date",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_3": {
+          "verb": "CHECK_SET",
+          "args": [
+            "3",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_day_4": {
+          "verb": "CHECK_SET",
+          "args": [
+            "4",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_4": {
+          "verb": "CHECK_SET",
+          "args": [
+            "4",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_date_4": {
+          "verb": "CHECK_SET",
+          "args": [
+            "4",
+            "date",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_4": {
+          "verb": "CHECK_SET",
+          "args": [
+            "4",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_day_5": {
+          "verb": "CHECK_SET",
+          "args": [
+            "5",
+            "day",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_clock_5": {
+          "verb": "CHECK_SET",
+          "args": [
+            "5",
+            "clock",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_date_5": {
+          "verb": "CHECK_SET",
+          "args": [
+            "5",
+            "date",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_temp_5": {
+          "verb": "CHECK_SET",
+          "args": [
+            "5",
+            "temp",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        }
+      },
+      "postinitialize": "events/pRT_postinitialize.txt"
+    },
+    {
+      "id": 12,
+      "name": "pStr",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tBase",
+        "tTarget",
+        "tDatum",
+        "tPDate",
+        "tPour",
+        "tInitTemp",
+        "tM",
+        "tFc",
+        "tPct",
+        "tElapsed",
+        "tRefDay"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mSave": {
+          "verb": "RESULT_SAVE",
+          "args": []
+        }
+      },
+      "postinitialize": "events/pStr_postinitialize.txt"
+    },
+    {
+      "id": 13,
+      "name": "pHist",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tId0",
+        "tName0",
+        "tVal0",
+        "tDate0",
+        "tCount0",
+        "tId1",
+        "tName1",
+        "tVal1",
+        "tDate1",
+        "tCount1",
+        "tId2",
+        "tName2",
+        "tVal2",
+        "tDate2",
+        "tCount2",
+        "tId3",
+        "tName3",
+        "tVal3",
+        "tDate3",
+        "tCount3",
+        "tId4",
+        "tName4",
+        "tVal4",
+        "tDate4",
+        "tCount4",
+        "tId5",
+        "tName5",
+        "tVal5",
+        "tDate5",
+        "tCount5"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mPrev": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "PREV"
+          ]
+        },
+        "mMore": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "NEXT"
+          ]
+        },
+        "mPick0": {
+          "verb": "HISTORY_PICK",
+          "args": [
+            "0"
+          ]
+        },
+        "mPick1": {
+          "verb": "HISTORY_PICK",
+          "args": [
+            "1"
+          ]
+        },
+        "mPick2": {
+          "verb": "HISTORY_PICK",
+          "args": [
+            "2"
+          ]
+        },
+        "mPick3": {
+          "verb": "HISTORY_PICK",
+          "args": [
+            "3"
+          ]
+        },
+        "mPick4": {
+          "verb": "HISTORY_PICK",
+          "args": [
+            "4"
+          ]
+        },
+        "mPick5": {
+          "verb": "HISTORY_PICK",
+          "args": [
+            "5"
+          ]
+        }
+      },
+      "postinitialize": "events/pHist_postinitialize.txt"
+    },
+    {
+      "id": 14,
+      "name": "pHistD",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tBase",
+        "tTarget",
+        "tDatum",
+        "tPDate",
+        "tPour",
+        "tInitTemp",
+        "tM",
+        "tFc",
+        "tPct",
+        "tElapsed",
+        "tRefDay",
+        "tDay0",
+        "tAt0",
+        "tTmp0",
+        "tCm0",
+        "tCf0",
+        "tDay1",
+        "tAt1",
+        "tTmp1",
+        "tCm1",
+        "tCf1",
+        "tDay2",
+        "tAt2",
+        "tTmp2",
+        "tCm2",
+        "tCf2",
+        "tDay3",
+        "tAt3",
+        "tTmp3",
+        "tCm3",
+        "tCf3",
+        "tDay4",
+        "tAt4",
+        "tTmp4",
+        "tCm4",
+        "tCf4",
+        "tDay5",
+        "tAt5",
+        "tTmp5",
+        "tCm5",
+        "tCf5",
+        "tOp",
+        "tProj",
+        "tDate",
+        "tSavedAt",
+        "tLastT",
+        "tStatus",
+        "tS1",
+        "tS2",
+        "tS3",
+        "tCount"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mPrev": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "PREV"
+          ]
+        },
+        "mMore": {
+          "verb": "PAGE_ROWS",
+          "args": [
+            "NEXT"
+          ]
+        }
+      },
+      "postinitialize": "events/pHistD_postinitialize.txt"
+    },
+    {
+      "id": 15,
+      "name": "pSet",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tInterval",
+        "tBright",
+        "tSound",
+        "tAuto",
+        "tHour",
+        "tMin",
+        "tSec"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mSave": {
+          "verb": "SETTINGS_SAVE",
+          "args": []
+        },
+        "m_hour_plus": {
+          "verb": "SETTINGS_STEP",
+          "args": [
+            "hour",
+            "1"
+          ]
+        },
+        "m_hour_minus": {
+          "verb": "SETTINGS_STEP",
+          "args": [
+            "hour",
+            "-1"
+          ]
+        },
+        "m_minute_plus": {
+          "verb": "SETTINGS_STEP",
+          "args": [
+            "minute",
+            "1"
+          ]
+        },
+        "m_minute_minus": {
+          "verb": "SETTINGS_STEP",
+          "args": [
+            "minute",
+            "-1"
+          ]
+        },
+        "m_second_plus": {
+          "verb": "SETTINGS_STEP",
+          "args": [
+            "second",
+            "1"
+          ]
+        },
+        "m_second_minus": {
+          "verb": "SETTINGS_STEP",
+          "args": [
+            "second",
+            "-1"
+          ]
+        },
+        "m_brightness_plus": {
+          "verb": "SETTINGS_STEP",
+          "args": [
+            "brightness",
+            "5"
+          ]
+        },
+        "m_brightness_minus": {
+          "verb": "SETTINGS_STEP",
+          "args": [
+            "brightness",
+            "-5"
+          ]
+        },
+        "m_sound_toggle": {
+          "verb": "SETTINGS_TOGGLE",
+          "args": [
+            "sound"
+          ]
+        },
+        "m_autoSave_toggle": {
+          "verb": "SETTINGS_TOGGLE",
+          "args": [
+            "autoSave"
+          ]
+        },
+        "apply_interval": {
+          "verb": "SETTINGS_SET",
+          "args": [
+            "interval",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_hour": {
+          "verb": "SETTINGS_SET",
+          "args": [
+            "hour",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_minute": {
+          "verb": "SETTINGS_SET",
+          "args": [
+            "minute",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_second": {
+          "verb": "SETTINGS_SET",
+          "args": [
+            "second",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_brightness": {
+          "verb": "SETTINGS_SET",
+          "args": [
+            "brightness",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_sound": {
+          "verb": "SETTINGS_SET",
+          "args": [
+            "sound",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        },
+        "apply_autoSave": {
+          "verb": "SETTINGS_SET",
+          "args": [
+            "autoSave",
+            {
+              "text": "pInit.tEdit"
+            }
+          ]
+        }
+      },
+      "postinitialize": "events/pSet_postinitialize.txt"
+    },
+    {
+      "id": 16,
+      "name": "pDev",
+      "textComponents": [
+        "tClock",
+        "tBatt",
+        "tMsg",
+        "tVersion",
+        "tMcu",
+        "tProtocol"
+      ],
+      "actions": {
+        "mBack": {
+          "verb": "NAV",
+          "args": [
+            "BACK"
+          ]
+        },
+        "mRetry": {
+          "verb": "STORAGE_RESCAN",
+          "args": []
+        }
+      },
+      "postinitialize": "events/pDev_postinitialize.txt"
+    }
+  ],
+  "globals": {
+    "page": "pInit",
+    "scope": "global",
+    "variables": [
+      "vBoot",
+      "vSeq",
+      "vView",
+      "vAck",
+      "vStatus",
+      "vBusy",
+      "vRetry",
+      "vRender",
+      "vAckBoot",
+      "vReqBoot"
+    ],
+    "texts": {
+      "tReq": 191,
+      "tNum": 16,
+      "tEdit": 64,
+      "tDayInput": 24
+    }
+  },
+  "notes": [
+    "apply_* snippets run after keyboard Apply; Cancel sends nothing",
+    "Confirmation widgets must ask before calling *Confirm events",
+    "vSeq must not wrap; reconnect before UINT32_MAX",
+    "retry current tReq on timer while vBusy and no ACK; do not increment vSeq",
+    "PAGE_READY never resets MCU session",
+    "vBusy is client-owned; clear only when vAckBoot/vAck match vReqBoot/vSeq or explicit timeout",
+    "vRender is MCU-owned and must not arm retry",
+    "Active-page retry timer placement requires Editor/model verification",
+    "Editor/model validation pending; this manifest is not HMI/TFT"
+  ]
+}

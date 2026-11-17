@@ -1,0 +1,315 @@
+{
+  "count": 38,
+  "bySeverity": {
+    "Sedang": 17,
+    "Tinggi": 17,
+    "Kritikal": 4
+  },
+  "scope": "Cacat implementasi firmware ConMT baru yang direproduksi dalam audit16-17November2026; bukan hitungan bug hardware/firmware lama",
+  "defects": [
+    {
+      "id": "A01",
+      "severity": "Sedang",
+      "area": "Baseline",
+      "problemBefore": "Daftar tersaji oldest-first",
+      "correction": "Urut newest-first sesuai source",
+      "reference": "screens.tsx SavedBaselineScreen"
+    },
+    {
+      "id": "A02",
+      "severity": "Sedang",
+      "area": "Baseline",
+      "problemBefore": "Baseline terpilih hilang setelah reboot",
+      "correction": "Simpan dan pulihkan selected ID; fallback newest",
+      "reference": "screens.tsx selectedBaseline; plan session/repository"
+    },
+    {
+      "id": "A03",
+      "severity": "Sedang",
+      "area": "Presisi",
+      "problemBefore": "Rounding printf berbeda dari JS pada exact half ties",
+      "correction": "Tangani tie biner tanpa membulatkan 2.675 secara palsu",
+      "reference": "screens.tsx toFixed; plan precision policy"
+    },
+    {
+      "id": "A04",
+      "severity": "Tinggi",
+      "area": "Akuisisi",
+      "problemBefore": "GapEnd berhenti pada sampel gagal pertama",
+      "correction": "Perpanjang gap sampai sampel valid kembali",
+      "reference": "06 policy D07"
+    },
+    {
+      "id": "A05",
+      "severity": "Sedang",
+      "area": "Status",
+      "problemBefore": "Status NoSensor tertinggal setelah sensor kembali",
+      "correction": "Pisahkan status kesehatan dan status aksi; tampilkan unresolved Gap",
+      "reference": "06 policy D07"
+    },
+    {
+      "id": "A06",
+      "severity": "Tinggi",
+      "area": "Validasi",
+      "problemBefore": "Brightness korup256 menyempit menjadi0 sebelum divalidasi",
+      "correction": "Periksa uint32 sebelum cast ke uint8",
+      "reference": "01 settings/input validation"
+    },
+    {
+      "id": "A07",
+      "severity": "Tinggi",
+      "area": "Akuisisi",
+      "problemBefore": "Output average/mask tidak diinisialisasi ketika driver gagal",
+      "correction": "Kosongkan output sebelum mengembalikan error",
+      "reference": "07 status driver nyata"
+    },
+    {
+      "id": "A09",
+      "severity": "Sedang",
+      "area": "Protokol",
+      "problemBefore": "Argumen tambahan command diabaikan",
+      "correction": "Tolak arity yang tidak sesuai verb",
+      "reference": "02 HMI grammar"
+    },
+    {
+      "id": "A10",
+      "severity": "Kritikal",
+      "area": "HMI/menu",
+      "problemBefore": "Refresh status menyalakan retry command lama",
+      "correction": "Pisahkan render flag dan outstanding command milik panel",
+      "reference": "02 HMI ACK/retry; 04 H05"
+    },
+    {
+      "id": "A11",
+      "severity": "Tinggi",
+      "area": "HMI/menu",
+      "problemBefore": "PAGE_READY menghilangkan ACK command aktif",
+      "correction": "Pertahankan correlation sampai respons terkirim",
+      "reference": "02 HMI handshake"
+    },
+    {
+      "id": "A12",
+      "severity": "Kritikal",
+      "area": "Protokol",
+      "problemBefore": "Reset panel memakai ulang operation ID lama",
+      "correction": "Epoch koneksi baru dipersist tanpa merestart sesi",
+      "reference": "02 idempotency/reset; 07 reconnect"
+    },
+    {
+      "id": "A13",
+      "severity": "Tinggi",
+      "area": "HMI/data",
+      "problemBefore": "Generation baru bisa berisi campuran render lama/baru",
+      "correction": "Ulang render sebelum publish view generation",
+      "reference": "02 view/revision contract"
+    },
+    {
+      "id": "A14",
+      "severity": "Sedang",
+      "area": "Jam",
+      "problemBefore": "Jam invalid ditampilkan00:00",
+      "correction": "Tampilkan unavailable --",
+      "reference": "06 ClockPort validity"
+    },
+    {
+      "id": "A15",
+      "severity": "Tinggi",
+      "area": "Storage",
+      "problemBefore": "Koefisien nonfinite terserialisasi menjadi nol",
+      "correction": "Validasi finite/range/n model sebelum encoding",
+      "reference": "01 numeric/schema validation"
+    },
+    {
+      "id": "A16",
+      "severity": "Tinggi",
+      "area": "Akuisisi",
+      "problemBefore": "Jumlah kanal finite dapat overflow menjadi average infinite",
+      "correction": "Validasi jumlah dan hasil pembulatan",
+      "reference": "01 average/validity"
+    },
+    {
+      "id": "A17",
+      "severity": "Tinggi",
+      "area": "Jam/recovery",
+      "problemBefore": "RTC rollback menghasilkan GapStart lebih besar dari GapEnd",
+      "correction": "Simpan batas terurut dan gabungkan rentang gap",
+      "reference": "06 Clock/D07; 04 T04"
+    },
+    {
+      "id": "A19",
+      "severity": "Tinggi",
+      "area": "Snapshot",
+      "problemBefore": "Autosave setelah NEXT mengganti sensor history saat SAVE",
+      "correction": "Simpan PreviewSensors terpisah dan copy snapshot beku",
+      "reference": "01 ResultPreview; 06 ResultPolicy"
+    },
+    {
+      "id": "A20",
+      "severity": "Sedang",
+      "area": "Settings",
+      "problemBefore": "Efek brightness/sound berubah walau commit gagal",
+      "correction": "Rollback efek hardware ke nilai committed",
+      "reference": "03 D06; 04 U07"
+    },
+    {
+      "id": "A21",
+      "severity": "Sedang",
+      "area": "Validasi",
+      "problemBefore": "Capture sensor membungkus row revision uint32",
+      "correction": "Tolak ketika revision mencapai batas",
+      "reference": "02 stable row revision"
+    },
+    {
+      "id": "A22",
+      "severity": "Tinggi",
+      "area": "Pengukuran",
+      "problemBefore": "Edit checkpoint bisa mengaku observasi masa depan",
+      "correction": "Tolak timestamp setelah clock nyata saat ini",
+      "reference": "06 D05; 07 no future samples"
+    },
+    {
+      "id": "A23",
+      "severity": "Tinggi",
+      "area": "Storage",
+      "problemBefore": "Decoder result hanya memvalidasi sebagian angka",
+      "correction": "Validasi seluruh real field dan flag/range result",
+      "reference": "01 schema; 04 W01/W03"
+    },
+    {
+      "id": "A24",
+      "severity": "Tinggi",
+      "area": "Storage",
+      "problemBefore": "Flag row tidak dikenal diterima",
+      "correction": "Tolak bit flag di luar schema",
+      "reference": "01 schema/version"
+    },
+    {
+      "id": "A26",
+      "severity": "Sedang",
+      "area": "HMI/menu",
+      "problemBefore": "BACK ditolak hanya karena data view sudah berubah",
+      "correction": "Izinkan navigasi BACK pada page/boot yang benar",
+      "reference": "02 BACK/error navigation"
+    },
+    {
+      "id": "A29",
+      "severity": "Sedang",
+      "area": "Baseline",
+      "problemBefore": "Deteksi slot Day0 memakai equality waktu mentah",
+      "correction": "Gunakan snapping half-hour dengan tie ke bawah",
+      "reference": "screens.tsx snapDay0Time"
+    },
+    {
+      "id": "A30",
+      "severity": "Sedang",
+      "area": "Baseline/UI",
+      "problemBefore": "Urutan tabel hanya timeH",
+      "correction": "Pisahkan sort UI day/time dari sort integrasi waktu",
+      "reference": "screens.tsx sortMaturityRows"
+    },
+    {
+      "id": "A33",
+      "severity": "Sedang",
+      "area": "Presisi/UI",
+      "problemBefore": "Suhu lab manual36.55 tampil36.5",
+      "correction": "Simpan string input asli per row; display tidak mengubah nilai",
+      "reference": "screens.tsx MaturityRow.temperature"
+    },
+    {
+      "id": "A34",
+      "severity": "Sedang",
+      "area": "Presisi/UI",
+      "problemBefore": "Fc lab manual14.86333 tampil14.9",
+      "correction": "Simpan string Fc asli sampai save/reopen",
+      "reference": "screens.tsx MaturityRow.fcLab"
+    },
+    {
+      "id": "A35",
+      "severity": "Sedang",
+      "area": "Presisi/UI",
+      "problemBefore": "Day pecahan1.25 tampil sebagai angka berbeda",
+      "correction": "Pertahankan representasi input day",
+      "reference": "screens.tsx commitDay"
+    },
+    {
+      "id": "A36",
+      "severity": "Tinggi",
+      "area": "Jam/validasi",
+      "problemBefore": "Jam relatif sangat besar dicast ke timestamp overflow",
+      "correction": "Periksa range sebelum perkalian/cast kalender",
+      "reference": "01 calendar validation; 04 T03"
+    },
+    {
+      "id": "A37",
+      "severity": "Tinggi",
+      "area": "Akuisisi",
+      "problemBefore": "Sampel segar sebelum START memberi false NoClock",
+      "correction": "Pisahkan timestamp sampel dan anchor integrasi",
+      "reference": "06 real sample timestamp"
+    },
+    {
+      "id": "A38",
+      "severity": "Kritikal",
+      "area": "Storage",
+      "problemBefore": "Blok committed korup dianggap tail lalu suffix terpotong",
+      "correction": "Bedakan committed corruption dari tail parsial dan blokir write",
+      "reference": "01 recovery; 04 W02/W03"
+    },
+    {
+      "id": "C14",
+      "severity": "Kritikal",
+      "area": "Storage",
+      "problemBefore": "begin sebelum mount dapat truncate berkas yang sudah ada",
+      "correction": "Write wajib melewati mount yang berhasil",
+      "reference": "01 transactional storage; 07 SD nyata"
+    },
+    {
+      "id": "A39",
+      "severity": "Tinggi",
+      "area": "Protokol",
+      "problemBefore": "ACK terlambat dapat membuka busy untuk request lebih baru",
+      "correction": "Panel clear busy hanya pada pasangan boot/seq ACK yang cocok",
+      "reference": "02 correlation/retry"
+    },
+    {
+      "id": "A40",
+      "severity": "Sedang",
+      "area": "Baseline",
+      "problemBefore": "Menghapus pilihan tidak memilih baseline pengganti",
+      "correction": "Persist newest remaining ID dalam transaksi penghapusan",
+      "reference": "screens.tsx confirmDelete"
+    },
+    {
+      "id": "A41",
+      "severity": "Sedang",
+      "area": "Baseline/UI",
+      "problemBefore": "Row baru di luar viewport tidak langsung terlihat",
+      "correction": "Fokus ID baru dan pindah ke halaman row tersebut",
+      "reference": "screens.tsx focusNewRow"
+    },
+    {
+      "id": "A42",
+      "severity": "Tinggi",
+      "area": "Baseline/waktu",
+      "problemBefore": "Edit day0 selalu memaksa0.5h dan dapat menduplikasi slot",
+      "correction": "Pertahankan slot tersnap atau cari slot kosong pertama",
+      "reference": "screens.tsx commitDay/nextDay0Time"
+    },
+    {
+      "id": "A43",
+      "severity": "Sedang",
+      "area": "Policy",
+      "problemBefore": "AutoSave boot true berbeda dari default offline yang dikunci",
+      "correction": "Default false; test autosave mengaktifkan setting secara eksplisit",
+      "reference": "06 section4 default offline"
+    },
+    {
+      "id": "A44",
+      "severity": "Tinggi",
+      "area": "Protokol",
+      "problemBefore": "Frame berikutnya dibuang saat ACK masih pending",
+      "correction": "Hentikan konsumsi RX sampai respons sebelumnya dikirim",
+      "reference": "04 H02; 02 bounded single outstanding"
+    }
+  ]
+}

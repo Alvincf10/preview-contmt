@@ -1,0 +1,4 @@
+macOS-15.6.1-arm64-arm-64bit-Mach-O
+cmake version 4.4.3
+Apple clang version 17.0.0 (clang-1700.0.13.5)
+v26.0.0

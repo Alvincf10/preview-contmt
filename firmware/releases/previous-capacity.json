@@ -1,0 +1,11 @@
+{
+  "elf": "/Users/macbook/Documents/pptRnD/Hasil_terakhir_2026-09-22/Bukti_Verifikasi/cli_compile_20260929_105150/TERBARU_2026-09-22_Maturity_Control_LCD_IC_Programs.ino.elf",
+  "sha256": "38a343093719eccd9a47c8d3c954819a077481fe2457f0fd635daeda11b52266",
+  "flashBytes": 31288,
+  "staticRamBytes": 1249,
+  "configuredApplicationLimit": 32256,
+  "configuredFlashRemaining": 968,
+  "physicalFlashRemaining": 1480,
+  "staticRamRemaining": 799,
+  "scope": "capacity comparison only; application source was not used"
+}

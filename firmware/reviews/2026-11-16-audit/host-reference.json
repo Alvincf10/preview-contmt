@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "numericProfile": "binary64-host",
+  "datasets": {
+    "fullPrecision": {
+      "maxMError": 0,
+      "maxFcError": 7.105427357601002e-15,
+      "maxFactorError": 3.3306690738754696e-16,
+      "a": -29.128726167437065,
+      "b": 6.527225174129161,
+      "r2": 0.9357663569471288
+    },
+    "previewRounded": {
+      "maxMError": 0,
+      "maxFcError": 7.105427357601002e-15,
+      "maxFactorError": 1.1102230246251565e-16,
+      "a": -29.128062080419106,
+      "b": 6.527036099600492,
+      "r2": 0.9356718209844397
+    }
+  }
+}

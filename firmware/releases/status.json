@@ -1,0 +1,37 @@
+{
+  "assessmentDate": "2026-11-17",
+  "hostTests": "PASS",
+  "hostBinary32Tests": "PASS",
+  "sanitizers": "PASS",
+  "ctestSuitesPerProfile": 6,
+  "auditCasesPerProfile": 65,
+  "reproducedDefectsCorrected": 38,
+  "defectsBySeverity": {
+    "Sedang": 17,
+    "Tinggi": 17,
+    "Kritikal": 4
+  },
+  "planAcceptance": {
+    "HOST_PASS": 73,
+    "EMULATED_PASS": 1,
+    "PARTIAL": 20,
+    "NOT_IMPLEMENTED": 3,
+    "HARDWARE_PENDING": 3,
+    "FAIL": 2
+  },
+  "avrNumericEmulation": "PASS",
+  "avrCompleteFirmwareCapacity": "FAIL",
+  "flashBytes": 79884,
+  "staticRamBytes": 1685,
+  "runtimeStackVerified": false,
+  "physicalHardwareVerified": false,
+  "hmiContractRevision": 2,
+  "hmiPages": 17,
+  "hmiEventFiles": 197,
+  "hmiCompiled": false,
+  "sensorRtcBatteryDriversComplete": false,
+  "storageIndexImplemented": false,
+  "boundedStorageLatencyVerified": false,
+  "productionReady": false,
+  "flashed": false
+}
