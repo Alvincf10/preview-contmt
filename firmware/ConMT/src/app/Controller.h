@@ -1,6 +1,7 @@
 #pragma once
 #include "../storage/Repository.h"
 #include "../core/Calendar.h"
+#include "TransactionOps.h"
 namespace conmt {
 enum class Page : uint8_t { Init, User, Main, Base, NewB, Mat, Matu, BaseR, SaveB, Kuat, SelB, RT, Str, Hist, HistD, Set, Dev };
 enum class SessionState : uint8_t { Idle, Active, Preview, Completed, Suspended };
@@ -26,6 +27,7 @@ class Controller {
     Status markGap(uint64_t start,uint64_t end,ClockCause cause=ClockCause::None);
     Status finish(Status st);
     Status begin(const uint64_t& op);
+    Status transact(const TxStep* steps,uint8_t count,const Entity& source,const Entity& destination,const void* data,const uint64_t& op);
     Status mutateField(Kind k,uint32_t o,Field f,const char* value,const uint64_t& op);
     Status setting(const char* key,const char* value,const uint64_t& op);
     Status validateDraft();

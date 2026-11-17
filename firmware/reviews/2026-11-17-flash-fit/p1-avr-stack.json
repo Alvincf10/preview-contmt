@@ -1,0 +1,1219 @@
+{
+  "scope": "AVR GCC non-LTO per-function frame estimates; not nested worst-case or hardware watermark",
+  "runtimeStackVerified": false,
+  "includesDriverOrInterruptStack": false,
+  "frames": [
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:337:8:conmt::Status conmt::Controller::validateDraft()",
+      "bytes": 155,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:483:8:conmt::Status conmt::Controller::storePreview(const conmt::Result&, const uint64_t&)",
+      "bytes": 137,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:428:8:conmt::Status conmt::Controller::addCheckpoint(conmt::Real, const uint64_t&)",
+      "bytes": 136,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:500:8:conmt::Status conmt::Controller::replayResult(conmt::Kind, uint32_t, uint32_t, conmt::Result&, conmt::Real&)",
+      "bytes": 128,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:35:8:conmt::Status conmt::Controller::load()",
+      "bytes": 127,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:492:8:conmt::Status conmt::Controller::checkpointResult(conmt::Kind, uint32_t, uint32_t, conmt::Result&)",
+      "bytes": 123,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:395:8:conmt::Status conmt::Controller::start(bool, const uint64_t&)",
+      "bytes": 122,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:517:8:conmt::Status conmt::Controller::readResult(conmt::Kind, uint32_t, conmt::Result&)",
+      "bytes": 119,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:61:8:conmt::Status conmt::Journal::verify(uint32_t, uint32_t, uint32_t&, uint32_t&, uint64_t&, bool)",
+      "bytes": 112,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:154:8:conmt::Status conmt::replayPoints(conmt::Repository&, conmt::Kind, uint32_t, conmt::Real, conmt::Real&, conmt::Point&)",
+      "bytes": 110,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:445:8:conmt::Status conmt::Controller::editCheckpoint(uint32_t, const char*, const char*, const uint64_t&)",
+      "bytes": 109,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:281:8:conmt::Status conmt::Controller::editRow(uint32_t, const char*, const char*, const uint64_t&)",
+      "bytes": 105,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:52:15:conmt::Status conmt::{anonymous}::metric(conmt::Controller&, conmt::Kind, uint32_t, uint32_t, conmt::{anonymous}::Op, char*, size_t)",
+      "bytes": 104,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:83:8:conmt::Status conmt::Repository::putSensors(conmt::Kind, uint32_t, const conmt::SensorFrame&, const conmt::Average&, const conmt::Time&, conmt::Field)",
+      "bytes": 103,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:142:8:conmt::Status conmt::nextPoint(conmt::Repository&, conmt::Kind, uint32_t, const conmt::Point*, conmt::Point&)",
+      "bytes": 103,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:327:8:conmt::Status conmt::Controller::captureRow(uint32_t, const uint64_t&)",
+      "bytes": 103,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:42:15:conmt::Status conmt::{anonymous}::modelText(conmt::Repository&, conmt::Kind, uint32_t, conmt::{anonymous}::Op, char*, size_t)",
+      "bytes": 99,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:113:8:conmt::Status conmt::Controller::tickImpl()",
+      "bytes": 98,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:614:8:conmt::Status conmt::Controller::reconcileGap(const char*, const char*, const uint64_t&)",
+      "bytes": 96,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:315:8:conmt::Status conmt::Controller::deleteRow(uint32_t, bool, const uint64_t&)",
+      "bytes": 93,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:95:8:conmt::Status conmt::Controller::markGap(uint64_t, uint64_t, conmt::ClockCause)",
+      "bytes": 92,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:61:8:conmt::Status conmt::lookupRows(conmt::RowSource&, conmt::Real, const conmt::Fit&, conmt::Real, conmt::Selection&)",
+      "bytes": 89,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:609:8:conmt::Status conmt::Controller::saveIdentity()",
+      "bytes": 85,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:524:8:conmt::Status conmt::Controller::saveResult(const uint64_t&)",
+      "bytes": 83,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:128:8:conmt::Status conmt::Journal::indexTransaction(uint32_t, uint32_t)",
+      "bytes": 82,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:96:8:conmt::Status conmt::Journal::scan()",
+      "bytes": 82,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:75:15:conmt::Status conmt::{anonymous}::sensorText(conmt::Repository&, conmt::Kind, uint32_t, uint8_t, char*, size_t)",
+      "bytes": 82,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:130:8:virtual conmt::Status conmt::StoredRows::next(conmt::Row&)",
+      "bytes": 80,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/TransactionOps.cpp",
+      "function": "TransactionOps.cpp:6:15:conmt::Status conmt::copyText(conmt::Repository&, const conmt::Key&, const conmt::Key&, bool)",
+      "bytes": 74,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:118:6:bool conmt::Presenter::rows(uint8_t, char*, size_t, char*, size_t)",
+      "bytes": 74,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:150:8:conmt::Status conmt::Controller::reanchorLive(const conmt::SensorFrame&, const conmt::Average&, const conmt::Time&)",
+      "bytes": 73,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:245:8:conmt::Status conmt::Controller::addRow(bool, const uint64_t&)",
+      "bytes": 73,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:469:8:conmt::Status conmt::Controller::prepareResult(const uint64_t&)",
+      "bytes": 72,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:227:8:conmt::Status conmt::Journal::scanQuery(uint8_t, conmt::Key&, uint32_t&, uint16_t&, const uint64_t&)",
+      "bytes": 71,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:348:8:conmt::Status conmt::Controller::generate(const uint64_t&)",
+      "bytes": 71,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:96:6:bool conmt::Transport::renderField(uint16_t, char*, size_t, char*, size_t)",
+      "bytes": 71,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:221:8:conmt::Status conmt::Controller::earlySlot(uint32_t, conmt::Real&)",
+      "bytes": 70,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:237:8:conmt::Status conmt::Controller::focusRow(uint32_t)",
+      "bytes": 70,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:56:8:conmt::Status conmt::fitRows(conmt::RowSource&, conmt::Real, conmt::Fit&)",
+      "bytes": 68,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:48:8:conmt::Status conmt::Repository::row(conmt::Kind, uint32_t, uint32_t, conmt::Row&)",
+      "bytes": 68,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:202:8:conmt::Status conmt::Journal::locate(const conmt::Key&, uint32_t&, uint16_t&)",
+      "bytes": 68,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/DiskIndex.cpp",
+      "function": "DiskIndex.cpp:42:8:conmt::Status conmt::DiskIndex::put(const conmt::Key&, uint32_t, uint32_t)",
+      "bytes": 68,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:266:8:conmt::Status conmt::Controller::fillEarly(const uint64_t&)",
+      "bytes": 68,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:198:8:conmt::Status conmt::Controller::newBaseline(const uint64_t&)",
+      "bytes": 67,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:269:8:conmt::Status conmt::Journal::findOperation(const uint64_t&, conmt::Key&)",
+      "bytes": 65,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:55:8:conmt::Status conmt::Repository::putRow(conmt::Kind, uint32_t, const conmt::Row&)",
+      "bytes": 64,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:175:8:conmt::Status conmt::Journal::commit()",
+      "bytes": 63,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:630:8:conmt::Status conmt::Controller::dispatch(const char*, const char*, const char*, const char*, const uint64_t&)",
+      "bytes": 63,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:60:8:conmt::Status conmt::Repository::point(conmt::Kind, uint32_t, uint32_t, conmt::Point&)",
+      "bytes": 60,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:66:8:conmt::Status conmt::Repository::putPoint(conmt::Kind, uint32_t, const conmt::Point&)",
+      "bytes": 59,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:77:8:conmt::Status conmt::Repository::putModel(conmt::Kind, uint32_t, const conmt::Fit&)",
+      "bytes": 59,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/TransactionOps.cpp",
+      "function": "TransactionOps.cpp:11:8:conmt::Status conmt::applyTransaction(conmt::Repository&, conmt::ClockPort&, const conmt::TxStep*, uint8_t, const conmt::Entity&, const conmt::Entity&, const void*)",
+      "bytes": 58,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Calendar.cpp",
+      "function": "Calendar.cpp:43:8:conmt::Status conmt::calendarText(uint64_t, char*, size_t, char*, size_t)",
+      "bytes": 57,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/storage/DiskIndex.cpp",
+      "function": "DiskIndex.cpp:32:8:conmt::Status conmt::DiskIndex::get(const conmt::Key&, uint32_t&, uint32_t&)",
+      "bytes": 57,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:477:8:conmt::Status conmt::Controller::roundResult(conmt::Result&)",
+      "bytes": 57,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:71:8:conmt::Status conmt::Repository::model(conmt::Kind, uint32_t, conmt::Fit&)",
+      "bytes": 56,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:96:8:conmt::Status conmt::Repository::copy(conmt::Kind, uint32_t, conmt::Kind, uint32_t)",
+      "bytes": 55,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:36:13:void conmt::{anonymous}::calendar(uint64_t, conmt::{anonymous}::Op, char*, size_t)",
+      "bytes": 55,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:27:8:conmt::Status conmt::FitJob::step()",
+      "bytes": 54,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:286:8:conmt::Status conmt::Journal::maxObject(conmt::Kind, uint32_t&)",
+      "bytes": 52,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:126:6:void conmt::Transport::poll(uint32_t)",
+      "bytes": 52,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:89:6:void conmt::formatReal(char*, size_t, conmt::Real, uint8_t)",
+      "bytes": 51,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:177:8:conmt::Status conmt::Controller::setField(const char*, const char*, const uint64_t&)",
+      "bytes": 50,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:250:8:conmt::Status conmt::Journal::copy(const conmt::Key&, const conmt::Key&, uint16_t)",
+      "bytes": 49,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:548:8:conmt::Status conmt::Controller::pointAt(uint32_t, conmt::Point&)",
+      "bytes": 48,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:64:6:void conmt::Transport::accept(const conmt::Frame&)",
+      "bytes": 48,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:155:8:conmt::Status conmt::Journal::begin(const uint64_t&)",
+      "bytes": 46,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:543:8:conmt::Status conmt::Controller::rowAt(uint32_t, conmt::Row&)",
+      "bytes": 46,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:86:13:void conmt::{anonymous}::scalar(conmt::Controller&, conmt::Kind, uint32_t, conmt::{anonymous}::Op, conmt::Field, char*, size_t)",
+      "bytes": 46,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:135:6:bool conmt::Presenter::points(uint8_t, char*, size_t, char*, size_t)",
+      "bytes": 44,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:354:8:conmt::Status conmt::Controller::saveBaseline(const uint64_t&)",
+      "bytes": 43,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:161:8:conmt::Status conmt::Controller::mutateField(conmt::Kind, uint32_t, conmt::Field, const char*, const uint64_t&)",
+      "bytes": 42,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:76:8:conmt::Status conmt::Controller::getAverage(conmt::Average&, conmt::SensorFrame*)",
+      "bytes": 40,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:113:6:void conmt::Transport::receive(uint32_t)",
+      "bytes": 39,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:381:8:conmt::Status conmt::Controller::deleteBaseline(uint32_t, bool, const uint64_t&)",
+      "bytes": 38,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:144:6:bool conmt::Presenter::field(uint16_t, char*, size_t, char*, size_t)",
+      "bytes": 38,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:42:6:void conmt::Transport::flush()",
+      "bytes": 38,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:119:8:conmt::Status conmt::Repository::list(conmt::Kind, uint32_t, uint32_t&)",
+      "bytes": 37,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:9:8:conmt::Status conmt::Parser::feed(uint8_t, uint32_t, conmt::Frame&)",
+      "bytes": 35,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:374:8:conmt::Status conmt::Controller::select(uint32_t)",
+      "bytes": 31,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:80:13:void conmt::{anonymous}::settingText(const conmt::Settings&, conmt::{anonymous}::Op, char*, size_t)",
+      "bytes": 31,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:165:8:conmt::Status conmt::Journal::put(const conmt::Key&, const uint8_t*, uint16_t)",
+      "bytes": 30,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:90:8:conmt::Status conmt::Controller::persistSample(const conmt::SensorFrame&, const conmt::Average&, const conmt::Time&)",
+      "bytes": 30,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:562:8:conmt::Status conmt::Controller::setting(const char*, const char*, const uint64_t&)",
+      "bytes": 29,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:110:13:void conmt::{anonymous}::rowText(conmt::Repository&, uint32_t, const conmt::Row&, conmt::Field, conmt::Real, char*, size_t)",
+      "bytes": 29,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:80:12:conmt::Prediction conmt::trace(conmt::Real, const conmt::Fit&, const conmt::Selection&)",
+      "bytes": 28,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:22:8:conmt::Status conmt::Controller::newConnection()",
+      "bytes": 27,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:19:8:conmt::Status conmt::Accumulator::add(conmt::Real, conmt::Real, conmt::Real)",
+      "bytes": 26,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Calendar.cpp",
+      "function": "Calendar.cpp:35:8:conmt::Status conmt::scheduleTime(uint64_t, conmt::Real, uint64_t&)",
+      "bytes": 26,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:83:8:conmt::Status conmt::Controller::state(conmt::SessionState&)",
+      "bytes": 26,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:4:6:conmt::Real conmt::interval(conmt::Real, conmt::Real, conmt::Real, conmt::Real)",
+      "bytes": 24,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:8:6:conmt::Real conmt::locked(conmt::Real, conmt::Real, conmt::Real, conmt::Real)",
+      "bytes": 24,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:14:6:conmt::Real conmt::predict(conmt::Real, conmt::Real, conmt::Real, conmt::Real)",
+      "bytes": 24,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/DiskIndex.cpp",
+      "function": "DiskIndex.cpp:17:8:conmt::Status conmt::DiskIndex::root(const conmt::Key&, uint32_t&, uint32_t&)",
+      "bytes": 24,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:35:8:conmt::Status conmt::Transport::numeric(const char*, uint32_t)",
+      "bytes": 24,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:76:13:conmt::Real conmt::fixedTie(conmt::Real, uint8_t)",
+      "bytes": 22,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/DiskIndex.cpp",
+      "function": "DiskIndex.cpp:9:8:conmt::Status conmt::DiskIndex::reset(conmt::StoragePort*)",
+      "bytes": 22,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Calendar.cpp",
+      "function": "Calendar.cpp:21:8:conmt::Status conmt::parseDate(const char*, uint64_t&)",
+      "bytes": 20,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:37:8:conmt::Status conmt::Repository::putNumber(const conmt::Key&, conmt::Real)",
+      "bytes": 20,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:42:8:conmt::Status conmt::Repository::putTime(const conmt::Key&, uint64_t)",
+      "bytes": 20,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:369:8:conmt::Status conmt::Controller::cloneDraft(uint32_t, const uint64_t&)",
+      "bytes": 19,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:28:8:conmt::Status conmt::average(const conmt::SensorFrame&, uint32_t, uint32_t, conmt::Average&)",
+      "bytes": 18,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:61:8:conmt::Status conmt::parseU32(const char*, uint32_t&)",
+      "bytes": 18,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Calendar.cpp",
+      "function": "Calendar.cpp:30:8:conmt::Status conmt::clockToHours(uint32_t, uint32_t, conmt::Real, conmt::Real&)",
+      "bytes": 18,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:196:8:conmt::Status conmt::Journal::get(const conmt::Key&, uint8_t*, uint16_t&)",
+      "bytes": 18,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/DiskIndex.cpp",
+      "function": "DiskIndex.cpp:24:8:conmt::Status conmt::DiskIndex::node(uint32_t, uint8_t*)",
+      "bytes": 18,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:16:8:conmt::Status conmt::Repository::number(const conmt::Key&, conmt::Real&)",
+      "bytes": 17,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:26:8:conmt::Status conmt::Repository::time(const conmt::Key&, uint64_t&)",
+      "bytes": 17,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Calendar.cpp",
+      "function": "Calendar.cpp:14:8:conmt::Status conmt::parseClock(const char*, uint32_t&)",
+      "bytes": 16,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:33:6:conmt::Real conmt::getReal(const uint8_t*)",
+      "bytes": 16,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:554:8:conmt::Status conmt::Controller::baselineAt(uint32_t, uint32_t&)",
+      "bytes": 16,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:558:8:conmt::Status conmt::Controller::historyAt(uint32_t, uint32_t&)",
+      "bytes": 16,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:19:8:conmt::Status conmt::Controller::transact(const conmt::TxStep*, uint8_t, const conmt::Entity&, const conmt::Entity&, const void*, const uint64_t&)",
+      "bytes": 15,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:98:6:void conmt::formatCoeff(char*, size_t, conmt::Real, uint8_t)",
+      "bytes": 14,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:21:8:conmt::Status conmt::Repository::integer(const conmt::Key&, uint32_t&)",
+      "bytes": 13,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:12:10:uint64_t conmt::get64(const uint8_t*)",
+      "bytes": 13,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:42:8:conmt::Status conmt::parseReal(const char*, conmt::Real&)",
+      "bytes": 12,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:41:8:conmt::Status conmt::Repository::putInteger(const conmt::Key&, uint32_t)",
+      "bytes": 12,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:34:13:void conmt::{anonymous}::integerText(char*, size_t, uint32_t)",
+      "bytes": 12,
+      "kind": "dynamic,bounded"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:31:8:conmt::Status conmt::Repository::text(const conmt::Key&, char*, uint16_t)",
+      "bytes": 11,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:9:6:void conmt::put64(uint8_t*, uint64_t)",
+      "bytes": 11,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:18:6:conmt::Real conmt::achievement(conmt::Real, conmt::Real)",
+      "bytes": 10,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:6:12:conmt::Key conmt::operationKey(const uint64_t&)",
+      "bytes": 10,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:216:13:conmt::Real conmt::snapEarly(conmt::Real)",
+      "bytes": 10,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:378:8:conmt::Status conmt::Controller::openBaseline(uint32_t, const uint64_t&)",
+      "bytes": 10,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:118:6:bool conmt::Transport::renderNext()",
+      "bytes": 10,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:59:17:uint32_t conmt::requestCrc(const conmt::Frame&)",
+      "bytes": 9,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Command.cpp",
+      "function": "Command.cpp:42:9:uint8_t conmt::flashToken(const char*, const char*, uint8_t)",
+      "bytes": 8,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Command.cpp",
+      "function": "Flash.h:24:24:T conmt::flashValue(const T*) [with T = long unsigned int]",
+      "bytes": 8,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Calendar.cpp",
+      "function": "Calendar.cpp:7:17:unsigned int conmt::daysIn(unsigned int, unsigned int)",
+      "bytes": 8,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Flash.cpp",
+      "function": "Flash.cpp:4:6:void conmt::copyFlash(char*, size_t, const char*)",
+      "bytes": 8,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:43:8:conmt::Status conmt::Repository::putText(const conmt::Key&, const char*, uint16_t)",
+      "bytes": 8,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/TransactionOps.cpp",
+      "function": "Flash.h:24:24:T conmt::flashValue(const T*) [with T = conmt::TxStep]",
+      "bytes": 8,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Repository.h:41:5:conmt::Record::Record(conmt::Repository&, conmt::Kind, uint32_t)",
+      "bytes": 8,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Flash.h:24:24:T conmt::flashValue(const T*) [with T = long unsigned int]",
+      "bytes": 8,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:29:8:conmt::Status conmt::Transport::encode()",
+      "bytes": 8,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Flash.cpp",
+      "function": "Flash.cpp:13:6:void conmt::indexedName(char*, size_t, const char*, uint8_t)",
+      "bytes": 7,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:5:1:conmt::Key::Key(conmt::Kind, uint32_t, conmt::Field, uint32_t)",
+      "bytes": 7,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:103:10:uint32_t conmt::crc32(uint32_t, const uint8_t*, size_t)",
+      "bytes": 6,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:18:6:void conmt::formatStatus(char*, size_t, conmt::Status)",
+      "bytes": 6,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:9:6:conmt::Real conmt::fkzFromError(conmt::Real)",
+      "bytes": 6,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:11:8:conmt::Status conmt::Record::putTime(conmt::Field, uint64_t)",
+      "bytes": 6,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:11:10:uint32_t conmt::get32(const uint8_t*)",
+      "bytes": 6,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:13:6:void conmt::putReal(uint8_t*, conmt::Real)",
+      "bytes": 6,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/DiskIndex.cpp",
+      "function": "DiskIndex.cpp:4:13:void conmt::keyBytes(const conmt::Key&, uint8_t*)",
+      "bytes": 6,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:9:1:conmt::Controller::Controller(conmt::Repository&, conmt::ClockPort&, conmt::SensorPort&, conmt::DevicePort&)",
+      "bytes": 6,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Flash.h:24:24:T conmt::flashValue(const T*) [with T = char]",
+      "bytes": 5,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:9:20:const char* conmt::statusText(conmt::Status)",
+      "bytes": 5,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Calendar.cpp",
+      "function": "Flash.h:24:24:T conmt::flashValue(const T*) [with T = unsigned char]",
+      "bytes": 5,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Flash.cpp",
+      "function": "Flash.h:24:24:T conmt::flashValue(const T*) [with T = char]",
+      "bytes": 5,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Battery.cpp",
+      "function": "Battery.cpp:3:8:conmt::Status conmt::BatteryGauge::sample(uint16_t)",
+      "bytes": 5,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:128:1:conmt::StoredRows::StoredRows(conmt::Repository&, conmt::Kind, uint32_t, bool)",
+      "bytes": 5,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Flash.h:24:24:T conmt::flashValue(const T*) [with T = unsigned char]",
+      "bytes": 5,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Flash.h:24:24:T conmt::flashValue(const T*) [with T = char]",
+      "bytes": 5,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.h:28:10:bool conmt::Key::operator==(const conmt::Key&) const",
+      "bytes": 4,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:91:8:conmt::Status conmt::Journal::mount()",
+      "bytes": 4,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:10:8:conmt::Status conmt::Controller::finish(conmt::Status)",
+      "bytes": 4,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:26:8:conmt::Status conmt::Controller::boot()",
+      "bytes": 4,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:108:8:conmt::Status conmt::Controller::tick()",
+      "bytes": 4,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Flash.h:24:24:T conmt::flashValue(const T*) [with T = conmt::{anonymous}::Descriptor]",
+      "bytes": 4,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:8:6:void conmt::Parser::expire(uint32_t)",
+      "bytes": 4,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Command.cpp",
+      "function": "Command.cpp:54:6:bool conmt::allowedPage(conmt::Command, uint8_t)",
+      "bytes": 3,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:602:6:bool conmt::Controller::validNavigation(conmt::Page) const",
+      "bytes": 3,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.h:19:13:bool conmt::finite(conmt::Real)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:70:6:bool conmt::safeText(const char*, size_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Types.cpp",
+      "function": "Types.cpp:21:13:const char* conmt::statusName(conmt::Status)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Types.h:19:13:bool conmt::finite(conmt::Real)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Math.cpp",
+      "function": "Math.cpp:26:1:conmt::FitJob::FitJob(conmt::RowSource&, conmt::Real)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Command.cpp",
+      "function": "Command.cpp:39:9:conmt::Command conmt::commandFromText(const char*)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Command.cpp",
+      "function": "Command.cpp:66:6:bool conmt::validArguments(conmt::Command, uint8_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Calendar.cpp",
+      "function": "Calendar.cpp:6:13:bool conmt::leap(unsigned int)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/core/Calendar.cpp",
+      "function": "Calendar.cpp:11:13:bool conmt::decimal(const char*, unsigned int, unsigned int&)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:129:6:virtual void conmt::StoredRows::reset()",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Types.h:19:13:bool conmt::finite(conmt::Real)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Types.h:51:5:conmt::Point::Point()",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:13:8:conmt::Status conmt::Record::erase(conmt::Field)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:14:8:conmt::Status conmt::Record::get(conmt::Field, uint8_t*, uint16_t&)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:15:8:conmt::Status conmt::Record::put(conmt::Field, const uint8_t*, uint16_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:5:8:conmt::Status conmt::Record::number(conmt::Field, conmt::Real&)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:6:8:conmt::Status conmt::Record::integer(conmt::Field, uint32_t&)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:7:8:conmt::Status conmt::Record::time(conmt::Field, uint64_t&)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:8:8:conmt::Status conmt::Record::text(conmt::Field, char*, uint16_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:9:8:conmt::Status conmt::Record::putNumber(conmt::Field, conmt::Real)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:10:8:conmt::Status conmt::Record::putInteger(conmt::Field, uint32_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:12:8:conmt::Status conmt::Record::putText(conmt::Field, const char*, uint16_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:93:8:conmt::Status conmt::Repository::copyScalar(const conmt::Key&, const conmt::Key&, uint16_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:7:6:void conmt::put16(uint8_t*, uint16_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:8:6:void conmt::put32(uint8_t*, uint32_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:10:10:uint16_t conmt::get16(const uint8_t*)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/DiskIndex.cpp",
+      "function": "DiskIndex.cpp:8:17:uint32_t conmt::checksum(const uint8_t*, uint8_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/TransactionOps.cpp",
+      "function": "TransactionOps.cpp:5:28:T conmt::load(const uint8_t*) [with T = long unsigned int]",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/TransactionOps.cpp",
+      "function": "TransactionOps.cpp:5:28:T conmt::load(const uint8_t*) [with T = double]",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/TransactionOps.cpp",
+      "function": "TransactionOps.cpp:5:28:T conmt::load(const uint8_t*) [with T = long long unsigned int]",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Types.h:19:13:bool conmt::finite(conmt::Real)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Types.h:25:5:conmt::Row::Row()",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Types.h:31:5:conmt::Fit::Fit()",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Types.h:51:5:conmt::Point::Point()",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Types.h:57:5:conmt::SensorFrame::SensorFrame()",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.h:12:5:conmt::Result::Result()",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:15:8:conmt::Status conmt::Controller::begin(const uint64_t&)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Presenter.cpp",
+      "function": "Presenter.cpp:33:13:void conmt::{anonymous}::missing(char*, size_t)",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/hmi/Transport.cpp",
+      "function": "Transport.cpp:28:1:conmt::Transport::Transport(conmt::Controller&, conmt::UartPort&)",
+      "bytes": 2,
+      "kind": "static"
+    }
+  ]
+}

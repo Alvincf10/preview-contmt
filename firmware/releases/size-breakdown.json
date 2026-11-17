@@ -1,12 +1,12 @@
 {
   "scope": "Unique address/size symbols; LTO attribution is approximate. Unnamed padding is not attributed.",
   "textGroups": {
-    "Runtime/SDK/constants": 8639,
-    "ConMT other": 17673,
-    "Controller": 26618,
+    "Runtime/SDK/constants": 8683,
+    "ConMT other": 18509,
+    "Controller": 24924,
     "Transport": 3946,
     "Presenter": 1594,
-    "Repository": 4062,
+    "Repository": 4086,
     "SdFile": 3360,
     "Sd2Card": 1334,
     "Journal": 7026,
@@ -15,7 +15,7 @@
   },
   "largestText": [
     {
-      "address": 64746,
+      "address": 63956,
       "bytes": 2088,
       "type": "t",
       "names": [
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "address": 50224,
+      "address": 48436,
       "bytes": 2030,
       "type": "t",
       "names": [
@@ -31,31 +31,23 @@
       ]
     },
     {
-      "address": 52682,
-      "bytes": 1970,
-      "type": "t",
-      "names": [
-        "conmt::Controller::start(bool, unsigned long long const&)"
-      ]
-    },
-    {
-      "address": 61796,
-      "bytes": 1780,
+      "address": 61004,
+      "bytes": 1782,
       "type": "t",
       "names": [
         "conmt::Controller::editCheckpoint(unsigned long, char const*, char const*, unsigned long long const&)"
       ]
     },
     {
-      "address": 48582,
+      "address": 46794,
       "bytes": 1616,
       "type": "t",
       "names": [
-        "conmt::Controller::tickImpl() [clone .constprop.48]"
+        "conmt::Controller::tickImpl() [clone .constprop.47]"
       ]
     },
     {
-      "address": 70756,
+      "address": 69966,
       "bytes": 1174,
       "type": "t",
       "names": [
@@ -63,7 +55,7 @@
       ]
     },
     {
-      "address": 22870,
+      "address": 23046,
       "bytes": 1130,
       "type": "t",
       "names": [
@@ -71,7 +63,7 @@
       ]
     },
     {
-      "address": 66834,
+      "address": 66044,
       "bytes": 1128,
       "type": "t",
       "names": [
@@ -79,7 +71,7 @@
       ]
     },
     {
-      "address": 18424,
+      "address": 18600,
       "bytes": 1038,
       "type": "t",
       "names": [
@@ -87,7 +79,7 @@
       ]
     },
     {
-      "address": 73268,
+      "address": 72478,
       "bytes": 918,
       "type": "T",
       "names": [
@@ -95,7 +87,7 @@
       ]
     },
     {
-      "address": 68096,
+      "address": 67306,
       "bytes": 820,
       "type": "t",
       "names": [
@@ -103,15 +95,15 @@
       ]
     },
     {
-      "address": 41252,
-      "bytes": 816,
+      "address": 51660,
+      "bytes": 814,
       "type": "t",
       "names": [
         "conmt::Controller::setting(char const*, char const*, unsigned long long const&)"
       ]
     },
     {
-      "address": 47778,
+      "address": 45990,
       "bytes": 804,
       "type": "t",
       "names": [
@@ -119,7 +111,7 @@
       ]
     },
     {
-      "address": 47000,
+      "address": 45212,
       "bytes": 778,
       "type": "t",
       "names": [
@@ -127,7 +119,7 @@
       ]
     },
     {
-      "address": 34756,
+      "address": 35008,
       "bytes": 776,
       "type": "t",
       "names": [
@@ -135,15 +127,23 @@
       ]
     },
     {
-      "address": 37916,
-      "bytes": 744,
+      "address": 38592,
+      "bytes": 760,
       "type": "t",
       "names": [
-        "conmt::Repository::putSensors(conmt::Kind, unsigned long, conmt::SensorFrame const&, conmt::Average const&, conmt::Time const&, conmt::Field) [clone .constprop.52]"
+        "conmt::Repository::putSensors(conmt::Kind, unsigned long, conmt::SensorFrame const&, conmt::Average const&, conmt::Time const&, conmt::Field)"
       ]
     },
     {
-      "address": 64008,
+      "address": 50900,
+      "bytes": 760,
+      "type": "t",
+      "names": [
+        "conmt::applyTransaction(conmt::Repository&, conmt::ClockPort&, conmt::TxStep const*, unsigned char, conmt::Entity const&, conmt::Entity const&, void const*)"
+      ]
+    },
+    {
+      "address": 63218,
       "bytes": 738,
       "type": "t",
       "names": [
@@ -151,7 +151,7 @@
       ]
     },
     {
-      "address": 8756,
+      "address": 8884,
       "bytes": 734,
       "type": "t",
       "names": [
@@ -159,7 +159,7 @@
       ]
     },
     {
-      "address": 40520,
+      "address": 40790,
       "bytes": 732,
       "type": "t",
       "names": [
@@ -167,15 +167,15 @@
       ]
     },
     {
-      "address": 43412,
-      "bytes": 728,
+      "address": 42190,
+      "bytes": 730,
       "type": "t",
       "names": [
         "conmt::Controller::addCheckpoint(double, unsigned long long const&)"
       ]
     },
     {
-      "address": 39728,
+      "address": 39998,
       "bytes": 726,
       "type": "t",
       "names": [
@@ -183,7 +183,7 @@
       ]
     },
     {
-      "address": 36330,
+      "address": 36582,
       "bytes": 724,
       "type": "t",
       "names": [
@@ -191,15 +191,7 @@
       ]
     },
     {
-      "address": 42068,
-      "bytes": 716,
-      "type": "t",
-      "names": [
-        "conmt::Controller::saveResult(unsigned long long const&)"
-      ]
-    },
-    {
-      "address": 29684,
+      "address": 29930,
       "bytes": 712,
       "type": "t",
       "names": [
@@ -207,7 +199,15 @@
       ]
     },
     {
-      "address": 60334,
+      "address": 52918,
+      "bytes": 706,
+      "type": "t",
+      "names": [
+        "conmt::Controller::start(bool, unsigned long long const&)"
+      ]
+    },
+    {
+      "address": 59542,
       "bytes": 696,
       "type": "t",
       "names": [
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "address": 74186,
+      "address": 73396,
       "bytes": 696,
       "type": "T",
       "names": [
@@ -223,7 +223,7 @@
       ]
     },
     {
-      "address": 22192,
+      "address": 22368,
       "bytes": 678,
       "type": "t",
       "names": [
@@ -231,7 +231,7 @@
       ]
     },
     {
-      "address": 31170,
+      "address": 31416,
       "bytes": 672,
       "type": "t",
       "names": [
@@ -239,7 +239,7 @@
       ]
     },
     {
-      "address": 61030,
+      "address": 60238,
       "bytes": 664,
       "type": "t",
       "names": [
@@ -247,15 +247,15 @@
       ]
     },
     {
-      "address": 31842,
+      "address": 32088,
       "bytes": 654,
       "type": "t",
       "names": [
-        "conmt::lookupRows(conmt::RowSource&, double, conmt::Fit const&, double, conmt::Selection&) [clone .constprop.57]"
+        "conmt::lookupRows(conmt::RowSource&, double, conmt::Fit const&, double, conmt::Selection&) [clone .constprop.55]"
       ]
     },
     {
-      "address": 24000,
+      "address": 24176,
       "bytes": 650,
       "type": "t",
       "names": [
@@ -263,7 +263,7 @@
       ]
     },
     {
-      "address": 71996,
+      "address": 71206,
       "bytes": 650,
       "type": "T",
       "names": [
@@ -271,7 +271,7 @@
       ]
     },
     {
-      "address": 58898,
+      "address": 58106,
       "bytes": 640,
       "type": "t",
       "names": [
@@ -279,7 +279,7 @@
       ]
     },
     {
-      "address": 27392,
+      "address": 27568,
       "bytes": 634,
       "type": "t",
       "names": [
@@ -287,15 +287,15 @@
       ]
     },
     {
-      "address": 34118,
+      "address": 34370,
       "bytes": 622,
       "type": "t",
       "names": [
-        "conmt::Controller::reanchorLive(conmt::SensorFrame const&, conmt::Average const&, conmt::Time const&) [clone .constprop.49]"
+        "conmt::Controller::reanchorLive(conmt::SensorFrame const&, conmt::Average const&, conmt::Time const&) [clone .constprop.48]"
       ]
     },
     {
-      "address": 26644,
+      "address": 26820,
       "bytes": 616,
       "type": "t",
       "names": [
@@ -303,7 +303,7 @@
       ]
     },
     {
-      "address": 12284,
+      "address": 12412,
       "bytes": 604,
       "type": "t",
       "names": [
@@ -311,7 +311,7 @@
       ]
     },
     {
-      "address": 46398,
+      "address": 44610,
       "bytes": 602,
       "type": "t",
       "names": [
@@ -319,7 +319,7 @@
       ]
     },
     {
-      "address": 57344,
+      "address": 56552,
       "bytes": 600,
       "type": "t",
       "names": [
@@ -327,17 +327,17 @@
       ]
     },
     {
-      "address": 30396,
+      "address": 30642,
       "bytes": 584,
       "type": "t",
       "names": [
-        "conmt::replayPoints(conmt::Repository&, conmt::Kind, unsigned long, double, double&, conmt::Point&) [clone .constprop.50]"
+        "conmt::replayPoints(conmt::Repository&, conmt::Kind, unsigned long, double, double&, conmt::Point&) [clone .constprop.49]"
       ]
     }
   ],
   "largestStatic": [
     {
-      "address": 8389541,
+      "address": 8389539,
       "bytes": 512,
       "type": "b",
       "names": [
@@ -345,7 +345,7 @@
       ]
     },
     {
-      "address": 8389174,
+      "address": 8389172,
       "bytes": 367,
       "type": "b",
       "names": [
@@ -353,7 +353,7 @@
       ]
     },
     {
-      "address": 8390207,
+      "address": 8390205,
       "bytes": 157,
       "type": "b",
       "names": [
@@ -361,7 +361,7 @@
       ]
     },
     {
-      "address": 8389062,
+      "address": 8389060,
       "bytes": 108,
       "type": "b",
       "names": [
@@ -369,7 +369,7 @@
       ]
     },
     {
-      "address": 8390118,
+      "address": 8390116,
       "bytes": 89,
       "type": "b",
       "names": [
@@ -377,7 +377,7 @@
       ]
     },
     {
-      "address": 8390053,
+      "address": 8390051,
       "bytes": 41,
       "type": "b",
       "names": [
@@ -385,7 +385,7 @@
       ]
     },
     {
-      "address": 8390094,
+      "address": 8390092,
       "bytes": 22,
       "type": "b",
       "names": [
@@ -393,7 +393,7 @@
       ]
     },
     {
-      "address": 8388994,
+      "address": 8388991,
       "bytes": 18,
       "type": "d",
       "names": [
@@ -401,7 +401,7 @@
       ]
     },
     {
-      "address": 8388924,
+      "address": 8388921,
       "bytes": 18,
       "type": "d",
       "names": [
@@ -409,7 +409,7 @@
       ]
     },
     {
-      "address": 8388942,
+      "address": 8388939,
       "bytes": 18,
       "type": "d",
       "names": [
@@ -425,7 +425,7 @@
       ]
     },
     {
-      "address": 8388982,
+      "address": 8388979,
       "bytes": 12,
       "type": "d",
       "names": [
@@ -433,7 +433,7 @@
       ]
     },
     {
-      "address": 8388970,
+      "address": 8388967,
       "bytes": 12,
       "type": "d",
       "names": [
@@ -441,7 +441,7 @@
       ]
     },
     {
-      "address": 8388960,
+      "address": 8388957,
       "bytes": 10,
       "type": "d",
       "names": [
@@ -457,7 +457,7 @@
       ]
     },
     {
-      "address": 8388916,
+      "address": 8388913,
       "bytes": 8,
       "type": "d",
       "names": [
@@ -481,7 +481,7 @@
       ]
     },
     {
-      "address": 8389045,
+      "address": 8389043,
       "bytes": 4,
       "type": "b",
       "names": [
@@ -489,7 +489,7 @@
       ]
     },
     {
-      "address": 8389056,
+      "address": 8389054,
       "bytes": 4,
       "type": "b",
       "names": [

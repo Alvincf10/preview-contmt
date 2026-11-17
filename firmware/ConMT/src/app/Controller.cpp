@@ -16,6 +16,9 @@ Status Controller::begin(const uint64_t& op) {
     if(!mounted_&&!loading_) return health_==Status::Ok?Status::Absent:health_;
     return repo_.journal().begin(op);
 }
+Status Controller::transact(const TxStep* steps,uint8_t count,const Entity& source,const Entity& destination,const void* data,const uint64_t& op) {
+    TRY(begin(op)); return finish(applyTransaction(repo_,clock_,steps,count,source,destination,data));
+}
 Status Controller::newConnection() {
     if(boot_==UINT32_MAX) return Status::Capacity;
     TRY(begin(0)); TRY(finish(repo_.putInteger(Key(Kind::System,0,Field::State),boot_+1))); ++boot_; return Status::Ok;
@@ -351,13 +354,17 @@ Status Controller::generate(const uint64_t& op) {
 Status Controller::saveBaseline(const uint64_t& op) {
     TRY(validateDraft()); Fit f; TRY(repo_.model(Kind::Draft,draft_,f));
     uint32_t id; TRY(repo_.journal().maxObject(Kind::Baseline,id)); if(id==UINT32_MAX) return Status::Capacity; ++id;
-    TRY(begin(op)); Status s=repo_.putInteger(Key(Kind::Baseline,id,Field::Exists),1);
-    if(s==Status::Ok) s=repo_.copy(Kind::Draft,draft_,Kind::Baseline,id);
-    if(s==Status::Ok) s=repo_.putTime(Key(Kind::Baseline,id,Field::Created),clock_.now().wallMs);
-    if(s==Status::Ok) s=repo_.putInteger(Key(Kind::System,0,Field::BaselineRef),id);
-    const Field context[]={Field::Operator,Field::Project,Field::Date};
-    for(uint8_t i=0;i<3&&s==Status::Ok;++i) { Status copied=repo_.copyScalar(Key(Kind::User,0,context[i]),Key(Kind::Baseline,id,context[i])); if(copied!=Status::Missing) s=copied; }
-    TRY(finish(s)); selected_=id; cursor_=0; page_=Page::SaveB; return Status::Ok;
+    static const TxStep steps[] CM_ROM={
+        {TxOp::Constant,TxTarget::Destination,Field::Exists,1},
+        {TxOp::CopyObject,TxTarget::Destination,Field::Exists,0},
+        {TxOp::Now,TxTarget::Destination,Field::Created,0},
+        {TxOp::DestinationId,TxTarget::System,Field::BaselineRef,0},
+        {TxOp::CopyUserField,TxTarget::Destination,Field::Operator,0},
+        {TxOp::CopyUserField,TxTarget::Destination,Field::Project,0},
+        {TxOp::CopyUserField,TxTarget::Destination,Field::Date,0}
+    };
+    TRY(transact(steps,sizeof(steps)/sizeof(*steps),{Kind::Draft,draft_},{Kind::Baseline,id},nullptr,op));
+    selected_=id; cursor_=0; page_=Page::SaveB; return Status::Ok;
 }
 Status Controller::cloneDraft(uint32_t id,const uint64_t& op) {
     uint32_t max; TRY(repo_.journal().maxObject(Kind::Draft,max)); if(max==UINT32_MAX) return Status::Capacity;
@@ -389,34 +396,34 @@ Status Controller::start(bool confirmed,const uint64_t& op) {
     SessionState old; TRY(state(old));
     if(old!=SessionState::Idle && old!=SessionState::Completed && !confirmed) return Status::ConfirmRequired;
     if(!selected_) return Status::Missing;
-    TRY(select(selected_)); Time t=clock_.now(); if(!t.valid) return Status::NoClock;
-    Average avg; SensorFrame frame; TRY(getAverage(avg,&frame)); Fit fit; TRY(repo_.model(Kind::Baseline,selected_,fit));
+    struct Data { TxSample sample; Fit fit; Point point; } data;
+    TRY(select(selected_)); Time& t=data.sample.time; t=clock_.now(); if(!t.valid) return Status::NoClock;
+    Average& avg=data.sample.average; SensorFrame& frame=data.sample.frame;
+    TRY(getAverage(avg,&frame)); TRY(repo_.model(Kind::Baseline,selected_,data.fit));
     uint32_t id; TRY(repo_.journal().maxObject(Kind::Session,id)); if(id==UINT32_MAX) return Status::Capacity; ++id;
-    TRY(begin(op)); Status s=repo_.putInteger(Key(Kind::Session,id,Field::Exists),1);
+    Point& p=data.point; p.id=1; p.revision=1; p.atMs=t.wallMs; p.temp=avg.operational; p.validMask=avg.mask;
+    static_assert(sizeof(Data)<256,"Transaction offsets must fit uint8");
+    static const TxStep steps[] CM_ROM={
+        {TxOp::Constant,TxTarget::Destination,Field::Exists,1},
+        {TxOp::SourceId,TxTarget::Destination,Field::BaselineRef,0},
+        {TxOp::Constant,TxTarget::Destination,Field::State,uint8_t(SessionState::Active)},
+        {TxOp::Time,TxTarget::Destination,Field::Start,offsetof(Data,sample)+offsetof(TxSample,time)+offsetof(Time,wallMs)},
+        {TxOp::Number,TxTarget::Destination,Field::InitialTemp,offsetof(Data,sample)+offsetof(TxSample,average)+offsetof(Average,operational)},
+        {TxOp::Model,TxTarget::Destination,Field::Model,offsetof(Data,fit)},
+        {TxOp::CopyNumber,TxTarget::Destination,Field::Datum,0},
+        {TxOp::CopyNumber,TxTarget::Destination,Field::Target,0},
+        {TxOp::CopyText,TxTarget::Destination,Field::Name,0},
+        {TxOp::CopyUserText,TxTarget::Destination,Field::Operator,0},
+        {TxOp::CopyUserText,TxTarget::Destination,Field::Project,0},
+        {TxOp::CopyUserText,TxTarget::Destination,Field::Date,0},
+        {TxOp::Point,TxTarget::Destination,Field::Row,offsetof(Data,point)},
+        {TxOp::Constant,TxTarget::Destination,Field::MaxRow,1},
+        {TxOp::Constant,TxTarget::Destination,Field::Gap,0},
+        {TxOp::Sensors,TxTarget::Destination,Field::Sensors,offsetof(Data,sample)}
+    };
+    TRY(transact(steps,sizeof(steps)/sizeof(*steps),{Kind::Baseline,selected_},{Kind::Session,id},&data,op));
 #define PUT(expr) do { if(s==Status::Ok) s=(expr); } while(0)
-    PUT(repo_.putInteger(Key(Kind::Session,id,Field::BaselineRef),selected_));
-    PUT(repo_.putInteger(Key(Kind::Session,id,Field::State),uint32_t(SessionState::Active)));
-    PUT(repo_.putTime(Key(Kind::Session,id,Field::Start),t.wallMs));
-    PUT(repo_.putNumber(Key(Kind::Session,id,Field::InitialTemp),avg.operational));
-    PUT(repo_.putModel(Kind::Session,id,fit));
-    Real v=0; if(s==Status::Ok) s=repo_.number(Key(Kind::Baseline,selected_,Field::Datum),v);
-    PUT(repo_.putNumber(Key(Kind::Session,id,Field::Datum),v));
-    if(s==Status::Ok) s=repo_.number(Key(Kind::Baseline,selected_,Field::Target),v);
-    PUT(repo_.putNumber(Key(Kind::Session,id,Field::Target),v));
-    char text[65];
-    static const Field fields[] CM_ROM={Field::Name,Field::Operator,Field::Project,Field::Date};
-    for(uint8_t i=0;i<4 && s==Status::Ok;++i) {
-        Field field=flashValue(fields+i);
-        Status read=repo_.text(Key(i?Kind::User:Kind::Baseline,i?0:selected_,field),text,65);
-        if(read==Status::Missing && i) continue;
-        if(read!=Status::Ok) { s=read; break; }
-        s=repo_.putText(Key(Kind::Session,id,field),text,65);
-    }
-    Point p; p.id=1; p.revision=1; p.atMs=t.wallMs; p.temp=avg.operational; p.validMask=avg.mask;
-    PUT(repo_.putPoint(Kind::Session,id,p)); PUT(repo_.putInteger(Key(Kind::Session,id,Field::MaxRow),1));
-    PUT(repo_.putInteger(Key(Kind::Session,id,Field::Gap),0));
-    PUT(repo_.putSensors(Kind::Session,id,frame,avg,t));
-    TRY(finish(s)); replayLive_=false; session_=id; liveM_=0; liveCompensation_=0; lastTemp_=avg.operational; lastWall_=t.wallMs; lastMono_=t.monoMs; lastSaveMono_=t.monoMs; lastFrameMono_=frame.sampledMonoMs; sampleKnown_=true; gapLatched_=false; inGap_=false; health_=Status::Ok; cursor_=0; page_=Page::RT; return Status::Ok;
+    replayLive_=false; session_=id; liveM_=0; liveCompensation_=0; lastTemp_=avg.operational; lastWall_=t.wallMs; lastMono_=t.monoMs; lastSaveMono_=t.monoMs; lastFrameMono_=frame.sampledMonoMs; sampleKnown_=true; gapLatched_=false; inGap_=false; health_=Status::Ok; cursor_=0; page_=Page::RT; return Status::Ok;
 }
 Status Controller::addCheckpoint(Real day,const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
@@ -522,13 +529,16 @@ Status Controller::saveResult(const uint64_t& op) {
     SessionState ss; TRY(state(ss)); if(ss!=SessionState::Preview) return Status::Invalid;
     uint32_t gap=0; TRY(record.integer(Field::Gap,gap)); if(gap) return Status::Gap;
     { Result r; TRY(readResult(Kind::Session,session_,r)); }
-    TRY(begin(op)); Status s=repo_.putInteger(Key(Kind::Result,session_,Field::Exists),1);
-    PUT(repo_.copy(Kind::Session,session_,Kind::Result,session_));
-    PUT(repo_.copyScalar(Key(Kind::Session,session_,Field::PreviewSensors),Key(Kind::Result,session_,Field::Sensors),53));
-    PUT(repo_.putInteger(Key(Kind::Result,session_,Field::State),uint32_t(SessionState::Completed)));
-    PUT(record.putInteger(Field::State,uint32_t(SessionState::Completed)));
-    PUT(repo_.putTime(Key(Kind::Result,session_,Field::Created),clock_.now().wallMs));
-    TRY(finish(s)); history_=session_; page_=Page::Hist; cursor_=0; return Status::Ok;
+    static const TxStep steps[] CM_ROM={
+        {TxOp::Constant,TxTarget::Destination,Field::Exists,1},
+        {TxOp::CopyObject,TxTarget::Destination,Field::Exists,0},
+        {TxOp::CopySensors,TxTarget::Destination,Field::Sensors,uint8_t(Field::PreviewSensors)},
+        {TxOp::Constant,TxTarget::Destination,Field::State,uint8_t(SessionState::Completed)},
+        {TxOp::Constant,TxTarget::Source,Field::State,uint8_t(SessionState::Completed)},
+        {TxOp::Now,TxTarget::Destination,Field::Created,0}
+    };
+    TRY(transact(steps,sizeof(steps)/sizeof(*steps),{Kind::Session,session_},{Kind::Result,session_},nullptr,op));
+    history_=session_; page_=Page::Hist; cursor_=0; return Status::Ok;
 }
 Status Controller::rowAt(uint32_t slot,Row& out) {
     if(slot>=6) return Status::Invalid;
@@ -568,7 +578,16 @@ Status Controller::setting(const char* name,const char* value,const uint64_t& op
     if(field==Field::Sound) hardware=devices_.sound(v!=0);
     if(hardware!=Status::Ok) return hardware;
     Status saved=begin(op);
-    if(saved==Status::Ok) saved=finish(repo_.putInteger(Key(Kind::Settings,0,field),v));
+    if(saved==Status::Ok) {
+        static const TxStep steps[] CM_ROM={
+            {TxOp::Integer,TxTarget::Destination,Field::Interval,0},
+            {TxOp::Integer,TxTarget::Destination,Field::Brightness,0},
+            {TxOp::Integer,TxTarget::Destination,Field::Sound,0},
+            {TxOp::Integer,TxTarget::Destination,Field::AutoSave,0}
+        };
+        const Entity entity={Kind::Settings,0};
+        saved=finish(applyTransaction(repo_,clock_,steps+uint8_t(field)-uint8_t(Field::Interval),1,entity,entity,&v));
+    }
     if(saved!=Status::Ok) {
         if(field==Field::Brightness) devices_.brightness(settings_.brightness);
         if(field==Field::Sound) devices_.sound(settings_.sound);
