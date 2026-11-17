@@ -1,5 +1,6 @@
 #include "../core/Flash.h"
 #include "Transport.h"
+#include "../core/Command.h"
 #include <stdio.h>
 #include <string.h>
 namespace conmt {
@@ -44,23 +45,14 @@ void Transport::flush() {
     uint16_t sent=uart_.write(reinterpret_cast<uint8_t*>(tx_+txAt_),n); if(sent>n) sent=n;
     txAt_+=uint8_t(sent); if(txAt_==txSize_) txAt_=txSize_=0;
 }
-static bool arity(const Frame& f) {
-#define IS(v) CM_EQ(f.verb,v)
-    if(IS("MEASURE_START")) return f.argc<=1;
-    if(IS("FIELD_SET")||IS("SETTINGS_SET")||IS("SETTINGS_STEP")||IS("ROW_DELETE")||IS("GAP_RECONCILE")) return f.argc==2;
-    if(IS("ROW_SET")||IS("CHECK_SET")) return f.argc==3;
-    if(IS("SETTINGS_TOGGLE")||IS("NAV")||IS("ROW_FOCUS")||IS("ROW_SENSOR")||IS("ROW_SCHEDULE")||IS("BASE_PICK")||IS("BASE_DELETE")||IS("CHECK_ADD")||IS("HISTORY_PICK")||IS("PAGE_ROWS")) return f.argc==1;
-    if(IS("USER_SAVE")||IS("BASE_NEW")||IS("ROW_ADD_EARLY")||IS("ROW_ADD_LAB")||IS("ROW_FILL_EARLY")||IS("BASE_GENERATE")||IS("BASE_SAVE")||IS("BASE_OPEN")||IS("RESULT_PREPARE")||IS("RESULT_SAVE")||IS("SETTINGS_SAVE")||IS("SESSION_RESUME")||IS("STORAGE_RESCAN")) return f.argc==0;
-    return false;
-#undef IS
-}
 static uint32_t requestCrc(const Frame& f) {
     uint32_t c=crc32(0xffffffffUL,reinterpret_cast<const uint8_t*>(f.verb),strlen(f.verb));
     for(uint8_t i=0;i<f.argc;++i) { const uint8_t separator='|'; c=crc32(c,&separator,1); c=crc32(c,reinterpret_cast<const uint8_t*>(f.args[i]),strlen(f.args[i])); }
     return c;
 }
 void Transport::accept(const Frame& f) {
-    if(CM_EQ(f.verb,"PAGE_READY")) {
+    const Command command=commandFromText(f.verb);
+    if((command==Command::PAGE_READY)) {
         actualPage_=f.page;
         uint32_t version=0; compatible_=f.argc==1&&parseU32(f.args[0],version)==Status::Ok&&version==HmiContractVersion;
         if(!compatible_) ack_=Status::Version;
@@ -75,15 +67,15 @@ void Transport::accept(const Frame& f) {
     uint64_t operation=(uint64_t(f.boot)<<32)|f.seq;
     uint32_t fingerprint=requestCrc(f);
     if(!compatible_) ack_=Status::Version;
-    else if(!arity(f)) ack_=Status::Invalid;
+    else if(!validArguments(command,f.argc)) ack_=Status::Invalid;
     else if(operation&&operation==lastOperation_) ack_=fingerprint==lastRequestCrc_?lastAck_:Status::Conflict;
-    else if(CM_EQ(f.verb,"STORAGE_RESCAN")&&f.page==uint8_t(app_.page())&&f.seq) ack_=app_.dispatch(f.verb);
+    else if((command==Command::STORAGE_RESCAN)&&f.page==uint8_t(app_.page())&&f.seq) ack_=app_.dispatch(f.verb);
     else {
         Key previous; Status duplicate=f.boot&&f.seq?app_.repository().journal().findOperation(operation,previous):Status::Missing;
         if(duplicate==Status::Ok) ack_=app_.dispatch(f.verb,f.args[0],f.args[1],f.args[2],operation);
         else if(duplicate!=Status::Missing) ack_=duplicate;
         else if(f.boot!=app_.bootToken()||!f.seq) ack_=Status::Conflict;
-        else if(f.page!=uint8_t(app_.page())||(f.view!=app_.view()&&!(CM_EQ(f.verb,"NAV")&&CM_EQ(f.args[0],"BACK")))) ack_=Status::Stale;
+        else if(f.page!=uint8_t(app_.page())||(f.view!=app_.view()&&!((command==Command::NAV)&&CM_EQ(f.args[0],"BACK")))) ack_=Status::Stale;
         else ack_=app_.dispatch(f.verb,f.args[0],f.args[1],f.args[2],operation);
     }
     if(f.boot&&f.boot==app_.bootToken()) seenConnection_=true;
@@ -241,10 +233,21 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
     if(s!=Status::Ok) CM_TEXT(value,vc,"--");
     return true;
 }
-void Transport::poll(uint32_t now) {
+void Transport::receive(uint32_t now) {
     Frame f;
     for(uint8_t i=0;i<48&&!ackPending_;++i) { int byte=uart_.read(); if(byte<0) break; Status st=parser_.feed(uint8_t(byte),now,f); if(st==Status::Ok) accept(f); }
-    parser_.expire(now); flush(); if(txSize_) return;
+    parser_.expire(now);
+}
+bool Transport::renderNext() {
+    char component[18],value[80];
+    if((full_||field_<(app_.page()==Page::RT?9:3))&&renderField(field_,component,sizeof(component),value,sizeof(value))) {
+        Status st=encode(component,value); if(st!=Status::Ok) ack_=st;
+        ++field_; return true;
+    }
+    return false;
+}
+void Transport::poll(uint32_t now) {
+    receive(now); flush(); if(txSize_) return;
     if(uint32_t(now-lastRefresh_)>=1000) { lastRefresh_=now; dirty_=true; }
     if(!dirty_&&!ackPending_&&viewSent_==app_.view()) return;
     if(phase_&&renderView_!=app_.view()) { phase_=0; field_=0; full_=true; }
@@ -262,8 +265,7 @@ void Transport::poll(uint32_t now) {
         ++phase_; return;
     }
     if(phase_==3) {
-        char component[18],value[80];
-        if((full_||field_<(app_.page()==Page::RT?9:3))&&renderField(field_,component,sizeof(component),value,sizeof(value))) { Status s=encode(component,value); if(s!=Status::Ok) ack_=s; ++field_; return; }
+        if(renderNext()) return;
         ++phase_;
     }
     if(phase_==4) { numeric("pInit.vView",renderView_); ++phase_; return; }

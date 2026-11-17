@@ -4,6 +4,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include "board/ArduinoUart.h"
+#include "board/BatteryDevices.h"
 using namespace conmt;
 volatile uint8_t probeInput;
 class ProbeClock : public ClockPort { public: Time now() override __attribute__((noinline)) { return {uint32_t(probeInput),uint64_t(probeInput),probeInput!=0}; } };
@@ -13,11 +14,12 @@ class ProbeUart : public UartPort { public: int read() override { return probeIn
 ProbeClock cl;
 ProbeSensors se;
 ProbeDevices de;
+BatteryDevices batteryDevices(de);
 ArduinoUart uart(Serial);
 SdStorage storage;
 Journal journal(storage);
 Repository repository(journal);
-Controller controller(repository,cl,se,de);
+Controller controller(repository,cl,se,batteryDevices);
 Transport transport(controller,uart);
 int main() {
     storage.begin(probeInput,probeInput);

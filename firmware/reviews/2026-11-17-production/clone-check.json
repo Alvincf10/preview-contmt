@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "planningFolderPresent": false,
+  "buildRoot": "/private/tmp/conmt-clone-yp6754dg",
+  "suites": 9,
+  "purpose": "Fresh source copy with no docs/firmware-plan, reviews or releases; required CMake/CTest paths remain self-contained"
+}

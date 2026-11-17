@@ -4,12 +4,14 @@ namespace conmt {
 Status SdStorage::failed(Status fallback) { ready_=false; return card_.errorCode()?Status::IoError:fallback; }
 Status SdStorage::begin(uint8_t cs,uint8_t rate) {
     ready_=false; configured_=true; cs_=cs; rate_=rate;
+    index_.close();
     if(file_.isOpen()) file_.close();
-    if(root_.isOpen()) root_.close();
     if(!card_.init(rate,cs)) return Status::Absent;
     if(!volume_.init(&card_)) return Status::Corrupt;
-    if(!root_.openRoot(&volume_)) return Status::IoError;
-    if(!file_.open(&root_,"CMT.JRN",O_CREAT|O_RDWR)) return Status::IoError;
+    SdFile root;
+    if(!root.openRoot(&volume_)) return Status::IoError;
+    if(!file_.open(&root,"CMT.JRN",O_CREAT|O_RDWR)) { root.close(); return Status::IoError; }
+    index_.open(root); root.close();
     ready_=true; return Status::Ok;
 }
 Status SdStorage::size(uint32_t& n) { if(!ready_) return Status::Absent; n=file_.fileSize(); return Status::Ok; }

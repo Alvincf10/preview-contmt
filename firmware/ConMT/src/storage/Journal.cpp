@@ -63,8 +63,10 @@ Status Journal::mount() {
 }
 Status Journal::scan() {
     writing_=false; uncertain_=false; end_=sequence_=0; tail_=false;
+    indexed_=false;
     Status open=io_.reopen(); if(open!=Status::Ok) return open;
     uint32_t size; Status st=io_.size(size); if(st!=Status::Ok) return st;
+    indexed_=index_.reset(io_.indexStorage())==Status::Ok;
     while(end_<size) {
         uint32_t next,seq; uint64_t op;
         st=verify(end_,size,next,seq,op,true);
@@ -86,7 +88,20 @@ Status Journal::scan() {
         }
         if(st!=Status::Ok) return st;
         if(seq!=sequence_+1) return Status::Corrupt;
+        if(indexed_ && indexTransaction(end_,next)!=Status::Ok) indexed_=false;
         end_=next; sequence_=seq;
+    }
+    return Status::Ok;
+}
+Status Journal::indexTransaction(uint32_t at,uint32_t next) {
+    uint8_t bytes[12];
+    for(uint32_t pos=at+32;pos<next-8;) {
+        Status st=io_.read(pos,bytes,12); if(st!=Status::Ok) return st;
+        Key key(Kind(bytes[0]),get32(bytes+2),Field(bytes[1]),get32(bytes+6));
+        uint16_t size=get16(bytes+10);
+        if(size>MaxValue || next-8-pos<12 || size>next-8-pos-12) return Status::Corrupt;
+        st=index_.put(key,pos,at); if(st!=Status::Ok) return st;
+        pos+=12+size;
     }
     return Status::Ok;
 }
@@ -124,11 +139,40 @@ Status Journal::commit() {
     if(st==Status::Ok) st=io_.sync();
     if(st==Status::Ok) st=verify(end_,writeAt_+8,next,seq,op,true);
     writing_=false; uncertain_=st!=Status::Ok;
-    if(st==Status::Ok) { end_=next; sequence_=seq; tail_=false; }
+    if(st==Status::Ok) {
+        if(indexed_ && indexTransaction(end_,next)!=Status::Ok) indexed_=false;
+        end_=next; sequence_=seq; tail_=false;
+    }
     return st;
 }
 Status Journal::get(const Key& wanted,uint8_t* out,uint16_t& capacity) {
-    bool found=false; uint16_t valueLength=0; uint32_t valueAt=0;
+    uint32_t at; uint16_t size;
+    Status st=locate(wanted,at,size); if(st!=Status::Ok) return st;
+    if(capacity<size) return Status::Capacity;
+    capacity=size; return io_.read(at,out,size);
+}
+Status Journal::locate(const Key& wanted,uint32_t& valueAt,uint16_t& valueLength) {
+    if(indexed_) {
+        uint32_t entry,transaction; Status st=index_.get(wanted,entry,transaction);
+        if(st==Status::Missing) return st;
+        if(st==Status::Ok && transaction<end_ && entry>=transaction && entry-transaction>=32) {
+            uint32_t next,seq; uint64_t op;
+            st=verify(transaction,end_,next,seq,op,true);
+            if(st!=Status::Ok) return st;
+            uint8_t bytes[12];
+            if(entry<=next-8 && next-8-entry>=12) {
+                st=io_.read(entry,bytes,12); if(st!=Status::Ok) return st;
+                Key found(Kind(bytes[0]),get32(bytes+2),Field(bytes[1]),get32(bytes+6));
+                uint16_t size=get16(bytes+10);
+                if(found==wanted && size<=MaxValue && size<=next-8-entry-12) {
+                    if(!size) return Status::Missing;
+                    valueAt=entry+12; valueLength=size; return Status::Ok;
+                }
+            }
+        }
+        indexed_=false;
+    }
+    bool found=false; valueLength=0; valueAt=0;
     for(uint32_t at=0;at<end_;) {
         uint32_t verifiedEnd,verifiedSeq; uint64_t verifiedOp;
         Status verified=verify(at,end_,verifiedEnd,verifiedSeq,verifiedOp,true); if(verified!=Status::Ok) return verified;
@@ -145,8 +189,25 @@ Status Journal::get(const Key& wanted,uint8_t* out,uint16_t& capacity) {
         at=until+8;
     }
     if(!found) return Status::Missing;
-    if(capacity<valueLength) return Status::Capacity;
-    capacity=valueLength; return io_.read(valueAt,out,valueLength);
+    return Status::Ok;
+}
+Status Journal::copy(const Key& from,const Key& to,uint16_t expected) {
+    if(!writing_) return Status::Invalid;
+    uint32_t at; uint16_t size; Status st=locate(from,at,size); if(st!=Status::Ok) return st;
+    if(expected&&size!=expected) return Status::Corrupt;
+    if(writeAt_>UINT32_MAX-uint32_t(size)-20) return Status::Capacity;
+    uint8_t bytes[32]; bytes[0]=uint8_t(to.kind); bytes[1]=uint8_t(to.field);
+    put32(bytes+2,to.object); put32(bytes+6,to.index); put16(bytes+10,size);
+    st=io_.write(writeAt_,bytes,12); if(st!=Status::Ok) { abort(); return st; }
+    payloadCrc_=crc32(payloadCrc_,bytes,12); writeAt_+=12;
+    while(size) {
+        uint16_t chunk=size>32?32:size;
+        st=io_.read(at,bytes,chunk);
+        if(st==Status::Ok) st=io_.write(writeAt_,bytes,chunk);
+        if(st!=Status::Ok) { abort(); return st; }
+        payloadCrc_=crc32(payloadCrc_,bytes,chunk); writeAt_+=chunk; at+=chunk; size-=chunk;
+    }
+    ++count_; return Status::Ok;
 }
 Status Journal::findOperation(uint64_t op,Key& first) {
     if(!op) return Status::Missing;

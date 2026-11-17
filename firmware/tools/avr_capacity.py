@@ -40,7 +40,7 @@ size=subprocess.check_output([str(binpath/'avr-size'),'-A',str(output/'CAPACITY_
 sections={line.split()[0]:int(line.split()[1]) for line in size.splitlines() if line.startswith('.')}
 flash=sections.get('.text',0)+sections.get('.data',0)
 ram=sections.get('.data',0)+sections.get('.bss',0)+sections.get('.noinit',0)
-report={'purpose':'capacity probe, never upload','compiler':subprocess.check_output([str(binpath/'avr-g++'),'--version'],text=True).splitlines()[0],'flashBytes':flash,'staticRamBytes':ram,'physicalFlashRemaining':32768-flash,'staticRamRemaining':2048-ram,'fitsStaticLimits':flash<=32768 and ram<=2048,'includes':'shared core/controller/HMI/real SD/HardwareSerial; probe clock/sensor/device ports','excludes':'verified sensor/RTC/battery drivers, actual stack watermark','clockAssumption':'16MHz for capacity only; not board configuration'}
+report={'purpose':'capacity probe, never upload','compiler':subprocess.check_output([str(binpath/'avr-g++'),'--version'],text=True).splitlines()[0],'flashBytes':flash,'staticRamBytes':ram,'physicalFlashRemaining':32768-flash,'staticRamRemaining':2048-ram,'fitsStaticLimits':flash<=32768 and ram<=2048,'includes':'shared core/controller/HMI/real SD with disk index/HardwareSerial/confirmed battery adapter; probe clock/sensor/brightness/sound ports','excludes':'verified sensor/RTC drivers, actual stack watermark','clockAssumption':'16MHz for capacity only; not board configuration'}
 report['strategy']=args.strategy
 report['compilerFlags']=[flag for flag in flags if not flag.startswith('-I')]
 report['nativeLinkPassed']=result.returncode==0

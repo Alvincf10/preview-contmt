@@ -6,6 +6,9 @@
 namespace conmt { namespace host {
 class MemoryStorage : public StoragePort {
 public:
+    StoragePort* sidecar=nullptr;
+    uint64_t readCalls=0,readBytes=0;
+    StoragePort* indexStorage() override { return sidecar; }
     std::vector<uint8_t> bytes;
     int64_t writeBudget=-1;
     bool absent=false,full=false,failSync=false;
@@ -18,9 +21,11 @@ public:
 class FileStorage : public StoragePort {
     std::string path_;
     int fd_;
+    FileStorage* index_;
 public:
-    explicit FileStorage(const std::string& p);
+    explicit FileStorage(const std::string& p,bool indexed=true);
     ~FileStorage();
+    StoragePort* indexStorage() override { return index_; }
     Status size(uint32_t& v) override;
     Status read(uint32_t at,uint8_t* b,uint16_t n) override;
     Status write(uint32_t at,const uint8_t* b,uint16_t n) override;

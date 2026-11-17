@@ -3,7 +3,7 @@
   "hostTests": "PASS",
   "hostBinary32Tests": "PASS",
   "sanitizers": "PASS",
-  "ctestSuitesPerProfile": 6,
+  "ctestSuitesPerProfile": 9,
   "auditCasesPerProfile": 65,
   "reproducedDefectsCorrected": 38,
   "defectsBySeverity": {
@@ -14,15 +14,15 @@
   "planAcceptance": {
     "HOST_PASS": 73,
     "EMULATED_PASS": 1,
-    "PARTIAL": 20,
-    "NOT_IMPLEMENTED": 3,
+    "PARTIAL": 21,
     "HARDWARE_PENDING": 3,
+    "NOT_IMPLEMENTED": 2,
     "FAIL": 2
   },
   "avrNumericEmulation": "PASS",
   "avrCompleteFirmwareCapacity": "FAIL",
-  "flashBytes": 79884,
-  "staticRamBytes": 1685,
+  "flashBytes": 81106,
+  "staticRamBytes": 1764,
   "runtimeStackVerified": false,
   "physicalHardwareVerified": false,
   "hmiContractRevision": 2,
@@ -30,8 +30,13 @@
   "hmiEventFiles": 197,
   "hmiCompiled": false,
   "sensorRtcBatteryDriversComplete": false,
-  "storageIndexImplemented": false,
+  "storageIndexImplemented": true,
   "boundedStorageLatencyVerified": false,
   "productionReady": false,
-  "flashed": false
+  "flashed": false,
+  "batteryDriverImplemented": true,
+  "batteryCalibrationSource": "board-evidence/battery.json",
+  "batteryHardwareVerified": false,
+  "storageIndexRebuildHostTested": true,
+  "latestReview": "reviews/2026-11-17-production/README.md"
 }

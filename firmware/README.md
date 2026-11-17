@@ -2,7 +2,7 @@
 
 **Status: implementasi C++ sudah berjalan pada host; target produksi ATmega328P belum dapat dirilis.** Resource probe lengkap masih melebihi flash dan ruang stack belum cukup. Lihat [STATUS.md](releases/STATUS.md) dan [audit terhadap102skenario](reviews/2026-11-16-audit/README.md). Ini bukan paket firmware siap upload.
 
-Kode domain, controller, repository dan transport dipakai bersama oleh host dan Arduino. Driver SD dan HardwareSerial nyata tersedia. Sensor/RTC/baterai belum dapat dipilih karena identitas/rangkaian tidak didefinisikan sumber. Production build memerlukan [profil board](BOARD_PROFILE_REQUIRED.md) dan tidak mempunyai fallback ke fake ports.
+Kode domain, controller, repository dan transport dipakai bersama oleh host dan Arduino. Driver SD dan HardwareSerial nyata tersedia. Sensor/RTC masih memerlukan identitas hardware. Adapter baterai A0 sudah memakai kalibrasi dari source produksi yang disetujui pengguna; pengujian listrik tetap pending. Production build memerlukan [profil board](BOARD_PROFILE_REQUIRED.md) dan tidak mempunyai fallback ke fake ports.
 
 ## Yang sudah dibuat
 
@@ -31,7 +31,7 @@ ctest --test-dir firmware/build-float --output-on-failure
 
 Untuk AddressSanitizer/UndefinedBehaviorSanitizer tambahkan -DCONMT_SANITIZE=ON pada build terpisah.
 
-Enam suite test memeriksa core/codec, seluruh row dua fixture oracle, serta workflow/recovery/protocol. Fault test memakai100batas byte penulisan terputus; ini bukan100uji listrik fisik. Matriks102skenario pada plan belum seluruhnya menjadi acceptance test perangkat.
+Sembilan suite test memeriksa core/codec, seluruh row dua fixture oracle, serta workflow/recovery/protocol. Fault test memakai100batas byte penulisan terputus; ini bukan100uji listrik fisik. Matriks102skenario pada plan belum seluruhnya menjadi acceptance test perangkat.
 
 ## Menjalankan controller melalui terminal
 
@@ -58,9 +58,9 @@ Numeric probe memakai AVR GCC dan simavr pada ATmega328P; hasilnya di releases/a
 
 - Flash penuh melebihi32KB; status ini harus diselesaikan lewat implementasi yang lebih ringkas sambil mempertahankan fitur/rumus. Menghapus fitur atau mengganti MCU belum diizinkan.
 - SRAM statis saja belum memasukkan semua driver nyata; nested stack membutuhkan lebih dari margin saat ini.
-- BoardBinding sensor/RTC/baterai/pin/baud/clock belum tersedia.
+- BoardBinding sensor/RTC/pin/baud/clock belum tersedia; baterai sudah diintegrasikan.
 - HMI/TFT belum dikompilasi; snippet Apply dihubungkan ke keyboard/modal Editor. Chart core tersedia tetapi renderer panel belum lengkap.
-- Index disk dan pengukuran latency dataset besar belum tersedia. Full journal scan tidak boleh dianggap memenuhi respons UI di mesin.
+- Index disk sudah tersedia dan dapat dibangun ulang. Pengukuran latency dataset besar serta jatah kerja storage/generate/save masih belum lulus.
 - Automatic day assignment, endurance media dan uji daya/hardware belum selesai.
 
 Jangan menyatakan production-ready atau semua acceptance selesai berdasarkan host tests. [Traceability](requirements.md) memisahkan bukti yang ada dari pekerjaan tersisa.
@@ -69,4 +69,6 @@ Jangan menyatakan production-ready atau semua acceptance selesai berdasarkan hos
 
 38cacat direproduksi dan dikoreksi, dengan65kasus audit PASS pada host64/host32/sanitizer. Daftar lengkap beserta bukti sebelum/sesudah ada pada [defects.md](reviews/2026-11-16-audit/defects.md). Manifest/event menggunakan CM1 contract2; panel pasangan wajib memakai revision yang sama.
 
-Build lengkap saat ini memerlukan79.884byte flash dan1.685byte RAM statis, sehingga belum muat pada ATmega328P. [Matriks102skenario](reviews/2026-11-16-audit/coverage.md) mencatat73HOST_PASS,1EMULATED_PASS dan28skenario parsial/belum lulus. Source ini belum boleh diperlakukan sebagai release mesin.
+Build lengkap setelah adapter baterai/index memerlukan81.106byte flash dan1.764byte RAM statis, sehingga belum muat pada ATmega328P. [Matriks102skenario](reviews/2026-11-16-audit/coverage.md) mencatat73HOST_PASS,1EMULATED_PASS dan28skenario parsial/belum lulus. Source ini belum boleh diperlakukan sebagai release mesin.
+
+Lanjutan implementasi terbaru: [baterai, index SD, streaming copy dan pengurangan stack](reviews/2026-11-17-production/README.md). Seluruh9suite lulus pada tiga profil host, tetapi kapasitas target dan integrasi mesin masih belum lulus.

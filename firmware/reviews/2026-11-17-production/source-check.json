@@ -1,0 +1,13 @@
+{
+  "status": "FAIL",
+  "sourceFilesChecked": 138,
+  "clientReferencesChecked": 2,
+  "localMarkdownLinksChecked": 55,
+  "nextionPages": 17,
+  "excelRows": 41,
+  "labDays": 10,
+  "errors": [
+    "Changed source: .gitignore"
+  ],
+  "authorizedException": ".gitignore changed as explicitly requested; domain source/workbook/client references unchanged"
+}

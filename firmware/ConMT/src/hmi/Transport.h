@@ -44,6 +44,8 @@ class Transport {
     bool renderField(uint16_t index,char* component,size_t cc,char* value,size_t vc);
     void accept(const Frame& frame);
     void flush();
+    void receive(uint32_t now) __attribute__((noinline));
+    bool renderNext() __attribute__((noinline));
 public:
     Transport(Controller& app,UartPort& uart);
     void poll(uint32_t now);

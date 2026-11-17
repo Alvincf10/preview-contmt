@@ -45,3 +45,8 @@ scripts/
 *.map
 *.su
 __pycache__/
+
+/firmware/reviews/*/build-*-tests.txt
+/firmware/reviews/*/avr-capacity.json
+/firmware/reviews/*/avr-stack.json
+/firmware/reviews/*/status.json

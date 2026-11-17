@@ -31,6 +31,11 @@ class Controller {
     Status validateDraft();
     Status earlySlot(uint32_t excluding,Real& hours);
     Status focusRow(uint32_t id);
+    Status storePreview(const Result& result,uint64_t operation) __attribute__((noinline));
+    Status roundResult(Result& result) __attribute__((noinline));
+    Status replayResult(Kind kind,uint32_t object,uint32_t pointId,Result& out,Real& day) __attribute__((noinline));
+    Status saveIdentity() __attribute__((noinline));
+    Status reconcileGap(const char* confirmed,const char* reason,uint64_t operation) __attribute__((noinline));
     Status cloneDraft(uint32_t from,uint64_t op);
     Status persistSample(const SensorFrame& frame,const Average& avg,const Time& now);
     bool validNavigation(Page p) const;

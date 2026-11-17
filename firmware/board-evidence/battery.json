@@ -1,0 +1,27 @@
+{
+  "authorizedBy": "User instruction 2026-11-17: battery configuration from this production sketch should be reused",
+  "sourceName": "TERBARU_2026-09-22_Maturity_Control_LCD_IC_Programs.ino",
+  "sourceSha256": "396fe3a679d44d63e77acb5a8b8e3654ccabc742605557224b6a4f5b3e34c274",
+  "sourceLines": {
+    "pin": 12,
+    "calibration": [
+      31,
+      38
+    ],
+    "algorithm": [
+      1443,
+      1535
+    ]
+  },
+  "pin": "A0",
+  "presentAdc": 520,
+  "emptyAdc": 877,
+  "fullAdc": 991,
+  "adcSamples": 8,
+  "discardFirstRead": true,
+  "periodMs": 100,
+  "filterShift": 5,
+  "percentConfirmSamples": 100,
+  "adcReference": "Arduino default used by source; no analogReference override found",
+  "scope": "Battery configuration and stabilization only. No old concrete/maturity formula reused. Physical calibration not remeasured."
+}

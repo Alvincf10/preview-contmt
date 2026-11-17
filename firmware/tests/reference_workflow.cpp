@@ -8,9 +8,11 @@
 using namespace conmt;
 #define CHECK(x) do{if(!(x)){std::cerr<<__LINE__<<" "<<#x<<'\n';std::exit(1);}}while(0)
 #define OK(x) CHECK((x)==Status::Ok)
-int main(){
-    host::MemoryStorage io;Journal journal(io);Repository repo(journal);host::FakeClock clock;host::RecordedSensor sensors;host::Devices devices;
+int main(int argc,char**){
+    host::MemoryStorage io,index; if(argc>1) io.sidecar=&index;
+    Journal journal(io);Repository repo(journal);host::FakeClock clock;host::RecordedSensor sensors;host::Devices devices;
     Controller app(repo,clock,sensors,devices);OK(app.boot());
+    if(argc>1) CHECK(journal.indexed());
     OK(app.setField("operator","OP-EXCEL"));OK(app.setField("project","Client reference"));OK(app.setField("date","2026-11-16"));
     OK(app.newBaseline());OK(app.setField("name","Baseline from explicit lab input"));OK(app.setField("target","30"));
     std::ifstream fixture(CONMT_FIXTURE_PATH);CHECK(bool(fixture));

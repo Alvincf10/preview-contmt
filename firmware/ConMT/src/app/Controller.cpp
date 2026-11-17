@@ -1,5 +1,6 @@
 #include "../core/Flash.h"
 #include "Controller.h"
+#include "../core/Command.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -103,7 +104,7 @@ Status Controller::tick() {
     return st;
 }
 Status Controller::tickImpl() {
-    Time t=clock_.now(); sensors_.poll(t.monoMs);
+    Time t=clock_.now(); sensors_.poll(t.monoMs); devices_.poll(t.monoMs);
     if(!mounted_ || !session_) return Status::Ok;
     SessionState ss; TRY(state(ss));
     if(ss!=SessionState::Active && ss!=SessionState::Preview) return Status::Ok;
@@ -427,11 +428,18 @@ Status Controller::editCheckpoint(uint32_t id,const char* field,const char* valu
 Status Controller::prepareResult(uint64_t op) {
     SessionState ss; TRY(state(ss)); if(ss!=SessionState::Active&&ss!=SessionState::Preview) return Status::Invalid;
     uint32_t gap; TRY(repo_.integer(Key(Kind::Session,session_,Field::Gap),gap)); if(gap) return Status::Gap;
-    Average avg; SensorFrame frame; TRY(getAverage(avg,&frame)); Time now=clock_.now(); if(!now.valid) return Status::NoClock;
     Result result; TRY(checkpointResult(Kind::Session,session_,0,result));
+    TRY(roundResult(result));
+    return storePreview(result,op);
+}
+Status Controller::roundResult(Result& result) {
     Fit fit; TRY(repo_.model(Kind::Session,session_,fit));
     Selection selection; selection.factor=result.prediction.factor; selection.day=result.prediction.referenceDay; selection.found=result.prediction.hasReference;
     result.prediction=trace(floor(result.rawM+Real(.5)),fit,selection);
+    return Status::Ok;
+}
+Status Controller::storePreview(const Result& result,uint64_t op) {
+    Average avg; SensorFrame frame; TRY(getAverage(avg,&frame)); Time now=clock_.now(); if(!now.valid) return Status::NoClock;
     uint8_t b[73]; putReal(b,result.rawM); putReal(b+8,result.prediction.maturity); putReal(b+16,result.prediction.raw); putReal(b+24,result.prediction.factor); putReal(b+32,result.prediction.fc); putReal(b+40,result.prediction.referenceDay); put64(b+48,result.endMs); putReal(b+56,result.initialTemp); putReal(b+64,result.lastTemp); b[72]=result.prediction.hasReference;
     TRY(begin(op)); Status s=repo_.putSensors(Kind::Session,session_,frame,avg,now,Field::PreviewSensors);
     PUT(repo_.journal().put(Key(Kind::Session,session_,Field::Result),b,73));
@@ -439,8 +447,14 @@ Status Controller::prepareResult(uint64_t op) {
     TRY(finish(s)); page_=Page::Str; return Status::Ok;
 }
 Status Controller::checkpointResult(Kind kind,uint32_t object,uint32_t pointId,Result& out) {
+    Real day; TRY(replayResult(kind,object,pointId,out,day));
     Real datum; Fit fit; uint32_t baseline=0;
     TRY(repo_.number(Key(kind,object,Field::Datum),datum)); TRY(repo_.model(kind,object,fit)); TRY(repo_.integer(Key(kind,object,Field::BaselineRef),baseline));
+    StoredRows rows(repo_,Kind::Baseline,baseline); Selection selection; TRY(lookupRows(rows,datum,fit,day,selection));
+    out.prediction=trace(out.rawM,fit,selection); return Status::Ok;
+}
+Status Controller::replayResult(Kind kind,uint32_t object,uint32_t pointId,Result& out,Real& day) {
+    Real datum; TRY(repo_.number(Key(kind,object,Field::Datum),datum));
     Point p,previous; bool first=true,found=false; uint64_t start=0; Accumulator acc;
     Status st;
     while((st=nextPoint(repo_,kind,object,first?nullptr:&previous,p))==Status::Ok) {
@@ -452,8 +466,7 @@ Status Controller::checkpointResult(Kind kind,uint32_t object,uint32_t pointId,R
     }
     if(first || (pointId&&!found)) return Status::Missing;
     if(st!=Status::Ok&&st!=Status::Missing) return st;
-    StoredRows rows(repo_,Kind::Baseline,baseline); Selection selection; TRY(lookupRows(rows,datum,fit,p.day,selection));
-    out.rawM=acc.maturity(); out.prediction=trace(out.rawM,fit,selection); out.endMs=p.atMs; out.lastTemp=p.temp;
+    day=p.day; out.rawM=acc.maturity(); out.endMs=p.atMs; out.lastTemp=p.temp;
     TRY(repo_.number(Key(kind,object,Field::InitialTemp),out.initialTemp)); return Status::Ok;
 }
 Status Controller::readResult(Kind kind,uint32_t id,Result& r) {
@@ -548,8 +561,28 @@ bool Controller::validNavigation(Page p) const {
     }
     return false;
 }
+Status Controller::saveIdentity() {
+    char value[65]; TRY(repo_.text(Key(Kind::User,0,Field::Operator),value,65)); TRY(repo_.text(Key(Kind::User,0,Field::Project),value,65)); TRY(repo_.text(Key(Kind::User,0,Field::Date),value,65));
+    page_=Page::Main; ++view_; return Status::Ok;
+}
+Status Controller::reconcileGap(const char* a,const char* b,uint64_t op) {
+    Status result;
+        if(!CM_EQ(a,"1")) return Status::ConfirmRequired;
+        if(!*b || !safeText(b,65)) return Status::Invalid;
+        Average current; TRY(getAverage(current)); if(!clock_.now().valid||inGap_) return Status::Gap;
+        uint64_t beginGap=0,endGap=0; TRY(repo_.time(Key(Kind::Session,session_,Field::GapStart),beginGap)); TRY(repo_.time(Key(Kind::Session,session_,Field::GapEnd),endGap));
+        if(!endGap || endGap<beginGap) return Status::NoClock;
+        uint32_t max; TRY(repo_.integer(Key(Kind::Session,session_,Field::MaxRow),max)); bool before=false,after=false;
+        for(uint32_t i=1;i<=max;++i) { Point p; TRY(repo_.point(Kind::Session,session_,i,p)); if(p.source==PointSource::Manual) { if(p.atMs<=beginGap) before=true; if(p.atMs>=endGap) after=true; } }
+        if(!before||!after||max<2) return Status::Invalid;
+        TRY(begin(op)); Status saved=repo_.putInteger(Key(Kind::Session,session_,Field::Gap),0);
+        if(saved==Status::Ok) saved=repo_.putText(Key(Kind::Session,session_,Field::ClockIssue),b,65);
+        result=finish(saved); if(result==Status::Ok) { gapLatched_=false; health_=Status::Ok; }
+    return result;
+}
 Status Controller::dispatch(const char* verb,const char* a,const char* b,const char* c,uint64_t op) {
     Status result=Status::Invalid;
+    const Command command=commandFromText(verb);
     if(op) {
         Key first; Status s=repo_.journal().findOperation(op,first);
         if(s==Status::Ok) {
@@ -564,10 +597,10 @@ Status Controller::dispatch(const char* verb,const char* a,const char* b,const c
         if(s!=Status::Missing) return status_=s;
     }
     uint32_t n=0;
-    if(CM_EQ(verb,"STORAGE_RESCAN")) return boot();
-    if(!mounted_ && !CM_EQ(verb,"PAGE_READY") && !CM_EQ(verb,"NAV")) return health_==Status::Ok?Status::Absent:health_;
-    if(CM_EQ(verb,"PAGE_READY")) { ++view_; return status_=Status::Ok; }
-    if(CM_EQ(verb,"NAV")) {
+    if((command==Command::STORAGE_RESCAN)) return boot();
+    if(!mounted_ && !(command==Command::PAGE_READY) && !(command==Command::NAV)) return health_==Status::Ok?Status::Absent:health_;
+    if((command==Command::PAGE_READY)) { ++view_; return status_=Status::Ok; }
+    if((command==Command::NAV)) {
         if(CM_EQ(a,"BACK")) {
             static const uint8_t back[]={1,1,2,2,3,4,5,6,3,2,9,10,11,9,13,2,2};
             n=(page_==Page::Matu&&savedEntry_)?8:back[uint8_t(page_)];
@@ -575,44 +608,43 @@ Status Controller::dispatch(const char* verb,const char* a,const char* b,const c
         if(n>16||!validNavigation(Page(n))) return status_=Status::Invalid;
         page_=Page(n); cursor_=0; ++view_; return status_=Status::Ok;
     }
-    if(CM_EQ(verb,"USER_SAVE")&&page_==Page::User) {
-        char value[65]; TRY(repo_.text(Key(Kind::User,0,Field::Operator),value,65)); TRY(repo_.text(Key(Kind::User,0,Field::Project),value,65)); TRY(repo_.text(Key(Kind::User,0,Field::Date),value,65));
-        page_=Page::Main; ++view_; return status_=Status::Ok;
+    if((command==Command::USER_SAVE)&&page_==Page::User) {
+        return status_=saveIdentity();
     }
-    if(CM_EQ(verb,"FIELD_SET")) {
+    if((command==Command::FIELD_SET)) {
         bool userField=CM_EQ(a,"operator")||CM_EQ(a,"project")||CM_EQ(a,"date");
         if((userField&&page_==Page::User)||(!userField&&(page_==Page::NewB||page_==Page::Mat||page_==Page::Matu))) result=setField(a,b,op);
     }
-    else if(CM_EQ(verb,"BASE_NEW")&&page_==Page::Base) result=newBaseline(op);
-    else if(CM_EQ(verb,"ROW_ADD_EARLY")&&page_==Page::Matu) result=addRow(true,op);
-    else if(CM_EQ(verb,"ROW_ADD_LAB")&&page_==Page::Matu) result=addRow(false,op);
-    else if(CM_EQ(verb,"ROW_FILL_EARLY")&&page_==Page::Matu) result=fillEarly(op);
-    else if((CM_EQ(verb,"ROW_SET")||CM_EQ(verb,"ROW_SENSOR")||CM_EQ(verb,"ROW_DELETE")||CM_EQ(verb,"ROW_FOCUS")||CM_EQ(verb,"ROW_SCHEDULE"))&&page_==Page::Matu) {
+    else if((command==Command::BASE_NEW)&&page_==Page::Base) result=newBaseline(op);
+    else if((command==Command::ROW_ADD_EARLY)&&page_==Page::Matu) result=addRow(true,op);
+    else if((command==Command::ROW_ADD_LAB)&&page_==Page::Matu) result=addRow(false,op);
+    else if((command==Command::ROW_FILL_EARLY)&&page_==Page::Matu) result=fillEarly(op);
+    else if(((command==Command::ROW_SET)||(command==Command::ROW_SENSOR)||(command==Command::ROW_DELETE)||(command==Command::ROW_FOCUS)||(command==Command::ROW_SCHEDULE))&&page_==Page::Matu) {
         TRY(parseU32(a,n)); Row row; TRY(rowAt(n,row));
-        if(CM_EQ(verb,"ROW_SET")) result=editRow(row.id,b,c,op);
-        else if(CM_EQ(verb,"ROW_SENSOR")) result=captureRow(row.id,op);
-        else if(CM_EQ(verb,"ROW_DELETE")) result=deleteRow(row.id,CM_EQ(b,"1"),op);
+        if((command==Command::ROW_SET)) result=editRow(row.id,b,c,op);
+        else if((command==Command::ROW_SENSOR)) result=captureRow(row.id,op);
+        else if((command==Command::ROW_DELETE)) result=deleteRow(row.id,CM_EQ(b,"1"),op);
         else { focusedRow_=row.id; ++view_; result=Status::Ok; }
     }
-    else if(CM_EQ(verb,"BASE_GENERATE")&&page_==Page::Matu) result=generate(op);
-    else if(CM_EQ(verb,"BASE_SAVE")&&page_==Page::BaseR) result=saveBaseline(op);
-    else if(CM_EQ(verb,"BASE_PICK")&&(page_==Page::SaveB||page_==Page::SelB)) { TRY(parseU32(a,n)); uint32_t id; TRY(baselineAt(n,id)); result=select(id); }
-    else if(CM_EQ(verb,"BASE_OPEN")&&page_==Page::SaveB) result=openBaseline(selected_,op);
-    else if(CM_EQ(verb,"BASE_DELETE")&&page_==Page::SaveB) result=deleteBaseline(selected_,CM_EQ(a,"1"),op);
-    else if(CM_EQ(verb,"MEASURE_START")&&page_==Page::SelB) result=start(CM_EQ(a,"1"),op);
-    else if(CM_EQ(verb,"CHECK_ADD")&&page_==Page::RT) { Real day; TRY(parseReal(a,day)); result=addCheckpoint(day,op); }
-    else if(CM_EQ(verb,"CHECK_SET")&&page_==Page::RT) { TRY(parseU32(a,n)); Point p; TRY(pointAt(n,p)); result=editCheckpoint(p.id,b,c,op); }
-    else if(CM_EQ(verb,"RESULT_PREPARE")&&page_==Page::RT) result=prepareResult(op);
-    else if(CM_EQ(verb,"RESULT_SAVE")&&page_==Page::Str) result=saveResult(op);
-    else if(CM_EQ(verb,"HISTORY_PICK")&&page_==Page::Hist) { TRY(parseU32(a,n)); TRY(historyAt(n,history_)); page_=Page::HistD; cursor_=0; ++view_; result=Status::Ok; }
-    else if(CM_EQ(verb,"PAGE_ROWS")&&(page_==Page::Matu||page_==Page::RT||page_==Page::HistD||page_==Page::Hist||page_==Page::SaveB||page_==Page::SelB)) {
+    else if((command==Command::BASE_GENERATE)&&page_==Page::Matu) result=generate(op);
+    else if((command==Command::BASE_SAVE)&&page_==Page::BaseR) result=saveBaseline(op);
+    else if((command==Command::BASE_PICK)&&(page_==Page::SaveB||page_==Page::SelB)) { TRY(parseU32(a,n)); uint32_t id; TRY(baselineAt(n,id)); result=select(id); }
+    else if((command==Command::BASE_OPEN)&&page_==Page::SaveB) result=openBaseline(selected_,op);
+    else if((command==Command::BASE_DELETE)&&page_==Page::SaveB) result=deleteBaseline(selected_,CM_EQ(a,"1"),op);
+    else if((command==Command::MEASURE_START)&&page_==Page::SelB) result=start(CM_EQ(a,"1"),op);
+    else if((command==Command::CHECK_ADD)&&page_==Page::RT) { Real day; TRY(parseReal(a,day)); result=addCheckpoint(day,op); }
+    else if((command==Command::CHECK_SET)&&page_==Page::RT) { TRY(parseU32(a,n)); Point p; TRY(pointAt(n,p)); result=editCheckpoint(p.id,b,c,op); }
+    else if((command==Command::RESULT_PREPARE)&&page_==Page::RT) result=prepareResult(op);
+    else if((command==Command::RESULT_SAVE)&&page_==Page::Str) result=saveResult(op);
+    else if((command==Command::HISTORY_PICK)&&page_==Page::Hist) { TRY(parseU32(a,n)); TRY(historyAt(n,history_)); page_=Page::HistD; cursor_=0; ++view_; result=Status::Ok; }
+    else if((command==Command::PAGE_ROWS)&&(page_==Page::Matu||page_==Page::RT||page_==Page::HistD||page_==Page::Hist||page_==Page::SaveB||page_==Page::SelB)) {
         if(CM_EQ(a,"NEXT")) { if(cursor_>UINT32_MAX-6) return Status::Capacity; cursor_+=6; }
         else if(CM_EQ(a,"PREV")) cursor_=cursor_>=6?cursor_-6:0;
         else return Status::Invalid;
         ++view_; result=Status::Ok;
     }
-    else if(CM_EQ(verb,"SETTINGS_SET")&&page_==Page::Set) result=setting(a,b,op);
-    else if(CM_EQ(verb,"SETTINGS_STEP")&&page_==Page::Set) {
+    else if((command==Command::SETTINGS_SET)&&page_==Page::Set) result=setting(a,b,op);
+    else if((command==Command::SETTINGS_STEP)&&page_==Page::Set) {
         bool brightness=CM_EQ(a,"brightness");
         if(brightness?!(CM_EQ(b,"5")||CM_EQ(b,"-5")):!(CM_EQ(b,"1")||CM_EQ(b,"-1"))) return Status::Invalid;
         int value=0,max=59,step=brightness?5:1;
@@ -624,28 +656,18 @@ Status Controller::dispatch(const char* verb,const char* a,const char* b,const c
         value+=b[0]=='-'?-step:step; if(value<0) value=0; if(value>max) value=max;
         char text[8]; CM_FMT(text,sizeof(text),"%u",unsigned(value)); result=setting(a,text,op);
     }
-    else if(CM_EQ(verb,"SETTINGS_TOGGLE")&&page_==Page::Set) {
+    else if((command==Command::SETTINGS_TOGGLE)&&page_==Page::Set) {
         if(CM_EQ(a,"sound")) result=setting(a,settings_.sound?"0":"1",op);
         else if(CM_EQ(a,"autoSave")) result=setting(a,settings_.autoSave?"0":"1",op);
     }
-    else if(CM_EQ(verb,"SETTINGS_SAVE")&&page_==Page::Set) { page_=Page::Main; ++view_; result=Status::Ok; }
-    else if(CM_EQ(verb,"SESSION_RESUME")&&page_==Page::SelB) {
+    else if((command==Command::SETTINGS_SAVE)&&page_==Page::Set) { page_=Page::Main; ++view_; result=Status::Ok; }
+    else if((command==Command::SESSION_RESUME)&&page_==Page::SelB) {
         SessionState ss; TRY(state(ss)); if(ss!=SessionState::Suspended) return Status::Invalid;
         TRY(begin(op)); result=finish(repo_.putInteger(Key(Kind::Session,session_,Field::State),uint32_t(SessionState::Active)));
         if(result==Status::Ok) { sampleKnown_=false; page_=Page::RT; }
     }
-    else if(CM_EQ(verb,"GAP_RECONCILE")&&page_==Page::RT) {
-        if(!CM_EQ(a,"1")) return Status::ConfirmRequired;
-        if(!*b || !safeText(b,65)) return Status::Invalid;
-        Average current; TRY(getAverage(current)); if(!clock_.now().valid||inGap_) return Status::Gap;
-        uint64_t beginGap=0,endGap=0; TRY(repo_.time(Key(Kind::Session,session_,Field::GapStart),beginGap)); TRY(repo_.time(Key(Kind::Session,session_,Field::GapEnd),endGap));
-        if(!endGap || endGap<beginGap) return Status::NoClock;
-        uint32_t max; TRY(repo_.integer(Key(Kind::Session,session_,Field::MaxRow),max)); bool before=false,after=false;
-        for(uint32_t i=1;i<=max;++i) { Point p; TRY(repo_.point(Kind::Session,session_,i,p)); if(p.source==PointSource::Manual) { if(p.atMs<=beginGap) before=true; if(p.atMs>=endGap) after=true; } }
-        if(!before||!after||max<2) return Status::Invalid;
-        TRY(begin(op)); Status saved=repo_.putInteger(Key(Kind::Session,session_,Field::Gap),0);
-        if(saved==Status::Ok) saved=repo_.putText(Key(Kind::Session,session_,Field::ClockIssue),b,65);
-        result=finish(saved); if(result==Status::Ok) { gapLatched_=false; health_=Status::Ok; }
+    else if((command==Command::GAP_RECONCILE)&&page_==Page::RT) {
+        result=reconcileGap(a,b,op);
     }
     if(result!=Status::Ok) repo_.journal().abort();
     return status_=result;

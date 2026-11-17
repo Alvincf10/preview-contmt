@@ -84,6 +84,7 @@ class DevicePort {
 protected:
     ~DevicePort() {}
 public:
+    virtual void poll(uint32_t) {}
     virtual Status battery(uint8_t& percent) = 0;
     virtual Status brightness(uint8_t value) = 0;
     virtual Status sound(bool enabled) = 0;

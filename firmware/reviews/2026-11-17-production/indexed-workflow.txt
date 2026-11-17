@@ -1,0 +1,4 @@
+day=4 ref=5 M=4320 factor=1 Fc=25.510745484
+day=6 ref=7 M=6960 factor=1 Fc=28.6237362935
+day=26 ref=28 M=28560 factor=0.994263603749 Fc=37.621993554
+Full41row baseline, viewport, client days4/6/26, save/reboot/delete snapshot PASS

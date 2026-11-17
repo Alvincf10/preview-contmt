@@ -30,3 +30,5 @@ Keputusan yang dipertegas audit17November2026:
 - Timestamp pada Sensors adalah waktu sampel, bukan waktu pemanggilan writer. PreviewSensors membekukan kanal pada NEXT dan tidak ditimpa autosave sebelum SAVE RESULT.
 - Mount wajib sebelum write. Committed corruption dan sequence discontinuity memblokir writer; tail parsial yang dikenali tidak diperlakukan sebagai committed data. Ini belum memulihkan setiap kerusakan media.
 - Source sama diuji dengan tiga strategi compiler. Merge constants/linker relaxation adalah pilihan paling kecil yang diukur, tetapi tidak memenuhi flash/stack328P. Batas region fisik wajib diberikan eksplisit ke linker saat capacity gate; ELF region besar hanya artefak pengukuran.
+
+Lanjutan17November: source produksi lama hanya digunakan untuk konfigurasi/penstabil baterai yang secara eksplisit ditunjuk pengguna. Rumus beton tetap acuan ConMT. Index disk adalah cache turunan yang selalu dibangun ulang saat mount; metadata A/B bukan prasyarat integritas index ini karena journal committed tetap otoritasnya. Streaming copy memakai32byte untuk mengurangi nested stack. Batas flash/stack tetap gagal dan tidak disembunyikan.

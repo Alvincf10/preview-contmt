@@ -112,7 +112,7 @@ for profile in ['host', 'binary32', 'sanitizer']:
 rows = [dict(id=key, scenario=scenario, acceptance=acceptance, **assessment[key]) for key, (scenario, acceptance) in cases.items()]
 counts = dict(collections.Counter(row['status'] for row in rows))
 with (output / 'coverage.csv').open('w', newline='') as file:
-    writer = csv.DictWriter(file, fieldnames=['id', 'scenario', 'acceptance', 'status', 'evidence', 'note'])
+    writer = csv.DictWriter(file, lineterminator='\n', fieldnames=['id', 'scenario', 'acceptance', 'status', 'evidence', 'note'])
     writer.writeheader()
     writer.writerows(rows)
 (output / 'coverage.json').write_text(json.dumps(dict(assessmentDate='2026-11-17', source=str(plan.relative_to(root.parent)), total=len(rows), counts=counts, scenarios=rows), ensure_ascii=False, indent=2) + '\n')

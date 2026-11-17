@@ -1,0 +1,2 @@
+indexed bytes=717050 full-scan bytes=4538400
+Disk index collisions, updates, tombstone, rebuild, loss/full/corruption fallback, interrupted commit and real-file restart PASS

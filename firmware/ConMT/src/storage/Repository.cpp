@@ -80,33 +80,26 @@ Status Repository::putSensors(Kind k,uint32_t o,const SensorFrame& f,const Avera
     return journal_.put(Key(k,o,destination),b,53);
 }
 Status Repository::copyScalar(const Key& from,const Key& to,uint16_t expected) {
-    uint8_t bytes[64]; uint16_t n=64; Status s=journal_.get(from,bytes,n);
-    if(s!=Status::Ok) return s;
-    if(expected&&n!=expected) return Status::Corrupt;
-    return journal_.put(to,bytes,n);
+    return journal_.copy(from,to,expected);
 }
 Status Repository::copy(Kind from,uint32_t src,Kind to,uint32_t dst) {
-    uint8_t b[128];
     for(uint8_t f=uint8_t(Field::Exists);f<=uint8_t(Field::FcInput);++f) {
         if(Field(f)==Field::Row||Field(f)==Field::DayInput||Field(f)==Field::TempInput||Field(f)==Field::FcInput) continue;
-        uint16_t n=128; Status s=journal_.get(Key(from,src,Field(f)),b,n);
+        Status s=journal_.copy(Key(from,src,Field(f)),Key(to,dst,Field(f)));
         if(s==Status::Missing) continue;
         if(s!=Status::Ok) return s;
-        s=journal_.put(Key(to,dst,Field(f)),b,n); if(s!=Status::Ok) return s;
     }
     uint32_t max=0; Status st=integer(Key(from,src,Field::MaxRow),max);
     if(st!=Status::Ok && st!=Status::Missing) return st;
     for(uint32_t i=1;i<=max;++i) {
-        uint16_t n=128; st=journal_.get(Key(from,src,Field::Row,i),b,n);
+        st=journal_.copy(Key(from,src,Field::Row,i),Key(to,dst,Field::Row,i));
         if(st==Status::Missing) continue;
         if(st!=Status::Ok) return st;
-        st=journal_.put(Key(to,dst,Field::Row,i),b,n); if(st!=Status::Ok) return st;
         if(from==Kind::Draft||from==Kind::Baseline) {
             for(uint8_t field=uint8_t(Field::DayInput);field<=uint8_t(Field::FcInput);++field) {
-                n=128; st=journal_.get(Key(from,src,Field(field),i),b,n);
+                st=journal_.copy(Key(from,src,Field(field),i),Key(to,dst,Field(field),i));
                 if(st==Status::Missing) continue;
                 if(st!=Status::Ok) return st;
-                st=journal_.put(Key(to,dst,Field(field),i),b,n); if(st!=Status::Ok) return st;
             }
         }
     }
