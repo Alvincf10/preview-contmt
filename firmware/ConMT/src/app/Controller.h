@@ -5,12 +5,6 @@
 namespace conmt {
 enum class Page : uint8_t { Init, User, Main, Base, NewB, Mat, Matu, BaseR, SaveB, Kuat, SelB, RT, Str, Hist, HistD, Set, Dev };
 enum class SessionState : uint8_t { Idle, Active, Preview, Completed, Suspended };
-struct Result {
-    Prediction prediction;
-    Real rawM, initialTemp, lastTemp;
-    uint64_t endMs;
-    Result() : rawM(0),initialTemp(0),lastTemp(0),endMs(0) {}
-};
 struct Settings { uint32_t intervalSeconds; uint8_t brightness; bool sound,autoSave; };
 class Controller {
     Repository& repo_; ClockPort& clock_; SensorPort& sensors_; DevicePort& devices_;

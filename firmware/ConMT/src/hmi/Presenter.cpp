@@ -73,9 +73,10 @@ static Status metric(Controller& app,Kind kind,uint32_t object,uint32_t point,Op
 }
 static Status sensorText(Repository& repo,Kind kind,uint32_t object,uint8_t channel,char* value,size_t capacity) __attribute__((noinline));
 static Status sensorText(Repository& repo,Kind kind,uint32_t object,uint8_t channel,char* value,size_t capacity) {
-    uint8_t frame[53]; uint16_t n=sizeof(frame); Status st=repo.journal().get(Key(kind,object,Field::Sensors),frame,n);
-    if(st!=Status::Ok||n!=sizeof(frame)||!(frame[36]&(1u<<channel))) return Status::Missing;
-    formatReal(value,capacity,getReal(frame+12+8*channel),1); return Status::Ok;
+    ValueReader reader; Status st=repo.journal().openValue(Key(kind,object,Field::Sensors),53,reader);
+    uint8_t bytes[8],mask;
+    if(st!=Status::Ok||reader.skip(12+8*channel)!=Status::Ok||reader.read(bytes,8)!=Status::Ok||reader.skip(16-8*channel)!=Status::Ok||reader.read(&mask,1)!=Status::Ok||!(mask&(1u<<channel))) return Status::Missing;
+    formatReal(value,capacity,getReal(bytes),1); return Status::Ok;
 }
 static void settingText(const Settings& settings,Op op,char* value,size_t capacity) {
     uint32_t h=settings.intervalSeconds/3600,m=settings.intervalSeconds/60%60,s=settings.intervalSeconds%60;

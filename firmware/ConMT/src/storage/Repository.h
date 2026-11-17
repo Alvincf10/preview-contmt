@@ -21,6 +21,8 @@ public:
     Status putPoint(Kind kind,uint32_t object,const Point& point);
     Status model(Kind kind,uint32_t object,Fit& out);
     Status putModel(Kind kind,uint32_t object,const Fit& fit);
+    Status result(Kind kind,uint32_t object,Result& out);
+    Status putResult(Kind kind,uint32_t object,const Result& result);
     Status putSensors(Kind kind,uint32_t object,const SensorFrame& frame,const Average& avg,const Time& time,Field destination=Field::Sensors);
     Status copyScalar(const Key& from,const Key& to,uint16_t expected=0);
     Status copy(Kind from,uint32_t src,Kind to,uint32_t dest);

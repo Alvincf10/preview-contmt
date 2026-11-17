@@ -40,6 +40,12 @@ struct Prediction {
     bool hasReference;
     Prediction() : maturity(0),raw(0),factor(1),fc(0),referenceDay(0),hasReference(false) {}
 };
+struct Result {
+    Prediction prediction;
+    Real rawM, initialTemp, lastTemp;
+    uint64_t endMs;
+    Result() : rawM(0),initialTemp(0),lastTemp(0),endMs(0) {}
+};
 enum class PointSource : uint8_t { Sensor, Manual, Import };
 enum class ClockCause : uint8_t { None, Invalid, Backward, Forward, SampleDelay, Sensor, Restart };
 struct Point {

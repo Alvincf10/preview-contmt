@@ -160,20 +160,36 @@ Status Journal::begin(const uint64_t& op) {
     if(op) { Key k; Status st=findOperation(op,k); if(st==Status::Ok) return Status::Conflict; if(st!=Status::Missing) return st; }
     Status st=io_.truncate(end_); if(st!=Status::Ok) return st;
     uint8_t h[32]={0}; st=io_.write(end_,h,32); if(st!=Status::Ok) return st;
-    writing_=true; writeAt_=end_+32; payloadCrc_=0xffffffffUL; count_=0; operation_=op; return Status::Ok;
+    writing_=true; remaining_=0; writeAt_=end_+32; payloadCrc_=0xffffffffUL; count_=0; operation_=op; return Status::Ok;
 }
 Status Journal::put(const Key& k,const uint8_t* value,uint16_t n) {
+    if(n&&!value) return !writing_||!uint8_t(k.kind)||!uint8_t(k.field)?Status::Invalid:Status::Capacity;
+    Status st=startValue(k,n);
+    return st==Status::Ok?appendValue(value,n):st;
+}
+Status Journal::startValue(const Key& k,uint16_t n) {
     if(!writing_) return Status::Invalid;
+    if(remaining_) return Status::Busy;
     if(!uint8_t(k.kind) || !uint8_t(k.field)) return Status::Invalid;
-    if(n>MaxValue || (n && !value) || writeAt_>UINT32_MAX-uint32_t(n)-20) return Status::Capacity;
+    if(n>MaxValue || writeAt_>UINT32_MAX-uint32_t(n)-20) return Status::Capacity;
     uint8_t h[12]; h[0]=uint8_t(k.kind); h[1]=uint8_t(k.field); put32(h+2,k.object); put32(h+6,k.index); put16(h+10,n);
     Status st=io_.write(writeAt_,h,12); if(st!=Status::Ok) { abort(); return st; }
     payloadCrc_=crc32(payloadCrc_,h,12); writeAt_+=12;
-    if(n) { st=io_.write(writeAt_,value,n); if(st!=Status::Ok) { abort(); return st; } payloadCrc_=crc32(payloadCrc_,value,n); writeAt_+=n; }
-    ++count_; return Status::Ok;
+    remaining_=n; if(!n) ++count_;
+    return Status::Ok;
+}
+Status Journal::appendValue(const uint8_t* bytes,uint16_t n) {
+    if(!writing_) return Status::Invalid;
+    if(n>remaining_ || (n&&!bytes)) { abort(); return Status::Capacity; }
+    if(!n) return Status::Ok;
+    Status st=io_.write(writeAt_,bytes,n); if(st!=Status::Ok) { abort(); return st; }
+    payloadCrc_=crc32(payloadCrc_,bytes,n); writeAt_+=n; remaining_-=n;
+    if(!remaining_) ++count_;
+    return Status::Ok;
 }
 Status Journal::commit() {
     if(!writing_) return Status::Invalid;
+    if(remaining_) { abort(); return Status::Invalid; }
     uint8_t h[32]; memcpy(h,"CMT1",4); put16(h+4,1); put16(h+6,1); put32(h+8,sequence_+1);
     put64(h+12,operation_); put32(h+20,writeAt_-end_-32); put32(h+24,count_); put32(h+28,crc32(0xffffffffUL,h,28)^0xffffffffUL);
     Status st=io_.write(end_,h,32);
@@ -194,10 +210,27 @@ Status Journal::commit() {
     return st;
 }
 Status Journal::get(const Key& wanted,uint8_t* out,uint16_t& capacity) {
-    uint32_t at; uint16_t size;
+    ValueReader reader; Status st=openValue(wanted,0,reader); if(st!=Status::Ok) return st;
+    if(capacity<reader.remaining()) return Status::Capacity;
+    capacity=reader.remaining(); return reader.read(out,capacity);
+}
+Status Journal::openValue(const Key& wanted,uint16_t expected,ValueReader& reader) {
+    reader=ValueReader(); uint32_t at; uint16_t size;
     Status st=locate(wanted,at,size); if(st!=Status::Ok) return st;
-    if(capacity<size) return Status::Capacity;
-    capacity=size; return io_.read(at,out,size);
+    if(expected&&size!=expected) return Status::Corrupt;
+    reader.io_=&io_; reader.at_=at; reader.remaining_=size; return Status::Ok;
+}
+Status ValueReader::read(uint8_t* out,uint16_t size) {
+    if(!io_) return Status::Invalid;
+    if(size>remaining_ || (size&&!out)) return Status::Capacity;
+    Status st=io_->read(at_,out,size);
+    if(st!=Status::Ok) { io_=nullptr; return st; }
+    at_+=size; remaining_-=size; return Status::Ok;
+}
+Status ValueReader::skip(uint16_t size) {
+    if(!io_) return Status::Invalid;
+    if(size>remaining_) return Status::Capacity;
+    at_+=size; remaining_-=size; return Status::Ok;
 }
 Status Journal::locate(const Key& wanted,uint32_t& valueAt,uint16_t& valueLength) {
     if(!uint8_t(wanted.kind) || !uint8_t(wanted.field)) return Status::Invalid;
@@ -250,21 +283,16 @@ Status Journal::scanQuery(uint8_t mode,Key& wanted,uint32_t& valueAt,uint16_t& v
 Status Journal::copy(const Key& from,const Key& to,uint16_t expected) {
     if(!writing_) return Status::Invalid;
     if(!uint8_t(to.kind) || !uint8_t(to.field)) return Status::Invalid;
-    uint32_t at; uint16_t size; Status st=locate(from,at,size); if(st!=Status::Ok) return st;
-    if(expected&&size!=expected) return Status::Corrupt;
-    if(writeAt_>UINT32_MAX-uint32_t(size)-20) return Status::Capacity;
-    uint8_t bytes[32]; bytes[0]=uint8_t(to.kind); bytes[1]=uint8_t(to.field);
-    put32(bytes+2,to.object); put32(bytes+6,to.index); put16(bytes+10,size);
-    st=io_.write(writeAt_,bytes,12); if(st!=Status::Ok) { abort(); return st; }
-    payloadCrc_=crc32(payloadCrc_,bytes,12); writeAt_+=12;
-    while(size) {
-        uint16_t chunk=size>32?32:size;
-        st=io_.read(at,bytes,chunk);
-        if(st==Status::Ok) st=io_.write(writeAt_,bytes,chunk);
+    ValueReader reader; Status st=openValue(from,expected,reader); if(st!=Status::Ok) return st;
+    st=startValue(to,reader.remaining()); if(st!=Status::Ok) return st;
+    uint8_t bytes[32];
+    while(reader.remaining()) {
+        uint16_t chunk=reader.remaining()>32?32:reader.remaining();
+        st=reader.read(bytes,chunk);
+        if(st==Status::Ok) st=appendValue(bytes,chunk);
         if(st!=Status::Ok) { abort(); return st; }
-        payloadCrc_=crc32(payloadCrc_,bytes,chunk); writeAt_+=chunk; at+=chunk; size-=chunk;
     }
-    ++count_; return Status::Ok;
+    return Status::Ok;
 }
 Status Journal::findOperation(const uint64_t& op,Key& first) {
     if(!op) return Status::Missing;

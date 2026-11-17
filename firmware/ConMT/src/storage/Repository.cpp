@@ -1,5 +1,6 @@
 #include "../core/Flash.h"
 #include "Repository.h"
+#include "RecordCodec.h"
 #include <string.h>
 namespace conmt {
 Status Record::number(Field f,Real& out) { return repo_.number(field(f),out); }
@@ -46,49 +47,54 @@ Status Repository::putText(const Key& k,const char* v,uint16_t cap) {
     return journal_.put(k,reinterpret_cast<const uint8_t*>(v),uint16_t(strlen(v)));
 }
 Status Repository::row(Kind k,uint32_t o,uint32_t id,Row& r) {
-    uint8_t b[37]; uint16_t n=37; Status s=journal_.get(Key(k,o,Field::Row,id),b,n); if(s!=Status::Ok) return s;
-    if(n!=37 || (b[36]&~uint8_t(3))) return Status::Corrupt;
-    r.id=id; r.revision=get32(b); r.day=getReal(b+4); r.timeH=getReal(b+12); r.temp=getReal(b+20); r.fc=getReal(b+28); r.hasTemp=b[36]&1; r.hasFc=b[36]&2;
+    Status s=readRecord(journal_,Key(k,o,Field::Row,id),RecordType::Row,&r); if(s!=Status::Ok) return s;
+    r.id=id;
     if(!finite(r.day)||r.day<0||!finite(r.timeH)||r.timeH<0||(r.hasTemp&&!finite(r.temp))||(r.hasFc&&!finite(r.fc))) return Status::Corrupt;
     return Status::Ok;
 }
 Status Repository::putRow(Kind k,uint32_t o,const Row& r) {
     if(!r.id||!finite(r.day)||r.day<0||!finite(r.timeH)||r.timeH<0||(r.hasTemp&&!finite(r.temp))||(r.hasFc&&(!finite(r.fc)||r.fc<0))) return Status::Invalid;
-    uint8_t b[37]; put32(b,r.revision); putReal(b+4,r.day); putReal(b+12,r.timeH); putReal(b+20,r.temp); putReal(b+28,r.fc); b[36]=(r.hasTemp?1:0)|(r.hasFc?2:0);
-    return journal_.put(Key(k,o,Field::Row,r.id),b,37);
+    return writeRecord(journal_,Key(k,o,Field::Row,r.id),RecordType::Row,&r);
 }
 Status Repository::point(Kind k,uint32_t o,uint32_t id,Point& p) {
-    uint8_t b[30]; uint16_t n=30; Status s=journal_.get(Key(k,o,Field::Row,id),b,n); if(s!=Status::Ok) return s;
-    if(n!=30||b[29]>2||(b[28]&~uint8_t(7))) return Status::Corrupt;
-    p.id=id; p.revision=get32(b); p.atMs=get64(b+4); p.day=getReal(b+12); p.temp=getReal(b+20); p.validMask=b[28]; p.source=PointSource(b[29]);
+    Status s=readRecord(journal_,Key(k,o,Field::Row,id),RecordType::Point,&p); if(s!=Status::Ok) return s;
+    if(uint8_t(p.source)>2||(p.validMask&~uint8_t(7))) return Status::Corrupt;
+    p.id=id;
     return finite(p.day)&&p.day>=0&&finite(p.temp)?Status::Ok:Status::Corrupt;
 }
 Status Repository::putPoint(Kind k,uint32_t o,const Point& p) {
     if(!p.id||!finite(p.day)||p.day<0||!finite(p.temp)||(p.validMask&~uint8_t(7))||uint8_t(p.source)>2) return Status::Invalid;
-    uint8_t b[30]; put32(b,p.revision); put64(b+4,p.atMs); putReal(b+12,p.day); putReal(b+20,p.temp); b[28]=p.validMask; b[29]=uint8_t(p.source);
-    return journal_.put(Key(k,o,Field::Row,p.id),b,30);
+    return writeRecord(journal_,Key(k,o,Field::Row,p.id),RecordType::Point,&p);
 }
 Status Repository::model(Kind k,uint32_t o,Fit& f) {
-    uint8_t b[28]; uint16_t n=28; Status s=journal_.get(Key(k,o,Field::Model),b,n); if(s!=Status::Ok) return s;
-    if(n!=28) return Status::Corrupt;
-    f.a=getReal(b); f.b=getReal(b+8); f.r2=getReal(b+16); f.n=get32(b+24); f.valid=finite(f.a)&&finite(f.b)&&finite(f.r2)&&f.r2>=0&&f.r2<=1&&f.n>=2;
+    Status s=readRecord(journal_,Key(k,o,Field::Model),RecordType::Model,&f); if(s!=Status::Ok) return s;
+    f.valid=finite(f.a)&&finite(f.b)&&finite(f.r2)&&f.r2>=0&&f.r2<=1&&f.n>=2;
     return f.valid?Status::Ok:Status::NoModel;
 }
 Status Repository::putModel(Kind k,uint32_t o,const Fit& f) {
     if(!f.valid) return Status::NoModel;
     if(!finite(f.a)||!finite(f.b)||!finite(f.r2)||f.r2<0||f.r2>1||f.n<2) return Status::Invalid;
-    uint8_t b[28]; putReal(b,f.a); putReal(b+8,f.b); putReal(b+16,f.r2); put32(b+24,f.n);
-    return journal_.put(Key(k,o,Field::Model),b,28);
+    return writeRecord(journal_,Key(k,o,Field::Model),RecordType::Model,&f);
+}
+Status Repository::result(Kind kind,uint32_t id,Result& r) {
+    Status st=readRecord(journal_,Key(kind,id,Field::Result),RecordType::Result,&r); if(st!=Status::Ok) return st;
+    if(r.rawM<0||r.prediction.maturity<0||r.prediction.fc<0||r.prediction.factor<=0||r.prediction.referenceDay<0) return Status::Corrupt;
+    return finite(r.rawM)&&finite(r.prediction.maturity)&&finite(r.prediction.raw)&&finite(r.prediction.factor)&&finite(r.prediction.fc)&&finite(r.prediction.referenceDay)&&finite(r.initialTemp)&&finite(r.lastTemp)?Status::Ok:Status::Corrupt;
+}
+Status Repository::putResult(Kind kind,uint32_t id,const Result& result) {
+    return writeRecord(journal_,Key(kind,id,Field::Result),RecordType::Result,&result);
 }
 Status Repository::putSensors(Kind k,uint32_t o,const SensorFrame& f,const Average& a,const Time& t,Field destination) {
     uint32_t age=t.monoMs-f.sampledMonoMs;
     if(!t.valid||t.wallMs<age) return Status::NoClock;
     if(!a.mask||(a.mask&~uint8_t(7))||(a.mask&~f.validMask)||!finite(a.raw)||!finite(a.operational)) return Status::Invalid;
     for(uint8_t i=0;i<3;++i) if((a.mask&(1u<<i))&&!finite(f.channel[i])) return Status::Invalid;
-    uint8_t b[53]; put64(b,t.wallMs-age); put32(b+8,f.sampledMonoMs);
-    for(uint8_t i=0;i<3;++i) putReal(b+12+8*i,f.channel[i]);
-    b[36]=a.mask; putReal(b+37,a.raw); putReal(b+45,a.operational);
-    return journal_.put(Key(k,o,destination),b,53);
+    Time sampled={f.sampledMonoMs,t.wallMs-age,true};
+    Status st=journal_.startValue(Key(k,o,destination),53);
+    if(st==Status::Ok) st=appendRecord(journal_,RecordType::SampleTime,&sampled);
+    if(st==Status::Ok) st=appendRecord(journal_,RecordType::Channels,&f);
+    if(st==Status::Ok) st=appendRecord(journal_,RecordType::Average,&a);
+    return st;
 }
 Status Repository::copyScalar(const Key& from,const Key& to,uint16_t expected) {
     return journal_.copy(from,to,expected);

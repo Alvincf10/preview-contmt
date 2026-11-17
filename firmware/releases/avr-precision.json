@@ -10,7 +10,8 @@
     "PROGMEM strings/tables",
     "status/command lookup",
     "decimal ties",
-    "leap date"
+    "leap date",
+    "schema1 record descriptors and streamed journal read/write"
   ],
   "fullPresenterRuntimeVerified": false,
   "physicalHardwareVerified": false

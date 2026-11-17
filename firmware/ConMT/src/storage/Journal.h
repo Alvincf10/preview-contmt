@@ -14,6 +14,17 @@ public:
     virtual Status truncate(uint32_t length)=0;
     virtual Status sync()=0;
 };
+class ValueReader {
+    friend class Journal;
+    StoragePort* io_;
+    uint32_t at_;
+    uint16_t remaining_;
+public:
+    ValueReader() : io_(nullptr),at_(0),remaining_(0) {}
+    Status read(uint8_t* out,uint16_t size);
+    Status skip(uint16_t size);
+    uint16_t remaining() const { return remaining_; }
+};
 enum class Kind : uint8_t { User=1, Settings, Draft, Baseline, Session, Result, System };
 enum class Field : uint8_t {
     Exists=1, Name, Target, Datum, Pour, Created, Operator, Project, Date,
@@ -32,6 +43,7 @@ class Journal {
     DiskIndex index_;
     uint32_t end_,sequence_,writeAt_,payloadCrc_,count_;
     uint64_t operation_;
+    uint16_t remaining_;
     bool writing_,tail_,uncertain_,mounted_,indexed_;
     Status scan();
     Status indexTransaction(uint32_t at,uint32_t next);
@@ -40,14 +52,17 @@ class Journal {
     Status verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,uint64_t& op,bool footer);
 public:
     static const uint16_t MaxValue=128;
-    explicit Journal(StoragePort& io) : io_(io),end_(0),sequence_(0),writeAt_(0),payloadCrc_(0),count_(0),operation_(0),writing_(false),tail_(false),uncertain_(false),mounted_(false),indexed_(false) {}
+    explicit Journal(StoragePort& io) : io_(io),end_(0),sequence_(0),writeAt_(0),payloadCrc_(0),count_(0),operation_(0),remaining_(0),writing_(false),tail_(false),uncertain_(false),mounted_(false),indexed_(false) {}
     Status mount();
     Status begin(const uint64_t& operation=0);
     Status put(const Key& key,const uint8_t* value,uint16_t size);
+    Status startValue(const Key& key,uint16_t size);
+    Status appendValue(const uint8_t* bytes,uint16_t size);
     Status erase(const Key& key) { return put(key,nullptr,0); }
     Status commit();
-    void abort() { writing_=false; }
+    void abort() { writing_=false; remaining_=0; }
     Status get(const Key& key,uint8_t* value,uint16_t& size);
+    Status openValue(const Key& key,uint16_t expected,ValueReader& reader);
     Status copy(const Key& from,const Key& to,uint16_t expected=0);
     Status findOperation(const uint64_t& operation,Key& first);
     Status maxObject(Kind kind,uint32_t& out);

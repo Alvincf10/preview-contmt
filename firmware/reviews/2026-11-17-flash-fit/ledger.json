@@ -13,6 +13,19 @@
       "deltaFlash": -792,
       "tests": "12/12 host64,host32,ASan/UBSan; UART fixture unchanged",
       "decision": "Retain measured shared foundation; insufficient savings to justify wholesale controller conversion yet"
+    },
+    {
+      "stage": "P2 schema1 shared streaming record codec",
+      "flash": 76964,
+      "staticRam": 1502,
+      "deltaFlash": -518,
+      "tests": "13/13 each host64/host32/ASan/UBSan;800 multi-record byte-cut cases;620 AVR codec cases plus separate streamed-record AVR image",
+      "stackFrames": {
+        "START": 122,
+        "storePreview": 66,
+        "codecTransfer": 30
+      },
+      "decision": "Retain compatible streaming codec; no full storage job or latency claim"
     }
   ]
 }

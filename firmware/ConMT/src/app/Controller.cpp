@@ -55,9 +55,9 @@ Status Controller::load() {
         if(saved!=Status::Ok && saved!=Status::Missing) return saved;
         SessionState ss; TRY(state(ss));
         if(ss!=SessionState::Completed) {
-            uint64_t start=0; uint8_t frame[53]; uint16_t frameSize=53;
-            Status frameStatus=repo_.journal().get(Key(Kind::Session,session_,Field::Sensors),frame,frameSize);
-            if(frameStatus==Status::Ok&&frameSize==53) start=get64(frame);
+            uint64_t start=0; uint8_t frame[8]; ValueReader reader;
+            Status frameStatus=repo_.journal().openValue(Key(Kind::Session,session_,Field::Sensors),53,reader);
+            if(frameStatus==Status::Ok) { TRY(reader.read(frame,8)); start=get64(frame); }
             else if(frameStatus==Status::Missing) TRY(repo_.time(Key(Kind::Session,session_,Field::Start),start));
             else return frameStatus==Status::Ok?Status::Corrupt:frameStatus;
             uint64_t sessionStart; TRY(repo_.time(Key(Kind::Session,session_,Field::Start),sessionStart)); if(start<sessionStart) start=sessionStart;
@@ -483,9 +483,8 @@ Status Controller::roundResult(Result& result) {
 Status Controller::storePreview(const Result& result,const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
     Average avg; SensorFrame frame; TRY(getAverage(avg,&frame)); Time now=clock_.now(); if(!now.valid) return Status::NoClock;
-    uint8_t b[73]; putReal(b,result.rawM); putReal(b+8,result.prediction.maturity); putReal(b+16,result.prediction.raw); putReal(b+24,result.prediction.factor); putReal(b+32,result.prediction.fc); putReal(b+40,result.prediction.referenceDay); put64(b+48,result.endMs); putReal(b+56,result.initialTemp); putReal(b+64,result.lastTemp); b[72]=result.prediction.hasReference;
     TRY(begin(op)); Status s=repo_.putSensors(Kind::Session,session_,frame,avg,now,Field::PreviewSensors);
-    PUT(record.put(Field::Result,b,73));
+    PUT(repo_.putResult(Kind::Session,session_,result));
     PUT(record.putInteger(Field::State,uint32_t(SessionState::Preview)));
     TRY(finish(s)); page_=Page::Str; return Status::Ok;
 }
@@ -515,11 +514,7 @@ Status Controller::replayResult(Kind kind,uint32_t object,uint32_t pointId,Resul
     TRY(record.number(Field::InitialTemp,out.initialTemp)); return Status::Ok;
 }
 Status Controller::readResult(Kind kind,uint32_t id,Result& r) {
-    Record record(repo_,kind,id);
-    uint8_t b[73]; uint16_t n=73; TRY(record.get(Field::Result,b,n)); if(n!=73) return Status::Corrupt;
-    r.rawM=getReal(b); r.prediction.maturity=getReal(b+8); r.prediction.raw=getReal(b+16); r.prediction.factor=getReal(b+24); r.prediction.fc=getReal(b+32); r.prediction.referenceDay=getReal(b+40); r.endMs=get64(b+48); r.initialTemp=getReal(b+56); r.lastTemp=getReal(b+64); r.prediction.hasReference=b[72]!=0;
-    if(b[72]>1||r.rawM<0||r.prediction.maturity<0||r.prediction.fc<0||r.prediction.factor<=0||r.prediction.referenceDay<0) return Status::Corrupt;
-    return finite(r.rawM)&&finite(r.prediction.maturity)&&finite(r.prediction.raw)&&finite(r.prediction.factor)&&finite(r.prediction.fc)&&finite(r.prediction.referenceDay)&&finite(r.initialTemp)&&finite(r.lastTemp)?Status::Ok:Status::Corrupt;
+    return repo_.result(kind,id,r);
 }
 Status Controller::saveResult(const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
