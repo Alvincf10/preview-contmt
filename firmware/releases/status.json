@@ -3,7 +3,7 @@
   "hostTests": "PASS",
   "hostBinary32Tests": "PASS",
   "sanitizers": "PASS",
-  "ctestSuitesPerProfile": 10,
+  "ctestSuitesPerProfile": 12,
   "auditCasesPerProfile": 65,
   "reproducedDefectsCorrected": 38,
   "defectsBySeverity": {
@@ -12,17 +12,17 @@
     "Kritikal": 4
   },
   "planAcceptance": {
-    "HOST_PASS": 73,
+    "HOST_PASS": 76,
     "EMULATED_PASS": 1,
-    "PARTIAL": 21,
+    "PARTIAL": 18,
     "HARDWARE_PENDING": 3,
     "NOT_IMPLEMENTED": 2,
     "FAIL": 2
   },
   "avrNumericEmulation": "PASS",
   "avrCompleteFirmwareCapacity": "FAIL",
-  "flashBytes": 80748,
-  "staticRamBytes": 1582,
+  "flashBytes": 78274,
+  "staticRamBytes": 1502,
   "runtimeStackVerified": false,
   "physicalHardwareVerified": false,
   "hmiContractRevision": 2,
@@ -38,9 +38,17 @@
   "batteryCalibrationSource": "board-evidence/battery.json",
   "batteryHardwareVerified": false,
   "storageIndexRebuildHostTested": true,
-  "latestReview": "reviews/2026-11-17-handoff/README.md",
-  "implementationPausedForHandoff": true,
+  "latestReview": "reviews/2026-11-17-optimization/README.md",
+  "implementationPausedForHandoff": false,
   "storageOperationIndexImplemented": true,
   "hmiWireSnapshotPages": 17,
-  "avrPresenterRuntimeVerified": false
+  "avrPresenterRuntimeVerified": false,
+  "avrPrecisionEmulation": "PASS",
+  "avrPrecisionCases": 620,
+  "avrFlashHelpersRuntimeVerified": true,
+  "checkpointLiveReanchorHostVerified": true,
+  "clockAdjustmentHostVerified": true,
+  "uartLostAckResetHostVerified": true,
+  "storageMaximumIdIndexImplemented": true,
+  "implementationCommit": "0707959"
 }
