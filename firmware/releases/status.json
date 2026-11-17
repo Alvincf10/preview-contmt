@@ -3,7 +3,7 @@
   "hostTests": "PASS",
   "hostBinary32Tests": "PASS",
   "sanitizers": "PASS",
-  "ctestSuitesPerProfile": 9,
+  "ctestSuitesPerProfile": 10,
   "auditCasesPerProfile": 65,
   "reproducedDefectsCorrected": 38,
   "defectsBySeverity": {
@@ -21,8 +21,8 @@
   },
   "avrNumericEmulation": "PASS",
   "avrCompleteFirmwareCapacity": "FAIL",
-  "flashBytes": 81106,
-  "staticRamBytes": 1764,
+  "flashBytes": 80748,
+  "staticRamBytes": 1582,
   "runtimeStackVerified": false,
   "physicalHardwareVerified": false,
   "hmiContractRevision": 2,
@@ -38,5 +38,9 @@
   "batteryCalibrationSource": "board-evidence/battery.json",
   "batteryHardwareVerified": false,
   "storageIndexRebuildHostTested": true,
-  "latestReview": "reviews/2026-11-17-production/README.md"
+  "latestReview": "reviews/2026-11-17-handoff/README.md",
+  "implementationPausedForHandoff": true,
+  "storageOperationIndexImplemented": true,
+  "hmiWireSnapshotPages": 17,
+  "avrPresenterRuntimeVerified": false
 }

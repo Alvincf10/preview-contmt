@@ -22,3 +22,5 @@ Tabel ini bukan klaim seluruh102acceptance scenario sudah dieksekusi. Detail com
 Audit17November2026: [matriks per102ID](reviews/2026-11-16-audit/coverage.md) menggantikan asumsi bahwa semua acceptance selesai. [38koreksi](reviews/2026-11-16-audit/defects.md) mempunyai reproduksi sebelum/sesudah. Enam suite dan65kasus audit lulus pada tiga konfigurasi host; status produksi tetap gagal.
 
 Pembaruan17November setelah snapshot0b55090: driver baterai dan index/rebuild SD sudah diimplementasikan,9suite host lulus. Status terkini dan batas W05/W09/U08 berada pada [lanjutan audit](reviews/2026-11-17-production/README.md); tabel awal di atas adalah kondisi audit sebelumnya.
+
+Current Sol handoff supersedes the historical resource figures above:80,748flash /1,582static SRAM,10CTest suites on each host profile, operation-ID index and17page wire snapshot.28acceptance scenarios remain incomplete; see [handoff](reviews/2026-11-17-handoff/README.md).

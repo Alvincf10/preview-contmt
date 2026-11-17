@@ -6,20 +6,24 @@
 #include <float.h>
 
 namespace conmt {
-const char* statusName(Status s) {
-    switch (s) {
+static const char* statusText(Status status) {
+    static const char names[] CM_ROM=
+        "Ok\0Missing\0Invalid\0Stale\0Busy\0Absent\0Full\0IoError\0Corrupt\0Version\0"
+        "NoModel\0NoSensor\0NoClock\0Conflict\0Gap\0NeedDay\0Capacity\0ConfirmRequired\0Unsupported";
+    uint8_t index=uint8_t(status); if(index>uint8_t(Status::Unsupported)) index=uint8_t(Status::Invalid);
+    const char* name=names;
+    while(index--) { while(flashValue(name++)) {} }
+    return name;
+}
+void formatStatus(char* out,size_t capacity,Status status) {
+    copyFlash(out,capacity,statusText(status));
+}
+const char* statusName(Status status) {
 #ifdef __AVR__
-    static char name[18];
-#define S(x) case Status::x: strcpy_P(name,PSTR(#x)); return name
+    static char name[18]; formatStatus(name,sizeof(name),status); return name;
 #else
-#define S(x) case Status::x: return #x
+    return statusText(status);
 #endif
-        S(Ok); S(Missing); S(Invalid); S(Stale); S(Busy); S(Absent); S(Full);
-        S(IoError); S(Corrupt); S(Version); S(NoModel); S(NoSensor); S(NoClock);
-        S(Conflict); S(Gap); S(NeedDay); S(Capacity); S(ConfirmRequired); S(Unsupported);
-#undef S
-    }
-    return "Invalid";
 }
 Status average(const SensorFrame& f, uint32_t now, uint32_t maxAge, Average& out) {
     out = {0,0,0};

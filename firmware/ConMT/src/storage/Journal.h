@@ -24,7 +24,7 @@ enum class Field : uint8_t {
 };
 struct Key {
     Kind kind; uint32_t object; Field field; uint32_t index;
-    Key(Kind k=Kind::System,uint32_t o=0,Field f=Field::Exists,uint32_t i=0) : kind(k),object(o),field(f),index(i) {}
+    Key(Kind k=Kind::System,uint32_t o=0,Field f=Field::Exists,uint32_t i=0) __attribute__((noinline));
     bool operator==(const Key& b) const { return kind==b.kind && object==b.object && field==b.field && index==b.index; }
 };
 class Journal {

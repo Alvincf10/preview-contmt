@@ -34,8 +34,10 @@ Status Transport::encode(const char* component,const char* value) {
 }
 Status Transport::numeric(const char* component,uint32_t value) {
     if(txSize_) return Status::Busy;
-    int n=CM_FMT(tx_,sizeof(tx_)-3,"%s.val=%lu",component,(unsigned long)value);
-    if(n<0||n>int(sizeof(tx_)-4)) return Status::Capacity;
+    copyFlash(tx_,sizeof(tx_)-3,component); size_t prefix=strlen(tx_);
+    int written=CM_FMT(tx_+prefix,sizeof(tx_)-3-prefix,".val=%lu",(unsigned long)value);
+    if(written<0||prefix+unsigned(written)>sizeof(tx_)-4) return Status::Capacity;
+    uint8_t n=uint8_t(prefix+unsigned(written));
     txSize_=uint8_t(n+3); txAt_=0; for(uint8_t i=0;i<3;++i) tx_[n+i]=char(255); return Status::Ok;
 }
 void Transport::flush() {
@@ -96,26 +98,26 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
     value[0]=0;
     if(i==0) { char date[12]; Time now=app_.clock().now(); if(now.valid) calendarText(now.wallMs,date,sizeof(date),value,vc); else CM_TEXT(value,vc,"--"); CM_TEXT(component,cc,"tClock"); return true; }
     if(i==1) { uint8_t battery; Status s=app_.devices().battery(battery); if(s==Status::Ok) CM_FMT(value,vc,"%u%%",unsigned(battery)); else CM_TEXT(value,vc,"--"); CM_TEXT(component,cc,"tBatt"); return true; }
-    if(i==2) { CM_FMT(value,vc,"%s",statusName(ack_==Status::Ok?app_.status():ack_)); CM_TEXT(component,cc,"tMsg"); return true; }
+    if(i==2) { formatStatus(value,vc,ack_==Status::Ok?app_.status():ack_); CM_TEXT(component,cc,"tMsg"); return true; }
     i-=3;
     Field field=Field::Name; bool isText=false; uint8_t digits=1;
     if(page==Page::User) {
         if(i>2) return false;
-        static const Field fields[]={Field::Operator,Field::Project,Field::Date};
+        static const Field fields[] CM_ROM={Field::Operator,Field::Project,Field::Date};
         static const char names[][6] CM_ROM={"tOp","tProj","tDate"};
-        field=fields[i]; CM_FMT(component,cc,"%s",flashText(names[i])); kind=Kind::User; object=0; isText=true;
+        field=flashValue(fields+i); copyFlash(component,cc,names[i]); kind=Kind::User; object=0; isText=true;
     } else if(page==Page::NewB) {
         if(i>4) return false;
         if(i==3||i==4) { uint64_t at; char date[12],clock[12]; if(r.time(Key(kind,object,Field::Pour),at)==Status::Ok) calendarText(at,date,sizeof(date),clock,sizeof(clock)); else { CM_COPY(date,"--"); CM_COPY(clock,"--"); } CM_FMT(component,cc,"%s",i==3?"tPDate":"tPClock"); CM_FMT(value,vc,"%s",i==3?date:clock); return true; }
-        static const Field fields[]={Field::Name,Field::Target,Field::Datum};
-        static const char names[][6] CM_ROM={"tName","tFc","tTemp"}; field=fields[i]; CM_FMT(component,cc,"%s",flashText(names[i])); isText=i==0;
+        static const Field fields[] CM_ROM={Field::Name,Field::Target,Field::Datum};
+        static const char names[][6] CM_ROM={"tName","tFc","tTemp"}; field=flashValue(fields+i); copyFlash(component,cc,names[i]); isText=i==0;
     } else if(page==Page::Mat||(page==Page::BaseR&&i>=8&&i<19)) {
         if(page==Page::BaseR) i-=8;
         if(i>10) return false;
         if(i==10) { Real w,c; CM_TEXT(component,cc,"tWC"); if(r.number(Key(kind,object,Field::Water),w)==Status::Ok&&r.number(Key(kind,object,Field::Cement),c)==Status::Ok&&c>0) formatReal(value,vc,w/c,2); else CM_TEXT(value,vc,"--"); return true; }
-        static const Field fields[]={Field::Cement,Field::Water,Field::Coarse,Field::Fine,Field::RetarderPct,Field::RetarderBrand,Field::AcceleratorPct,Field::AcceleratorBrand,Field::FlyAshPct,Field::FlyAshBrand};
+        static const Field fields[] CM_ROM={Field::Cement,Field::Water,Field::Coarse,Field::Fine,Field::RetarderPct,Field::RetarderBrand,Field::AcceleratorPct,Field::AcceleratorBrand,Field::FlyAshPct,Field::FlyAshBrand};
         static const char names[][6] CM_ROM={"tCem","tWat","tCoa","tFin","tRetP","tRetB","tAccP","tAccB","tFlyP","tFlyB"};
-        field=fields[i]; CM_FMT(component,cc,"%s",flashText(names[i])); isText=i==5||i==7||i==9; digits=2;
+        field=flashValue(fields+i); copyFlash(component,cc,names[i]); isText=i==5||i==7||i==9; digits=2;
     } else if(page==Page::Matu) {
         if(i==30) {
             CM_TEXT(component,cc,"tHint"); Row selected; uint64_t pour;
@@ -125,7 +127,7 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
         }
         if(i>30) return false;
         uint8_t slot=uint8_t(i/5),col=uint8_t(i%5); Row row; Status s=app_.rowAt(slot,row);
-        static const char names[][5] CM_ROM={"tDay","tTim","tFc","tT","tRid"}; CM_FMT(component,cc,"%s%u",flashText(names[col]),unsigned(slot));
+        static const char names[][5] CM_ROM={"tDay","tTim","tFc","tT","tRid"}; indexedName(component,cc,names[col],slot);
         if(s!=Status::Ok) { CM_TEXT(value,vc,"--"); return true; }
         if(col==4) CM_FMT(value,vc,"%lu",(unsigned long)row.id);
         else if(col==0) rowText(r,object,row,Field::DayInput,row.day,value,vc);
@@ -135,9 +137,9 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
         return true;
     } else if(page==Page::BaseR) {
         if(i==7) { CM_TEXT(component,cc,"tEq"); Fit fit; if(r.model(kind,object,fit)==Status::Ok) { char a[28],b[28]; formatReal(a,sizeof(a),fit.a,3); formatReal(b,sizeof(b),fabs(fit.b),4); CM_FMT(value,vc,"fc = %s %c %s ln(M)",a,fit.b<0?'-':'+',b); } else CM_TEXT(value,vc,"--"); return true; }
-        if(i>=19&&i<=21) { static const Field context[]={Field::Operator,Field::Project,Field::Date}; static const char names[][6] CM_ROM={"tOp","tProj","tDate"}; CM_FMT(component,cc,"%s",flashText(names[i-19])); if(r.text(Key(Kind::User,0,context[i-19]),value,uint16_t(vc))!=Status::Ok) CM_TEXT(value,vc,"--"); return true; }
+        if(i>=19&&i<=21) { static const Field context[] CM_ROM={Field::Operator,Field::Project,Field::Date}; static const char names[][6] CM_ROM={"tOp","tProj","tDate"}; copyFlash(component,cc,names[i-19]); if(r.text(Key(Kind::User,0,flashValue(context+i-19)),value,uint16_t(vc))!=Status::Ok) CM_TEXT(value,vc,"--"); return true; }
         if(i>6) return false;
-        static const char names[][8] CM_ROM={"tName","tTarget","tDatum","tA","tB","tR2","tCount"}; CM_FMT(component,cc,"%s",flashText(names[i]));
+        static const char names[][8] CM_ROM={"tName","tTarget","tDatum","tA","tB","tR2","tCount"}; copyFlash(component,cc,names[i]);
         if(i<3) { field=i==0?Field::Name:(i==1?Field::Target:Field::Datum); isText=i==0; }
         else { Fit fit; Status s=r.model(kind,object,fit); if(s!=Status::Ok) CM_TEXT(value,vc,"--"); else if(i==6) CM_FMT(value,vc,"%lu",(unsigned long)fit.n); else formatCoeff(value,vc,i==3?fit.a:(i==4?fit.b:fit.r2),4); return true; }
     } else if(page==Page::SaveB||page==Page::SelB||page==Page::Hist) {
@@ -145,7 +147,7 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
         if(!history&&i>=18) {
             if(i>23) return false;
             static const char names[][9] CM_ROM={"tSelName","tSelFc","tSelT","tSelR2","tSelId","tSelDate"};
-            uint8_t item=uint8_t(i-18); CM_FMT(component,cc,"%s",flashText(names[item]));
+            uint8_t item=uint8_t(i-18); copyFlash(component,cc,names[item]);
             uint32_t id=app_.selectedId(); if(!id) { CM_TEXT(value,vc,"--"); return true; }
             if(item==0) { if(r.text(Key(Kind::Baseline,id,Field::Name),value,uint16_t(vc))!=Status::Ok) CM_TEXT(value,vc,"--"); }
             if(item==1||item==2) { Real number; if(r.number(Key(Kind::Baseline,id,item==1?Field::Target:Field::Datum),number)==Status::Ok) formatReal(value,vc,number,1); else CM_TEXT(value,vc,"--"); }
@@ -158,7 +160,7 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
         if(i>=uint16_t(6*columns)) return false;
         uint8_t slot=uint8_t(i/columns),col=uint8_t(i%columns); uint32_t id=0;
         Status s=history?app_.historyAt(slot,id):app_.baselineAt(slot,id);
-        static const char names[][7] CM_ROM={"tId","tName","tVal","tDate","tCount"}; CM_FMT(component,cc,"%s%u",flashText(names[col]),unsigned(slot));
+        static const char names[][7] CM_ROM={"tId","tName","tVal","tDate","tCount"}; indexedName(component,cc,names[col],slot);
         if(s!=Status::Ok) { CM_TEXT(value,vc,"--"); return true; }
         if(col==0) CM_FMT(value,vc,"%lu",(unsigned long)id);
         else if(col==1) r.text(Key(history?Kind::Result:Kind::Baseline,id,Field::Name),value,uint16_t(vc));
@@ -175,14 +177,14 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
             return true;
         }
         uint16_t base=page==Page::RT?6:0; if(i<base) return false; i-=base;
-        if(i<3) { static const char names[][8] CM_ROM={"tBase","tTarget","tDatum"}; CM_FMT(component,cc,"%s",flashText(names[i])); field=i==0?Field::Name:(i==1?Field::Target:Field::Datum); isText=i==0; }
+        if(i<3) { static const char names[][8] CM_ROM={"tBase","tTarget","tDatum"}; copyFlash(component,cc,names[i]); field=i==0?Field::Name:(i==1?Field::Target:Field::Datum); isText=i==0; }
         else if(i<6) {
-            static const char names[][10] CM_ROM={"tPDate","tPour","tInitTemp"}; CM_FMT(component,cc,"%s",flashText(names[i-3]));
+            static const char names[][10] CM_ROM={"tPDate","tPour","tInitTemp"}; copyFlash(component,cc,names[i-3]);
             if(i==5) { Real t; if(r.number(Key(kind,object,Field::InitialTemp),t)==Status::Ok) formatReal(value,vc,t,1); }
             else { uint64_t at; char date[12],clock[12]; if(r.time(Key(kind,object,Field::Start),at)==Status::Ok) { calendarText(at,date,sizeof(date),clock,sizeof(clock)); CM_FMT(value,vc,"%s",i==3?date:clock); } }
             return true;
         } else if(i<11) {
-            static const char names[][9] CM_ROM={"tM","tFc","tPct","tElapsed","tRefDay"}; CM_FMT(component,cc,"%s",flashText(names[i-6]));
+            static const char names[][9] CM_ROM={"tM","tFc","tPct","tElapsed","tRefDay"}; copyFlash(component,cc,names[i-6]);
             Result result; Status s=page==Page::RT?app_.checkpointResult(kind,object,0,result):app_.readResult(kind,object,result);
             if(s!=Status::Ok) { CM_TEXT(value,vc,"--"); return true; }
             if(i==6) formatReal(value,vc,result.prediction.maturity,0);
@@ -195,8 +197,8 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
             i-=11;
             if(page==Page::HistD&&i>=30) {
                 uint8_t extra=uint8_t(i-30); if(extra>9) return false;
-                static const char names[][9] CM_ROM={"tOp","tProj","tDate","tSavedAt","tLastT","tStatus","tS1","tS2","tS3","tCount"}; CM_FMT(component,cc,"%s",flashText(names[extra]));
-                if(extra<3) { static const Field context[]={Field::Operator,Field::Project,Field::Date}; if(r.text(Key(kind,object,context[extra]),value,uint16_t(vc))!=Status::Ok) CM_TEXT(value,vc,"--"); }
+                static const char names[][9] CM_ROM={"tOp","tProj","tDate","tSavedAt","tLastT","tStatus","tS1","tS2","tS3","tCount"}; copyFlash(component,cc,names[extra]);
+                if(extra<3) { static const Field context[] CM_ROM={Field::Operator,Field::Project,Field::Date}; if(r.text(Key(kind,object,flashValue(context+extra)),value,uint16_t(vc))!=Status::Ok) CM_TEXT(value,vc,"--"); }
                 if(extra==3) { uint64_t at; char date[12],clock[12]; if(r.time(Key(kind,object,Field::Created),at)==Status::Ok) { calendarText(at,date,sizeof(date),clock,sizeof(clock)); CM_FMT(value,vc,"%s %s",date,clock); } else CM_TEXT(value,vc,"--"); }
                 if(extra==4) { Result result; if(app_.readResult(kind,object,result)==Status::Ok) formatReal(value,vc,result.lastTemp,1); else CM_TEXT(value,vc,"--"); }
                 if(extra==5) { uint32_t state; if(r.integer(Key(kind,object,Field::State),state)==Status::Ok&&state==uint32_t(SessionState::Completed)) CM_TEXT(value,vc,"COMPLETED"); else CM_TEXT(value,vc,"--"); }
@@ -206,7 +208,7 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
             }
             if(page==Page::Str||i>=30) return false;
             uint8_t slot=uint8_t(i/5),col=uint8_t(i%5); Point p; Status s=app_.pointAt(slot,p);
-            static const char names[][5] CM_ROM={"tDay","tAt","tTmp","tCm","tCf"}; CM_FMT(component,cc,"%s%u",flashText(names[col]),unsigned(slot));
+            static const char names[][5] CM_ROM={"tDay","tAt","tTmp","tCm","tCf"}; indexedName(component,cc,names[col],slot);
             if(s!=Status::Ok) { CM_TEXT(value,vc,"--"); return true; }
             if(col==0) formatReal(value,vc,p.day,1);
             if(col==1) { char date[12],clock[12]; calendarText(p.atMs,date,sizeof(date),clock,sizeof(clock)); CM_FMT(value,vc,"%s %s",date,clock); }
@@ -221,11 +223,11 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
     } else if(page==Page::Set) {
         if(i>6) return false;
         if(i>=4) { const Settings& s=app_.settings(); uint32_t v=i==4?s.intervalSeconds/3600:(i==5?s.intervalSeconds/60%60:s.intervalSeconds%60); CM_FMT(component,cc,"%s",i==4?"tHour":(i==5?"tMin":"tSec")); CM_FMT(value,vc,"%02u",unsigned(v)); return true; }
-        static const char names[][10] CM_ROM={"tInterval","tBright","tSound","tAuto"}; CM_FMT(component,cc,"%s",flashText(names[i]));
+        static const char names[][10] CM_ROM={"tInterval","tBright","tSound","tAuto"}; copyFlash(component,cc,names[i]);
         const Settings& s=app_.settings(); if(i==0) { CM_FMT(value,vc,"%02u:%02u:%02u",unsigned(s.intervalSeconds/3600),unsigned(s.intervalSeconds/60%60),unsigned(s.intervalSeconds%60)); return true; } CM_FMT(value,vc,"%lu",(unsigned long)(i==0?s.intervalSeconds:(i==1?s.brightness:(i==2?s.sound:s.autoSave)))); return true;
     } else if(page==Page::Dev) {
         if(i>2) return false;
-        static const char names[][10] CM_ROM={"tVersion","tMcu","tProtocol"}; static const char values[][18] CM_ROM={"ConMT 1.0 schema1","ATmega328P","CM1 contract2"}; CM_FMT(component,cc,"%s",flashText(names[i])); CM_FMT(value,vc,"%s",flashText(values[i])); return true;
+        static const char names[][10] CM_ROM={"tVersion","tMcu","tProtocol"}; static const char values[][18] CM_ROM={"ConMT 1.0 schema1","ATmega328P","CM1 contract2"}; copyFlash(component,cc,names[i]); copyFlash(value,vc,values[i]); return true;
     } else return false;
     Status s;
     if(isText) s=r.text(Key(kind,object,field),value,uint16_t(vc));
@@ -255,9 +257,9 @@ void Transport::poll(uint32_t now) {
     if(phase_==0) {
         renderView_=app_.view();
         if(app_.page()==Page::RT) { SensorFrame frame; Average avg; sensorStatus_=app_.getAverage(avg,&frame); sensorMask_=avg.mask; averageCache_=avg.operational; for(uint8_t i=0;i<3;++i) sensorCache_[i]=frame.channel[i]; }
-        numeric("pInit.vRender",1); ++phase_; return;
+        numeric(CM_LITERAL("pInit.vRender"),1); ++phase_; return;
     }
-    if(phase_==1) { numeric("pInit.vBoot",app_.bootToken()); ++phase_; return; }
+    if(phase_==1) { numeric(CM_LITERAL("pInit.vBoot"),app_.bootToken()); ++phase_; return; }
     if(phase_==2) {
         if(actualPage_!=uint8_t(app_.page())) {
             int n=CM_FMT(tx_,sizeof(tx_)-3,"page %u",unsigned(app_.page())); for(uint8_t i=0;i<3;++i) tx_[n+i]=char(255); txAt_=0; txSize_=uint8_t(n+3); actualPage_=uint8_t(app_.page());
@@ -268,11 +270,11 @@ void Transport::poll(uint32_t now) {
         if(renderNext()) return;
         ++phase_;
     }
-    if(phase_==4) { numeric("pInit.vView",renderView_); ++phase_; return; }
-    if(phase_==5) { numeric("pInit.vStatus",uint32_t(ack_)); ++phase_; return; }
-    if(phase_==6) { if(ackPending_) numeric("pInit.vAckBoot",ackBoot_); ++phase_; return; }
-    if(phase_==7) { if(ackPending_) { numeric("pInit.vAck",seq_); ackPending_=false; } ++phase_; return; }
-    if(phase_==8) { numeric("pInit.vRender",0); ++phase_; return; }
+    if(phase_==4) { numeric(CM_LITERAL("pInit.vView"),renderView_); ++phase_; return; }
+    if(phase_==5) { numeric(CM_LITERAL("pInit.vStatus"),uint32_t(ack_)); ++phase_; return; }
+    if(phase_==6) { if(ackPending_) numeric(CM_LITERAL("pInit.vAckBoot"),ackBoot_); ++phase_; return; }
+    if(phase_==7) { if(ackPending_) { numeric(CM_LITERAL("pInit.vAck"),seq_); ackPending_=false; } ++phase_; return; }
+    if(phase_==8) { numeric(CM_LITERAL("pInit.vRender"),0); ++phase_; return; }
     phase_=0; field_=0; dirty_=false; full_=false; ackPending_=false; viewSent_=renderView_;
 }
 }

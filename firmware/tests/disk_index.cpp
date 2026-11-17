@@ -31,12 +31,36 @@ int main() {
     OK(rr.integer(Key(Kind::Baseline,200,Field::Target),value));REQUIRE(value==999);sidecar.full=false;
     Journal refresh(media);Repository final(refresh);OK(refresh.mount());REQUIRE(refresh.indexed());
     sidecar.bytes.assign(sidecar.bytes.size(),0xff);OK(final.integer(Key(Kind::Baseline,200,Field::Target),value));REQUIRE(value==999&&!refresh.indexed());
+    {
+        host::MemoryStorage m,idx; m.sidecar=&idx; Journal j(m); Repository r2(j); OK(j.mount());
+        const uint64_t epoch=uint64_t(17)<<32;
+        OK(j.begin()); REQUIRE(j.put(Key(Kind(0),17,Field(0),300),nullptr,0)==Status::Invalid); j.abort();
+        for(uint32_t sequence=1;sequence<=300;++sequence) {
+            OK(j.begin(epoch|sequence)); OK(r2.putInteger(Key(Kind::Result,sequence,Field::Exists),1)); OK(j.commit());
+        }
+        Key first; m.readBytes=idx.readBytes=0;
+        OK(j.findOperation(epoch|300,first)); REQUIRE(first==Key(Kind::Result,300,Field::Exists));
+        REQUIRE(j.findOperation((uint64_t(18)<<32)|300,first)==Status::Missing);
+        const uint64_t indexedOperationBytes=m.readBytes+idx.readBytes;
+        m.sidecar=nullptr; Journal scan(m); OK(scan.mount()); m.readBytes=0;
+        OK(scan.findOperation(epoch|300,first)); REQUIRE(first==Key(Kind::Result,300,Field::Exists));
+        REQUIRE(m.readBytes>indexedOperationBytes*10);
+        std::cout<<"operation indexed bytes="<<indexedOperationBytes<<" scanned bytes="<<m.readBytes<<'\n';
+        m.sidecar=&idx; idx.bytes.clear(); Journal rebuilt(m); OK(rebuilt.mount());
+        OK(rebuilt.findOperation(epoch|300,first)); REQUIRE(first==Key(Kind::Result,300,Field::Exists));
+        REQUIRE(rebuilt.begin(epoch|300)==Status::Conflict);
+        idx.bytes.assign(idx.bytes.size(),0xff);
+        OK(rebuilt.findOperation(epoch|300,first)); REQUIRE(!rebuilt.indexed()&&first==Key(Kind::Result,300,Field::Exists));
+        Journal verifyCorruption(m); OK(verifyCorruption.mount()); m.bytes[m.bytes.size()-9]^=1;
+        REQUIRE(verifyCorruption.findOperation(epoch|300,first)==Status::Corrupt);
+    }
     for(int cut=0;cut<40;++cut) {
         host::MemoryStorage m,idx;m.sidecar=&idx;Journal j(m);Repository r2(j);OK(j.mount());
-        idx.writeBudget=cut;OK(j.begin());OK(r2.putInteger(Key(Kind::Baseline,1,Field::Target),73));OK(j.commit());
+        idx.writeBudget=cut;OK(j.begin(42));OK(r2.putInteger(Key(Kind::Baseline,1,Field::Target),73));OK(j.commit());
         OK(r2.integer(Key(Kind::Baseline,1,Field::Target),value));REQUIRE(value==73);
         idx.writeBudget=-1;Journal reboot(m);Repository recovered(reboot);OK(reboot.mount());REQUIRE(reboot.indexed());
         OK(recovered.integer(Key(Kind::Baseline,1,Field::Target),value));REQUIRE(value==73);
+        Key first; OK(reboot.findOperation(42,first)); REQUIRE(first==Key(Kind::Baseline,1,Field::Target));
     }
     {
         host::MemoryStorage source;Journal seed(source);OK(seed.mount());OK(seed.begin());

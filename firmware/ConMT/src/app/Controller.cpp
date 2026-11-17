@@ -373,12 +373,13 @@ Status Controller::start(bool confirmed,uint64_t op) {
     if(s==Status::Ok) s=repo_.number(Key(Kind::Baseline,selected_,Field::Target),v);
     PUT(repo_.putNumber(Key(Kind::Session,id,Field::Target),v));
     char text[65];
-    const Field fields[]={Field::Name,Field::Operator,Field::Project,Field::Date};
+    static const Field fields[] CM_ROM={Field::Name,Field::Operator,Field::Project,Field::Date};
     for(uint8_t i=0;i<4 && s==Status::Ok;++i) {
-        Status read=repo_.text(Key(i?Kind::User:Kind::Baseline,i?0:selected_,fields[i]),text,65);
+        Field field=flashValue(fields+i);
+        Status read=repo_.text(Key(i?Kind::User:Kind::Baseline,i?0:selected_,field),text,65);
         if(read==Status::Missing && i) continue;
         if(read!=Status::Ok) { s=read; break; }
-        s=repo_.putText(Key(Kind::Session,id,fields[i]),text,65);
+        s=repo_.putText(Key(Kind::Session,id,field),text,65);
     }
     Point p; p.id=1; p.revision=1; p.atMs=t.wallMs; p.temp=avg.operational; p.validMask=avg.mask;
     PUT(repo_.putPoint(Kind::Session,id,p)); PUT(repo_.putInteger(Key(Kind::Session,id,Field::MaxRow),1));
@@ -602,8 +603,8 @@ Status Controller::dispatch(const char* verb,const char* a,const char* b,const c
     if((command==Command::PAGE_READY)) { ++view_; return status_=Status::Ok; }
     if((command==Command::NAV)) {
         if(CM_EQ(a,"BACK")) {
-            static const uint8_t back[]={1,1,2,2,3,4,5,6,3,2,9,10,11,9,13,2,2};
-            n=(page_==Page::Matu&&savedEntry_)?8:back[uint8_t(page_)];
+            static const uint8_t back[] CM_ROM={1,1,2,2,3,4,5,6,3,2,9,10,11,9,13,2,2};
+            n=(page_==Page::Matu&&savedEntry_)?8:flashValue(back+uint8_t(page_));
         } else TRY(parseU32(a,n));
         if(n>16||!validNavigation(Page(n))) return status_=Status::Invalid;
         page_=Page(n); cursor_=0; ++view_; return status_=Status::Ok;

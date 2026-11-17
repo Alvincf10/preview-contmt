@@ -2,6 +2,8 @@
 #include "Journal.h"
 #include <string.h>
 namespace conmt {
+Key::Key(Kind k,uint32_t o,Field f,uint32_t i) : kind(k),object(o),field(f),index(i) {}
+static Key operationKey(uint64_t operation) { return Key(Kind(0),uint32_t(operation>>32),Field(0),uint32_t(operation)); }
 void put16(uint8_t* p,uint16_t n) { for(uint8_t i=0;i<2;++i) p[i]=uint8_t(n>>(i*8)); }
 void put32(uint8_t* p,uint32_t n) { for(uint8_t i=0;i<4;++i) p[i]=uint8_t(n>>(i*8)); }
 void put64(uint8_t* p,uint64_t n) { for(uint8_t i=0;i<8;++i) p[i]=uint8_t(n>>(i*8)); }
@@ -40,6 +42,7 @@ Status Journal::verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,u
     while(left) {
         if(left<12) return Status::Corrupt;
         s=io_.read(pos,scratch,12); if(s!=Status::Ok) return s;
+        if(!scratch[0] || !scratch[1]) return Status::Corrupt;
         uint16_t v=get16(scratch+10);
         if(v>MaxValue || uint32_t(v)+12>left) return Status::Corrupt;
         crc=crc32(crc,scratch,12); pos+=12; left-=12; ++n;
@@ -103,6 +106,11 @@ Status Journal::indexTransaction(uint32_t at,uint32_t next) {
         st=index_.put(key,pos,at); if(st!=Status::Ok) return st;
         pos+=12+size;
     }
+    if(next>at+40) {
+        Status st=io_.read(at+12,bytes,8); if(st!=Status::Ok) return st;
+        uint64_t operation=get64(bytes);
+        if(operation) return index_.put(operationKey(operation),at+32,at);
+    }
     return Status::Ok;
 }
 Status Journal::begin(uint64_t op) {
@@ -117,6 +125,7 @@ Status Journal::begin(uint64_t op) {
 }
 Status Journal::put(const Key& k,const uint8_t* value,uint16_t n) {
     if(!writing_) return Status::Invalid;
+    if(!uint8_t(k.kind) || !uint8_t(k.field)) return Status::Invalid;
     if(n>MaxValue || (n && !value) || writeAt_>UINT32_MAX-uint32_t(n)-20) return Status::Capacity;
     uint8_t h[12]; h[0]=uint8_t(k.kind); h[1]=uint8_t(k.field); put32(h+2,k.object); put32(h+6,k.index); put16(h+10,n);
     Status st=io_.write(writeAt_,h,12); if(st!=Status::Ok) { abort(); return st; }
@@ -152,6 +161,7 @@ Status Journal::get(const Key& wanted,uint8_t* out,uint16_t& capacity) {
     capacity=size; return io_.read(at,out,size);
 }
 Status Journal::locate(const Key& wanted,uint32_t& valueAt,uint16_t& valueLength) {
+    if(!uint8_t(wanted.kind) || !uint8_t(wanted.field)) return Status::Invalid;
     if(indexed_) {
         uint32_t entry,transaction; Status st=index_.get(wanted,entry,transaction);
         if(st==Status::Missing) return st;
@@ -193,6 +203,7 @@ Status Journal::locate(const Key& wanted,uint32_t& valueAt,uint16_t& valueLength
 }
 Status Journal::copy(const Key& from,const Key& to,uint16_t expected) {
     if(!writing_) return Status::Invalid;
+    if(!uint8_t(to.kind) || !uint8_t(to.field)) return Status::Invalid;
     uint32_t at; uint16_t size; Status st=locate(from,at,size); if(st!=Status::Ok) return st;
     if(expected&&size!=expected) return Status::Corrupt;
     if(writeAt_>UINT32_MAX-uint32_t(size)-20) return Status::Capacity;
@@ -211,6 +222,19 @@ Status Journal::copy(const Key& from,const Key& to,uint16_t expected) {
 }
 Status Journal::findOperation(uint64_t op,Key& first) {
     if(!op) return Status::Missing;
+    if(indexed_) {
+        uint32_t entry,transaction; Status st=index_.get(operationKey(op),entry,transaction);
+        if(st==Status::Missing) return st;
+        if(st==Status::Ok && transaction<end_ && end_-transaction>=40 && entry==transaction+32) {
+            uint32_t next,seq; uint64_t saved;
+            st=verify(transaction,end_,next,seq,saved,true); if(st!=Status::Ok) return st;
+            if(saved==op && next-entry>=20) {
+                uint8_t bytes[12]; st=io_.read(entry,bytes,12); if(st!=Status::Ok) return st;
+                first=Key(Kind(bytes[0]),get32(bytes+2),Field(bytes[1]),get32(bytes+6)); return Status::Ok;
+            }
+        }
+        indexed_=false;
+    }
     for(uint32_t at=0;at<end_;) {
         uint32_t verifiedEnd,verifiedSeq; uint64_t verifiedOp;
         Status verified=verify(at,end_,verifiedEnd,verifiedSeq,verifiedOp,true); if(verified!=Status::Ok) return verified;

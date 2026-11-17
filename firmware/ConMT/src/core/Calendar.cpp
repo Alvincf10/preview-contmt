@@ -5,8 +5,8 @@
 namespace conmt {
 static bool leap(unsigned y) { return y%4==0 && (y%100!=0 || y%400==0); }
 static unsigned daysIn(unsigned y,unsigned m) {
-    static const uint8_t d[]={31,28,31,30,31,30,31,31,30,31,30,31};
-    return d[m-1]+(m==2 && leap(y)?1:0);
+    static const uint8_t d[] CM_ROM={31,28,31,30,31,30,31,31,30,31,30,31};
+    return flashValue(d+m-1)+(m==2 && leap(y)?1:0);
 }
 static bool decimal(const char* s,unsigned n,unsigned& value) {
     value=0; for(unsigned i=0;i<n;++i) { if(s[i]<'0'||s[i]>'9') return false; value=value*10+unsigned(s[i]-'0'); } return true;

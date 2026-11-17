@@ -36,3 +36,5 @@ CMT.IDX adalah index bantu di SD:64bucket×8byte berisi head offset dan CRC, lal
 Penyalinan record ke transaksi memakai buffer32byte dan CRC/commit schema yang sama. Rebuild index, chain lookup, copy/save/generate masih perlu jatah kerja per tick dan uji latency target. Index mengurangi volume read pada host tetapi belum membuktikan responsiveness alat. Tidak ada garbage collection atau penghapusan data otomatis.
 
 Baseline immutable direferensikan oleh session dan result, ditambah snapshot coeff/target/datum/identity. Delete baseline menulis Exists=0, tidak menghapus rows yang masih diperlukan history. ID history berasal dari sessionID, sehingga SAVE RESULT berulang tidak menggandakan record.
+
+Operation index extension at the17November handoff: kind0/field0 index keys encode the64bit operation ID in object/index. Their node references the first journal entry and its transaction. A hit verifies the committed journal CRC and operation ID before acknowledging a duplicate. Zero kind/field are rejected in journal data to prevent namespace collisions. Missing/full/corrupt sidecars retain journal-scan fallback and rebuild semantics; schema1 stays unchanged.

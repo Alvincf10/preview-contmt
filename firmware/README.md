@@ -31,7 +31,7 @@ ctest --test-dir firmware/build-float --output-on-failure
 
 Untuk AddressSanitizer/UndefinedBehaviorSanitizer tambahkan -DCONMT_SANITIZE=ON pada build terpisah.
 
-Sembilan suite test memeriksa core/codec, seluruh row dua fixture oracle, serta workflow/recovery/protocol. Fault test memakai100batas byte penulisan terputus; ini bukan100uji listrik fisik. Matriks102skenario pada plan belum seluruhnya menjadi acceptance test perangkat.
+Sepuluh suite test memeriksa core/codec, seluruh row dua fixture oracle, workflow/recovery/protocol dan snapshot UART17page. Fault test mencakup100batas byte scalar serta500batas streaming-copy; ini bukan uji listrik fisik. Matriks102skenario pada plan belum seluruhnya menjadi acceptance test perangkat.
 
 ## Menjalankan controller melalui terminal
 
@@ -69,6 +69,6 @@ Jangan menyatakan production-ready atau semua acceptance selesai berdasarkan hos
 
 38cacat direproduksi dan dikoreksi, dengan65kasus audit PASS pada host64/host32/sanitizer. Daftar lengkap beserta bukti sebelum/sesudah ada pada [defects.md](reviews/2026-11-16-audit/defects.md). Manifest/event menggunakan CM1 contract2; panel pasangan wajib memakai revision yang sama.
 
-Build lengkap setelah adapter baterai/index memerlukan81.106byte flash dan1.764byte RAM statis, sehingga belum muat pada ATmega328P. [Matriks102skenario](reviews/2026-11-16-audit/coverage.md) mencatat73HOST_PASS,1EMULATED_PASS dan28skenario parsial/belum lulus. Source ini belum boleh diperlakukan sebagai release mesin.
+Build pada handoff terakhir memerlukan80.748byte flash dan1.582byte RAM statis, sehingga belum muat pada ATmega328P. Matriks102skenario masih mencatat73HOST_PASS,1EMULATED_PASS dan28skenario parsial/belum lulus. Source ini belum boleh diperlakukan sebagai release mesin.
 
-Lanjutan implementasi terbaru: [baterai, index SD, streaming copy dan pengurangan stack](reviews/2026-11-17-production/README.md). Seluruh9suite lulus pada tiga profil host, tetapi kapasitas target dan integrasi mesin masih belum lulus.
+Lanjutan implementasi terbaru: [checkpoint handoff Sol](reviews/2026-11-17-handoff/README.md). Seluruh10suite lulus pada tiga profil host, tetapi kapasitas target dan integrasi mesin masih belum lulus. Rencana lanjutan tersimpan lokal dalam docs/firmware-plan/08_REMAINING_AND_SIZE_PLAN.md yang sengaja tidak masuk Git.

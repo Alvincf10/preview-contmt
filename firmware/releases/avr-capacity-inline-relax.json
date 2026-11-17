@@ -2,12 +2,12 @@
   "purpose": "capacity probe, never upload",
   "compiler": "avr-g++ (GCC) 7.3.0",
   "flashBytes": 83072,
-  "staticRamBytes": 1685,
+  "staticRamBytes": 1764,
   "physicalFlashRemaining": -50304,
-  "staticRamRemaining": 363,
+  "staticRamRemaining": 284,
   "fitsStaticLimits": false,
-  "includes": "shared core/controller/HMI/real SD/HardwareSerial; probe clock/sensor/device ports",
-  "excludes": "verified sensor/RTC/battery drivers, actual stack watermark",
+  "includes": "shared core/controller/HMI/real SD with disk index/HardwareSerial/confirmed battery adapter; probe clock/sensor/brightness/sound ports",
+  "excludes": "verified sensor/RTC drivers, actual stack watermark",
   "clockAssumption": "16MHz for capacity only; not board configuration",
   "strategy": "inline-relax",
   "compilerFlags": [
@@ -33,5 +33,7 @@
   "physicalRegionLimits": {
     "flash": 32768,
     "sram": 2048
-  }
+  },
+  "sourceCommit": "72697e1",
+  "measurementStage": "comparison before subsequent flash-text and operation-index changes; not current release"
 }
