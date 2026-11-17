@@ -14,6 +14,8 @@ int main() {
         for(unsigned i=1;i<=200;++i) OK(repo.putInteger(Key(Kind::Baseline,i,Field::Target),round*1000+i));
         OK(journal.commit());
     }
+    uint32_t maximum; OK(journal.maxObject(Kind::Baseline,maximum)); REQUIRE(maximum==200);
+    OK(journal.maxObject(Kind::Result,maximum)); REQUIRE(maximum==0);
     uint32_t value; media.readCalls=media.readBytes=0;
     for(unsigned i=1;i<=200;++i) { OK(repo.integer(Key(Kind::Baseline,i,Field::Target),value)); REQUIRE(value==3000+i); }
     auto indexedBytes=media.readBytes+sidecar.readBytes;
@@ -27,10 +29,16 @@ int main() {
     auto authoritative=media.bytes;
     sidecar.bytes.assign(22,0xff); Journal rebuilt(media);Repository rr(rebuilt);OK(rebuilt.mount());REQUIRE(rebuilt.indexed());
     OK(rr.integer(Key(Kind::Baseline,200,Field::Target),value));REQUIRE(value==3200&&media.bytes==authoritative);
+    OK(rebuilt.maxObject(Kind::Baseline,maximum)); REQUIRE(maximum==200);
     sidecar.full=true;OK(rebuilt.begin());OK(rr.putInteger(Key(Kind::Baseline,200,Field::Target),999));OK(rebuilt.commit());REQUIRE(!rebuilt.indexed());
     OK(rr.integer(Key(Kind::Baseline,200,Field::Target),value));REQUIRE(value==999);sidecar.full=false;
     Journal refresh(media);Repository final(refresh);OK(refresh.mount());REQUIRE(refresh.indexed());
+    OK(refresh.begin()); OK(final.putInteger(Key(Kind::Baseline,7,Field::Target),77)); OK(refresh.commit());
+    OK(refresh.maxObject(Kind::Baseline,maximum)); REQUIRE(maximum==200);
+    OK(refresh.begin()); OK(final.putInteger(Key(Kind::Baseline,200,Field::Exists),0)); OK(refresh.commit());
+    OK(refresh.maxObject(Kind::Baseline,maximum)); REQUIRE(maximum==200);
     sidecar.bytes.assign(sidecar.bytes.size(),0xff);OK(final.integer(Key(Kind::Baseline,200,Field::Target),value));REQUIRE(value==999&&!refresh.indexed());
+    OK(refresh.maxObject(Kind::Baseline,maximum)); REQUIRE(maximum==200);
     {
         host::MemoryStorage m,idx; m.sidecar=&idx; Journal j(m); Repository r2(j); OK(j.mount());
         const uint64_t epoch=uint64_t(17)<<32;

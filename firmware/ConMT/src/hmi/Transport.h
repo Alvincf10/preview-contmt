@@ -29,7 +29,8 @@ public:
 class Transport {
     Controller& app_; UartPort& uart_;
     Parser parser_;
-    char tx_[128];
+    char component_[18],value_[80];
+    uint8_t componentSize_,valueSize_,txMode_;
     uint8_t txSize_,txAt_,phase_,actualPage_;
     uint16_t field_;
     uint32_t seq_,ackBoot_,viewSent_,lastRefresh_,renderView_,lastRequestCrc_;
@@ -39,7 +40,7 @@ class Transport {
     Status sensorStatus_,lastAck_;
     Status ack_;
     bool dirty_,ackPending_,compatible_,full_,seenConnection_;
-    Status encode(const char* component,const char* text);
+    Status encode();
     Status numeric(const char* component,uint32_t value);
     bool renderField(uint16_t index,char* component,size_t cc,char* value,size_t vc);
     void accept(const Frame& frame);

@@ -25,27 +25,35 @@ Status Parser::feed(uint8_t b,uint32_t now,Frame& out) {
     if((b<32&&b!='\r')||b>126||used_>=sizeof(buffer_)-1) { dropping_=true; used_=0; return Status::Busy; }
     buffer_[used_++]=char(b); return Status::Busy;
 }
-Transport::Transport(Controller& app,UartPort& uart) : app_(app),uart_(uart),txSize_(0),txAt_(0),phase_(0),actualPage_(255),field_(0),seq_(0),ackBoot_(0),viewSent_(0),lastRefresh_(0),renderView_(0),lastRequestCrc_(0),lastOperation_(0),sensorCache_{0,0,0},averageCache_(0),sensorMask_(0),sensorStatus_(Status::NoSensor),lastAck_(Status::Ok),ack_(Status::Ok),dirty_(true),ackPending_(false),compatible_(false),full_(true),seenConnection_(false) {}
-Status Transport::encode(const char* component,const char* value) {
+Transport::Transport(Controller& app,UartPort& uart) : app_(app),uart_(uart),componentSize_(0),valueSize_(0),txMode_(0),txSize_(0),txAt_(0),phase_(0),actualPage_(255),field_(0),seq_(0),ackBoot_(0),viewSent_(0),lastRefresh_(0),renderView_(0),lastRequestCrc_(0),lastOperation_(0),sensorCache_{0,0,0},averageCache_(0),sensorMask_(0),sensorStatus_(Status::NoSensor),lastAck_(Status::Ok),ack_(Status::Ok),dirty_(true),ackPending_(false),compatible_(false),full_(true),seenConnection_(false) {}
+Status Transport::encode() {
     if(txSize_) return Status::Busy;
-    if(!safeText(value,80)) return Status::Invalid;
-    int n=CM_FMT(tx_,sizeof(tx_)-3,"%s.txt=\"%s\"",component,value);
-    if(n<0 || n>int(sizeof(tx_)-4)) return Status::Capacity;
-    txSize_=uint8_t(n+3); txAt_=0; for(uint8_t i=0;i<3;++i) tx_[n+i]=char(255); return Status::Ok;
+    if(!safeText(value_,sizeof(value_))) return Status::Invalid;
+    componentSize_=uint8_t(strlen(component_)); valueSize_=uint8_t(strlen(value_)); txMode_=0;
+    txAt_=0; txSize_=uint8_t(componentSize_+valueSize_+10); return Status::Ok;
 }
 Status Transport::numeric(const char* component,uint32_t value) {
     if(txSize_) return Status::Busy;
-    copyFlash(tx_,sizeof(tx_)-3,component); size_t prefix=strlen(tx_);
-    int written=CM_FMT(tx_+prefix,sizeof(tx_)-3-prefix,".val=%lu",(unsigned long)value);
-    if(written<0||prefix+unsigned(written)>sizeof(tx_)-4) return Status::Capacity;
-    uint8_t n=uint8_t(prefix+unsigned(written));
-    txSize_=uint8_t(n+3); txAt_=0; for(uint8_t i=0;i<3;++i) tx_[n+i]=char(255); return Status::Ok;
+    copyFlash(component_,sizeof(component_),component);
+    CM_FMT(value_,sizeof(value_),"%lu",(unsigned long)value);
+    componentSize_=uint8_t(strlen(component_)); valueSize_=uint8_t(strlen(value_)); txMode_=1;
+    txAt_=0; txSize_=uint8_t(componentSize_+valueSize_+8); return Status::Ok;
 }
 void Transport::flush() {
     if(!txSize_) return;
-    uint16_t n=uart_.writable(),remaining=uint16_t(txSize_-txAt_); if(n>remaining) n=remaining;
-    if(!n) return;
-    uint16_t sent=uart_.write(reinterpret_cast<uint8_t*>(tx_+txAt_),n); if(sent>n) sent=n;
+    uint16_t n=uart_.writable(),remaining=uint16_t(txSize_-txAt_);
+    if(n>remaining) n=remaining;
+    uint8_t bytes[16]; if(n>sizeof(bytes)) n=sizeof(bytes); if(!n) return;
+    static const char suffix[][7] CM_ROM={".txt=\"",".val="," "};
+    uint8_t suffixSize=txMode_==0?6:(txMode_==1?5:1);
+    for(uint8_t i=0;i<n;++i) {
+        uint8_t at=uint8_t(txAt_+i);
+        if(at<componentSize_) bytes[i]=uint8_t(component_[at]);
+        else if((at-=componentSize_)<suffixSize) bytes[i]=uint8_t(flashValue(suffix[txMode_]+at));
+        else if((at-=suffixSize)<valueSize_) bytes[i]=uint8_t(value_[at]);
+        else bytes[i]=txMode_==0&&at==valueSize_?'\"':255;
+    }
+    uint16_t sent=uart_.write(bytes,n); if(sent>n) sent=n;
     txAt_+=uint8_t(sent); if(txAt_==txSize_) txAt_=txSize_=0;
 }
 static uint32_t requestCrc(const Frame& f) {
@@ -108,13 +116,13 @@ void Transport::receive(uint32_t now) {
     parser_.expire(now);
 }
 bool Transport::renderNext() {
-    char component[18],value[80];
-    if((full_||field_<(app_.page()==Page::RT?9:3))&&renderField(field_,component,sizeof(component),value,sizeof(value))) {
-        Status st=encode(component,value); if(st!=Status::Ok) ack_=st;
+    if((full_||field_<(app_.page()==Page::RT?9:3))&&renderField(field_,component_,sizeof(component_),value_,sizeof(value_))) {
+        Status st=encode(); if(st!=Status::Ok) ack_=st;
         ++field_; return true;
     }
     return false;
 }
+
 void Transport::poll(uint32_t now) {
     receive(now); flush(); if(txSize_) return;
     if(uint32_t(now-lastRefresh_)>=1000) { lastRefresh_=now; dirty_=true; }
@@ -129,7 +137,8 @@ void Transport::poll(uint32_t now) {
     if(phase_==1) { numeric(CM_LITERAL("pInit.vBoot"),app_.bootToken()); ++phase_; return; }
     if(phase_==2) {
         if(actualPage_!=uint8_t(app_.page())) {
-            int n=CM_FMT(tx_,sizeof(tx_)-3,"page %u",unsigned(app_.page())); for(uint8_t i=0;i<3;++i) tx_[n+i]=char(255); txAt_=0; txSize_=uint8_t(n+3); actualPage_=uint8_t(app_.page());
+            CM_COPY(component_,"page"); CM_FMT(value_,sizeof(value_),"%u",unsigned(app_.page()));
+            componentSize_=4; valueSize_=uint8_t(strlen(value_)); txMode_=2; txAt_=0; txSize_=uint8_t(componentSize_+valueSize_+4); actualPage_=uint8_t(app_.page());
         }
         ++phase_; return;
     }

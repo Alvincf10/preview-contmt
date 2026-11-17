@@ -3,7 +3,7 @@
 #include <string.h>
 namespace conmt {
 Key::Key(Kind k,uint32_t o,Field f,uint32_t i) : kind(k),object(o),field(f),index(i) {}
-static Key operationKey(uint64_t operation) { return Key(Kind(0),uint32_t(operation>>32),Field(0),uint32_t(operation)); }
+static Key operationKey(const uint64_t& operation) { return Key(Kind(0),uint32_t(operation>>32),Field(0),uint32_t(operation)); }
 void put16(uint8_t* p,uint16_t n) { for(uint8_t i=0;i<2;++i) p[i]=uint8_t(n>>(i*8)); }
 void put32(uint8_t* p,uint32_t n) { for(uint8_t i=0;i<4;++i) p[i]=uint8_t(n>>(i*8)); }
 void put64(uint8_t* p,uint64_t n) { for(uint8_t i=0;i<8;++i) p[i]=uint8_t(n>>(i*8)); }
@@ -133,6 +133,16 @@ Status Journal::indexTransaction(uint32_t at,uint32_t next) {
         uint16_t size=get16(bytes+10);
         if(size>MaxValue || next-8-pos<12 || size>next-8-pos-12) return Status::Corrupt;
         st=index_.put(key,pos,at); if(st!=Status::Ok) return st;
+        Key maximum(Kind(0),uint8_t(key.kind),Field::Exists);
+        uint32_t previous,transaction; st=index_.get(maximum,previous,transaction);
+        bool replace=st==Status::Missing;
+        if(st==Status::Ok) {
+            if(previous<32||previous>pos||transaction>previous-32) return Status::Corrupt;
+            uint8_t entry[6]; st=io_.read(previous,entry,sizeof(entry)); if(st!=Status::Ok) return st;
+            if(entry[0]!=uint8_t(key.kind)) return Status::Corrupt;
+            replace=key.object>get32(entry+2);
+        } else if(!replace) return st;
+        if(replace) { st=index_.put(maximum,pos,at); if(st!=Status::Ok) return st; }
         pos+=12+size;
     }
     if(next>at+40) {
@@ -142,7 +152,7 @@ Status Journal::indexTransaction(uint32_t at,uint32_t next) {
     }
     return Status::Ok;
 }
-Status Journal::begin(uint64_t op) {
+Status Journal::begin(const uint64_t& op) {
     if(!mounted_) return Status::Invalid;
     if(writing_) return Status::Busy;
     if(uncertain_) return Status::IoError;
@@ -211,25 +221,32 @@ Status Journal::locate(const Key& wanted,uint32_t& valueAt,uint16_t& valueLength
         }
         indexed_=false;
     }
+    Key key=wanted; const uint64_t noOperation=0;
+    return scanQuery(0,key,valueAt,valueLength,noOperation);
+}
+Status Journal::scanQuery(uint8_t mode,Key& wanted,uint32_t& valueAt,uint16_t& valueLength,const uint64_t& operation) {
     bool found=false; valueLength=0; valueAt=0;
     for(uint32_t at=0;at<end_;) {
-        uint32_t verifiedEnd,verifiedSeq; uint64_t verifiedOp;
-        Status verified=verify(at,end_,verifiedEnd,verifiedSeq,verifiedOp,true); if(verified!=Status::Ok) return verified;
-        uint8_t h[32]; Status s=io_.read(at,h,32); if(s!=Status::Ok) return s;
-        uint32_t until=at+32+get32(h+20);
-        if(until>end_ || until<at+32) return Status::Corrupt;
-        for(uint32_t p=at+32;p<until;) {
-            s=io_.read(p,h,12); if(s!=Status::Ok) return s;
-            uint16_t len=get16(h+10); if(len>MaxValue || len>until-p-12) return Status::Corrupt;
-            Key k(Kind(h[0]),get32(h+2),Field(h[1]),get32(h+6));
-            if(k==wanted) { found=len!=0; valueAt=p+12; valueLength=len; }
-            p+=12+len;
+        uint32_t next,sequence; uint64_t saved;
+        Status st=verify(at,end_,next,sequence,saved,true); if(st!=Status::Ok) return st;
+        uint32_t until=next-8;
+        if(mode!=1||saved==operation) {
+            uint8_t bytes[12];
+            for(uint32_t entry=at+32;entry<until;) {
+                st=io_.read(entry,bytes,12); if(st!=Status::Ok) return st;
+                uint16_t size=get16(bytes+10); if(size>MaxValue||until-entry<12||size>until-entry-12) return Status::Corrupt;
+                Key key(Kind(bytes[0]),get32(bytes+2),Field(bytes[1]),get32(bytes+6));
+                if(mode==1) { wanted=key; return Status::Ok; }
+                if(mode==2) { if(key.kind==wanted.kind&&key.object>valueAt) valueAt=key.object; }
+                else if(key==wanted) { found=size!=0; valueAt=entry+12; valueLength=size; }
+                entry+=12+size;
+            }
         }
-        at=until+8;
+        at=next;
     }
-    if(!found) return Status::Missing;
-    return Status::Ok;
+    return mode==2||found?Status::Ok:Status::Missing;
 }
+
 Status Journal::copy(const Key& from,const Key& to,uint16_t expected) {
     if(!writing_) return Status::Invalid;
     if(!uint8_t(to.kind) || !uint8_t(to.field)) return Status::Invalid;
@@ -249,7 +266,7 @@ Status Journal::copy(const Key& from,const Key& to,uint16_t expected) {
     }
     ++count_; return Status::Ok;
 }
-Status Journal::findOperation(uint64_t op,Key& first) {
+Status Journal::findOperation(const uint64_t& op,Key& first) {
     if(!op) return Status::Missing;
     if(indexed_) {
         uint32_t entry,transaction; Status st=index_.get(operationKey(op),entry,transaction);
@@ -264,34 +281,23 @@ Status Journal::findOperation(uint64_t op,Key& first) {
         }
         indexed_=false;
     }
-    for(uint32_t at=0;at<end_;) {
-        uint32_t verifiedEnd,verifiedSeq; uint64_t verifiedOp;
-        Status verified=verify(at,end_,verifiedEnd,verifiedSeq,verifiedOp,true); if(verified!=Status::Ok) return verified;
-        uint8_t h[32]; Status st=io_.read(at,h,32); if(st!=Status::Ok) return st;
-        if(get64(h+12)==op && get32(h+24)>0) {
-            st=io_.read(at+32,h,12); if(st!=Status::Ok) return st;
-            first=Key(Kind(h[0]),get32(h+2),Field(h[1]),get32(h+6)); return Status::Ok;
-        }
-        uint32_t next=at+40+get32(h+20); if(next<=at || next>end_) return Status::Corrupt; at=next;
-    }
-    return Status::Missing;
+    uint32_t at; uint16_t length; return scanQuery(1,first,at,length,op);
 }
 Status Journal::maxObject(Kind kind,uint32_t& out) {
-    out=0;
-    for(uint32_t at=0;at<end_;) {
-        uint32_t verifiedEnd,verifiedSeq; uint64_t verifiedOp;
-        Status verified=verify(at,end_,verifiedEnd,verifiedSeq,verifiedOp,true); if(verified!=Status::Ok) return verified;
-        uint8_t h[32]; Status st=io_.read(at,h,32); if(st!=Status::Ok) return st;
-        uint32_t until=at+32+get32(h+20);
-        if(until>end_ || until<at+32) return Status::Corrupt;
-        for(uint32_t p=at+32;p<until;) {
-            st=io_.read(p,h,12); if(st!=Status::Ok) return st;
-            uint16_t n=get16(h+10); if(n>MaxValue || n>until-p-12) return Status::Corrupt;
-            if(h[0]==uint8_t(kind) && get32(h+2)>out) out=get32(h+2);
-            p+=12+n;
+    if(indexed_) {
+        uint32_t entry,transaction; Status st=index_.get(Key(Kind(0),uint8_t(kind),Field::Exists),entry,transaction);
+        if(st==Status::Missing) { out=0; return Status::Ok; }
+        if(st==Status::Ok&&transaction<end_&&end_-transaction>=40&&entry>=transaction+32) {
+            uint32_t next,sequence; uint64_t operation;
+            st=verify(transaction,end_,next,sequence,operation,true); if(st!=Status::Ok) return st;
+            if(entry<next-8&&next-entry>=20) {
+                uint8_t bytes[6]; st=io_.read(entry,bytes,sizeof(bytes)); if(st!=Status::Ok) return st;
+                if(bytes[0]==uint8_t(kind)) { out=get32(bytes+2); return Status::Ok; }
+            }
         }
-        at=until+8;
+        indexed_=false;
     }
-    return Status::Ok;
+    Key key(kind); uint16_t length; const uint64_t noOperation=0;
+    return scanQuery(2,key,out,length,noOperation);
 }
 }

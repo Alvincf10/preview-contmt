@@ -36,19 +36,20 @@ class Journal {
     Status scan();
     Status indexTransaction(uint32_t at,uint32_t next);
     Status locate(const Key& key,uint32_t& at,uint16_t& length);
+    Status scanQuery(uint8_t mode,Key& key,uint32_t& at,uint16_t& length,const uint64_t& operation);
     Status verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,uint64_t& op,bool footer);
 public:
     static const uint16_t MaxValue=128;
     explicit Journal(StoragePort& io) : io_(io),end_(0),sequence_(0),writeAt_(0),payloadCrc_(0),count_(0),operation_(0),writing_(false),tail_(false),uncertain_(false),mounted_(false),indexed_(false) {}
     Status mount();
-    Status begin(uint64_t operation=0);
+    Status begin(const uint64_t& operation=0);
     Status put(const Key& key,const uint8_t* value,uint16_t size);
     Status erase(const Key& key) { return put(key,nullptr,0); }
     Status commit();
     void abort() { writing_=false; }
     Status get(const Key& key,uint8_t* value,uint16_t& size);
     Status copy(const Key& from,const Key& to,uint16_t expected=0);
-    Status findOperation(uint64_t operation,Key& first);
+    Status findOperation(const uint64_t& operation,Key& first);
     Status maxObject(Kind kind,uint32_t& out);
     uint32_t sequence() const { return sequence_; }
     uint32_t committedBytes() const { return end_; }

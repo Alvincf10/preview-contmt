@@ -12,7 +12,7 @@ Status Controller::finish(Status s) {
     if(s==Status::Ok) ++view_;
     return s;
 }
-Status Controller::begin(uint64_t op) {
+Status Controller::begin(const uint64_t& op) {
     if(!mounted_&&!loading_) return health_==Status::Ok?Status::Absent:health_;
     return repo_.journal().begin(op);
 }
@@ -155,7 +155,7 @@ Status Controller::reanchorLive(const SensorFrame& frame,const Average& avg,cons
     liveM_=rebased; liveCompensation_=0; lastTemp_=avg.operational; lastWall_=sampled;
     lastMono_=lastFrameMono_=frame.sampledMonoMs; sampleKnown_=true; replayLive_=false; return Status::Ok;
 }
-Status Controller::mutateField(Kind k,uint32_t o,Field f,const char* value,uint64_t op) {
+Status Controller::mutateField(Kind k,uint32_t o,Field f,const char* value,const uint64_t& op) {
     Record record(repo_,k,o);
     Real v=0; uint64_t at=0; Status s;
     bool text=f==Field::Name||f==Field::Operator||f==Field::Project||f==Field::Date||f==Field::RetarderBrand||f==Field::AcceleratorBrand||f==Field::FlyAshBrand;
@@ -171,7 +171,7 @@ Status Controller::mutateField(Kind k,uint32_t o,Field f,const char* value,uint6
     if(s==Status::Ok && k==Kind::Draft) s=record.erase(Field::Model);
     return finish(s);
 }
-Status Controller::setField(const char* key,const char* value,uint64_t op) {
+Status Controller::setField(const char* key,const char* value,const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
     if(CM_EQ(key,"operator")) return mutateField(Kind::User,0,Field::Operator,value,op);
     if(CM_EQ(key,"project")) return mutateField(Kind::User,0,Field::Project,value,op);
@@ -192,7 +192,7 @@ Status Controller::setField(const char* key,const char* value,uint64_t op) {
 #undef F
     return mutateField(Kind::Draft,draft_,field,value,op);
 }
-Status Controller::newBaseline(uint64_t op) {
+Status Controller::newBaseline(const uint64_t& op) {
     if(!mounted_) return Status::Absent;
     Time now=clock_.now(); if(!now.valid) return Status::NoClock;
     if(!draft_) {
@@ -239,7 +239,7 @@ Status Controller::focusRow(uint32_t id) {
     }
     return st;
 }
-Status Controller::addRow(bool early,uint64_t op) {
+Status Controller::addRow(bool early,const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
     uint32_t max; TRY(record.integer(Field::MaxRow,max));
     if(max==UINT32_MAX) return Status::Capacity;
@@ -260,7 +260,7 @@ Status Controller::addRow(bool early,uint64_t op) {
     if(s==Status::Ok) s=record.erase(Field::Model);
     TRY(finish(s)); return focusRow(r.id);
 }
-Status Controller::fillEarly(uint64_t op) {
+Status Controller::fillEarly(const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
     uint32_t max; TRY(record.integer(Field::MaxRow,max));
     TRY(begin(op)); Status s=Status::Ok;
@@ -275,7 +275,7 @@ Status Controller::fillEarly(uint64_t op) {
     if(s==Status::Ok) s=record.erase(Field::Model);
     TRY(finish(s)); return firstNew?focusRow(firstNew):Status::Ok;
 }
-Status Controller::editRow(uint32_t id,const char* field,const char* value,uint64_t op) {
+Status Controller::editRow(uint32_t id,const char* field,const char* value,const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
     Row r; TRY(repo_.row(Kind::Draft,draft_,id,r));
     Real v=0;
@@ -309,7 +309,7 @@ Status Controller::editRow(uint32_t id,const char* field,const char* value,uint6
     if(s==Status::Ok) s=record.erase(Field::Model);
     return finish(s);
 }
-Status Controller::deleteRow(uint32_t id,bool confirmed,uint64_t op) {
+Status Controller::deleteRow(uint32_t id,bool confirmed,const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
     if(!confirmed) return Status::ConfirmRequired;
     uint32_t count=0; StoredRows source(repo_,Kind::Draft,draft_); Row r; Status s;
@@ -321,7 +321,7 @@ Status Controller::deleteRow(uint32_t id,bool confirmed,uint64_t op) {
     if(s==Status::Ok) s=record.erase(Field::Model);
     return finish(s);
 }
-Status Controller::captureRow(uint32_t id,uint64_t op) {
+Status Controller::captureRow(uint32_t id,const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
     Row r; TRY(repo_.row(Kind::Draft,draft_,id,r)); if(r.revision==UINT32_MAX) return Status::Capacity; Average a; TRY(getAverage(a));
     r.temp=a.operational; r.hasTemp=true; ++r.revision;
@@ -342,13 +342,13 @@ Status Controller::validateDraft() {
     if(s!=Status::Missing) return s;
     return count>=3?Status::Ok:Status::Invalid;
 }
-Status Controller::generate(uint64_t op) {
+Status Controller::generate(const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
     TRY(validateDraft()); Real datum; TRY(record.number(Field::Datum,datum));
     StoredRows rows(repo_,Kind::Draft,draft_); Fit fit; TRY(fitRows(rows,datum,fit));
     TRY(begin(op)); TRY(finish(repo_.putModel(Kind::Draft,draft_,fit))); page_=Page::BaseR; return Status::Ok;
 }
-Status Controller::saveBaseline(uint64_t op) {
+Status Controller::saveBaseline(const uint64_t& op) {
     TRY(validateDraft()); Fit f; TRY(repo_.model(Kind::Draft,draft_,f));
     uint32_t id; TRY(repo_.journal().maxObject(Kind::Baseline,id)); if(id==UINT32_MAX) return Status::Capacity; ++id;
     TRY(begin(op)); Status s=repo_.putInteger(Key(Kind::Baseline,id,Field::Exists),1);
@@ -359,7 +359,7 @@ Status Controller::saveBaseline(uint64_t op) {
     for(uint8_t i=0;i<3&&s==Status::Ok;++i) { Status copied=repo_.copyScalar(Key(Kind::User,0,context[i]),Key(Kind::Baseline,id,context[i])); if(copied!=Status::Missing) s=copied; }
     TRY(finish(s)); selected_=id; cursor_=0; page_=Page::SaveB; return Status::Ok;
 }
-Status Controller::cloneDraft(uint32_t id,uint64_t op) {
+Status Controller::cloneDraft(uint32_t id,const uint64_t& op) {
     uint32_t max; TRY(repo_.journal().maxObject(Kind::Draft,max)); if(max==UINT32_MAX) return Status::Capacity;
     TRY(begin(op)); Status s=repo_.copy(Kind::Baseline,id,Kind::Draft,max+1);
     TRY(finish(s)); draft_=max+1; return Status::Ok;
@@ -368,10 +368,10 @@ Status Controller::select(uint32_t id) {
     uint32_t exists=0; TRY(repo_.integer(Key(Kind::Baseline,id,Field::Exists),exists)); if(!exists) return Status::Missing;
     TRY(begin(0)); TRY(finish(repo_.putInteger(Key(Kind::System,0,Field::BaselineRef),id))); selected_=id; return Status::Ok;
 }
-Status Controller::openBaseline(uint32_t id,uint64_t op) {
+Status Controller::openBaseline(uint32_t id,const uint64_t& op) {
     TRY(select(id)); TRY(cloneDraft(id,op)); savedEntry_=true; cursor_=0; page_=Page::Matu; return Status::Ok;
 }
-Status Controller::deleteBaseline(uint32_t id,bool confirm,uint64_t op) {
+Status Controller::deleteBaseline(uint32_t id,bool confirm,const uint64_t& op) {
     if(!confirm) return Status::ConfirmRequired;
     uint32_t exists; TRY(repo_.integer(Key(Kind::Baseline,id,Field::Exists),exists)); if(!exists) return Status::Missing;
     uint32_t replacement=selected_;
@@ -385,7 +385,7 @@ Status Controller::deleteBaseline(uint32_t id,bool confirm,uint64_t op) {
     TRY(finish(saved)); selected_=replacement;
     return Status::Ok;
 }
-Status Controller::start(bool confirmed,uint64_t op) {
+Status Controller::start(bool confirmed,const uint64_t& op) {
     SessionState old; TRY(state(old));
     if(old!=SessionState::Idle && old!=SessionState::Completed && !confirmed) return Status::ConfirmRequired;
     if(!selected_) return Status::Missing;
@@ -418,7 +418,7 @@ Status Controller::start(bool confirmed,uint64_t op) {
     PUT(repo_.putSensors(Kind::Session,id,frame,avg,t));
     TRY(finish(s)); replayLive_=false; session_=id; liveM_=0; liveCompensation_=0; lastTemp_=avg.operational; lastWall_=t.wallMs; lastMono_=t.monoMs; lastSaveMono_=t.monoMs; lastFrameMono_=frame.sampledMonoMs; sampleKnown_=true; gapLatched_=false; inGap_=false; health_=Status::Ok; cursor_=0; page_=Page::RT; return Status::Ok;
 }
-Status Controller::addCheckpoint(Real day,uint64_t op) {
+Status Controller::addCheckpoint(Real day,const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
     SessionState ss; TRY(state(ss)); if(ss!=SessionState::Active && ss!=SessionState::Preview) return Status::Invalid;
     if(!finite(day)||day<0) return Status::Invalid;
@@ -435,7 +435,7 @@ Status Controller::addCheckpoint(Real day,uint64_t op) {
     PUT(record.erase(Field::Result));
     return finish(s);
 }
-Status Controller::editCheckpoint(uint32_t id,const char* field,const char* value,uint64_t op) {
+Status Controller::editCheckpoint(uint32_t id,const char* field,const char* value,const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
     SessionState ss; TRY(state(ss)); if(ss==SessionState::Completed || ss==SessionState::Idle) return Status::Invalid;
     Point p; TRY(repo_.point(Kind::Session,session_,id,p));
@@ -459,7 +459,7 @@ Status Controller::editCheckpoint(uint32_t id,const char* field,const char* valu
     if(ss!=SessionState::Suspended) PUT(record.putInteger(Field::State,uint32_t(SessionState::Active)));
     TRY(finish(s)); replayLive_=true; sampleKnown_=false; return Status::Ok;
 }
-Status Controller::prepareResult(uint64_t op) {
+Status Controller::prepareResult(const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
     SessionState ss; TRY(state(ss)); if(ss!=SessionState::Active&&ss!=SessionState::Preview) return Status::Invalid;
     uint32_t gap; TRY(record.integer(Field::Gap,gap)); if(gap) return Status::Gap;
@@ -473,7 +473,7 @@ Status Controller::roundResult(Result& result) {
     result.prediction=trace(floor(result.rawM+Real(.5)),fit,selection);
     return Status::Ok;
 }
-Status Controller::storePreview(const Result& result,uint64_t op) {
+Status Controller::storePreview(const Result& result,const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
     Average avg; SensorFrame frame; TRY(getAverage(avg,&frame)); Time now=clock_.now(); if(!now.valid) return Status::NoClock;
     uint8_t b[73]; putReal(b,result.rawM); putReal(b+8,result.prediction.maturity); putReal(b+16,result.prediction.raw); putReal(b+24,result.prediction.factor); putReal(b+32,result.prediction.fc); putReal(b+40,result.prediction.referenceDay); put64(b+48,result.endMs); putReal(b+56,result.initialTemp); putReal(b+64,result.lastTemp); b[72]=result.prediction.hasReference;
@@ -514,7 +514,7 @@ Status Controller::readResult(Kind kind,uint32_t id,Result& r) {
     if(b[72]>1||r.rawM<0||r.prediction.maturity<0||r.prediction.fc<0||r.prediction.factor<=0||r.prediction.referenceDay<0) return Status::Corrupt;
     return finite(r.rawM)&&finite(r.prediction.maturity)&&finite(r.prediction.raw)&&finite(r.prediction.factor)&&finite(r.prediction.fc)&&finite(r.prediction.referenceDay)&&finite(r.initialTemp)&&finite(r.lastTemp)?Status::Ok:Status::Corrupt;
 }
-Status Controller::saveResult(uint64_t op) {
+Status Controller::saveResult(const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
     uint32_t existing=0; Status st=repo_.integer(Key(Kind::Result,session_,Field::Exists),existing);
     if(st==Status::Ok&&existing) { history_=session_; page_=Page::Hist; return Status::Ok; }
@@ -549,7 +549,7 @@ Status Controller::historyAt(uint32_t slot,uint32_t& id) {
     if(slot>=6) return Status::Invalid;
     id=0; for(uint32_t i=0;i<=cursor_+slot;++i) TRY(repo_.list(Kind::Result,id,id)); return Status::Ok;
 }
-Status Controller::setting(const char* name,const char* value,uint64_t op) {
+Status Controller::setting(const char* name,const char* value,const uint64_t& op) {
     uint32_t v; TRY(parseU32(value,v)); Field field;
     if(CM_EQ(name,"hour")||CM_EQ(name,"minute")||CM_EQ(name,"second")) {
         if(v>(CM_EQ(name,"hour")?23u:59u)) return Status::Invalid;
@@ -592,7 +592,7 @@ Status Controller::saveIdentity() {
     char value[65]; TRY(record.text(Field::Operator,value,65)); TRY(record.text(Field::Project,value,65)); TRY(record.text(Field::Date,value,65));
     page_=Page::Main; ++view_; return Status::Ok;
 }
-Status Controller::reconcileGap(const char* a,const char* b,uint64_t op) {
+Status Controller::reconcileGap(const char* a,const char* b,const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
     Status result;
         if(!CM_EQ(a,"1")) return Status::ConfirmRequired;
@@ -608,7 +608,7 @@ Status Controller::reconcileGap(const char* a,const char* b,uint64_t op) {
         result=finish(saved); if(result==Status::Ok) { gapLatched_=false; health_=Status::Ok; }
     return result;
 }
-Status Controller::dispatch(const char* verb,const char* a,const char* b,const char* c,uint64_t op) {
+Status Controller::dispatch(const char* verb,const char* a,const char* b,const char* c,const uint64_t& op) {
     Status result=Status::Invalid;
     const Command command=commandFromText(verb);
     if(op) {
