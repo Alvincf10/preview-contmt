@@ -39,6 +39,7 @@ struct Key {
     bool operator==(const Key& b) const { return kind==b.kind && object==b.object && field==b.field && index==b.index; }
 };
 class Journal {
+    enum class Query : uint8_t { Value, Operation, MaxObject };
     StoragePort& io_;
     DiskIndex index_;
     uint32_t end_,sequence_,writeAt_,payloadCrc_,count_;
@@ -46,9 +47,10 @@ class Journal {
     uint16_t remaining_;
     bool writing_,tail_,uncertain_,mounted_,indexed_;
     Status scan();
-    Status indexTransaction(uint32_t at,uint32_t next);
+    Status indexTransaction(uint32_t at,uint32_t next,const uint64_t& operation);
+    Status readEntry(uint32_t at,uint32_t available,uint8_t* header,uint16_t& length);
     Status locate(const Key& key,uint32_t& at,uint16_t& length);
-    Status scanQuery(uint8_t mode,Key& key,uint32_t& at,uint16_t& length,const uint64_t& operation);
+    Status findEntry(Query mode,Key& key,uint32_t& at,uint16_t& length,const uint64_t* operation=nullptr);
     Status verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,uint64_t& op,bool footer);
 public:
     static const uint16_t MaxValue=128;
