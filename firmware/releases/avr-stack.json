@@ -5,49 +5,37 @@
   "frames": [
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:325:8:conmt::Status conmt::Controller::validateDraft()",
-      "bytes": 155,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:416:8:conmt::Status conmt::Controller::addCheckpoint(conmt::Real, const uint64_t&)",
+      "function": "Controller.cpp:444:8:conmt::Status conmt::Controller::addCheckpoint(conmt::Real, const uint64_t&)",
       "bytes": 141,
       "kind": "dynamic,bounded"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:479:8:conmt::Status conmt::Controller::checkpointResult(conmt::Kind, uint32_t, uint32_t, conmt::Result&)",
-      "bytes": 125,
+      "function": "Controller.cpp:503:8:conmt::Status conmt::Controller::calculateCheckpointResult(conmt::Kind, uint32_t, uint32_t, conmt::Result&, bool)",
+      "bytes": 127,
       "kind": "dynamic,bounded"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:383:8:conmt::Status conmt::Controller::start(bool, const uint64_t&)",
+      "function": "Controller.cpp:411:8:conmt::Status conmt::Controller::start(bool, const uint64_t&)",
       "bytes": 122,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:433:8:conmt::Status conmt::Controller::editCheckpoint(uint32_t, const char*, const char*, const uint64_t&)",
+      "function": "Controller.cpp:461:8:conmt::Status conmt::Controller::editCheckpoint(uint32_t, const char*, const char*, const uint64_t&)",
       "bytes": 109,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:269:8:conmt::Status conmt::Controller::editRow(uint32_t, const char*, const char*, const uint64_t&)",
-      "bytes": 105,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:315:8:conmt::Status conmt::Controller::captureRow(uint32_t, const uint64_t&)",
+      "function": "Controller.cpp:295:8:conmt::Status conmt::Controller::editRow(uint32_t, const char*, const char*, const uint64_t&)",
       "bytes": 103,
       "kind": "static"
     },
     {
       "source": "ConMT/src/storage/Repository.cpp",
-      "function": "Repository.cpp:150:8:conmt::Status conmt::nextPoint(conmt::Repository&, conmt::Kind, uint32_t, const conmt::Point*, conmt::Point&)",
+      "function": "Repository.cpp:161:8:conmt::Status conmt::nextPoint(conmt::Repository&, conmt::Kind, uint32_t, const conmt::Point*, conmt::Point&)",
       "bytes": 101,
       "kind": "static"
     },
@@ -59,13 +47,13 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:572:8:conmt::Status conmt::Controller::reconcileGap(const char*, const char*, const uint64_t&)",
+      "function": "Controller.cpp:597:8:conmt::Status conmt::Controller::reconcileGap(const char*, const char*, const uint64_t&)",
       "bytes": 96,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:303:8:conmt::Status conmt::Controller::deleteRow(uint32_t, bool, const uint64_t&)",
+      "function": "Controller.cpp:333:8:conmt::Status conmt::Controller::deleteRow(uint32_t, bool, const uint64_t&)",
       "bytes": 93,
       "kind": "static"
     },
@@ -73,6 +61,18 @@
       "source": "ConMT/src/app/Controller.cpp",
       "function": "Controller.cpp:90:8:conmt::Status conmt::Controller::markGap(uint64_t, uint64_t, conmt::ClockCause)",
       "bytes": 92,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:351:8:conmt::Status conmt::Controller::validateDraftHeader(conmt::Real&)",
+      "bytes": 91,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:242:8:conmt::Status conmt::Controller::addRow(bool, const uint64_t&)",
+      "bytes": 90,
       "kind": "static"
     },
     {
@@ -95,7 +95,7 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:567:8:conmt::Status conmt::Controller::saveIdentity()",
+      "function": "Controller.cpp:592:8:conmt::Status conmt::Controller::saveIdentity()",
       "bytes": 85,
       "kind": "static"
     },
@@ -106,27 +106,21 @@
       "kind": "dynamic,bounded"
     },
     {
-      "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:496:8:conmt::Status conmt::Controller::saveResult(const uint64_t&)",
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:156:8:conmt::Status conmt::Journal::scan()",
       "bytes": 83,
       "kind": "static"
     },
     {
-      "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:140:8:conmt::Status conmt::Journal::scan()",
-      "bytes": 82,
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:521:8:conmt::Status conmt::Controller::saveResult(const uint64_t&)",
+      "bytes": 83,
       "kind": "static"
     },
     {
-      "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:283:8:conmt::Status conmt::Journal::findEntry(conmt::Journal::Query, const uint8_t*, uint32_t&, uint16_t&, const uint64_t*, conmt::Key*)",
-      "bytes": 82,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/storage/Repository.cpp",
-      "function": "Repository.cpp:138:8:virtual conmt::Status conmt::StoredRows::next(conmt::Row&)",
-      "bytes": 80,
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:345:8:conmt::Status conmt::Controller::captureRow(uint32_t, const uint64_t&)",
+      "bytes": 81,
       "kind": "static"
     },
     {
@@ -136,14 +130,26 @@
       "kind": "dynamic,bounded"
     },
     {
+      "source": "ConMT/src/storage/Repository.cpp",
+      "function": "Repository.cpp:139:8:virtual conmt::Status conmt::StoredRows::next(conmt::Row&)",
+      "bytes": 76,
+      "kind": "static"
+    },
+    {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:172:8:conmt::Status conmt::Journal::indexTransaction(uint32_t, uint32_t, const uint64_t&)",
+      "function": "Journal.cpp:188:8:conmt::Status conmt::Journal::indexTransaction(uint32_t, uint32_t, const uint64_t&)",
       "bytes": 74,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/TransactionOps.cpp",
       "function": "TransactionOps.cpp:6:15:conmt::Status conmt::copyText(conmt::Repository&, const conmt::Key&, const conmt::Key&, bool)",
+      "bytes": 74,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:363:8:conmt::Status conmt::Controller::saveBaseline(const uint64_t&)",
       "bytes": 74,
       "kind": "static"
     },
@@ -155,31 +161,13 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:233:8:conmt::Status conmt::Controller::addRow(bool, const uint64_t&)",
+      "function": "Controller.cpp:485:8:conmt::Status conmt::Controller::prepareResult(const uint64_t&)",
       "bytes": 73,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:457:8:conmt::Status conmt::Controller::prepareResult(const uint64_t&)",
-      "bytes": 72,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:336:8:conmt::Status conmt::Controller::generate(const uint64_t&)",
-      "bytes": 71,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:209:8:conmt::Status conmt::Controller::earlySlot(uint32_t, conmt::Real&)",
-      "bytes": 70,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:225:8:conmt::Status conmt::Controller::focusRow(uint32_t)",
+      "function": "Controller.cpp:234:8:conmt::Status conmt::Controller::focusRow(uint32_t)",
       "bytes": 70,
       "kind": "static"
     },
@@ -191,13 +179,19 @@
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:107:8:conmt::Status conmt::Journal::verify(uint32_t, uint32_t, uint32_t&, uint32_t&, uint64_t&, bool)",
+      "function": "Journal.cpp:119:8:conmt::Status conmt::Journal::verify(uint32_t, uint32_t, conmt::Journal::Transaction&, bool, conmt::Journal::Lookup*)",
+      "bytes": 68,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:346:8:conmt::Status conmt::Journal::findOperation(const uint64_t&, conmt::Key&)",
       "bytes": 68,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:254:8:conmt::Status conmt::Controller::fillEarly(const uint64_t&)",
+      "function": "Controller.cpp:268:8:conmt::Status conmt::Controller::fillEarly(const uint64_t&)",
       "bytes": 68,
       "kind": "static"
     },
@@ -215,19 +209,25 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:471:8:conmt::Status conmt::Controller::storePreview(const conmt::Result&, const uint64_t&)",
+      "function": "Controller.cpp:492:8:conmt::Status conmt::Controller::storePreview(const conmt::Result&, const uint64_t&)",
       "bytes": 66,
       "kind": "static"
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:232:8:conmt::Status conmt::Journal::commit()",
-      "bytes": 63,
+      "function": "Journal.cpp:248:8:conmt::Status conmt::Journal::commit()",
+      "bytes": 62,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:358:8:conmt::Status conmt::Controller::generate(const uint64_t&)",
+      "bytes": 59,
       "kind": "static"
     },
     {
       "source": "ConMT/src/storage/Repository.cpp",
-      "function": "Repository.cpp:162:8:conmt::Status conmt::replayPoints(conmt::Repository&, conmt::Kind, uint32_t, conmt::Real, conmt::Real&, conmt::Point&, uint32_t, bool)",
+      "function": "Repository.cpp:173:8:conmt::Status conmt::replayPoints(conmt::Repository&, conmt::Kind, uint32_t, conmt::Real, conmt::Real&, conmt::Point&, uint32_t, bool)",
       "bytes": 58,
       "kind": "static"
     },
@@ -241,12 +241,6 @@
       "source": "ConMT/src/app/TransactionOps.cpp",
       "function": "TransactionOps.cpp:11:8:conmt::Status conmt::applyTransaction(conmt::Repository&, conmt::ClockPort&, const conmt::TxStep*, uint8_t, const conmt::Entity&, const conmt::Entity&, const void*)",
       "bytes": 58,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:465:8:conmt::Status conmt::Controller::roundResult(conmt::Result&)",
-      "bytes": 57,
       "kind": "static"
     },
     {
@@ -269,20 +263,32 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:592:8:conmt::Status conmt::Controller::dispatch(conmt::Command, const char* const*, const uint64_t&, conmt::Status, bool)",
+      "function": "Controller.cpp:212:8:conmt::Status conmt::Controller::earlySlots(uint32_t, uint32_t, uint8_t*)",
+      "bytes": 52,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:617:8:conmt::Status conmt::Controller::dispatch(conmt::Command, const char* const*, const uint64_t&, conmt::Status, bool)",
       "bytes": 52,
       "kind": "static"
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:348:8:conmt::Status conmt::Journal::copy(const conmt::Key&, const conmt::Key&, uint16_t)",
+      "function": "Journal.cpp:332:8:conmt::Status conmt::Journal::copy(const conmt::Key&, const conmt::Key&, uint16_t)",
       "bytes": 49,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:520:8:conmt::Status conmt::Controller::pointAt(uint32_t, conmt::Point&)",
+      "function": "Controller.cpp:545:8:conmt::Status conmt::Controller::pointAt(uint32_t, conmt::Point&)",
       "bytes": 48,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:293:8:conmt::Status conmt::Journal::locate(const conmt::Key&, uint32_t&, uint16_t&)",
+      "bytes": 47,
       "kind": "static"
     },
     {
@@ -293,13 +299,13 @@
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:197:8:conmt::Status conmt::Journal::begin(const uint64_t&)",
+      "function": "Journal.cpp:213:8:conmt::Status conmt::Journal::begin(const uint64_t&)",
       "bytes": 46,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:515:8:conmt::Status conmt::Controller::rowAt(uint32_t, conmt::Row&)",
+      "function": "Controller.cpp:540:8:conmt::Status conmt::Controller::rowAt(uint32_t, conmt::Row&)",
       "bytes": 46,
       "kind": "static"
     },
@@ -335,12 +341,6 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:342:8:conmt::Status conmt::Controller::saveBaseline(const uint64_t&)",
-      "bytes": 43,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/app/Controller.cpp",
       "function": "Controller.cpp:156:8:conmt::Status conmt::Controller::mutateField(const conmt::FieldRule&, const char*, const uint64_t&)",
       "bytes": 42,
       "kind": "static"
@@ -358,6 +358,18 @@
       "kind": "static"
     },
     {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:358:8:conmt::Status conmt::Journal::maxObject(conmt::Kind, uint32_t&)",
+      "bytes": 39,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:286:8:conmt::Status conmt::Controller::storeDraftRow(const conmt::Row&, conmt::Field, const char*, bool, const uint64_t&)",
+      "bytes": 39,
+      "kind": "static"
+    },
+    {
       "source": "ConMT/src/hmi/Transport.cpp",
       "function": "Transport.cpp:128:6:void conmt::Transport::receive(uint32_t)",
       "bytes": 39,
@@ -371,7 +383,7 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:369:8:conmt::Status conmt::Controller::deleteBaseline(uint32_t, bool, const uint64_t&)",
+      "function": "Controller.cpp:397:8:conmt::Status conmt::Controller::deleteBaseline(uint32_t, bool, const uint64_t&)",
       "bytes": 38,
       "kind": "static"
     },
@@ -394,6 +406,12 @@
       "kind": "static"
     },
     {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:302:8:conmt::Status conmt::Journal::findEntry(conmt::Journal::Lookup&)",
+      "bytes": 35,
+      "kind": "static"
+    },
+    {
       "source": "ConMT/src/hmi/Presenter.cpp",
       "function": "Presenter.cpp:79:15:conmt::Status conmt::{anonymous}::sensorText(conmt::Repository&, conmt::Kind, uint32_t, uint8_t, char*, size_t)",
       "bytes": 35,
@@ -409,12 +427,6 @@
       "source": "ConMT/src/core/Calendar.cpp",
       "function": "Calendar.cpp:44:8:conmt::Status conmt::calendarText(uint64_t, char*, size_t, char*, size_t)",
       "bytes": 34,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:362:8:conmt::Status conmt::Journal::findOperation(const uint64_t&, conmt::Key&)",
-      "bytes": 33,
       "kind": "static"
     },
     {
@@ -437,7 +449,7 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:362:8:conmt::Status conmt::Controller::select(uint32_t)",
+      "function": "Controller.cpp:390:8:conmt::Status conmt::Controller::select(uint32_t)",
       "bytes": 31,
       "kind": "static"
     },
@@ -509,19 +521,7 @@
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:212:8:conmt::Status conmt::Journal::startValue(const conmt::Key&, uint16_t)",
-      "bytes": 26,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:277:8:conmt::Status conmt::Journal::locate(const conmt::Key&, uint32_t&, uint16_t&)",
-      "bytes": 26,
-      "kind": "static"
-    },
-    {
-      "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:369:8:conmt::Status conmt::Journal::maxObject(conmt::Kind, uint32_t&)",
+      "function": "Journal.cpp:228:8:conmt::Status conmt::Journal::startValue(const conmt::Key&, uint16_t)",
       "bytes": 26,
       "kind": "static"
     },
@@ -581,7 +581,7 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:534:8:conmt::Status conmt::Controller::setting(const char*, const char*, const uint64_t&)",
+      "function": "Controller.cpp:559:8:conmt::Status conmt::Controller::setting(const char*, const char*, const uint64_t&)",
       "bytes": 24,
       "kind": "static"
     },
@@ -623,7 +623,7 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:357:8:conmt::Status conmt::Controller::cloneDraft(uint32_t, const uint64_t&)",
+      "function": "Controller.cpp:385:8:conmt::Status conmt::Controller::cloneDraft(uint32_t, const uint64_t&)",
       "bytes": 19,
       "kind": "static"
     },
@@ -659,7 +659,13 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:588:8:conmt::Status conmt::Controller::dispatch(const char*, const char*, const char*, const char*, const uint64_t&)",
+      "function": "Controller.cpp:226:8:conmt::Status conmt::Controller::earlySlot(uint32_t, uint32_t, conmt::Real&)",
+      "bytes": 18,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:613:8:conmt::Status conmt::Controller::dispatch(const char*, const char*, const char*, const char*, const uint64_t&)",
       "bytes": 18,
       "kind": "static"
     },
@@ -677,25 +683,25 @@
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:259:8:conmt::Status conmt::Journal::openValue(const conmt::Key&, uint16_t, conmt::ValueReader&)",
+      "function": "Journal.cpp:275:8:conmt::Status conmt::Journal::openValue(const conmt::Key&, uint16_t, conmt::ValueReader&)",
       "bytes": 16,
       "kind": "static"
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:254:8:conmt::Status conmt::Journal::get(const conmt::Key&, uint8_t*, uint16_t&)",
+      "function": "Journal.cpp:270:8:conmt::Status conmt::Journal::get(const conmt::Key&, uint8_t*, uint16_t&)",
       "bytes": 16,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:526:8:conmt::Status conmt::Controller::baselineAt(uint32_t, uint32_t&)",
+      "function": "Controller.cpp:551:8:conmt::Status conmt::Controller::baselineAt(uint32_t, uint32_t&)",
       "bytes": 16,
       "kind": "static"
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:530:8:conmt::Status conmt::Controller::historyAt(uint32_t, uint32_t&)",
+      "function": "Controller.cpp:555:8:conmt::Status conmt::Controller::historyAt(uint32_t, uint32_t&)",
       "bytes": 16,
       "kind": "static"
     },
@@ -791,7 +797,13 @@
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:223:8:conmt::Status conmt::Journal::appendValue(const uint8_t*, uint16_t)",
+      "function": "Journal.cpp:107:6:void conmt::Journal::Lookup::consider(uint32_t, const uint8_t*, uint16_t)",
+      "bytes": 10,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/storage/Journal.cpp",
+      "function": "Journal.cpp:239:8:conmt::Status conmt::Journal::appendValue(const uint8_t*, uint16_t)",
       "bytes": 10,
       "kind": "static"
     },
@@ -803,7 +815,7 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:366:8:conmt::Status conmt::Controller::openBaseline(uint32_t, const uint64_t&)",
+      "function": "Controller.cpp:394:8:conmt::Status conmt::Controller::openBaseline(uint32_t, const uint64_t&)",
       "bytes": 10,
       "kind": "static"
     },
@@ -822,6 +834,12 @@
     {
       "source": "ConMT/src/storage/RecordCodec.cpp",
       "function": "RecordCodec.cpp:73:8:conmt::Status conmt::writeRecord(conmt::Journal&, const conmt::Key&, conmt::RecordType, const void*)",
+      "bytes": 9,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:500:8:conmt::Status conmt::Controller::checkpointResult(conmt::Kind, uint32_t, uint32_t, conmt::Result&)",
       "bytes": 9,
       "kind": "static"
     },
@@ -887,13 +905,13 @@
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:207:8:conmt::Status conmt::Journal::put(const conmt::Key&, const uint8_t*, uint16_t)",
+      "function": "Journal.cpp:223:8:conmt::Status conmt::Journal::put(const conmt::Key&, const uint8_t*, uint16_t)",
       "bytes": 8,
       "kind": "static"
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:265:8:conmt::Status conmt::ValueReader::read(uint8_t*, uint16_t)",
+      "function": "Journal.cpp:281:8:conmt::Status conmt::ValueReader::read(uint8_t*, uint16_t)",
       "bytes": 8,
       "kind": "static"
     },
@@ -917,7 +935,7 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Repository.h:43:5:conmt::Record::Record(conmt::Repository&, conmt::Kind, uint32_t)",
+      "function": "Repository.h:46:5:conmt::Record::Record(conmt::Repository&, conmt::Kind, uint32_t)",
       "bytes": 8,
       "kind": "static"
     },
@@ -1049,7 +1067,7 @@
     },
     {
       "source": "ConMT/src/storage/Repository.cpp",
-      "function": "Repository.cpp:136:1:conmt::StoredRows::StoredRows(conmt::Repository&, conmt::Kind, uint32_t, bool)",
+      "function": "Repository.cpp:136:1:conmt::StoredRows::StoredRows(conmt::Repository&, conmt::Kind, uint32_t, conmt::RowView)",
       "bytes": 5,
       "kind": "static"
     },
@@ -1091,13 +1109,13 @@
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:135:8:conmt::Status conmt::Journal::mount()",
+      "function": "Journal.cpp:151:8:conmt::Status conmt::Journal::mount()",
       "bytes": 4,
       "kind": "static"
     },
     {
       "source": "ConMT/src/storage/Journal.cpp",
-      "function": "Journal.cpp:272:8:conmt::Status conmt::ValueReader::skip(uint16_t)",
+      "function": "Journal.cpp:288:8:conmt::Status conmt::ValueReader::skip(uint16_t)",
       "bytes": 4,
       "kind": "static"
     },
@@ -1127,7 +1145,7 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:493:8:conmt::Status conmt::Controller::readResult(conmt::Kind, uint32_t, conmt::Result&)",
+      "function": "Controller.cpp:518:8:conmt::Status conmt::Controller::readResult(conmt::Kind, uint32_t, conmt::Result&)",
       "bytes": 4,
       "kind": "static"
     },
@@ -1151,7 +1169,7 @@
     },
     {
       "source": "ConMT/src/app/Controller.cpp",
-      "function": "Controller.cpp:560:6:bool conmt::Controller::validNavigation(conmt::Page) const",
+      "function": "Controller.cpp:585:6:bool conmt::Controller::validNavigation(conmt::Page) const",
       "bytes": 3,
       "kind": "static"
     },
@@ -1223,7 +1241,7 @@
     },
     {
       "source": "ConMT/src/storage/Repository.cpp",
-      "function": "Repository.cpp:137:6:virtual void conmt::StoredRows::reset()",
+      "function": "Repository.cpp:138:6:virtual void conmt::StoredRows::reset()",
       "bytes": 2,
       "kind": "static"
     },
@@ -1386,6 +1404,12 @@
     {
       "source": "ConMT/src/app/TransactionOps.cpp",
       "function": "TransactionOps.cpp:5:28:T conmt::load(const uint8_t*) [with T = long long unsigned int]",
+      "bytes": 2,
+      "kind": "static"
+    },
+    {
+      "source": "ConMT/src/app/Controller.cpp",
+      "function": "Controller.cpp:209:13:bool conmt::slotOccupied(const uint8_t*, uint8_t)",
       "bytes": 2,
       "kind": "static"
     },
