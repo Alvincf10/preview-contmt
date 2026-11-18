@@ -1,10 +1,6 @@
 #include "Journal.h"
 #include <string.h>
 namespace conmt {
-static void keyBytes(const Key& key,uint8_t* bytes) {
-    bytes[0]=uint8_t(key.kind); bytes[1]=uint8_t(key.field);
-    put32(bytes+2,key.object); put32(bytes+6,key.index);
-}
 static uint32_t checksum(const uint8_t* bytes,uint8_t size) { return crc32(0xffffffffUL,bytes,size)^0xffffffffUL; }
 Status DiskIndex::reset(StoragePort* storage) {
     io_=storage; end_=512;
@@ -14,13 +10,6 @@ Status DiskIndex::reset(StoragePort* storage) {
     for(uint16_t slot=0;slot<512;slot+=8) { st=io_->write(slot,empty,8); if(st!=Status::Ok) return st; }
     return Status::Ok;
 }
-Status DiskIndex::root(const Key& key,uint32_t& slot,uint32_t& at) {
-    if(!io_) return Status::Unsupported;
-    uint8_t bytes[10]; keyBytes(key,bytes); slot=(checksum(bytes,10)&63)*8;
-    Status st=io_->read(slot,bytes,8); if(st!=Status::Ok) return st;
-    if(get32(bytes+4)!=checksum(bytes,4)) return Status::Corrupt;
-    at=get32(bytes); return Status::Ok;
-}
 Status DiskIndex::node(uint32_t at,uint8_t* bytes) {
     if(at<512 || at>end_ || end_-at<26 || (at-512)%26) return Status::Corrupt;
     Status st=io_->read(at,bytes,26); if(st!=Status::Ok) return st;
@@ -29,33 +18,52 @@ Status DiskIndex::node(uint32_t at,uint8_t* bytes) {
     if(next && (next<512 || next>=at || (next-512)%26)) return Status::Corrupt;
     return Status::Ok;
 }
-Status DiskIndex::get(const Key& key,uint32_t& entry,uint32_t& transaction) {
-    uint32_t slot,at; Status st=root(key,slot,at); if(st!=Status::Ok) return st;
-    uint8_t wanted[10],bytes[26]; keyBytes(key,wanted);
-    while(at) {
-        st=node(at,bytes); if(st!=Status::Ok) return st;
-        if(!memcmp(bytes,wanted,10)) { entry=get32(bytes+10); transaction=get32(bytes+14); return Status::Ok; }
-        at=get32(bytes+18);
+Status DiskIndex::find(const uint8_t* key,Search& s) {
+    if(!io_) return Status::Unsupported;
+    s.slot=(checksum(key,KeyBytes)&63)*8;
+    Status st=io_->read(s.slot,s.bytes,8);
+    if(st!=Status::Ok) return st;
+    if(get32(s.bytes+4)!=checksum(s.bytes,4)) return Status::Corrupt;
+    s.head=get32(s.bytes);
+    s.position=s.head;
+    while(s.position) {
+        st=node(s.position,s.bytes);
+        if(st!=Status::Ok) return st;
+        if(!memcmp(s.bytes,key,KeyBytes)) return Status::Ok;
+        s.position=get32(s.bytes+18);
     }
     return Status::Missing;
 }
-Status DiskIndex::put(const Key& key,uint32_t entry,uint32_t transaction) {
-    uint32_t slot,head; Status st=root(key,slot,head); if(st!=Status::Ok) return st;
-    uint32_t at=head; uint8_t wanted[10],bytes[26]; keyBytes(key,wanted);
-    while(at) {
-        st=node(at,bytes); if(st!=Status::Ok) return st;
-        if(!memcmp(wanted,bytes,10)) break;
-        at=get32(bytes+18);
+Status DiskIndex::get(const uint8_t* key,uint32_t& entry,uint32_t& transaction) {
+    Search s;
+    Status st=find(key,s);
+    if(st==Status::Ok) {
+        entry=get32(s.bytes+10);
+        transaction=get32(s.bytes+14);
     }
-    if(!at) {
+    return st;
+}
+Status DiskIndex::put(const uint8_t* key,uint32_t entry,uint32_t transaction) {
+    Search s;
+    Status st=find(key,s);
+    if(st==Status::Missing) {
         if(end_>UINT32_MAX-26) return Status::Capacity;
-        memcpy(bytes,wanted,10); put32(bytes+18,head); at=end_;
+        memcpy(s.bytes,key,KeyBytes);
+        put32(s.bytes+18,s.head);
+        s.position=end_;
+    } else if(st!=Status::Ok) {
+        return st;
     }
-    put32(bytes+10,entry); put32(bytes+14,transaction); put32(bytes+22,checksum(bytes,22));
-    st=io_->write(at,bytes,26); if(st!=Status::Ok) return st;
-    if(at==end_) {
-        end_+=26; put32(bytes,at); put32(bytes+4,checksum(bytes,4));
-        st=io_->write(slot,bytes,8);
+    put32(s.bytes+10,entry);
+    put32(s.bytes+14,transaction);
+    put32(s.bytes+22,checksum(s.bytes,22));
+    st=io_->write(s.position,s.bytes,26);
+    if(st!=Status::Ok) return st;
+    if(s.position==end_) {
+        end_+=26;
+        put32(s.bytes,s.position);
+        put32(s.bytes+4,checksum(s.bytes,4));
+        st=io_->write(s.slot,s.bytes,8);
     }
     return st;
 }

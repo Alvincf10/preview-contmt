@@ -30,8 +30,13 @@ static Status transfer(Journal& journal,ValueReader* reader,RecordType type,void
         if(!reader) {
             switch(member.type) {
                 case RealValue: { Real v; memcpy(&v,value,sizeof(v)); putReal(bytes,v); break; }
+#if defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+                case Integer:
+                case TimeValue: memcpy(bytes,value,size); break;
+#else
                 case Integer: { uint32_t v; memcpy(&v,value,4); put32(bytes,v); break; }
                 case TimeValue: { uint64_t v; memcpy(&v,value,8); put64(bytes,v); break; }
+#endif
                 case Byte: bytes[0]=*value; break;
                 case Boolean: bytes[0]=*reinterpret_cast<bool*>(value)?1:0; break;
                 case RowFlags: bytes[0]=(*reinterpret_cast<bool*>(value)?1:0)|(*reinterpret_cast<bool*>(native+member.extra)?2:0); break;
@@ -41,8 +46,13 @@ static Status transfer(Journal& journal,ValueReader* reader,RecordType type,void
             st=reader->read(bytes,size); if(st!=Status::Ok) return st;
             switch(member.type) {
                 case RealValue: { Real v=getReal(bytes); memcpy(value,&v,sizeof(v)); break; }
+#if defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+                case Integer:
+                case TimeValue: memcpy(value,bytes,size); break;
+#else
                 case Integer: { uint32_t v=get32(bytes); memcpy(value,&v,4); break; }
                 case TimeValue: { uint64_t v=get64(bytes); memcpy(value,&v,8); break; }
+#endif
                 case Byte: *value=bytes[0]; break;
                 case Boolean: if(bytes[0]>1) return Status::Corrupt; *reinterpret_cast<bool*>(value)=bytes[0]!=0; break;
                 case RowFlags:

@@ -14,19 +14,21 @@ Status Record::putText(Field f,const char* value,uint16_t capacity) { return rep
 Status Record::erase(Field f) { return repo_.journal().erase(field(f)); }
 Status Record::get(Field f,uint8_t* out,uint16_t& size) { return repo_.journal().get(field(f),out,size); }
 Status Record::put(Field f,const uint8_t* value,uint16_t size) { return repo_.journal().put(field(f),value,size); }
+static Status readScalar(Journal& journal,const Key& key,uint8_t* bytes,uint16_t length) {
+    uint16_t size=length;
+    Status st=journal.get(key,bytes,size);
+    return st==Status::Ok&&size!=length?Status::Corrupt:st;
+}
 Status Repository::number(const Key& k,Real& v) {
-    uint8_t b[8]; uint16_t n=8; Status s=journal_.get(k,b,n); if(s!=Status::Ok) return s;
-    if(n!=8) return Status::Corrupt;
+    uint8_t b[8]; Status s=readScalar(journal_,k,b,sizeof(b)); if(s!=Status::Ok) return s;
     v=getReal(b); return finite(v)?Status::Ok:Status::Corrupt;
 }
 Status Repository::integer(const Key& k,uint32_t& v) {
-    uint8_t b[4]; uint16_t n=4; Status s=journal_.get(k,b,n); if(s!=Status::Ok) return s;
-    if(n!=4) return Status::Corrupt;
+    uint8_t b[4]; Status s=readScalar(journal_,k,b,sizeof(b)); if(s!=Status::Ok) return s;
     v=get32(b); return Status::Ok;
 }
 Status Repository::time(const Key& k,uint64_t& v) {
-    uint8_t b[8]; uint16_t n=8; Status s=journal_.get(k,b,n); if(s!=Status::Ok) return s;
-    if(n!=8) return Status::Corrupt;
+    uint8_t b[8]; Status s=readScalar(journal_,k,b,sizeof(b)); if(s!=Status::Ok) return s;
     v=get64(b); return Status::Ok;
 }
 Status Repository::text(const Key& k,char* v,uint16_t capacity) {

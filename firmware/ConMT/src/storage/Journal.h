@@ -50,7 +50,8 @@ class Journal {
     Status indexTransaction(uint32_t at,uint32_t next,const uint64_t& operation);
     Status readEntry(uint32_t at,uint32_t available,uint8_t* header,uint16_t& length);
     Status locate(const Key& key,uint32_t& at,uint16_t& length);
-    Status findEntry(Query mode,Key& key,uint32_t& at,uint16_t& length,const uint64_t* operation=nullptr);
+    Status findEntry(Query mode,const uint8_t* key,uint32_t& at,uint16_t& length,
+                     const uint64_t* operation=nullptr,Key* first=nullptr);
     Status verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,uint64_t& op,bool footer);
 public:
     static const uint16_t MaxValue=128;

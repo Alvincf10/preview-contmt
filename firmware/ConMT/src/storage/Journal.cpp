@@ -3,19 +3,52 @@
 #include <string.h>
 namespace conmt {
 Key::Key(Kind k,uint32_t o,Field f,uint32_t i) : kind(k),object(o),field(f),index(i) {}
-static Key operationKey(const uint64_t& operation) { return Key(Kind(0),uint32_t(operation>>32),Field(0),uint32_t(operation)); }
+static void encodeKey(uint8_t* bytes,Kind kind,Field field,uint32_t object,uint32_t index) {
+    bytes[0]=uint8_t(kind);
+    bytes[1]=uint8_t(field);
+    put32(bytes+2,object);
+    put32(bytes+6,index);
+}
+static void operationKey(uint8_t* bytes,const uint64_t& operation) {
+    encodeKey(bytes,Kind(0),Field(0),uint32_t(operation>>32),uint32_t(operation));
+}
+static void maximumKey(uint8_t* bytes,uint8_t kind) {
+    encodeKey(bytes,Kind(0),Field::Exists,kind,0);
+}
 static Key entryKey(const uint8_t* header) {
     return Key(Kind(header[0]),get32(header+2),Field(header[1]),get32(header+6));
 }
 static bool validEntryLength(uint16_t length,uint32_t available) {
     return length<=Journal::MaxValue && uint16_t(12+length)<=available;
 }
-void put16(uint8_t* p,uint16_t n) { for(uint8_t i=0;i<2;++i) p[i]=uint8_t(n>>(i*8)); }
-void put32(uint8_t* p,uint32_t n) { for(uint8_t i=0;i<4;++i) p[i]=uint8_t(n>>(i*8)); }
-void put64(uint8_t* p,uint64_t n) { for(uint8_t i=0;i<8;++i) p[i]=uint8_t(n>>(i*8)); }
-uint16_t get16(const uint8_t* p) { return uint16_t(p[0])|uint16_t(p[1])<<8; }
-uint32_t get32(const uint8_t* p) { uint32_t n=0; for(uint8_t i=0;i<4;++i) n|=uint32_t(p[i])<<(8*i); return n; }
-uint64_t get64(const uint8_t* p) { uint64_t n=0; for(uint8_t i=0;i<8;++i) n|=uint64_t(p[i])<<(8*i); return n; }
+template<class UInt>
+static void putLittleEndian(uint8_t* bytes,UInt value) {
+#if defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    memcpy(bytes,&value,sizeof(value));
+#else
+    for(uint8_t i=0;i<sizeof(value);++i) {
+        bytes[i]=uint8_t(value);
+        value>>=8;
+    }
+#endif
+}
+template<class UInt>
+static UInt getLittleEndian(const uint8_t* bytes) {
+#if defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+    UInt value;
+    memcpy(&value,bytes,sizeof(value));
+#else
+    UInt value=0;
+    for(uint8_t i=sizeof(value);i;--i) value=UInt(value<<8)|bytes[i-1];
+#endif
+    return value;
+}
+void put16(uint8_t* p,uint16_t n) { putLittleEndian(p,n); }
+void put32(uint8_t* p,uint32_t n) { putLittleEndian(p,n); }
+void put64(uint8_t* p,uint64_t n) { putLittleEndian(p,n); }
+uint16_t get16(const uint8_t* p) { return getLittleEndian<uint16_t>(p); }
+uint32_t get32(const uint8_t* p) { return getLittleEndian<uint32_t>(p); }
+uint64_t get64(const uint8_t* p) { return getLittleEndian<uint64_t>(p); }
 void putReal(uint8_t* bytes,Real value) {
     static_assert(sizeof(Real)==4||sizeof(Real)==8,"IEEE binary32/binary64 required");
     if(sizeof(Real)==8) {
@@ -141,21 +174,24 @@ Status Journal::indexTransaction(uint32_t at,uint32_t next,const uint64_t& opera
     for(uint32_t pos=at+32;pos<next-8;) {
         uint16_t size;
         Status st=readEntry(pos,next-8-pos,bytes,size); if(st!=Status::Ok) return st;
-        const Key key=entryKey(bytes);
-        st=index_.put(key,pos,at); if(st!=Status::Ok) return st;
-        Key maximum(Kind(0),uint8_t(key.kind),Field::Exists);
+        st=index_.put(bytes,pos,at); if(st!=Status::Ok) return st;
+        uint8_t maximum[DiskIndex::KeyBytes];
+        maximumKey(maximum,bytes[0]);
         uint32_t previous,transaction; st=index_.get(maximum,previous,transaction);
         bool replace=st==Status::Missing;
         if(st==Status::Ok) {
             if(previous<32||previous>pos||transaction>previous-32) return Status::Corrupt;
             uint8_t entry[6]; st=io_.read(previous,entry,sizeof(entry)); if(st!=Status::Ok) return st;
-            if(entry[0]!=uint8_t(key.kind)) return Status::Corrupt;
-            replace=key.object>get32(entry+2);
+            if(entry[0]!=bytes[0]) return Status::Corrupt;
+            replace=get32(bytes+2)>get32(entry+2);
         } else if(!replace) return st;
         if(replace) { st=index_.put(maximum,pos,at); if(st!=Status::Ok) return st; }
         pos+=12+size;
     }
-    if(next>at+40&&operation) return index_.put(operationKey(operation),at+32,at);
+    if(next>at+40&&operation) {
+        operationKey(bytes,operation);
+        return index_.put(bytes,at+32,at);
+    }
     return Status::Ok;
 }
 Status Journal::begin(const uint64_t& op) {
@@ -178,7 +214,7 @@ Status Journal::startValue(const Key& k,uint16_t n) {
     if(remaining_) return Status::Busy;
     if(!uint8_t(k.kind) || !uint8_t(k.field)) return Status::Invalid;
     if(n>MaxValue || writeAt_>UINT32_MAX-uint32_t(n)-20) return Status::Capacity;
-    uint8_t h[12]; h[0]=uint8_t(k.kind); h[1]=uint8_t(k.field); put32(h+2,k.object); put32(h+6,k.index); put16(h+10,n);
+    uint8_t h[12]; encodeKey(h,k.kind,k.field,k.object,k.index); put16(h+10,n);
     Status st=io_.write(writeAt_,h,12); if(st!=Status::Ok) { abort(); return st; }
     payloadCrc_=crc32(payloadCrc_,h,12); writeAt_+=12;
     remaining_=n; if(!n) ++count_;
@@ -240,16 +276,15 @@ Status ValueReader::skip(uint16_t size) {
 }
 Status Journal::locate(const Key& wanted,uint32_t& valueAt,uint16_t& valueLength) {
     if(!uint8_t(wanted.kind) || !uint8_t(wanted.field)) return Status::Invalid;
-    Key key=wanted;
+    uint8_t key[DiskIndex::KeyBytes];
+    encodeKey(key,wanted.kind,wanted.field,wanted.object,wanted.index);
     return findEntry(Query::Value,key,valueAt,valueLength);
 }
-Status Journal::findEntry(Query mode,Key& wanted,uint32_t& valueAt,uint16_t& valueLength,const uint64_t* operation) {
+Status Journal::findEntry(Query mode,const uint8_t* key,uint32_t& valueAt,uint16_t& valueLength,
+                          const uint64_t* operation,Key* first) {
     uint32_t transaction=0, entry=0;
     if(indexed_) {
-        Key lookup=wanted;
-        if(operation) lookup=operationKey(*operation);
-        if(mode==Query::MaxObject) lookup=Key(Kind(0),uint8_t(wanted.kind),Field::Exists);
-        Status st=index_.get(lookup,entry,transaction);
+        Status st=index_.get(key,entry,transaction);
         if(st==Status::Missing) {
             if(mode!=Query::MaxObject) return st;
             valueAt=0;
@@ -272,12 +307,11 @@ Status Journal::findEntry(Query mode,Key& wanted,uint32_t& valueAt,uint16_t& val
                 st=io_.read(entry,bytes,mode==Query::MaxObject?6:12);
                 if(st!=Status::Ok) return st;
                 if(mode==Query::MaxObject) {
-                    if(bytes[0]==uint8_t(wanted.kind)) { valueAt=get32(bytes+2); return Status::Ok; }
+                    if(bytes[0]==key[2]) { valueAt=get32(bytes+2); return Status::Ok; }
                 } else {
-                    const Key found=entryKey(bytes);
-                    if(mode==Query::Operation) { wanted=found; return Status::Ok; }
+                    if(mode==Query::Operation) { *first=entryKey(bytes); return Status::Ok; }
                     uint16_t size=get16(bytes+10);
-                    if(found==wanted && validEntryLength(size,limit-entry)) {
+                    if(!memcmp(key,bytes,DiskIndex::KeyBytes) && validEntryLength(size,limit-entry)) {
                         if(!size) return Status::Missing;
                         valueAt=entry+12; valueLength=size; return Status::Ok;
                     }
@@ -293,10 +327,16 @@ Status Journal::findEntry(Query mode,Key& wanted,uint32_t& valueAt,uint16_t& val
             for(uint32_t scan=transaction+32;scan<limit;) {
                 uint16_t size;
                 st=readEntry(scan,limit-scan,bytes,size); if(st!=Status::Ok) return st;
-                const Key key=entryKey(bytes);
-                if(mode==Query::Operation) { wanted=key; return Status::Ok; }
-                if(mode==Query::MaxObject) { if(key.kind==wanted.kind&&key.object>valueAt) valueAt=key.object; }
-                else if(key==wanted) { valueAt=scan+12; valueLength=size; }
+                if(mode==Query::Operation) { *first=entryKey(bytes); return Status::Ok; }
+                if(mode==Query::MaxObject) {
+                    if(bytes[0]==key[2]) {
+                        const uint32_t object=get32(bytes+2);
+                        if(object>valueAt) valueAt=object;
+                    }
+                } else if(!memcmp(key,bytes,DiskIndex::KeyBytes)) {
+                    valueAt=scan+12;
+                    valueLength=size;
+                }
                 scan+=12+size;
             }
         }
@@ -321,11 +361,15 @@ Status Journal::copy(const Key& from,const Key& to,uint16_t expected) {
 }
 Status Journal::findOperation(const uint64_t& op,Key& first) {
     if(!op) return Status::Missing;
+    uint8_t key[DiskIndex::KeyBytes];
+    operationKey(key,op);
     uint32_t at; uint16_t length;
-    return findEntry(Query::Operation,first,at,length,&op);
+    return findEntry(Query::Operation,key,at,length,&op,&first);
 }
 Status Journal::maxObject(Kind kind,uint32_t& out) {
-    Key key(kind); uint16_t length;
+    uint8_t key[DiskIndex::KeyBytes];
+    maximumKey(key,uint8_t(kind));
+    uint16_t length;
     return findEntry(Query::MaxObject,key,out,length);
 }
 }
