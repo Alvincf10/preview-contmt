@@ -2,44 +2,52 @@
   "scope": "Unique address/size symbols; LTO attribution is approximate. Unnamed padding is not attributed.",
   "textGroups": {
     "Runtime/SDK/constants": 7501,
-    "Controller": 21808,
-    "ConMT other": 20840,
-    "Transport": 3868,
+    "Controller": 21856,
+    "ConMT other": 21073,
+    "Transport": 3553,
     "Presenter": 1606,
-    "Repository": 3604,
+    "Repository": 3608,
     "SdFile": 3360,
     "Sd2Card": 1334,
-    "Journal": 6680,
+    "Journal": 6174,
     "SdVolume": 2152,
     "DiskIndex": 1268
   },
   "largestText": [
     {
-      "address": 62274,
-      "bytes": 2040,
+      "address": 60014,
+      "bytes": 2082,
       "type": "t",
       "names": [
-        "conmt::Controller::dispatch(char const*, char const*, char const*, char const*, unsigned long long const&)"
+        "conmt::Controller::dispatch(conmt::Command, char const* const*, unsigned long long const&, conmt::Status, bool)"
       ]
     },
     {
-      "address": 59688,
-      "bytes": 1782,
+      "address": 66144,
+      "bytes": 1772,
       "type": "t",
       "names": [
         "conmt::Controller::editCheckpoint(unsigned long, char const*, char const*, unsigned long long const&)"
       ]
     },
     {
-      "address": 49032,
+      "address": 48770,
       "bytes": 1616,
       "type": "t",
       "names": [
-        "conmt::Controller::tickImpl() [clone .constprop.47]"
+        "conmt::Controller::tickImpl() [clone .constprop.48]"
       ]
     },
     {
-      "address": 50674,
+      "address": 24440,
+      "bytes": 1466,
+      "type": "t",
+      "names": [
+        "conmt::Journal::findEntry(conmt::Journal::Query, conmt::Key&, unsigned long&, unsigned int&, unsigned long long const*)"
+      ]
+    },
+    {
+      "address": 50412,
       "bytes": 1340,
       "type": "t",
       "names": [
@@ -47,23 +55,15 @@
       ]
     },
     {
-      "address": 68454,
-      "bytes": 1166,
+      "address": 67916,
+      "bytes": 1168,
       "type": "t",
       "names": [
         "conmt::Controller::editRow(unsigned long, char const*, char const*, unsigned long long const&)"
       ]
     },
     {
-      "address": 64314,
-      "bytes": 1128,
-      "type": "t",
-      "names": [
-        "conmt::Transport::accept(conmt::Frame const&) [clone .constprop.15]"
-      ]
-    },
-    {
-      "address": 19946,
+      "address": 20046,
       "bytes": 1040,
       "type": "t",
       "names": [
@@ -71,15 +71,23 @@
       ]
     },
     {
-      "address": 23490,
-      "bytes": 896,
+      "address": 62096,
+      "bytes": 1012,
+      "type": "t",
+      "names": [
+        "conmt::Transport::accept(conmt::Frame const&) [clone .constprop.15]"
+      ]
+    },
+    {
+      "address": 23560,
+      "bytes": 880,
       "type": "t",
       "names": [
         "conmt::Journal::verify(unsigned long, unsigned long, unsigned long&, unsigned long&, unsigned long long&, bool)"
       ]
     },
     {
-      "address": 65576,
+      "address": 63242,
       "bytes": 800,
       "type": "t",
       "names": [
@@ -87,7 +95,7 @@
       ]
     },
     {
-      "address": 48234,
+      "address": 47972,
       "bytes": 798,
       "type": "t",
       "names": [
@@ -95,7 +103,7 @@
       ]
     },
     {
-      "address": 47456,
+      "address": 47194,
       "bytes": 778,
       "type": "t",
       "names": [
@@ -103,7 +111,7 @@
       ]
     },
     {
-      "address": 39454,
+      "address": 39008,
       "bytes": 760,
       "type": "t",
       "names": [
@@ -111,7 +119,7 @@
       ]
     },
     {
-      "address": 44410,
+      "address": 44148,
       "bytes": 754,
       "type": "t",
       "names": [
@@ -119,7 +127,7 @@
       ]
     },
     {
-      "address": 8984,
+      "address": 8966,
       "bytes": 734,
       "type": "t",
       "names": [
@@ -127,7 +135,7 @@
       ]
     },
     {
-      "address": 43200,
+      "address": 42938,
       "bytes": 732,
       "type": "t",
       "names": [
@@ -135,23 +143,23 @@
       ]
     },
     {
-      "address": 29222,
-      "bytes": 724,
+      "address": 28804,
+      "bytes": 730,
       "type": "t",
       "names": [
         "conmt::Journal::scan()"
       ]
     },
     {
-      "address": 42410,
-      "bytes": 720,
+      "address": 42142,
+      "bytes": 726,
       "type": "t",
       "names": [
         "conmt::Journal::commit()"
       ]
     },
     {
-      "address": 34446,
+      "address": 34000,
       "bytes": 714,
       "type": "t",
       "names": [
@@ -159,7 +167,7 @@
       ]
     },
     {
-      "address": 52834,
+      "address": 52572,
       "bytes": 706,
       "type": "t",
       "names": [
@@ -167,15 +175,15 @@
       ]
     },
     {
-      "address": 58246,
+      "address": 57956,
       "bytes": 696,
       "type": "t",
       "names": [
-        "conmt::Presenter::field(unsigned int, char*, unsigned int, char*, unsigned int) [clone .constprop.21]"
+        "conmt::Presenter::field(unsigned int, char*, unsigned int, char*, unsigned int) [clone .constprop.22]"
       ]
     },
     {
-      "address": 70868,
+      "address": 70332,
       "bytes": 696,
       "type": "T",
       "names": [
@@ -183,15 +191,7 @@
       ]
     },
     {
-      "address": 22812,
-      "bytes": 678,
-      "type": "t",
-      "names": [
-        "conmt::Journal::indexTransaction(unsigned long, unsigned long)"
-      ]
-    },
-    {
-      "address": 36666,
+      "address": 36220,
       "bytes": 674,
       "type": "t",
       "names": [
@@ -199,7 +199,7 @@
       ]
     },
     {
-      "address": 37340,
+      "address": 36894,
       "bytes": 654,
       "type": "t",
       "names": [
@@ -207,15 +207,7 @@
       ]
     },
     {
-      "address": 24386,
-      "bytes": 650,
-      "type": "t",
-      "names": [
-        "conmt::Journal::scanQuery(unsigned char, conmt::Key&, unsigned long&, unsigned int&, unsigned long long const&)"
-      ]
-    },
-    {
-      "address": 69686,
+      "address": 69150,
       "bytes": 650,
       "type": "T",
       "names": [
@@ -223,31 +215,31 @@
       ]
     },
     {
-      "address": 35624,
+      "address": 22912,
+      "bytes": 648,
+      "type": "t",
+      "names": [
+        "conmt::Journal::indexTransaction(unsigned long, unsigned long, unsigned long long const&)"
+      ]
+    },
+    {
+      "address": 35178,
       "bytes": 646,
       "type": "t",
       "names": [
-        "conmt::Controller::reanchorLive(conmt::SensorFrame const&, conmt::Average const&, conmt::Time const&) [clone .constprop.48]"
+        "conmt::Controller::reanchorLive(conmt::SensorFrame const&, conmt::Average const&, conmt::Time const&) [clone .constprop.49]"
       ]
     },
     {
-      "address": 56798,
+      "address": 56000,
       "bytes": 646,
       "type": "t",
       "names": [
-        "conmt::(anonymous namespace)::scalar(conmt::Controller&, conmt::Kind, unsigned long, conmt::(anonymous namespace)::Op, conmt::Field, char*, unsigned int) [clone .constprop.24]"
+        "conmt::(anonymous namespace)::scalar(conmt::Controller&, conmt::Kind, unsigned long, conmt::(anonymous namespace)::Op, conmt::Field, char*, unsigned int) [clone .constprop.25]"
       ]
     },
     {
-      "address": 58942,
-      "bytes": 644,
-      "type": "t",
-      "names": [
-        "conmt::Transport::renderField(unsigned int, char*, unsigned int, char*, unsigned int) [clone .constprop.14]"
-      ]
-    },
-    {
-      "address": 12860,
+      "address": 12842,
       "bytes": 604,
       "type": "t",
       "names": [
@@ -255,7 +247,7 @@
       ]
     },
     {
-      "address": 46854,
+      "address": 46592,
       "bytes": 602,
       "type": "t",
       "names": [
@@ -263,23 +255,15 @@
       ]
     },
     {
-      "address": 26470,
-      "bytes": 562,
-      "type": "t",
-      "names": [
-        "conmt::Journal::locate(conmt::Key const&, unsigned long&, unsigned int&)"
-      ]
-    },
-    {
-      "address": 55242,
+      "address": 55442,
       "bytes": 558,
       "type": "t",
       "names": [
-        "conmt::(anonymous namespace)::metric(conmt::Controller&, conmt::Kind, unsigned long, unsigned long, conmt::(anonymous namespace)::Op, char*, unsigned int) [clone .constprop.25]"
+        "conmt::(anonymous namespace)::metric(conmt::Controller&, conmt::Kind, unsigned long, unsigned long, conmt::(anonymous namespace)::Op, char*, unsigned int) [clone .constprop.26]"
       ]
     },
     {
-      "address": 32868,
+      "address": 32422,
       "bytes": 556,
       "type": "t",
       "names": [
@@ -287,23 +271,23 @@
       ]
     },
     {
-      "address": 30900,
-      "bytes": 544,
-      "type": "t",
-      "names": [
-        "conmt::Parser::feed(unsigned char, unsigned long, conmt::Frame&) [clone .constprop.19]"
-      ]
-    },
-    {
-      "address": 57704,
+      "address": 57414,
       "bytes": 542,
       "type": "t",
       "names": [
-        "conmt::Presenter::rows(unsigned char, char*, unsigned int, char*, unsigned int) [clone .constprop.23]"
+        "conmt::Presenter::rows(unsigned char, char*, unsigned int, char*, unsigned int) [clone .constprop.24]"
       ]
     },
     {
-      "address": 4102,
+      "address": 41226,
+      "bytes": 532,
+      "type": "t",
+      "names": [
+        "conmt::calendarText(unsigned long long, char*, unsigned int, char*, unsigned int)"
+      ]
+    },
+    {
+      "address": 4084,
       "bytes": 526,
       "type": "t",
       "names": [
@@ -311,7 +295,7 @@
       ]
     },
     {
-      "address": 46330,
+      "address": 46068,
       "bytes": 524,
       "type": "t",
       "names": [
@@ -319,25 +303,41 @@
       ]
     },
     {
-      "address": 25456,
-      "bytes": 522,
-      "type": "t",
-      "names": [
-        "conmt::Journal::findOperation(unsigned long long const&, conmt::Key&)"
-      ]
-    },
-    {
-      "address": 37994,
+      "address": 37548,
       "bytes": 520,
       "type": "t",
       "names": [
         "conmt::Controller::checkpointResult(conmt::Kind, unsigned long, unsigned long, conmt::Result&)"
       ]
+    },
+    {
+      "address": 6944,
+      "bytes": 512,
+      "type": "t",
+      "names": [
+        "SdVolume::init(Sd2Card*, unsigned char)"
+      ]
+    },
+    {
+      "address": 30488,
+      "bytes": 510,
+      "type": "t",
+      "names": [
+        "conmt::Parser::feed(unsigned char, unsigned long, conmt::Frame&) [clone .constprop.19]"
+      ]
+    },
+    {
+      "address": 9886,
+      "bytes": 470,
+      "type": "t",
+      "names": [
+        "SdFile::read(void*, unsigned int)"
+      ]
     }
   ],
   "largestStatic": [
     {
-      "address": 8389569,
+      "address": 8389568,
       "bytes": 512,
       "type": "b",
       "names": [
@@ -346,14 +346,14 @@
     },
     {
       "address": 8389202,
-      "bytes": 367,
+      "bytes": 366,
       "type": "b",
       "names": [
         "transport"
       ]
     },
     {
-      "address": 8390237,
+      "address": 8390236,
       "bytes": 157,
       "type": "b",
       "names": [
@@ -369,7 +369,7 @@
       ]
     },
     {
-      "address": 8390148,
+      "address": 8390147,
       "bytes": 89,
       "type": "b",
       "names": [
@@ -377,7 +377,7 @@
       ]
     },
     {
-      "address": 8390081,
+      "address": 8390080,
       "bytes": 43,
       "type": "b",
       "names": [
@@ -393,7 +393,7 @@
       ]
     },
     {
-      "address": 8390124,
+      "address": 8390123,
       "bytes": 22,
       "type": "b",
       "names": [
