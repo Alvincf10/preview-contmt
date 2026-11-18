@@ -1,0 +1,47 @@
+{
+  "purpose": "isolated feature-size study, incomplete functionality, never upload",
+  "compiler": "avr-g++ (GCC) 7.3.0",
+  "flashBytes": 75554,
+  "staticRamBytes": 1532,
+  "physicalFlashRemaining": -42786,
+  "staticRamRemaining": 516,
+  "fitsStaticLimits": false,
+  "includes": "shared core/controller/HMI/real SD with disk index/HardwareSerial/confirmed battery adapter; probe clock/sensor/brightness/sound ports",
+  "excludes": "verified sensor/RTC drivers, actual stack watermark",
+  "clockAssumption": "16MHz for capacity only; not board configuration",
+  "strategy": "merge-relax",
+  "compilerFlags": [
+    "-mmcu=atmega328p",
+    "-Os",
+    "-flto",
+    "-mcall-prologues",
+    "-fno-inline-small-functions",
+    "-fno-inline-functions-called-once",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-fno-exceptions",
+    "-fno-threadsafe-statics",
+    "-fno-rtti",
+    "-fstack-usage",
+    "-std=gnu++11",
+    "-DARDUINO=10819",
+    "-DARDUINO_ARCH_AVR",
+    "-DF_CPU=16000000UL",
+    "-mrelax",
+    "-fmerge-all-constants"
+  ],
+  "nativeLinkPassed": false,
+  "physicalRegionLimits": {
+    "flash": 32768,
+    "sram": 2048
+  },
+  "probeSourceSha256": "58f47af9f6e715aa830877fd393a02874b9d5801d9c756ff18f8315933d74b48",
+  "measurementInputsStaticBytes": 31,
+  "measurementInputs": {
+    "probeInput": 1,
+    "probeState": 30
+  },
+  "sourceDirectory": "/Users/macbook/Documents/pptRnD/preview-contmt/firmware/build-feature-reference/src",
+  "comparedSourceCommit": "c1ebca9",
+  "featureCuts": []
+}

@@ -42,5 +42,16 @@
     }
   },
   "nestedStackVerified": false,
-  "validation": "15suites pass on host64/host32/sanitizer; AVR precision620plus shared replay smoke PASS; existing UART and checkpoint fixtures unchanged"
+  "validation": "15suites pass on host64/host32/sanitizer; AVR precision620plus shared replay smoke PASS; existing UART and checkpoint fixtures unchanged",
+  "sameProbeComparison": {
+    "before": 75554,
+    "after": 74618,
+    "saved": 936,
+    "staticRam": 1532,
+    "measurementInputsStaticBytes": 31
+  },
+  "probeCorrection": {
+    "additionalFlash": 140,
+    "additionalStaticRam": 30
+  }
 }

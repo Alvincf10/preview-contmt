@@ -1,5 +1,5 @@
 {
-  "assessmentDate": "2026-11-17",
+  "assessmentDate": "2026-11-18",
   "hostTests": "PASS",
   "hostBinary32Tests": "PASS",
   "sanitizers": "PASS",
@@ -21,8 +21,8 @@
   },
   "avrNumericEmulation": "PASS",
   "avrCompleteFirmwareCapacity": "FAIL",
-  "flashBytes": 75414,
-  "staticRamBytes": 1502,
+  "flashBytes": 74618,
+  "staticRamBytes": 1532,
   "runtimeStackVerified": false,
   "physicalHardwareVerified": false,
   "hmiContractRevision": 2,
@@ -38,7 +38,7 @@
   "batteryCalibrationSource": "board-evidence/battery.json",
   "batteryHardwareVerified": false,
   "storageIndexRebuildHostTested": true,
-  "latestReview": "reviews/2026-11-17-flash-fit/README.md",
+  "latestReview": "reviews/2026-11-18-size-study/README.md",
   "implementationPausedForHandoff": false,
   "storageOperationIndexImplemented": true,
   "hmiWireSnapshotPages": 17,
@@ -50,11 +50,14 @@
   "clockAdjustmentHostVerified": true,
   "uartLostAckResetHostVerified": true,
   "storageMaximumIdIndexImplemented": true,
-  "implementationCommit": "04f34f8",
+  "implementationCommit": "881dbc8",
   "sharedTransactionExecutorImplemented": true,
   "streamedSchema1RecordCodecImplemented": true,
   "schema1AllFieldRoundtripHostVerified": true,
   "checkpointWorkflowParityHostVerified": true,
   "checkpointWorkflowParityBaseline": "520a74f",
-  "boundedTextFormattingHostVerified": true
+  "boundedTextFormattingHostVerified": true,
+  "productionFeaturesRemoved": false,
+  "featureCutStudyOnly": true,
+  "measurementInputsStaticBytes": 31
 }

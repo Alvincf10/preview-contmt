@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """Measure full linked core + SD on AVR. Capacity ELF only, never a production HEX."""
 from pathlib import Path
-import subprocess,json,argparse
+import subprocess,json,argparse,hashlib,re
 parser=argparse.ArgumentParser()
 parser.add_argument('--strategy',choices=['baseline','merge-relax','inline-relax'],default='merge-relax')
+parser.add_argument('--source-dir',type=Path,help='Isolated copy of ConMT/src for diagnostic studies only')
+parser.add_argument('--output-dir',type=Path,help='Separate build directory; required with --source-dir')
 args=parser.parse_args()
+if args.source_dir and not args.output_dir: parser.error('--source-dir requires a separate --output-dir')
 root=Path(__file__).resolve().parents[1]
+source_dir=(args.source_dir or root/'ConMT/src').resolve()
 workspace=root.parents[1]
 cache=workspace/'diagnosis_beton/build_firmware_original'
 packages=cache/'arduino-data/packages'
@@ -14,11 +18,11 @@ core=packages/'arduino/hardware/avr/1.8.8/cores/arduino'
 variant=packages/'arduino/hardware/avr/1.8.8/variants/standard'
 spi=packages/'arduino/hardware/avr/1.8.8/libraries/SPI/src'
 sd=cache/'user/libraries/SD/src'
-output=root/('build-avr-capacity' if args.strategy=='merge-relax' else 'build-avr-capacity-'+args.strategy);output.mkdir(exist_ok=True)
-flags=['-mmcu=atmega328p','-Os','-flto','-mcall-prologues','-fno-inline-small-functions','-fno-inline-functions-called-once','-ffunction-sections','-fdata-sections','-fno-exceptions','-fno-threadsafe-statics','-fno-rtti','-fstack-usage','-std=gnu++11','-DARDUINO=10819','-DARDUINO_ARCH_AVR','-DF_CPU=16000000UL','-I'+str(core),'-I'+str(variant),'-I'+str(spi),'-I'+str(sd),'-I'+str(root/'ConMT/src')]
+output=(args.output_dir or root/('build-avr-capacity' if args.strategy=='merge-relax' else 'build-avr-capacity-'+args.strategy)).resolve();output.mkdir(parents=True,exist_ok=True)
+flags=['-mmcu=atmega328p','-Os','-flto','-mcall-prologues','-fno-inline-small-functions','-fno-inline-functions-called-once','-ffunction-sections','-fdata-sections','-fno-exceptions','-fno-threadsafe-statics','-fno-rtti','-fstack-usage','-std=gnu++11','-DARDUINO=10819','-DARDUINO_ARCH_AVR','-DF_CPU=16000000UL','-I'+str(core),'-I'+str(variant),'-I'+str(spi),'-I'+str(sd),'-I'+str(source_dir)]
 if args.strategy!='baseline': flags+=['-mrelax','-fmerge-all-constants']
 if args.strategy=='inline-relax': flags.remove('-fno-inline-small-functions')
-sources=list((root/'ConMT/src').rglob('*.cpp'))+[root/'tools/capacity_probe/probe.cpp',spi/'SPI.cpp']+list((sd/'utility').glob('*.cpp'))
+sources=list(source_dir.rglob('*.cpp'))+[root/'tools/capacity_probe/probe.cpp',spi/'SPI.cpp']+list((sd/'utility').glob('*.cpp'))
 objects=[]
 for index,source in enumerate(sources):
     obj=output/(str(index)+'.o');objects.append(str(obj))
@@ -45,5 +49,19 @@ report['strategy']=args.strategy
 report['compilerFlags']=[flag for flag in flags if not flag.startswith('-I')]
 report['nativeLinkPassed']=result.returncode==0
 report['physicalRegionLimits']={'flash':32768,'sram':2048}
-(root/('releases/avr-capacity.json' if args.strategy=='merge-relax' else 'releases/avr-capacity-'+args.strategy+'.json')).write_text(json.dumps(report,indent=2)+'\n')
+report['probeSourceSha256']=hashlib.sha256((root/'tools/capacity_probe/probe.cpp').read_bytes()).hexdigest()
+symbols=subprocess.check_output([str(binpath/'avr-nm'),'-S',str(output/'CAPACITY_ONLY.elf')],text=True)
+inputs={}
+for line in symbols.splitlines():
+    match=re.match(r'[0-9a-f]+ ([0-9a-f]+) [bBdD] (probeInput|probeState)$',line)
+    if match:inputs[match[2]]=int(match[1],16)
+report['measurementInputsStaticBytes']=sum(inputs.values())
+report['measurementInputs']=inputs
+report_path=root/('releases/avr-capacity.json' if args.strategy=='merge-relax' else 'releases/avr-capacity-'+args.strategy+'.json')
+if args.output_dir:
+    report_path=output/'capacity.json'
+if args.source_dir:
+    report['purpose']='isolated feature-size study, incomplete functionality, never upload'
+    report['sourceDirectory']=str(source_dir)
+report_path.write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report,indent=2))

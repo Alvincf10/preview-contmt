@@ -1,0 +1,166 @@
+{
+  "purpose": "Hypothetical feature cuts, never production or flash artifacts",
+  "baselineCommit": "881dbc8fc44496f129f62ab3ad0b0f684e39bd2a",
+  "productionSourceDigestBefore": "47f7c4eeb147a02d2e59b37275556d9616e4e6f252dc923b341c02a2a767d059",
+  "productionSourceDigestAfter": "47f7c4eeb147a02d2e59b37275556d9616e4e6f252dc923b341c02a2a767d059",
+  "productionFeaturesRemoved": false,
+  "probeSourceSha256": "58f47af9f6e715aa830877fd393a02874b9d5801d9c756ff18f8315933d74b48",
+  "capacityToolSha256": "c3c3dce2888b0639bd42a24c050ea5f59133f6f5f79eb61b7e50d0dd27b0df86",
+  "studyToolSha256": "47d02f8dd01d6a0081b56b06cf9e4e91c12cc0950124ae6ab1a044647271b060",
+  "limitations": [
+    "LTO marginal sizes are not additive",
+    "No replacement UI/import/export workflow is included",
+    "No functionality acceptance for deliberately incomplete study copies",
+    "Sensor/clock/brightness/sound remain probe ports and chart integration remains incomplete",
+    "Physical-region limit is measured before any enlarged-region diagnostic link"
+  ],
+  "cases": [
+    {
+      "case": "baseline",
+      "flashBytes": 74618,
+      "staticRamBytes": 1532,
+      "physicalLinkPassed": false,
+      "disabledOnlyInStudyCopy": {},
+      "sourceDigest": "47f7c4eeb147a02d2e59b37275556d9616e4e6f252dc923b341c02a2a767d059",
+      "savingVersusStudyBaseline": 0
+    },
+    {
+      "case": "row_helpers",
+      "flashBytes": 73748,
+      "staticRamBytes": 1532,
+      "physicalLinkPassed": false,
+      "disabledOnlyInStudyCopy": {
+        "stubs": [
+          "captureRow",
+          "fillEarly"
+        ]
+      },
+      "sourceDigest": "a0e0b29c33c3f9f7cece8e1d62364b8120d894621bba0e70fe357788fc6c263c",
+      "savingVersusStudyBaseline": 870
+    },
+    {
+      "case": "material_metadata",
+      "flashBytes": 74398,
+      "staticRamBytes": 1532,
+      "physicalLinkPassed": false,
+      "disabledOnlyInStudyCopy": {
+        "material": true
+      },
+      "sourceDigest": "4908512cc33fa9016689061f2ac5988e6f4674343d1a3fde17711fa0c4b3dfd9",
+      "savingVersusStudyBaseline": 220
+    },
+    {
+      "case": "manual_checkpoint_editor",
+      "flashBytes": 72064,
+      "staticRamBytes": 1532,
+      "physicalLinkPassed": false,
+      "disabledOnlyInStudyCopy": {
+        "stubs": [
+          "editCheckpoint",
+          "reconcileGap"
+        ]
+      },
+      "sourceDigest": "11a40e82bc2457ea99e32e3fa753604cedceff9ed073c2b81b07eb09a53fecd8",
+      "savingVersusStudyBaseline": 2554
+    },
+    {
+      "case": "history_viewer",
+      "flashBytes": 74202,
+      "staticRamBytes": 1532,
+      "physicalLinkPassed": false,
+      "disabledOnlyInStudyCopy": {
+        "stubs": [
+          "historyAt"
+        ],
+        "pages": [
+          "Hist",
+          "HistD"
+        ]
+      },
+      "sourceDigest": "e3fefad9329e57b35b67bc87b6474d6a1f344aac70f70a8e1f2ea9e0e01780da",
+      "savingVersusStudyBaseline": 416
+    },
+    {
+      "case": "settings_editor",
+      "flashBytes": 73720,
+      "staticRamBytes": 1530,
+      "physicalLinkPassed": false,
+      "disabledOnlyInStudyCopy": {
+        "stubs": [
+          "setting"
+        ],
+        "pages": [
+          "Set"
+        ]
+      },
+      "sourceDigest": "4f614dfb63f1bcee926309762faeaf9de1d3b700acee66b3894c36b2c9f57c23",
+      "savingVersusStudyBaseline": 898
+    },
+    {
+      "case": "baseline_authoring",
+      "flashBytes": 66254,
+      "staticRamBytes": 1532,
+      "physicalLinkPassed": false,
+      "disabledOnlyInStudyCopy": {
+        "stubs": [
+          "newBaseline",
+          "addRow",
+          "fillEarly",
+          "editRow",
+          "deleteRow",
+          "captureRow",
+          "generate",
+          "saveBaseline",
+          "cloneDraft",
+          "openBaseline"
+        ],
+        "pages": [
+          "NewB",
+          "Mat",
+          "Matu",
+          "BaseR"
+        ],
+        "draft": true
+      },
+      "sourceDigest": "b2113d62ac5fc85b7672e60706c3bcc6a5acc39f8dacd108061676a19218c948",
+      "savingVersusStudyBaseline": 8364
+    },
+    {
+      "case": "all_candidates",
+      "flashBytes": 61754,
+      "staticRamBytes": 1530,
+      "physicalLinkPassed": false,
+      "disabledOnlyInStudyCopy": {
+        "stubs": [
+          "addRow",
+          "captureRow",
+          "cloneDraft",
+          "deleteRow",
+          "editCheckpoint",
+          "editRow",
+          "fillEarly",
+          "generate",
+          "historyAt",
+          "newBaseline",
+          "openBaseline",
+          "reconcileGap",
+          "saveBaseline",
+          "setting"
+        ],
+        "material": true,
+        "pages": [
+          "BaseR",
+          "Hist",
+          "HistD",
+          "Mat",
+          "Matu",
+          "NewB",
+          "Set"
+        ],
+        "draft": true
+      },
+      "sourceDigest": "7bff52171c435c21974a30c0c34db7be9440717cfb121c633e073aeb5e381aa3",
+      "savingVersusStudyBaseline": 12864
+    }
+  ]
+}
