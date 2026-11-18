@@ -1,21 +1,21 @@
 {
   "scope": "Unique address/size symbols; LTO attribution is approximate. Unnamed padding is not attributed.",
   "textGroups": {
-    "Runtime/SDK/constants": 7501,
-    "Controller": 21856,
-    "ConMT other": 21073,
+    "Runtime/SDK/constants": 7575,
+    "ConMT other": 20819,
+    "Controller": 21854,
     "Transport": 3553,
     "Presenter": 1606,
-    "Repository": 3608,
+    "Repository": 3534,
     "SdFile": 3360,
     "Sd2Card": 1334,
-    "Journal": 6174,
+    "Journal": 5882,
     "SdVolume": 2152,
-    "DiskIndex": 1268
+    "DiskIndex": 1128
   },
   "largestText": [
     {
-      "address": 60014,
+      "address": 59310,
       "bytes": 2082,
       "type": "t",
       "names": [
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "address": 66144,
+      "address": 65440,
       "bytes": 1772,
       "type": "t",
       "names": [
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "address": 48770,
+      "address": 48066,
       "bytes": 1616,
       "type": "t",
       "names": [
@@ -39,15 +39,7 @@
       ]
     },
     {
-      "address": 24440,
-      "bytes": 1466,
-      "type": "t",
-      "names": [
-        "conmt::Journal::findEntry(conmt::Journal::Query, conmt::Key&, unsigned long&, unsigned int&, unsigned long long const*)"
-      ]
-    },
-    {
-      "address": 50412,
+      "address": 49708,
       "bytes": 1340,
       "type": "t",
       "names": [
@@ -55,15 +47,23 @@
       ]
     },
     {
-      "address": 67916,
-      "bytes": 1168,
+      "address": 23124,
+      "bytes": 1174,
+      "type": "t",
+      "names": [
+        "conmt::Journal::findEntry(conmt::Journal::Query, unsigned char const*, unsigned long&, unsigned int&, unsigned long long const*, conmt::Key*)"
+      ]
+    },
+    {
+      "address": 67212,
+      "bytes": 1166,
       "type": "t",
       "names": [
         "conmt::Controller::editRow(unsigned long, char const*, char const*, unsigned long long const&)"
       ]
     },
     {
-      "address": 20046,
+      "address": 19670,
       "bytes": 1040,
       "type": "t",
       "names": [
@@ -71,7 +71,7 @@
       ]
     },
     {
-      "address": 62096,
+      "address": 61392,
       "bytes": 1012,
       "type": "t",
       "names": [
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "address": 23560,
+      "address": 22244,
       "bytes": 880,
       "type": "t",
       "names": [
@@ -87,7 +87,7 @@
       ]
     },
     {
-      "address": 63242,
+      "address": 62538,
       "bytes": 800,
       "type": "t",
       "names": [
@@ -95,7 +95,7 @@
       ]
     },
     {
-      "address": 47972,
+      "address": 47268,
       "bytes": 798,
       "type": "t",
       "names": [
@@ -103,7 +103,7 @@
       ]
     },
     {
-      "address": 47194,
+      "address": 46490,
       "bytes": 778,
       "type": "t",
       "names": [
@@ -111,15 +111,15 @@
       ]
     },
     {
-      "address": 39008,
-      "bytes": 760,
+      "address": 33012,
+      "bytes": 756,
       "type": "t",
       "names": [
         "conmt::applyTransaction(conmt::Repository&, conmt::ClockPort&, conmt::TxStep const*, unsigned char, conmt::Entity const&, conmt::Entity const&, void const*)"
       ]
     },
     {
-      "address": 44148,
+      "address": 43444,
       "bytes": 754,
       "type": "t",
       "names": [
@@ -135,7 +135,7 @@
       ]
     },
     {
-      "address": 42938,
+      "address": 42234,
       "bytes": 732,
       "type": "t",
       "names": [
@@ -143,23 +143,23 @@
       ]
     },
     {
-      "address": 28804,
-      "bytes": 730,
+      "address": 40680,
+      "bytes": 728,
       "type": "t",
       "names": [
         "conmt::Journal::scan()"
       ]
     },
     {
-      "address": 42142,
-      "bytes": 726,
+      "address": 41440,
+      "bytes": 724,
       "type": "t",
       "names": [
         "conmt::Journal::commit()"
       ]
     },
     {
-      "address": 34000,
+      "address": 34792,
       "bytes": 714,
       "type": "t",
       "names": [
@@ -167,7 +167,7 @@
       ]
     },
     {
-      "address": 52572,
+      "address": 51868,
       "bytes": 706,
       "type": "t",
       "names": [
@@ -175,7 +175,7 @@
       ]
     },
     {
-      "address": 57956,
+      "address": 57252,
       "bytes": 696,
       "type": "t",
       "names": [
@@ -183,7 +183,7 @@
       ]
     },
     {
-      "address": 70332,
+      "address": 69626,
       "bytes": 696,
       "type": "T",
       "names": [
@@ -191,7 +191,7 @@
       ]
     },
     {
-      "address": 36220,
+      "address": 37012,
       "bytes": 674,
       "type": "t",
       "names": [
@@ -199,7 +199,7 @@
       ]
     },
     {
-      "address": 36894,
+      "address": 37686,
       "bytes": 654,
       "type": "t",
       "names": [
@@ -207,7 +207,7 @@
       ]
     },
     {
-      "address": 69150,
+      "address": 68444,
       "bytes": 650,
       "type": "T",
       "names": [
@@ -215,15 +215,7 @@
       ]
     },
     {
-      "address": 22912,
-      "bytes": 648,
-      "type": "t",
-      "names": [
-        "conmt::Journal::indexTransaction(unsigned long, unsigned long, unsigned long long const&)"
-      ]
-    },
-    {
-      "address": 35178,
+      "address": 35970,
       "bytes": 646,
       "type": "t",
       "names": [
@@ -231,7 +223,7 @@
       ]
     },
     {
-      "address": 56000,
+      "address": 55296,
       "bytes": 646,
       "type": "t",
       "names": [
@@ -239,7 +231,15 @@
       ]
     },
     {
-      "address": 12842,
+      "address": 40070,
+      "bytes": 610,
+      "type": "t",
+      "names": [
+        "conmt::Journal::indexTransaction(unsigned long, unsigned long, unsigned long long const&)"
+      ]
+    },
+    {
+      "address": 12930,
       "bytes": 604,
       "type": "t",
       "names": [
@@ -247,7 +247,7 @@
       ]
     },
     {
-      "address": 46592,
+      "address": 45888,
       "bytes": 602,
       "type": "t",
       "names": [
@@ -255,7 +255,7 @@
       ]
     },
     {
-      "address": 55442,
+      "address": 54738,
       "bytes": 558,
       "type": "t",
       "names": [
@@ -263,7 +263,7 @@
       ]
     },
     {
-      "address": 32422,
+      "address": 32456,
       "bytes": 556,
       "type": "t",
       "names": [
@@ -271,7 +271,7 @@
       ]
     },
     {
-      "address": 57414,
+      "address": 56710,
       "bytes": 542,
       "type": "t",
       "names": [
@@ -279,7 +279,7 @@
       ]
     },
     {
-      "address": 41226,
+      "address": 30256,
       "bytes": 532,
       "type": "t",
       "names": [
@@ -295,7 +295,7 @@
       ]
     },
     {
-      "address": 46068,
+      "address": 45364,
       "bytes": 524,
       "type": "t",
       "names": [
@@ -303,7 +303,7 @@
       ]
     },
     {
-      "address": 37548,
+      "address": 38340,
       "bytes": 520,
       "type": "t",
       "names": [
@@ -319,7 +319,7 @@
       ]
     },
     {
-      "address": 30488,
+      "address": 28142,
       "bytes": 510,
       "type": "t",
       "names": [

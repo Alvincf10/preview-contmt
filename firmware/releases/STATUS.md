@@ -1,8 +1,8 @@
 # Current ConMT implementation status
 
-Updated 18 November 2026 for `optimize/conmt-flash-parity`. **ATmega328P capacity and board integration are still open.** See the [current implementation review](../reviews/2026-11-18-flash-parity/README.md) and the [prior size study](../reviews/2026-11-18-size-study/README.md).
+Updated 18 November 2026 for `optimize/conmt-flash-parity`. **ATmega328P capacity and board integration are still open.** See the [offline storage fit review](../reviews/2026-11-18-offline-storage-fit/README.md) and the [dispatch/journal parity review](../reviews/2026-11-18-flash-parity/README.md).
 
-CM1 dispatch and retry, verified journal traversal, and presentation formatting share more code. All 15 CTest suites pass on host64, host32 and sanitizer. The 300-line workflow traces match `ded9b7d` for each precision, including 120 write-cut scenarios. The original UART fixture for 17 pages and production features are preserved.
+Schema1 key bytes, index traversal, and integer codecs are shared. All 15 CTest suites pass on host64, host32 and sanitizer. The 300-line workflow traces match `f7aea07` for each precision, including 120 write-cut scenarios. The original UART fixture for 17 pages and production features are preserved.
 
 | Measurement | Flash bytes | Static SRAM bytes |
 |---|---:|---:|
@@ -14,9 +14,10 @@ CM1 dispatch and retry, verified journal traversal, and presentation formatting 
 |Previous retained implementation, old probe|75414|1502|
 |Same previous source remeasured with stronger probe|75554|1532|
 |Previous retained implementation, stronger probe|74618|1532|
-|Current branch following dispatch, journal and formatter changes|74082|1531|
+|Branch following dispatch, journal and formatter changes|74082|1531|
+|Current branch following offline storage changes|73394|1531|
 
-The current capacity probe exceeds physical ATmega328P flash by 41,314 bytes and leaves 517 bytes of static SRAM margin before nested stack and interrupts. The branch saves 536 flash bytes and 1 static SRAM byte on the same probe. The probe includes real SD, disk index, HardwareSerial and calibrated battery acquisition. Sensor, RTC, brightness and sound still use labelled probe ports, with 16 MHz used as a measurement assumption. Finished chart integration is also pending.
+The current capacity probe exceeds physical ATmega328P flash by 40,626 bytes and leaves 517 bytes of static SRAM margin before nested stack and interrupts. The latest changes save 688 flash bytes on the same probe. The diagnostic SD, numeric, codec, and storage subset drops from 42,208 to 41,606 bytes. The probe includes real SD, disk index, HardwareSerial and calibrated battery acquisition. Sensor, RTC, brightness and sound still use labelled probe ports, with 16 MHz used as a measurement assumption. Finished chart integration is also pending.
 
 Several stack frames were reduced, but the full worst-case stack is not proven. CAPACITY_ONLY.elf uses enlarged link regions only after the physical328Pregion check fails; it is not an uploadable328Pfirmware. No production HEX is issued.
 
