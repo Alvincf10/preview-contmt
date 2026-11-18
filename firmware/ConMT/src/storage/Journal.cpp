@@ -66,27 +66,28 @@ Status Journal::verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,u
     if(get16(h+4)!=1 || get16(h+6)!=1) return Status::Version;
     uint32_t len=get32(h+20), records=get32(h+24);
     if(len>limit-at-32 || (footer && limit-at-32-len<8)) return Status::Corrupt;
+    // Callers consume these provisional outputs only after Status::Ok.
+    next=at+32+len+(footer?8:0); seq=get32(h+8); op=get64(h+12);
     uint32_t pos=at+32, left=len, crc=0xffffffffUL, n=0;
-    uint8_t scratch[32];
     while(left) {
         if(left<12) return Status::Corrupt;
-        s=io_.read(pos,scratch,12); if(s!=Status::Ok) return s;
-        if(!scratch[0] || !scratch[1]) return Status::Corrupt;
-        uint16_t v=get16(scratch+10);
+        s=io_.read(pos,h,12); if(s!=Status::Ok) return s;
+        if(!h[0] || !h[1]) return Status::Corrupt;
+        uint16_t v=get16(h+10);
         if(v>MaxValue || uint32_t(v)+12>left) return Status::Corrupt;
-        crc=crc32(crc,scratch,12); pos+=12; left-=12; ++n;
+        crc=crc32(crc,h,12); pos+=12; left-=12; ++n;
         while(v) {
             uint16_t chunk=v>32?32:v;
-            s=io_.read(pos,scratch,chunk); if(s!=Status::Ok) return s;
-            crc=crc32(crc,scratch,chunk); pos+=chunk; left-=chunk; v-=chunk;
+            s=io_.read(pos,h,chunk); if(s!=Status::Ok) return s;
+            crc=crc32(crc,h,chunk); pos+=chunk; left-=chunk; v-=chunk;
         }
     }
     if(n!=records) return Status::Corrupt;
     if(footer) {
-        s=io_.read(pos,scratch,8); if(s!=Status::Ok) return s;
-        if(get32(scratch)!=(crc^0xffffffffUL)||memcmp(scratch+4,"DONE",4)!=0) return Status::Corrupt;
+        s=io_.read(pos,h,8); if(s!=Status::Ok) return s;
+        if(get32(h)!=(crc^0xffffffffUL)||memcmp(h+4,"DONE",4)!=0) return Status::Corrupt;
     } else if((crc^0xffffffffUL)!=(payloadCrc_^0xffffffffUL)) return Status::Corrupt;
-    next=at+32+len+(footer?8:0); seq=get32(h+8); op=get64(h+12); return Status::Ok;
+    return Status::Ok;
 }
 Status Journal::mount() {
     mounted_=false; Status st=scan();

@@ -11,7 +11,8 @@
     "status/command lookup",
     "decimal ties",
     "leap date",
-    "schema1 record descriptors and streamed journal read/write"
+    "schema1 record descriptors and streamed journal read/write",
+    "shared checkpoint replay, cutoff and aliased next-point output"
   ],
   "fullPresenterRuntimeVerified": false,
   "physicalHardwareVerified": false

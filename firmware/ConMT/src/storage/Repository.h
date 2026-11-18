@@ -54,5 +54,5 @@ public:
     Status put(Field field,const uint8_t* value,uint16_t size);
 };
 Status nextPoint(Repository& repo,Kind kind,uint32_t object,const Point* after,Point& out);
-Status replayPoints(Repository& repo,Kind kind,uint32_t object,Real datum,Real& maturity,Point& last);
+Status replayPoints(Repository& repo,Kind kind,uint32_t object,Real datum,Real& maturity,Point& last,uint32_t stopAt=0,bool summaryStatus=false);
 }

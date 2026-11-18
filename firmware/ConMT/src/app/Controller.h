@@ -30,7 +30,6 @@ class Controller {
     Status focusRow(uint32_t id);
     Status storePreview(const Result& result,const uint64_t& operation) __attribute__((noinline));
     Status roundResult(Result& result) __attribute__((noinline));
-    Status replayResult(Kind kind,uint32_t object,uint32_t pointId,Result& out,Real& day) __attribute__((noinline));
     Status saveIdentity() __attribute__((noinline));
     Status reconcileGap(const char* confirmed,const char* reason,const uint64_t& operation) __attribute__((noinline));
     Status cloneDraft(uint32_t from,const uint64_t& op);

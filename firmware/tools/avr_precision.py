@@ -58,7 +58,7 @@ void failed(uint16_t line) { char digits[8]; utoa(line,digits,10); text("FAIL li
 #define fail() failed(__LINE__)
 #ifdef CONMT_RECORD_CHECK
 class RecordMemory : public StoragePort {
-    uint8_t bytes_[384]; uint16_t size_=0;
+    uint8_t bytes_[512]; uint16_t size_=0;
 public:
     Status size(uint32_t& n) override { n=size_; return Status::Ok; }
     Status read(uint32_t at,uint8_t* out,uint16_t n) override {
@@ -91,6 +91,18 @@ void records() {
     if(readRecord(journal,Key(Kind::Session,1),RecordType::Point,&pp)!=Status::Ok||pp.atMs!=point.atMs||pp.source!=PointSource::Import) fail();
     if(readRecord(journal,Key(Kind::Baseline,1),RecordType::Model,&ff)!=Status::Ok||ff.a!=fit.a||ff.n!=41) fail();
     if(readRecord(journal,Key(Kind::Result,1),RecordType::Result,&rs)!=Status::Ok||rs.rawM!=result.rawM||rs.endMs!=result.endMs||!rs.prediction.hasReference||!signbit(rs.initialTemp)) fail();
+    Repository repo(journal);
+    if(journal.begin()!=Status::Ok||repo.putInteger(Key(Kind::Session,3,Field::MaxRow),3)!=Status::Ok) fail();
+    for(uint32_t id=1;id<=3;++id) {
+        Point p; p.id=id; p.day=id-1; p.atMs=uint64_t(id-1)*3600000; p.temp=Real(20*id-10);
+        if(repo.putPoint(Kind::Session,3,p)!=Status::Ok) fail();
+    }
+    if(journal.commit()!=Status::Ok) fail();
+    Point last; Real maturity;
+    if(replayPoints(repo,Kind::Session,3,0,maturity,last)!=Status::Ok||maturity!=60||last.id!=3) fail();
+    if(replayPoints(repo,Kind::Session,3,0,maturity,last,2,true)!=Status::Ok||maturity!=20||last.id!=2) fail();
+    if(nextPoint(repo,Kind::Session,3,&last,last)!=Status::Ok||last.id!=3) fail();
+    if(replayPoints(repo,Kind::Session,3,0,maturity,last,99,true)!=Status::Missing) fail();
 }
 #endif
 int main() {
@@ -137,7 +149,7 @@ int main() {
 }
 ''')
 sources = [source] + [root / 'ConMT/src' / path for path in [
-    'storage/Journal.cpp', 'storage/DiskIndex.cpp', 'storage/RecordCodec.cpp', 'app/FieldRules.cpp', 'app/Settings.cpp', 'core/Types.cpp', 'core/Flash.cpp', 'core/Text.cpp', 'core/Command.cpp', 'core/Calendar.cpp']]
+    'storage/Journal.cpp', 'storage/DiskIndex.cpp', 'storage/RecordCodec.cpp', 'storage/Repository.cpp', 'app/FieldRules.cpp', 'app/Settings.cpp', 'core/Types.cpp', 'core/Math.cpp', 'core/Flash.cpp', 'core/Text.cpp', 'core/Command.cpp', 'core/Calendar.cpp']]
 for name, defines in [('precision', []), ('records', ['-DCONMT_RECORD_CHECK=1'])]:
     command = [str(compiler), '-mmcu=atmega328p', '-Os', '-flto', '-std=gnu++11', '-fno-exceptions',
                '-fno-rtti', '-ffunction-sections', '-fdata-sections', '-I' + str(root / 'ConMT/src'),
@@ -157,7 +169,8 @@ for name, defines in [('precision', []), ('records', ['-DCONMT_RECORD_CHECK=1'])
 report = {'status': 'PASS', 'target': 'Emulated ATmega328P', 'codecCases': len(rows),
           'covers': ['binary64-to-binary32 rounding', 'subnormals', 'signed zero', 'binary64 encoding',
                      'PROGMEM strings/tables', 'status/command lookup', 'decimal ties', 'leap date',
-                     'schema1 record descriptors and streamed journal read/write'],
+                     'schema1 record descriptors and streamed journal read/write',
+                     'shared checkpoint replay, cutoff and aliased next-point output'],
           'fullPresenterRuntimeVerified': False, 'physicalHardwareVerified': False}
 (root / 'releases/avr-precision.json').write_text(json.dumps(report, indent=2) + '\n')
 print(json.dumps(report, indent=2))

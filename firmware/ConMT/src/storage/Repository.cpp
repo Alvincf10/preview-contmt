@@ -157,15 +157,19 @@ Status nextPoint(Repository& r,Kind k,uint32_t o,const Point* after,Point& out) 
     if(!found) return Status::Missing;
     out=candidate; return Status::Ok;
 }
-Status replayPoints(Repository& r,Kind k,uint32_t o,Real datum,Real& m,Point& last) {
-    Point p,previous; bool first=true; uint64_t start=0; Real lastDay=0;
+Status replayPoints(Repository& r,Kind k,uint32_t o,Real datum,Real& m,Point& last,uint32_t stopAt,bool summaryStatus) {
+    bool first=true; uint64_t start=0; Real lastDay=0;
     Accumulator acc; Status st;
-    while((st=nextPoint(r,k,o,first?nullptr:&previous,p))==Status::Ok) {
-        if(!first && p.day<lastDay) return Status::Invalid;
-        if(first) start=p.atMs;
-        st=acc.add(Real(p.atMs-start)/Real(3600000),p.temp,datum); if(st!=Status::Ok) return st;
-        last=previous=p; lastDay=p.day; first=false;
+    while((st=nextPoint(r,k,o,first?nullptr:&last,last))==Status::Ok) {
+        if(!first && last.day<lastDay) return Status::Invalid;
+        if(first) start=last.atMs;
+        st=acc.add(Real(last.atMs-start)/Real(3600000),last.temp,datum); if(st!=Status::Ok) return st;
+        lastDay=last.day; first=false;
+        if(stopAt&&last.id==stopAt) break;
     }
-    m=acc.maturity(); return st==Status::Missing?(first?Status::Missing:Status::Ok):st;
+    m=acc.maturity();
+    // Summary preserves the existing missing-point precedence for iterator errors.
+    if(summaryStatus&&(first||(stopAt&&last.id!=stopAt))) return Status::Missing;
+    return st==Status::Missing?(first?Status::Missing:Status::Ok):st;
 }
 }

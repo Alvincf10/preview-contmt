@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "c1ebca9",
+  "retainedFeaturesChanged": false,
+  "measurements": [
+    {
+      "stage": "baseline",
+      "flash": 75414,
+      "staticRam": 1502
+    },
+    {
+      "stage": "shared checkpoint replay",
+      "flash": 74822,
+      "staticRam": 1502
+    },
+    {
+      "stage": "reuse journal verification buffer",
+      "flash": 74586,
+      "staticRam": 1502
+    },
+    {
+      "stage": "scope replay temporaries and use one verified datum snapshot",
+      "flash": 74478,
+      "staticRam": 1502
+    }
+  ],
+  "individualFrameBytes": {
+    "Journal::verify": [
+      112,
+      68
+    ],
+    "replayPoints": [
+      110,
+      58
+    ],
+    "Controller::checkpointResult": [
+      123,
+      125
+    ],
+    "Controller::replayResult": {
+      "before": 128,
+      "after": "removed; merged scoped block"
+    }
+  },
+  "nestedStackVerified": false,
+  "validation": "15suites pass on host64/host32/sanitizer; AVR precision620plus shared replay smoke PASS; existing UART and checkpoint fixtures unchanged"
+}

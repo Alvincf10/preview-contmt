@@ -479,28 +479,17 @@ Status Controller::storePreview(const Result& result,const uint64_t& op) {
 }
 Status Controller::checkpointResult(Kind kind,uint32_t object,uint32_t pointId,Result& out) {
     Record record(repo_,kind,object);
-    Real day; TRY(replayResult(kind,object,pointId,out,day));
-    Real datum; Fit fit; uint32_t baseline=0;
-    TRY(record.number(Field::Datum,datum)); TRY(repo_.model(kind,object,fit)); TRY(record.integer(Field::BaselineRef,baseline));
+    Real datum,day; TRY(record.number(Field::Datum,datum));
+    {
+        Point p; Real maturity;
+        TRY(replayPoints(repo_,kind,object,datum,maturity,p,pointId,true));
+        day=p.day; out.rawM=maturity; out.endMs=p.atMs; out.lastTemp=p.temp;
+    }
+    TRY(record.number(Field::InitialTemp,out.initialTemp));
+    Fit fit; uint32_t baseline=0;
+    TRY(repo_.model(kind,object,fit)); TRY(record.integer(Field::BaselineRef,baseline));
     StoredRows rows(repo_,Kind::Baseline,baseline); Selection selection; TRY(lookupRows(rows,datum,fit,day,selection));
     out.prediction=trace(out.rawM,fit,selection); return Status::Ok;
-}
-Status Controller::replayResult(Kind kind,uint32_t object,uint32_t pointId,Result& out,Real& day) {
-    Record record(repo_,kind,object);
-    Real datum; TRY(record.number(Field::Datum,datum));
-    Point p,previous; bool first=true,found=false; uint64_t start=0; Accumulator acc;
-    Status st;
-    while((st=nextPoint(repo_,kind,object,first?nullptr:&previous,p))==Status::Ok) {
-        if(first) start=p.atMs;
-        if(!first&&p.day<previous.day) return Status::Invalid;
-        TRY(acc.add(Real(p.atMs-start)/3600000,p.temp,datum));
-        previous=p; first=false;
-        if(pointId&&p.id==pointId) { found=true; break; }
-    }
-    if(first || (pointId&&!found)) return Status::Missing;
-    if(st!=Status::Ok&&st!=Status::Missing) return st;
-    day=p.day; out.rawM=acc.maturity(); out.endMs=p.atMs; out.lastTemp=p.temp;
-    TRY(record.number(Field::InitialTemp,out.initialTemp)); return Status::Ok;
 }
 Status Controller::readResult(Kind kind,uint32_t id,Result& r) {
     return repo_.result(kind,id,r);

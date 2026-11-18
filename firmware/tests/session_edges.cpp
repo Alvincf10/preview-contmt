@@ -71,4 +71,18 @@ static void lostAckReset() {
     CHECK(wire.tx.find("pInit.vAckBoot.val="+std::to_string(oldBoot))!=std::string::npos);
     Result recovered; OK(reboot.readResult(Kind::Result,1,recovered)); CHECK(recovered.rawM==saved.rawM&&recovered.prediction.fc==saved.prediction.fc);
 }
-int main() { dayZero(); clockEvents(); lostAckReset(); std::cout<<"Day0 live reanchor, durable clock adjustment and UART retry after commit/reset/lost ACK PASS\n"; }
+static void sharedReplay() {
+    host::MemoryStorage io; Journal journal(io); Repository repo(journal); OK(journal.mount());
+    OK(journal.begin()); OK(repo.putInteger(Key(Kind::Session,1,Field::MaxRow),3));
+    for(uint32_t id=1;id<=3;++id) { Point p; p.id=id; p.day=id-1; p.atMs=uint64_t(id-1)*3600000; p.temp=Real(20*id-10); OK(repo.putPoint(Kind::Session,1,p)); }
+    OK(journal.commit());
+    Point last; Real maturity; OK(replayPoints(repo,Kind::Session,1,0,maturity,last)); CHECK(maturity==60&&last.id==3);
+    OK(replayPoints(repo,Kind::Session,1,0,maturity,last,2,true)); CHECK(maturity==20&&last.id==2&&last.temp==30);
+    CHECK(replayPoints(repo,Kind::Session,1,0,maturity,last,99,true)==Status::Missing);
+    last=Point(); OK(nextPoint(repo,Kind::Session,1,nullptr,last)); OK(nextPoint(repo,Kind::Session,1,&last,last)); CHECK(last.id==2);
+    OK(journal.begin()); Point invalidOrder; OK(repo.point(Kind::Session,1,2,invalidOrder)); invalidOrder.day=3; OK(repo.putPoint(Kind::Session,1,invalidOrder)); OK(journal.commit());
+    OK(replayPoints(repo,Kind::Session,1,0,maturity,last,2,true)); CHECK(maturity==20);
+    CHECK(replayPoints(repo,Kind::Session,1,0,maturity,last)==Status::Invalid);
+    CHECK(replayPoints(repo,Kind::Session,1,0,maturity,last,99,true)==Status::Invalid);
+}
+int main() { dayZero(); clockEvents(); lostAckReset(); sharedReplay(); std::cout<<"Day0, clock, UART retry and shared replay endpoint/alias/ordering PASS\n"; }
