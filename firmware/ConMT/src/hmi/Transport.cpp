@@ -93,9 +93,19 @@ void Transport::accept(const Frame& f) {
     if(operation) { lastOperation_=operation; lastRequestCrc_=fingerprint; lastAck_=ack_; }
     dirty_=full_=true; phase_=0; field_=0; ackPending_=true;
 }
+static void formatPanelTime(ClockPort& clock,char* value,size_t capacity,bool date) {
+    const Time now=clock.now();
+    if(!now.valid) CM_TEXT(value,capacity,"--");
+    else if(date) calendarText(now.wallMs,value,capacity,nullptr,0);
+    else calendarText(now.wallMs,nullptr,0,value,capacity);
+}
 bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,size_t vc) {
     value[0]=0;
-    if(i==0) { char date[12]; Time now=app_.clock().now(); if(now.valid) calendarText(now.wallMs,date,sizeof(date),value,vc); else CM_TEXT(value,vc,"--"); CM_TEXT(component,cc,"tClock"); return true; }
+    if(i==0) {
+        formatPanelTime(app_.clock(),value,vc,false);
+        CM_TEXT(component,cc,"tClock");
+        return true;
+    }
     if(i==1) { uint8_t battery; Status s=app_.devices().battery(battery); if(s==Status::Ok) Text(value,vc).number(battery).character('%'); else CM_TEXT(value,vc,"--"); CM_TEXT(component,cc,"tBatt"); return true; }
     if(i==2) { formatStatus(value,vc,ack_==Status::Ok?app_.status():ack_); CM_TEXT(component,cc,"tMsg"); return true; }
     i-=3;
@@ -105,7 +115,12 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
             if(sensorStatus_!=Status::Ok||(i<3&&!(sensorMask_&(1u<<i)))) CM_TEXT(value,vc,"--"); else formatReal(value,vc,i==3?averageCache_:sensorCache_[i],1);
             return true;
         }
-        if(i<6) { char date[12],clock[12]; Time now=app_.clock().now(); if(now.valid) calendarText(now.wallMs,date,sizeof(date),clock,sizeof(clock)); else { CM_COPY(date,"--"); CM_COPY(clock,"--"); } CM_TEXT(component,cc,"tNowD"); if(i==5) CM_TEXT(component,cc,"tNowT"); copyRam(value,vc,i==4?date:clock); return true; }
+        if(i<6) {
+            const bool date=i==4;
+            formatPanelTime(app_.clock(),value,vc,date);
+            copyFlash(component,cc,date?CM_LITERAL("tNowD"):CM_LITERAL("tNowT"));
+            return true;
+        }
         i-=6;
     }
     Presenter presenter(app_); return presenter.field(i,component,cc,value,vc);

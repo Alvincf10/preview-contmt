@@ -43,12 +43,18 @@ Status scheduleTime(uint64_t pour,Real hours,uint64_t& out) {
 }
 Status calendarText(uint64_t at,char* date,size_t ds,char* clock,size_t cs) {
     if(at>CalendarLastMs) { CM_TEXT(date,ds,"--"); CM_TEXT(clock,cs,"--"); return Status::Invalid; }
-    uint32_t days=uint32_t(at/86400000ULL), sec=uint32_t((at/1000)%86400);
-    unsigned y=1970,m=1;
-    while(y<2200 && days>=unsigned(leap(y)?366:365)) { days-=leap(y)?366:365; ++y; }
-    while(m<12 && days>=daysIn(y,m)) { days-=daysIn(y,m); ++m; }
-    Text(date,ds).number(y,4).character('-').number(m,2).character('-').number(days+1,2);
-    formatHms(clock,cs,sec/3600,uint8_t(sec/60%60),uint8_t(sec%60));
+    const uint64_t seconds=at/1000;
+    if(ds) {
+        uint32_t days=uint32_t(seconds/86400);
+        unsigned y=1970,m=1;
+        while(y<2200 && days>=unsigned(leap(y)?366:365)) { days-=leap(y)?366:365; ++y; }
+        while(m<12 && days>=daysIn(y,m)) { days-=daysIn(y,m); ++m; }
+        Text(date,ds).number(y,4).character('-').number(m,2).character('-').number(days+1,2);
+    }
+    if(cs) {
+        const uint32_t sec=uint32_t(seconds%86400);
+        formatHms(clock,cs,sec/3600,uint8_t(sec/60%60),uint8_t(sec%60));
+    }
     return Status::Ok;
 }
 }

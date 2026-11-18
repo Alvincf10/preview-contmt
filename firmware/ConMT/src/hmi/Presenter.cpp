@@ -35,9 +35,12 @@ static void missing(char* value,size_t capacity) { CM_TEXT(value,capacity,"--");
 static void integerText(char* value,size_t capacity,uint32_t number) { formatUnsigned(value,capacity,number); }
 static void calendar(uint64_t at,Op op,char* value,size_t capacity) __attribute__((noinline));
 static void calendar(uint64_t at,Op op,char* value,size_t capacity) {
-    char date[12],clock[12]; calendarText(at,date,sizeof(date),clock,sizeof(clock));
-    if(op==Stamp) conmt::Text(value,capacity).ram(date).character(' ').ram(clock);
-    else copyRam(value,capacity,op==Date||op==DateBlank?date:clock);
+    if(op==Stamp) {
+        char date[12],clock[12];
+        calendarText(at,date,sizeof(date),clock,sizeof(clock));
+        conmt::Text(value,capacity).ram(date).character(' ').ram(clock);
+    } else if(op==Date||op==DateBlank) calendarText(at,value,capacity,nullptr,0);
+    else calendarText(at,nullptr,0,value,capacity);
 }
 static Status modelText(Repository& repo,Kind kind,uint32_t object,Op op,char* value,size_t capacity) __attribute__((noinline));
 static Status modelText(Repository& repo,Kind kind,uint32_t object,Op op,char* value,size_t capacity) {

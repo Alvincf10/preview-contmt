@@ -78,6 +78,14 @@ static void protocol() {
     Status s=Status::Busy;
     for(char c:text) s=p.feed(uint8_t(c),0,f);
     OK(s); CHECK(f.boot==1&&f.seq==2&&f.page==6&&f.view==3&&!strcmp(f.args[2],"36.5"));
+    std::string maxFrame="CM1|1|2|6|3|FIELD_SET|project|";
+    maxFrame.resize(191,'A');
+    for(char c:maxFrame) CHECK(p.feed(uint8_t(c),0,f)==Status::Busy);
+    OK(p.feed('\n',0,f));
+    CHECK(f.argc==2&&std::strlen(f.args[1])==191-maxFrame.find_last_of('|')-1);
+    for(char c:maxFrame) CHECK(p.feed(uint8_t(c),0,f)==Status::Busy);
+    CHECK(p.feed('A',0,f)==Status::Busy);
+    CHECK(p.feed('\n',0,f)==Status::Invalid);
     for(int i=0;i<250;++i) p.feed('A',1,f); CHECK(p.feed('\n',1,f)==Status::Invalid);
     for(char c:text) s=p.feed(uint8_t(c),2,f); OK(s);
     p.feed('C',0,f); p.expire(3000); for(char c:text) s=p.feed(uint8_t(c),3001,f); OK(s);

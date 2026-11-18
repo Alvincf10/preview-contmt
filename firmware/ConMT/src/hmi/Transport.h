@@ -18,7 +18,8 @@ struct Frame {
 };
 class Parser {
     char buffer_[192];
-    uint16_t used_;
+    static_assert(sizeof(buffer_)<=UINT8_MAX+1u,"Parser index must span the frame buffer");
+    uint8_t used_;
     uint32_t lastAt_;
     bool dropping_;
 public:

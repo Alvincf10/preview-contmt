@@ -98,8 +98,10 @@ void formatReal(char* out,size_t n,Real v,uint8_t digits) {
 }
 void formatCoeff(char* out,size_t size,Real value,uint8_t digits) {
     formatReal(out,size,value,digits);
-    Real rounded;
-    if(parseReal(out,rounded)==Status::Ok&&rounded==0) formatReal(out,size,0,digits);
+    if(!size||out[0]!='-'||out[1]!='0') return;
+    const char* digit=out+2;
+    while(*digit=='0'||*digit=='.') ++digit;
+    if(!*digit) formatReal(out,size,0,digits);
 }
 uint32_t crc32(uint32_t crc,const uint8_t* p,size_t n) {
     while (n--) { crc ^= *p++; for (uint8_t b=0;b<8;++b) crc=(crc>>1)^(0xedb88320UL & (0u-(crc&1))); }
