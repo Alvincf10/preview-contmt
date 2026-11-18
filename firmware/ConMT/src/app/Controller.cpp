@@ -1,6 +1,5 @@
 #include "../core/Flash.h"
 #include "Controller.h"
-#include "../core/Command.h"
 #include "../core/Text.h"
 #include <string.h>
 #include <stdlib.h>
@@ -587,21 +586,40 @@ Status Controller::reconcileGap(const char* a,const char* b,const uint64_t& op) 
     return result;
 }
 Status Controller::dispatch(const char* verb,const char* a,const char* b,const char* c,const uint64_t& op) {
-    Status result=Status::Invalid;
-    const Command command=commandFromText(verb);
+    const char* args[]={a,b,c};
+    return dispatch(commandFromText(verb),args,op,Status::Ok,true);
+}
+Status Controller::dispatch(Command command,const char* const* args,const uint64_t& op,Status admission,bool reportLookupError) {
     if(op) {
-        Key first; Status s=repo_.journal().findOperation(op,first);
-        if(s==Status::Ok) {
+        Key first;
+        Status saved=repo_.journal().findOperation(op,first);
+        if(saved==Status::Ok) {
             if(first.field==Field::Exists) {
                 if(first.kind==Kind::Baseline) { selected_=first.object; page_=Page::SaveB; }
                 if(first.kind==Kind::Result) { history_=first.object; page_=Page::Hist; }
-                if(first.kind==Kind::Session) { if(session_>first.object) return status_=Status::Conflict; session_=first.object; SessionState ss; TRY(state(ss)); page_=ss==SessionState::Suspended?Page::SelB:Page::RT; }
-                cursor_=0; ++view_;
+                if(first.kind==Kind::Session) {
+                    if(session_>first.object) return status_=Status::Conflict;
+                    session_=first.object;
+                    SessionState currentState;
+                    TRY(state(currentState));
+                    page_=currentState==SessionState::Suspended?Page::SelB:Page::RT;
+                }
+                cursor_=0;
+                ++view_;
             }
             return status_=Status::Ok;
         }
-        if(s!=Status::Missing) return status_=s;
+        if(saved!=Status::Missing) {
+            if(reportLookupError) status_=saved;
+            return saved;
+        }
     }
+    // A committed retry can originate from an earlier boot or view.
+    if(admission!=Status::Ok) return admission;
+    const char* a=args[0];
+    const char* b=args[1];
+    const char* c=args[2];
+    Status result=Status::Invalid;
     if(command==Command::STORAGE_RESCAN) return boot();
     if(!mounted_&&command!=Command::PAGE_READY&&command!=Command::NAV) return health_==Status::Ok?Status::Absent:health_;
     if(!allowedPage(command,uint8_t(page_))) return status_=Status::Invalid;

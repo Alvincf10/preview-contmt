@@ -10,8 +10,11 @@ using namespace conmt;
 struct Rig {
     host::MemoryStorage io,index; Journal journal; Repository repo;
     host::FakeClock clock; host::RecordedSensor sensors; host::Devices devices; Controller app;
-    Rig() : journal(io),repo(journal),app(repo,clock,sensors,devices) {
-        io.sidecar=&index; OK(app.boot()); OK(app.newBaseline()); OK(app.setField("name","Edges")); OK(app.setField("target","30"));
+    explicit Rig(bool session=true,bool indexed=true) : journal(io),repo(journal),app(repo,clock,sensors,devices) {
+        if(indexed) io.sidecar=&index;
+        OK(app.boot());
+        if(!session) return;
+        OK(app.newBaseline()); OK(app.setField("name","Edges")); OK(app.setField("target","30"));
         OK(app.editRow(2,"day","1")); OK(app.editRow(3,"day","2"));
         for(unsigned i=1;i<=3;++i) OK(app.editRow(i,"temp","20"));
         OK(app.editRow(2,"fc","10")); OK(app.editRow(3,"fc","20")); OK(app.generate()); OK(app.saveBaseline()); OK(app.start());
@@ -71,6 +74,67 @@ static void lostAckReset() {
     CHECK(wire.tx.find("pInit.vAckBoot.val="+std::to_string(oldBoot))!=std::string::npos);
     Result recovered; OK(reboot.readResult(Kind::Result,1,recovered)); CHECK(recovered.rawM==saved.rawM&&recovered.prediction.fc==saved.prediction.fc);
 }
+static void lostBaselineAckReset(bool indexed) {
+    Rig t(false,indexed);
+    OK(t.app.newBaseline());
+    OK(t.app.setField("name","UART baseline"));
+    OK(t.app.setField("target","30"));
+    OK(t.app.dispatch("NAV","5"));
+    OK(t.app.dispatch("NAV","6"));
+    const uint32_t oldBoot=t.app.bootToken();
+    uint32_t seq=0;
+    auto request=[&](const char* command) {
+        std::ostringstream frame;
+        frame<<"CM1|"<<oldBoot<<'|'<<++seq<<'|'<<unsigned(t.app.page())<<'|'<<t.app.view()<<'|'<<command<<'\n';
+        return frame.str();
+    };
+    std::string save;
+    {
+        Wire wire;
+        Transport panel(t.app,wire);
+        wire.input("CM1|0|0|6|0|PAGE_READY|2\n");
+        drain(panel);
+        for(const char* command:{
+                "ROW_SET|1|day|1", "ROW_SET|1|day|2",
+                "ROW_SENSOR|0", "ROW_SET|1|temp|20.125", "ROW_SENSOR|2",
+                "ROW_SET|1|fc|10", "ROW_SET|2|fc|20", "BASE_GENERATE"}) {
+            wire.tx.clear();
+            wire.input(request(command));
+            drain(panel);
+            CHECK(wire.tx.find("pInit.vStatus.val=0")!=std::string::npos);
+        }
+        CHECK(t.app.page()==Page::BaseR);
+        wire.tx.clear();
+        wire.credit=0;
+        save=request("BASE_SAVE");
+        wire.input(save);
+        for(unsigned i=0;i<100&&t.app.page()!=Page::SaveB;++i) panel.poll(0);
+        CHECK(t.app.page()==Page::SaveB&&t.app.selectedId()==1&&wire.tx.empty());
+    }
+    char manualTemp[65];
+    OK(t.repo.text(Key(Kind::Baseline,1,Field::TempInput,2),manualTemp,sizeof(manualTemp)));
+    CHECK(std::string(manualTemp)=="20.125");
+
+    Journal journal(t.io);
+    Repository repo(journal);
+    Controller reboot(repo,t.clock,t.sensors,t.devices);
+    OK(reboot.boot());
+    CHECK(reboot.bootToken()!=oldBoot);
+    const auto committed=t.io.bytes;
+    const uint32_t sequence=journal.sequence();
+    Wire wire;
+    Transport panel(reboot,wire);
+    wire.input("CM1|0|0|1|0|PAGE_READY|2\n");
+    drain(panel);
+    wire.tx.clear();
+    wire.input(save);
+    drain(panel);
+    CHECK(reboot.page()==Page::SaveB&&reboot.selectedId()==1);
+    CHECK(journal.sequence()==sequence&&t.io.bytes==committed);
+    CHECK(wire.tx.find("pInit.vAckBoot.val="+std::to_string(oldBoot))!=std::string::npos);
+    CHECK(wire.tx.find("pInit.vAck.val="+std::to_string(seq))!=std::string::npos);
+    CHECK(wire.tx.find("pInit.vStatus.val=0")!=std::string::npos);
+}
 static void sharedReplay() {
     host::MemoryStorage io; Journal journal(io); Repository repo(journal); OK(journal.mount());
     OK(journal.begin()); OK(repo.putInteger(Key(Kind::Session,1,Field::MaxRow),3));
@@ -85,4 +149,12 @@ static void sharedReplay() {
     CHECK(replayPoints(repo,Kind::Session,1,0,maturity,last)==Status::Invalid);
     CHECK(replayPoints(repo,Kind::Session,1,0,maturity,last,99,true)==Status::Invalid);
 }
-int main() { dayZero(); clockEvents(); lostAckReset(); sharedReplay(); std::cout<<"Day0, clock, UART retry and shared replay endpoint/alias/ordering PASS\n"; }
+int main() {
+    dayZero();
+    clockEvents();
+    lostBaselineAckReset(false);
+    lostBaselineAckReset(true);
+    lostAckReset();
+    sharedReplay();
+    std::cout<<"Day0, clock, baseline/result UART retry and shared replay endpoint/alias/ordering PASS\n";
+}

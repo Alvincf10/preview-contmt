@@ -81,14 +81,13 @@ void Transport::accept(const Frame& f) {
     if(!compatible_) ack_=Status::Version;
     else if(!validArguments(command,f.argc)) ack_=Status::Invalid;
     else if(operation&&operation==lastOperation_) ack_=fingerprint==lastRequestCrc_?lastAck_:Status::Conflict;
-    else if((command==Command::STORAGE_RESCAN)&&f.page==uint8_t(app_.page())&&f.seq) ack_=app_.dispatch(f.verb);
+    else if(command==Command::STORAGE_RESCAN&&f.page==uint8_t(app_.page())&&f.seq) ack_=app_.boot();
     else {
-        Key previous; Status duplicate=f.boot&&f.seq?app_.repository().journal().findOperation(operation,previous):Status::Missing;
-        if(duplicate==Status::Ok) ack_=app_.dispatch(f.verb,f.args[0],f.args[1],f.args[2],operation);
-        else if(duplicate!=Status::Missing) ack_=duplicate;
-        else if(f.boot!=app_.bootToken()||!f.seq) ack_=Status::Conflict;
-        else if(f.page!=uint8_t(app_.page())||(f.view!=app_.view()&&!((command==Command::NAV)&&CM_EQ(f.args[0],"BACK")))) ack_=Status::Stale;
-        else ack_=app_.dispatch(f.verb,f.args[0],f.args[1],f.args[2],operation);
+        Status admission=Status::Ok;
+        if(f.boot!=app_.bootToken()||!f.seq) admission=Status::Conflict;
+        else if(f.page!=uint8_t(app_.page())||(f.view!=app_.view()&&!(command==Command::NAV&&CM_EQ(f.args[0],"BACK")))) admission=Status::Stale;
+        bool canRetry=f.boot&&f.seq;
+        ack_=canRetry||admission==Status::Ok?app_.dispatch(command,f.args,operation,admission,!canRetry):admission;
     }
     if(f.boot&&f.boot==app_.bootToken()) seenConnection_=true;
     if(operation) { lastOperation_=operation; lastRequestCrc_=fingerprint; lastAck_=ack_; }

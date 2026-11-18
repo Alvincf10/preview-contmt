@@ -1,6 +1,7 @@
 #pragma once
 #include "../storage/Repository.h"
 #include "../core/Calendar.h"
+#include "../core/Command.h"
 #include "TransactionOps.h"
 #include "FieldRules.h"
 #include "Settings.h"
@@ -8,6 +9,7 @@ namespace conmt {
 enum class Page : uint8_t { Init, User, Main, Base, NewB, Mat, Matu, BaseR, SaveB, Kuat, SelB, RT, Str, Hist, HistD, Set, Dev };
 enum class SessionState : uint8_t { Idle, Active, Preview, Completed, Suspended };
 class Controller {
+    friend class Transport;
     Repository& repo_; ClockPort& clock_; SensorPort& sensors_; DevicePort& devices_;
     Page page_;
     uint32_t draft_,selected_,session_,history_,view_,cursor_,boot_,focusedRow_;
@@ -18,6 +20,7 @@ class Controller {
     Settings settings_;
     Status status_,health_;
     Status load();
+    Status dispatch(Command command,const char* const* args,const uint64_t& operation,Status admission,bool reportLookupError);
     Status tickImpl();
     Status markGap(uint64_t start,uint64_t end,ClockCause cause=ClockCause::None);
     Status finish(Status st);
