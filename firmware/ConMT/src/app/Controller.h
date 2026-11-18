@@ -28,11 +28,13 @@ class Controller {
     Status transact(const TxStep* steps,uint8_t count,const Entity& source,const Entity& destination,const void* data,const uint64_t& op);
     Status mutateField(const FieldRule& rule,const char* value,const uint64_t& op);
     Status setting(const char* key,const char* value,const uint64_t& op);
-    Status validateDraft();
-    Status earlySlot(uint32_t excluding,Real& hours);
+    Status validateDraftHeader(Real& datum);
+    Status earlySlots(uint32_t max,uint32_t excluding,uint8_t* occupied);
+    Status earlySlot(uint32_t max,uint32_t excluding,Real& hours);
     Status focusRow(uint32_t id);
+    Status storeDraftRow(const Row& row,Field input,const char* text,bool added,const uint64_t& op);
     Status storePreview(const Result& result,const uint64_t& operation) __attribute__((noinline));
-    Status roundResult(Result& result) __attribute__((noinline));
+    Status calculateCheckpointResult(Kind kind,uint32_t object,uint32_t pointId,Result& result,bool roundMaturity);
     Status saveIdentity() __attribute__((noinline));
     Status reconcileGap(const char* confirmed,const char* reason,const uint64_t& operation) __attribute__((noinline));
     Status cloneDraft(uint32_t from,const uint64_t& op);

@@ -22,6 +22,7 @@ int main() {
     media.sidecar=nullptr; Journal scan(media); Repository slow(scan); OK(scan.mount());media.readBytes=0;
     for(unsigned i=1;i<=200;++i) { OK(slow.integer(Key(Kind::Baseline,i,Field::Target),value)); REQUIRE(value==3000+i); }
     REQUIRE(media.readBytes>indexedBytes*3);
+    REQUIRE(media.readBytes<=200*(uint64_t(scan.committedBytes())+sizeof(value)));
     std::cout<<"indexed bytes="<<indexedBytes<<" full-scan bytes="<<media.readBytes<<'\n';
     media.sidecar=&sidecar; Journal reopened(media); Repository r(reopened); OK(reopened.mount()); REQUIRE(reopened.indexed());
     OK(reopened.begin()); OK(reopened.erase(Key(Kind::Baseline,1,Field::Target))); OK(reopened.commit());
@@ -61,6 +62,37 @@ int main() {
         OK(rebuilt.findOperation(epoch|300,first)); REQUIRE(!rebuilt.indexed()&&first==Key(Kind::Result,300,Field::Exists));
         Journal verifyCorruption(m); OK(verifyCorruption.mount()); m.bytes[m.bytes.size()-9]^=1;
         REQUIRE(verifyCorruption.findOperation(epoch|300,first)==Status::Corrupt);
+    }
+    {
+        host::MemoryStorage media,index;
+        media.sidecar=&index;
+        Journal journal(media);
+        Repository repo(journal);
+        const Key target(Kind::Baseline,1,Field::Target);
+        OK(journal.mount());
+        const uint32_t payloadOffset=journal.committedBytes()+32+12;
+        uint8_t payload[16]={uint8_t(target.kind),uint8_t(target.field)};
+        put32(payload+2,target.object);
+        put16(payload+10,4);
+        put32(payload+12,123);
+        OK(journal.begin());
+        OK(journal.put(Key(Kind::Baseline,1,Field::Name),payload,sizeof(payload)));
+        OK(repo.putInteger(target,35));
+        OK(journal.commit());
+
+        // A damaged index can point to bytes that resemble an entry inside a value.
+        bool modified=false;
+        for(size_t at=512;at<index.bytes.size();at+=26) {
+            uint8_t* node=index.bytes.data()+at;
+            if(node[0]!=uint8_t(target.kind)||node[1]!=uint8_t(target.field)) continue;
+            put32(node+10,payloadOffset);
+            put32(node+22,crc32(0xffffffffUL,node,22)^0xffffffffUL);
+            modified=true;
+            break;
+        }
+        REQUIRE(modified);
+        OK(repo.integer(target,value));
+        REQUIRE(value==35&&!journal.indexed());
     }
     for(int cut=0;cut<40;++cut) {
         host::MemoryStorage m,idx;m.sidecar=&idx;Journal j(m);Repository r2(j);OK(j.mount());

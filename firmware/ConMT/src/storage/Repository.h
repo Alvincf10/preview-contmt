@@ -28,10 +28,13 @@ public:
     Status copy(Kind from,uint32_t src,Kind to,uint32_t dest);
     Status list(Kind kind,uint32_t after,uint32_t& id);
 };
+enum class RowView : uint8_t { Chronological, Display, CompleteDraft };
 class StoredRows : public RowSource {
-    Repository& repo_; Kind kind_; uint32_t object_,max_,lastId_; Real lastH_,lastDay_; bool first_,displayOrder_;
+    Repository& repo_; Kind kind_; uint32_t object_,max_,lastId_; Real lastH_,lastDay_;
+    uint8_t seen_;
+    RowView view_;
 public:
-    StoredRows(Repository& repo,Kind kind,uint32_t object,bool displayOrder=false);
+    StoredRows(Repository& repo,Kind kind,uint32_t object,RowView view=RowView::Chronological);
     void reset() override;
     Status next(Row& out) override;
 };

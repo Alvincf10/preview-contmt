@@ -119,4 +119,20 @@ static void corruptionAndTime() {
     std::cout<<"stale sensor, corruption, sync uncertainty, codec, calendar PASS\n";
 }
 
-int main() { workflows(); failures(); protocol(); corruptionAndTime(); }
+static void incompleteDraft() {
+    Rig t;
+    t.baseline();
+    const uint32_t draft=t.app.draftId();
+    const Key fields[]={Key(Kind::Draft,draft,Field::Row,1),Key(Kind::Draft,draft,Field::MaxRow)};
+    for(const Key& field:fields) {
+        OK(t.journal.begin());
+        OK(t.journal.erase(field));
+        OK(t.journal.commit());
+        const uint32_t sequence=t.journal.sequence();
+        CHECK(t.app.generate()==Status::Invalid);
+        CHECK(t.app.saveBaseline()==Status::Invalid);
+        CHECK(t.journal.sequence()==sequence);
+    }
+}
+
+int main() { workflows(); failures(); protocol(); corruptionAndTime(); incompleteDraft(); }

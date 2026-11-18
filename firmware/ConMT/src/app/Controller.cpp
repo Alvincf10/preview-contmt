@@ -206,24 +206,33 @@ static Real snapEarly(Real hours) {
     Real value=lower+(hours-lower>Real(.25)?Real(.5):0);
     return value<0?0:(value>Real(23.5)?Real(23.5):value);
 }
-Status Controller::earlySlot(uint32_t excluding,Real& hours) {
-    Record record(repo_,Kind::Draft,draft_);
-    uint32_t max; TRY(record.integer(Field::MaxRow,max));
-    for(uint8_t slot=0;slot<48;++slot) {
-        bool used=false;
-        for(uint32_t id=1;id<=max;++id) {
-            if(id==excluding) continue;
-            Row row; Status st=repo_.row(Kind::Draft,draft_,id,row);
-            if(st==Status::Missing) continue;
-            if(st!=Status::Ok) return st;
-            if(row.day==0&&snapEarly(row.timeH)==Real(slot)/2) { used=true; break; }
+static bool slotOccupied(const uint8_t* occupied,uint8_t slot) {
+    return (occupied[slot/8] & (1u<<(slot%8)))!=0;
+}
+Status Controller::earlySlots(uint32_t max,uint32_t excluding,uint8_t* occupied) {
+    for(uint32_t id=0;id<max;) {
+        ++id;
+        if(id==excluding) continue;
+        Row row; Status st=repo_.row(Kind::Draft,draft_,id,row);
+        if(st==Status::Missing) continue;
+        if(st!=Status::Ok) return st;
+        if(row.day==0) {
+            uint8_t slot=uint8_t(snapEarly(row.timeH)*2);
+            occupied[slot/8] |= uint8_t(1u<<(slot%8));
         }
-        if(!used) { hours=Real(slot)/2; return Status::Ok; }
+    }
+    return Status::Ok;
+}
+Status Controller::earlySlot(uint32_t max,uint32_t excluding,Real& hours) {
+    uint8_t occupied[6]={};
+    TRY(earlySlots(max,excluding,occupied));
+    for(uint8_t slot=0;slot<48;++slot) {
+        if(!slotOccupied(occupied,slot)) { hours=Real(slot)/2; return Status::Ok; }
     }
     return Status::Capacity;
 }
 Status Controller::focusRow(uint32_t id) {
-    StoredRows rows(repo_,Kind::Draft,draft_,true); Row row; uint32_t index=0; Status st;
+    StoredRows rows(repo_,Kind::Draft,draft_,RowView::Display); Row row; uint32_t index=0; Status st;
     while((st=rows.next(row))==Status::Ok) {
         if(row.id==id) { focusedRow_=id; cursor_=index/6*6; return Status::Ok; }
         ++index;
@@ -234,37 +243,54 @@ Status Controller::addRow(bool early,const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
     uint32_t max; TRY(record.integer(Field::MaxRow,max));
     if(max==UINT32_MAX) return Status::Capacity;
-    Real day=early?0:1, hours=0; bool available=false;
-    for(uint32_t candidate=0;candidate<(early?48UL:max+2);++candidate) {
-        if(!early) day=Real(candidate+1);
-        hours=early?Real(candidate)/2:day*24; bool used=false;
-        for(uint32_t id=1;id<=max;++id) {
-            Row r; Status st=repo_.row(Kind::Draft,draft_,id,r); if(st==Status::Missing) continue; if(st!=Status::Ok) return st;
-            if(early?(r.day==0&&snapEarly(r.timeH)==hours):(r.day==day)) { used=true; break; }
+    Row row; row.id=max+1; row.revision=1;
+    if(early) {
+        TRY(earlySlot(max,0,row.timeH));
+    } else {
+        bool available=false;
+        for(uint32_t candidate=0;candidate<max+2;++candidate) {
+            row.day=Real(candidate+1);
+            bool used=false;
+            for(uint32_t id=1;id<=max;++id) {
+                Row existing; Status st=repo_.row(Kind::Draft,draft_,id,existing);
+                if(st==Status::Missing) continue;
+                if(st!=Status::Ok) return st;
+                if(existing.day==row.day) { used=true; break; }
+            }
+            if(!used) { available=true; break; }
         }
-        if(!used) { available=true; break; }
+        if(!available) return Status::Capacity;
+        row.timeH=row.day*24;
     }
-    if(!available) return Status::Capacity;
-    Row r; r.id=max+1; r.revision=1; r.day=day; r.timeH=hours;
-    TRY(begin(op)); Status s=repo_.putRow(Kind::Draft,draft_,r);
-    if(s==Status::Ok) s=record.putInteger(Field::MaxRow,r.id);
-    if(s==Status::Ok) s=record.erase(Field::Model);
-    TRY(finish(s)); return focusRow(r.id);
+    TRY(storeDraftRow(row,Field::Exists,nullptr,true,op));
+    return focusRow(row.id);
 }
 Status Controller::fillEarly(const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
     uint32_t max; TRY(record.integer(Field::MaxRow,max));
-    TRY(begin(op)); Status s=Status::Ok;
+    TRY(begin(op));
+    uint8_t occupied[6]={};
+    Status s=earlySlots(max,0,occupied);
     uint32_t next=max,firstNew=0;
     for(uint8_t slot=0;slot<=12 && s==Status::Ok;++slot) {
-        bool used=false;
-        for(uint32_t i=1;i<=max;++i) { Row r; s=repo_.row(Kind::Draft,draft_,i,r); if(s==Status::Missing) { s=Status::Ok; continue; } if(s!=Status::Ok) break; if(r.day==0&&snapEarly(r.timeH)==Real(slot)/2) used=true; }
-        if(s!=Status::Ok) break;
-        if(!used) { if(next==UINT32_MAX) { s=Status::Capacity; break; } Row r; r.id=++next; r.revision=1; r.timeH=Real(slot)/2; s=repo_.putRow(Kind::Draft,draft_,r); if(!firstNew) firstNew=r.id; }
+        if(slotOccupied(occupied,slot)) continue;
+        if(next==UINT32_MAX) { s=Status::Capacity; break; }
+        Row row; row.id=++next; row.revision=1; row.timeH=Real(slot)/2;
+        s=repo_.putRow(Kind::Draft,draft_,row);
+        if(!firstNew) firstNew=row.id;
     }
     if(s==Status::Ok) s=record.putInteger(Field::MaxRow,next);
     if(s==Status::Ok) s=record.erase(Field::Model);
     TRY(finish(s)); return firstNew?focusRow(firstNew):Status::Ok;
+}
+Status Controller::storeDraftRow(const Row& row,Field input,const char* text,bool added,const uint64_t& op) {
+    TRY(begin(op));
+    Record record(repo_,Kind::Draft,draft_);
+    Status st=repo_.putRow(Kind::Draft,draft_,row);
+    if(st==Status::Ok&&added) st=record.putInteger(Field::MaxRow,row.id);
+    if(st==Status::Ok&&text) st=repo_.putText(Key(Kind::Draft,draft_,input,row.id),text,65);
+    if(st==Status::Ok) st=record.erase(Field::Model);
+    return finish(st);
 }
 Status Controller::editRow(uint32_t id,const char* field,const char* value,const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
@@ -281,7 +307,13 @@ Status Controller::editRow(uint32_t id,const char* field,const char* value,const
         TRY(parseReal(value,v));
         if(CM_EQ(field,"day")) {
             if(v<0) return Status::Invalid;
-            if(v==0) { if(r.day==0) r.timeH=snapEarly(r.timeH); else TRY(earlySlot(r.id,r.timeH)); }
+            if(v==0) {
+                if(r.day==0) r.timeH=snapEarly(r.timeH);
+                else {
+                    uint32_t max; TRY(record.integer(Field::MaxRow,max));
+                    TRY(earlySlot(max,r.id,r.timeH));
+                }
+            }
             else r.timeH=v*24;
             r.day=v;
         }
@@ -295,10 +327,8 @@ Status Controller::editRow(uint32_t id,const char* field,const char* value,const
         for(uint32_t i=1;i<=max;++i) { if(i==id) continue; Row other; Status s=repo_.row(Kind::Draft,draft_,i,other); if(s==Status::Missing) continue; if(s!=Status::Ok) return s; if(other.day==r.day) return Status::Conflict; }
     }
     if(r.revision==UINT32_MAX) return Status::Capacity;
-    ++r.revision; TRY(begin(op)); Status s=repo_.putRow(Kind::Draft,draft_,r);
-    if(s==Status::Ok&&input!=Field::Exists) s=repo_.putText(Key(Kind::Draft,draft_,input,r.id),value,65);
-    if(s==Status::Ok) s=record.erase(Field::Model);
-    return finish(s);
+    ++r.revision;
+    return storeDraftRow(r,input,input==Field::Exists?nullptr:value,false,op);
 }
 Status Controller::deleteRow(uint32_t id,bool confirmed,const uint64_t& op) {
     Record record(repo_,Kind::Draft,draft_);
@@ -313,34 +343,32 @@ Status Controller::deleteRow(uint32_t id,bool confirmed,const uint64_t& op) {
     return finish(s);
 }
 Status Controller::captureRow(uint32_t id,const uint64_t& op) {
-    Record record(repo_,Kind::Draft,draft_);
     Row r; TRY(repo_.row(Kind::Draft,draft_,id,r)); if(r.revision==UINT32_MAX) return Status::Capacity; Average a; TRY(getAverage(a));
     r.temp=a.operational; r.hasTemp=true; ++r.revision;
     char reading[28]; formatReal(reading,sizeof(reading),r.temp,1);
-    TRY(begin(op)); Status s=repo_.putRow(Kind::Draft,draft_,r);
-    if(s==Status::Ok) s=repo_.putText(Key(Kind::Draft,draft_,Field::TempInput,r.id),reading,65);
-    if(s==Status::Ok) s=record.erase(Field::Model);
-    return finish(s);
+    return storeDraftRow(r,Field::TempInput,reading,false,op);
 }
-Status Controller::validateDraft() {
+Status Controller::validateDraftHeader(Real& datum) {
     Record record(repo_,Kind::Draft,draft_);
     char name[65]; TRY(record.text(Field::Name,name,65)); if(!*name) return Status::Invalid;
-    Real target,datum; TRY(record.number(Field::Target,target)); if(!(target>0)) return Status::Invalid;
+    Real target; TRY(record.number(Field::Target,target)); if(!(target>0)) return Status::Invalid;
     TRY(record.number(Field::Datum,datum));
-    if(datum!=-20&&datum!=-10&&datum!=0&&datum!=10) return Status::Invalid;
-    StoredRows rows(repo_,Kind::Draft,draft_); Row r; uint32_t count=0; Real prevDay=0; Status s;
-    while((s=rows.next(r))==Status::Ok) { if(!r.hasTemp || (count&&r.day<prevDay)) return Status::Invalid; prevDay=r.day; ++count; }
-    if(s!=Status::Missing) return s;
-    return count>=3?Status::Ok:Status::Invalid;
+    return datum==-20||datum==-10||datum==0||datum==10?Status::Ok:Status::Invalid;
 }
 Status Controller::generate(const uint64_t& op) {
-    Record record(repo_,Kind::Draft,draft_);
-    TRY(validateDraft()); Real datum; TRY(record.number(Field::Datum,datum));
-    StoredRows rows(repo_,Kind::Draft,draft_); Fit fit; TRY(fitRows(rows,datum,fit));
+    Real datum; TRY(validateDraftHeader(datum));
+    StoredRows rows(repo_,Kind::Draft,draft_,RowView::CompleteDraft); Fit fit; TRY(fitRows(rows,datum,fit));
     TRY(begin(op)); TRY(finish(repo_.putModel(Kind::Draft,draft_,fit))); page_=Page::BaseR; return Status::Ok;
 }
 Status Controller::saveBaseline(const uint64_t& op) {
-    TRY(validateDraft()); Fit f; TRY(repo_.model(Kind::Draft,draft_,f));
+    {
+        Real datum; TRY(validateDraftHeader(datum));
+        StoredRows rows(repo_,Kind::Draft,draft_,RowView::CompleteDraft);
+        Row row; Status st;
+        do { st=rows.next(row); } while(st==Status::Ok);
+        if(st!=Status::Missing) return st;
+    }
+    Fit f; TRY(repo_.model(Kind::Draft,draft_,f));
     uint32_t id; TRY(repo_.journal().maxObject(Kind::Baseline,id)); if(id==UINT32_MAX) return Status::Capacity; ++id;
     static const TxStep steps[] CM_ROM={
         {TxOp::Constant,TxTarget::Destination,Field::Exists,1},
@@ -458,15 +486,8 @@ Status Controller::prepareResult(const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
     SessionState ss; TRY(state(ss)); if(ss!=SessionState::Active&&ss!=SessionState::Preview) return Status::Invalid;
     uint32_t gap; TRY(record.integer(Field::Gap,gap)); if(gap) return Status::Gap;
-    Result result; TRY(checkpointResult(Kind::Session,session_,0,result));
-    TRY(roundResult(result));
+    Result result; TRY(calculateCheckpointResult(Kind::Session,session_,0,result,true));
     return storePreview(result,op);
-}
-Status Controller::roundResult(Result& result) {
-    Fit fit; TRY(repo_.model(Kind::Session,session_,fit));
-    Selection selection; selection.factor=result.prediction.factor; selection.day=result.prediction.referenceDay; selection.found=result.prediction.hasReference;
-    result.prediction=trace(floor(result.rawM+Real(.5)),fit,selection);
-    return Status::Ok;
 }
 Status Controller::storePreview(const Result& result,const uint64_t& op) {
     Record record(repo_,Kind::Session,session_);
@@ -477,6 +498,9 @@ Status Controller::storePreview(const Result& result,const uint64_t& op) {
     TRY(finish(s)); page_=Page::Str; return Status::Ok;
 }
 Status Controller::checkpointResult(Kind kind,uint32_t object,uint32_t pointId,Result& out) {
+    return calculateCheckpointResult(kind,object,pointId,out,false);
+}
+Status Controller::calculateCheckpointResult(Kind kind,uint32_t object,uint32_t pointId,Result& out,bool roundMaturity) {
     Record record(repo_,kind,object);
     Real datum,day; TRY(record.number(Field::Datum,datum));
     {
@@ -488,7 +512,8 @@ Status Controller::checkpointResult(Kind kind,uint32_t object,uint32_t pointId,R
     Fit fit; uint32_t baseline=0;
     TRY(repo_.model(kind,object,fit)); TRY(record.integer(Field::BaselineRef,baseline));
     StoredRows rows(repo_,Kind::Baseline,baseline); Selection selection; TRY(lookupRows(rows,datum,fit,day,selection));
-    out.prediction=trace(out.rawM,fit,selection); return Status::Ok;
+    Real maturity=roundMaturity?floor(out.rawM+Real(.5)):out.rawM;
+    out.prediction=trace(maturity,fit,selection); return Status::Ok;
 }
 Status Controller::readResult(Kind kind,uint32_t id,Result& r) {
     return repo_.result(kind,id,r);
@@ -514,7 +539,7 @@ Status Controller::saveResult(const uint64_t& op) {
 }
 Status Controller::rowAt(uint32_t slot,Row& out) {
     if(slot>=6) return Status::Invalid;
-    StoredRows rows(repo_,Kind::Draft,draft_,true); Status s=Status::Missing;
+    StoredRows rows(repo_,Kind::Draft,draft_,RowView::Display); Status s=Status::Missing;
     for(uint32_t i=0;i<=cursor_+slot;++i) { s=rows.next(out); if(s!=Status::Ok) return s; } return s;
 }
 Status Controller::pointAt(uint32_t slot,Point& out) {

@@ -40,6 +40,18 @@ struct Key {
 };
 class Journal {
     enum class Query : uint8_t { Value, Operation, MaxObject };
+    struct Transaction {
+        uint32_t next, sequence;
+        uint64_t operation;
+    };
+    struct Lookup {
+        Query mode;
+        const uint8_t* key;
+        const uint64_t* operation;
+        uint32_t indexedEntry, found, object;
+        uint16_t length;
+        void consider(uint32_t position,const uint8_t* header,uint16_t size);
+    };
     StoragePort& io_;
     DiskIndex index_;
     uint32_t end_,sequence_,writeAt_,payloadCrc_,count_;
@@ -50,9 +62,8 @@ class Journal {
     Status indexTransaction(uint32_t at,uint32_t next,const uint64_t& operation);
     Status readEntry(uint32_t at,uint32_t available,uint8_t* header,uint16_t& length);
     Status locate(const Key& key,uint32_t& at,uint16_t& length);
-    Status findEntry(Query mode,const uint8_t* key,uint32_t& at,uint16_t& length,
-                     const uint64_t* operation=nullptr,Key* first=nullptr);
-    Status verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,uint64_t& op,bool footer);
+    Status findEntry(Lookup& lookup);
+    Status verify(uint32_t at,uint32_t limit,Transaction& transaction,bool footer,Lookup* lookup=nullptr);
 public:
     static const uint16_t MaxValue=128;
     explicit Journal(StoragePort& io) : io_(io),end_(0),sequence_(0),writeAt_(0),payloadCrc_(0),count_(0),operation_(0),remaining_(0),writing_(false),tail_(false),uncertain_(false),mounted_(false),indexed_(false) {}

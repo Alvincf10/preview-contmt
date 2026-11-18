@@ -133,19 +133,30 @@ Status Repository::list(Kind k,uint32_t after,uint32_t& id) {
     }
     return Status::Missing;
 }
-StoredRows::StoredRows(Repository& r,Kind k,uint32_t o,bool displayOrder) : repo_(r),kind_(k),object_(o),max_(0),lastId_(0),lastH_(0),lastDay_(0),first_(true),displayOrder_(displayOrder) { reset(); }
-void StoredRows::reset() { max_=0; lastId_=0; lastH_=lastDay_=0; first_=true; }
+StoredRows::StoredRows(Repository& r,Kind k,uint32_t o,RowView view)
+    : repo_(r),kind_(k),object_(o),view_(view) { reset(); }
+void StoredRows::reset() { max_=0; lastId_=0; lastH_=lastDay_=0; seen_=0; }
 Status StoredRows::next(Row& out) {
-    Status st=repo_.integer(Key(kind_,object_,Field::MaxRow),max_); if(st!=Status::Ok) return st;
-    bool found=false; Row candidate;
-    for(uint32_t id=1;id<=max_;++id) {
-        Row r; st=repo_.row(kind_,object_,id,r); if(st==Status::Missing) continue;
+    if(!seen_) {
+        Status st=repo_.integer(Key(kind_,object_,Field::MaxRow),max_);
+        if(st==Status::Missing&&view_==RowView::CompleteDraft) return Status::Invalid;
         if(st!=Status::Ok) return st;
-        if(!first_ && (displayOrder_&&r.day!=lastDay_?r.day<lastDay_:(r.timeH<lastH_ || (r.timeH==lastH_ && r.id<=lastId_)))) continue;
-        if(!found || (displayOrder_&&r.day!=candidate.day?r.day<candidate.day:(r.timeH<candidate.timeH || (r.timeH==candidate.timeH && r.id<candidate.id)))) { candidate=r; found=true; }
+    }
+    const bool display=view_==RowView::Display;
+    bool found=false; Row candidate;
+    for(uint32_t id=0;id<max_;) {
+        Row r; Status st=repo_.row(kind_,object_,++id,r); if(st==Status::Missing) continue;
+        if(st!=Status::Ok) return st;
+        if(seen_&&(display&&r.day!=lastDay_?r.day<lastDay_:(r.timeH<lastH_ || (r.timeH==lastH_ && r.id<=lastId_)))) continue;
+        if(!found||(display&&r.day!=candidate.day?r.day<candidate.day:(r.timeH<candidate.timeH || (r.timeH==candidate.timeH && r.id<candidate.id)))) { candidate=r; found=true; }
+    }
+    if(view_==RowView::CompleteDraft) {
+        if(!found) return seen_<3?Status::Invalid:Status::Missing;
+        if(!candidate.hasTemp||(seen_&&candidate.day<lastDay_)) return Status::Invalid;
     }
     if(!found) return Status::Missing;
-    out=candidate; lastH_=out.timeH; lastDay_=out.day; lastId_=out.id; first_=false; return Status::Ok;
+    if(seen_<3) ++seen_;
+    out=candidate; lastH_=out.timeH; lastDay_=out.day; lastId_=out.id; return Status::Ok;
 }
 Status nextPoint(Repository& r,Kind k,uint32_t o,const Point* after,Point& out) {
     uint32_t max=0; Status st=r.integer(Key(k,o,Field::MaxRow),max); if(st!=Status::Ok) return st;

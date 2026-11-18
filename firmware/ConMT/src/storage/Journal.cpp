@@ -104,7 +104,19 @@ inline __attribute__((always_inline)) Status Journal::readEntry(uint32_t at,uint
     length=get16(header+10);
     return validEntryLength(length,available)&&header[0]&&header[1]?Status::Ok:Status::Corrupt;
 }
-Status Journal::verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,uint64_t& op,bool footer) {
+void Journal::Lookup::consider(uint32_t position,const uint8_t* header,uint16_t size) {
+    if(indexedEntry&&indexedEntry!=position) return;
+    if(mode==Query::Value) {
+        if(memcmp(key,header,DiskIndex::KeyBytes)!=0) return;
+        length=size;
+    } else if(mode==Query::MaxObject) {
+        if(header[0]!=key[2]) return;
+        uint32_t candidate=get32(header+2);
+        if(candidate>object) object=candidate;
+    } else if(found) return;
+    found=position;
+}
+Status Journal::verify(uint32_t at,uint32_t limit,Transaction& transaction,bool footer,Lookup* lookup) {
     if(at>limit || limit-at<32) return Status::Corrupt;
     uint8_t h[32]; Status s=io_.read(at,h,32); if(s!=Status::Ok) return s;
     if(memcmp(h,"CMT1",4)!=0) return Status::Corrupt;
@@ -112,12 +124,16 @@ Status Journal::verify(uint32_t at,uint32_t limit,uint32_t& next,uint32_t& seq,u
     if(get16(h+4)!=1 || get16(h+6)!=1) return Status::Version;
     uint32_t len=get32(h+20), records=get32(h+24);
     if(len>limit-at-32 || (footer && limit-at-32-len<8)) return Status::Corrupt;
-    // Callers consume these provisional outputs only after Status::Ok.
-    next=at+32+len+(footer?8:0); seq=get32(h+8); op=get64(h+12);
+    // A match becomes usable only after the entire transaction passes verification.
+    transaction.next=at+32+len+(footer?8:0);
+    transaction.sequence=get32(h+8);
+    transaction.operation=get64(h+12);
+    if(lookup&&lookup->operation&&transaction.operation!=*lookup->operation) lookup=nullptr;
     uint32_t pos=at+32, left=len, crc=0xffffffffUL, n=0;
     while(left) {
         uint16_t v;
         s=readEntry(pos,left,h,v); if(s!=Status::Ok) return s;
+        if(lookup) lookup->consider(pos,h,v);
         crc=crc32(crc,h,12); pos+=12; left-=12; ++n;
         while(v) {
             uint16_t chunk=v>32?32:v;
@@ -144,8 +160,8 @@ Status Journal::scan() {
     uint32_t size; Status st=io_.size(size); if(st!=Status::Ok) return st;
     indexed_=index_.reset(io_.indexStorage())==Status::Ok;
     while(end_<size) {
-        uint32_t next,seq; uint64_t op;
-        st=verify(end_,size,next,seq,op,true);
+        Transaction transaction;
+        st=verify(end_,size,transaction,true);
         if(st==Status::Version) return st;
         if(st==Status::Corrupt) {
             if(size-end_>=32) {
@@ -163,9 +179,9 @@ Status Journal::scan() {
             tail_=true; break;
         }
         if(st!=Status::Ok) return st;
-        if(seq!=sequence_+1) return Status::Corrupt;
-        if(indexed_ && indexTransaction(end_,next,op)!=Status::Ok) indexed_=false;
-        end_=next; sequence_=seq;
+        if(transaction.sequence!=sequence_+1) return Status::Corrupt;
+        if(indexed_ && indexTransaction(end_,transaction.next,transaction.operation)!=Status::Ok) indexed_=false;
+        end_=transaction.next; sequence_=transaction.sequence;
     }
     return Status::Ok;
 }
@@ -236,18 +252,18 @@ Status Journal::commit() {
     put64(h+12,operation_); put32(h+20,writeAt_-end_-32); put32(h+24,count_); put32(h+28,crc32(0xffffffffUL,h,28)^0xffffffffUL);
     Status st=io_.write(end_,h,32);
     if(st==Status::Ok) st=io_.sync();
-    uint32_t next=0,seq=0; uint64_t op;
-    if(st==Status::Ok) st=verify(end_,writeAt_,next,seq,op,false);
+    Transaction transaction;
+    if(st==Status::Ok) st=verify(end_,writeAt_,transaction,false);
     if(st==Status::Ok) {
         put32(h,payloadCrc_^0xffffffffUL); memcpy(h+4,"DONE",4);
         st=io_.write(writeAt_,h,8);
     }
     if(st==Status::Ok) st=io_.sync();
-    if(st==Status::Ok) st=verify(end_,writeAt_+8,next,seq,op,true);
+    if(st==Status::Ok) st=verify(end_,writeAt_+8,transaction,true);
     writing_=false; uncertain_=st!=Status::Ok;
     if(st==Status::Ok) {
-        if(indexed_ && indexTransaction(end_,next,op)!=Status::Ok) indexed_=false;
-        end_=next; sequence_=seq; tail_=false;
+        if(indexed_ && indexTransaction(end_,transaction.next,transaction.operation)!=Status::Ok) indexed_=false;
+        end_=transaction.next; sequence_=transaction.sequence; tail_=false;
     }
     return st;
 }
@@ -278,71 +294,39 @@ Status Journal::locate(const Key& wanted,uint32_t& valueAt,uint16_t& valueLength
     if(!uint8_t(wanted.kind) || !uint8_t(wanted.field)) return Status::Invalid;
     uint8_t key[DiskIndex::KeyBytes];
     encodeKey(key,wanted.kind,wanted.field,wanted.object,wanted.index);
-    return findEntry(Query::Value,key,valueAt,valueLength);
+    Lookup lookup={Query::Value,key,nullptr,0,0,0,0};
+    Status st=findEntry(lookup);
+    if(st==Status::Ok) { valueAt=lookup.found+12; valueLength=lookup.length; }
+    return st;
 }
-Status Journal::findEntry(Query mode,const uint8_t* key,uint32_t& valueAt,uint16_t& valueLength,
-                          const uint64_t* operation,Key* first) {
-    uint32_t transaction=0, entry=0;
+Status Journal::findEntry(Lookup& lookup) {
+    uint32_t at=0;
     if(indexed_) {
-        Status st=index_.get(key,entry,transaction);
-        if(st==Status::Missing) {
-            if(mode!=Query::MaxObject) return st;
-            valueAt=0;
-            return Status::Ok;
-        }
-        if(st!=Status::Ok || transaction>=end_ || entry<transaction || entry-transaction<32 ||
-           (mode!=Query::Value && end_-transaction<40) ||
-           (mode==Query::Operation && entry-transaction!=32)) indexed_=false;
-    }
-    if(!indexed_) { transaction=0; valueAt=0; valueLength=0; }
-    while(transaction<end_) {
-        uint32_t next,seq;
-        uint64_t saved;
-        Status st=verify(transaction,end_,next,seq,saved,true);
-        if(st!=Status::Ok) return st;
-        const uint32_t limit=next-8;
-        uint8_t bytes[12];
-        if(indexed_) {
-            if(entry<=limit && limit-entry>=12 && (!operation || saved==*operation)) {
-                st=io_.read(entry,bytes,mode==Query::MaxObject?6:12);
-                if(st!=Status::Ok) return st;
-                if(mode==Query::MaxObject) {
-                    if(bytes[0]==key[2]) { valueAt=get32(bytes+2); return Status::Ok; }
-                } else {
-                    if(mode==Query::Operation) { *first=entryKey(bytes); return Status::Ok; }
-                    uint16_t size=get16(bytes+10);
-                    if(!memcmp(key,bytes,DiskIndex::KeyBytes) && validEntryLength(size,limit-entry)) {
-                        if(!size) return Status::Missing;
-                        valueAt=entry+12; valueLength=size; return Status::Ok;
-                    }
-                }
-            }
+        Status st=index_.get(lookup.key,lookup.indexedEntry,at);
+        if(st==Status::Missing) return lookup.mode==Query::MaxObject?Status::Ok:st;
+        if(st!=Status::Ok || at>=end_ || lookup.indexedEntry<at || lookup.indexedEntry-at<32 ||
+           (lookup.operation && lookup.indexedEntry-at!=32)) {
             indexed_=false;
-            transaction=0;
-            valueAt=0;
-            valueLength=0;
+            lookup.indexedEntry=0;
+            at=0;
+        }
+    }
+    while(at<end_) {
+        Transaction transaction;
+        Status st=verify(at,end_,transaction,true,&lookup);
+        if(st!=Status::Ok) return st;
+        if(indexed_) {
+            if(lookup.found) break;
+            indexed_=false;
+            lookup.indexedEntry=0;
+            at=0;
             continue;
         }
-        if(!operation||saved==*operation) {
-            for(uint32_t scan=transaction+32;scan<limit;) {
-                uint16_t size;
-                st=readEntry(scan,limit-scan,bytes,size); if(st!=Status::Ok) return st;
-                if(mode==Query::Operation) { *first=entryKey(bytes); return Status::Ok; }
-                if(mode==Query::MaxObject) {
-                    if(bytes[0]==key[2]) {
-                        const uint32_t object=get32(bytes+2);
-                        if(object>valueAt) valueAt=object;
-                    }
-                } else if(!memcmp(key,bytes,DiskIndex::KeyBytes)) {
-                    valueAt=scan+12;
-                    valueLength=size;
-                }
-                scan+=12+size;
-            }
-        }
-        transaction=next;
+        if(lookup.operation&&lookup.found) break;
+        at=transaction.next;
     }
-    return mode==Query::MaxObject||valueLength?Status::Ok:Status::Missing;
+    if(lookup.mode==Query::MaxObject) return Status::Ok;
+    return lookup.found&&(lookup.operation||lookup.length)?Status::Ok:Status::Missing;
 }
 
 Status Journal::copy(const Key& from,const Key& to,uint16_t expected) {
@@ -363,13 +347,20 @@ Status Journal::findOperation(const uint64_t& op,Key& first) {
     if(!op) return Status::Missing;
     uint8_t key[DiskIndex::KeyBytes];
     operationKey(key,op);
-    uint32_t at; uint16_t length;
-    return findEntry(Query::Operation,key,at,length,&op,&first);
+    Lookup lookup={Query::Operation,key,&op,0,0,0,0};
+    Status st=findEntry(lookup);
+    if(st!=Status::Ok) return st;
+    uint8_t header[DiskIndex::KeyBytes];
+    st=io_.read(lookup.found,header,sizeof(header));
+    if(st==Status::Ok) first=entryKey(header);
+    return st;
 }
 Status Journal::maxObject(Kind kind,uint32_t& out) {
     uint8_t key[DiskIndex::KeyBytes];
     maximumKey(key,uint8_t(kind));
-    uint16_t length;
-    return findEntry(Query::MaxObject,key,out,length);
+    Lookup lookup={Query::MaxObject,key,nullptr,0,0,0,0};
+    Status st=findEntry(lookup);
+    if(st==Status::Ok) out=lookup.object;
+    return st;
 }
 }
