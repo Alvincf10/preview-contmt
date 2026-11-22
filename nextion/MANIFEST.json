@@ -1,0 +1,53 @@
+{
+  "kit": "ConMT Nextion Build Kit",
+  "version": "2026-11-22",
+  "display": { "width": 480, "height": 800, "orientation": "portrait" },
+  "output": {
+    "editorProject": "ConMT.hmi",
+    "deviceFirmware": "ConMT.tft",
+    "note": ".HMI hanya bisa dibuat di Nextion Editor (Windows). Kit ini = sumber lengkap untuk rakit."
+  },
+  "entry": "BUILD.md",
+  "files": {
+    "project": "project.json",
+    "flow": "FLOW.md",
+    "build": "BUILD.md",
+    "serial": "SERIAL.md",
+    "checklist": "CHECKLIST.md",
+    "hotspots": "hotspots.csv",
+    "statusHud": "shared/statusCorners.json",
+    "pages": "pages/*.json",
+    "events": "events/*.txt",
+    "assets": "assets/pages/*.png",
+    "unusedAssets": "assets/_unused/"
+  },
+  "pageCount": 17,
+  "uiParity": {
+    "realtime": [
+      "baseline card",
+      "live M + Fc + %",
+      "sensors + average",
+      "pour date/time/temp + current",
+      "ADD DAY + LOAD EXCEL DEMO",
+      "logged days list",
+      "no elapsed timer"
+    ],
+    "strength": [
+      "Fc + % of target",
+      "avg = initial pour temp",
+      "maturity index",
+      "no READY status"
+    ],
+    "history": [
+      "logged days count on cards",
+      "detail shows day logs Time/Temp/M/Fc"
+    ]
+  },
+  "formula": {
+    "maturity": "Nurse-Saul M from day checkpoints",
+    "fc": "fc_FKZ = max(0, (a + b*ln(M)) * FKZ)",
+    "fkzMissing": "forward-fill next available day",
+    "percent": "(fc_FKZ / targetFc) * 100",
+    "excel": "docs/acuan/"
+  }
+}

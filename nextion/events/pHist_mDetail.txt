@@ -1,1 +1,2 @@
+prints "DETAIL\r\n",0
 page pHistD

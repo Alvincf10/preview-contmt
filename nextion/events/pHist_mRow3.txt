@@ -1,0 +1,2 @@
+vaSel.val=3
+prints "HSEL\r\n",0

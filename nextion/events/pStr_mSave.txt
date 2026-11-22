@@ -1,1 +1,2 @@
+prints "SAVE\r\n",0
 page pHist

@@ -1,32 +1,49 @@
-page,objname,label,x,y,w,h,event
-pUser,mSave,SAVE,84,625,312,57,page pMain
-pMain,mBase,BASELINE,85,330,310,64,page pBase
-pMain,mKuat,KUAT TEKAN,85,409,310,64,page pKuat
-pMain,mSet,SETTINGS,85,488,310,64,page pSet
-pMain,mDev,DEVICE INFO,85,567,310,64,page pDev
-pBase,mBack,BACK,18,78,90,36,page pMain
-pBase,mNew,NEW BASELINE,82,330,316,122,page pNewB
-pBase,mSaved,SAVED BASELINE,82,467,316,113,page pSaveB
-pNewB,mBack,BACK,84,597,150,40,page pBase
-pNewB,mNext,NEXT,245,597,164,40,page pMat
-pMat,mBack,BACK,84,596,150,40,page pNewB
-pMat,mNext,NEXT,248,596,165,40,page pMatu
-pMatu,mBack,BACK,70,653,150,42,page pMat
-pMatu,mGen,GENERATE BASELINE,241,653,183,42,page pBaseR
-pBaseR,mBack,BACK,18,78,90,36,page pMatu
-pBaseR,mSave,SAVE,140,736,200,48,page pSaveB
-pKuat,mStart,START TEST,90,320,300,58,page pSelB
-pKuat,mHist,HISTORY,90,400,300,58,page pHist
-pKuat,mBack,BACK,90,480,300,58,page pMain
-pSelB,mBack,BACK,84,700,150,44,page pKuat
-pSelB,mSelect,SELECT,245,700,150,44,page pRT
-pRT,mBack,BACK,84,700,150,44,page pSelB
-pRT,mNext,NEXT,245,700,150,44,page pStr
-pStr,mBack,BACK,84,700,150,44,page pRT
-pStr,mSave,SAVE RESULT,245,700,150,44,page pHist
-pHist,mBack,BACK,84,720,150,44,page pKuat
-pHist,mDetail,VIEW DETAIL,245,720,150,44,page pHistD
-pHistD,mBack,BACK,84,720,312,44,page pHist
-pSet,mBack,BACK,84,700,150,44,page pMain
-pSet,mSave,SAVE,245,700,150,44,page pMain
-pDev,mBack,BACK,84,720,312,44,page pMain
+"page","objname","label","x","y","w","h","event_file","event_code"
+"pUser","mSave","","84","625","312","57","events/pUser_mSave.txt","page pMain"
+"pMain","mBase","BASELINE","85","330","310","64","events/pMain_mBase.txt","page pBase"
+"pMain","mKuat","KUAT TEKAN","85","409","310","64","events/pMain_mKuat.txt","page pKuat"
+"pMain","mSet","SETTINGS","85","488","310","64","events/pMain_mSet.txt","page pSet"
+"pMain","mDev","DEVICE INFO","85","567","310","64","events/pMain_mDev.txt","page pDev"
+"pBase","mBack","BACK","18","104","90","36","events/pBase_mBack.txt","page pMain"
+"pBase","mNew","NEW BASELINE","82","330","316","122","events/pBase_mNew.txt","page pNewB"
+"pBase","mSaved","SAVED BASELINE","82","467","316","113","events/pBase_mSaved.txt","page pSaveB"
+"pNewB","mTemp","open temp picker","90","450","240","42","events/pNewB_mTemp.txt","prints ""TEMP\r\n"",0"
+"pNewB","mBack","BACK","84","597","150","40","events/pNewB_mBack.txt","page pBase"
+"pNewB","mNext","NEXT","245","597","164","40","events/pNewB_mNext.txt","page pMat"
+"pMat","mBack","BACK","84","596","150","40","events/pMat_mBack.txt","page pNewB"
+"pMat","mNext","NEXT","248","596","165","40","events/pMat_mNext.txt","page pMatu"
+"pMatu","mTemp0","Temp row 0","318","288","80","36","events/pMatu_mTemp0.txt","va0.val=0 | tHint.txt=""Active row 0 — tap SENSOR"""
+"pMatu","mTemp1","Temp row 1","318","326","80","36","events/pMatu_mTemp1.txt","va0.val=1 | tHint.txt=""Active row 1 — tap SENSOR"""
+"pMatu","mTemp2","Temp row 2","318","364","80","36","events/pMatu_mTemp2.txt","va0.val=2 | tHint.txt=""Active row 2 — tap SENSOR"""
+"pMatu","mTemp3","Temp row 3","318","402","80","36","events/pMatu_mTemp3.txt","va0.val=3 | tHint.txt=""Active row 3 — tap SENSOR"""
+"pMatu","mTemp4","Temp row 4","318","440","80","36","events/pMatu_mTemp4.txt","va0.val=4 | tHint.txt=""Active row 4 — tap SENSOR"""
+"pMatu","mTemp5","Temp row 5","318","478","80","36","events/pMatu_mTemp5.txt","va0.val=5 | tHint.txt=""Active row 5 — tap SENSOR"""
+"pMatu","mAddDay","+ ADD DAY","70","520","160","44","events/pMatu_mAddDay.txt","prints ""ADD\r\n"",0"
+"pMatu","mSensor","SENSOR","250","520","160","44","events/pMatu_mSensor.txt","prints ""SEN\r\n"",0"
+"pMatu","mBack","BACK","70","653","150","42","events/pMatu_mBack.txt","page pMat"
+"pMatu","mGen","GENERATE BASELINE","241","653","183","42","events/pMatu_mGen.txt","page pBaseR"
+"pBaseR","mBack","BACK","18","104","90","36","events/pBaseR_mBack.txt","page pMatu"
+"pBaseR","mSave","SAVE","140","736","200","48","events/pBaseR_mSave.txt","page pSaveB"
+"pSaveB","mBack","","84","700","150","44","events/nav_pBase.txt","page pBase"
+"pSaveB","mSelect","","245","700","150","44","events/nav_pBase.txt","page pBase"
+"pKuat","mStart","START TEST","90","320","300","58","events/pKuat_mStart.txt","page pSelB"
+"pKuat","mHist","HISTORY","90","400","300","58","events/pKuat_mHist.txt","page pHist"
+"pKuat","mBack","BACK","90","480","300","58","events/nav_pMain.txt","page pMain"
+"pSelB","mBack","","84","700","150","44","events/pSelB_mBack.txt","page pKuat"
+"pSelB","mStart","START","245","700","150","44","events/pSelB_mStart.txt","// START: capture sensor avg as initial pour temp, then go realtime | page pRT"
+"pRT","mAddDay","+ ADD DAY","40","488","200","40","events/pRT_mAddDay.txt","prints ""ADD\r\n"",0"
+"pRT","mDemo","LOAD EXCEL DEMO","250","488","190","40","events/pRT_mDemo.txt","prints ""DEMO\r\n"",0"
+"pRT","mBack","BACK","84","700","150","44","events/pRT_mBack.txt","page pSelB"
+"pRT","mNext","NEXT","245","700","150","44","events/pRT_mNext.txt","prints ""NEXT\r\n"",0 | page pStr"
+"pStr","mBack","BACK","84","700","150","44","events/pStr_mBack.txt","page pRT"
+"pStr","mSave","SAVE RESULT","245","700","150","44","events/pStr_mSave.txt","prints ""SAVE\r\n"",0 | page pHist"
+"pHist","mRow0","Select history 0","40","140","400","72","events/pHist_mRow0.txt","vaSel.val=0 | prints ""HSEL\r\n"",0"
+"pHist","mRow1","Select history 1","40","230","400","72","events/pHist_mRow1.txt","vaSel.val=1 | prints ""HSEL\r\n"",0"
+"pHist","mRow2","Select history 2","40","320","400","72","events/pHist_mRow2.txt","vaSel.val=2 | prints ""HSEL\r\n"",0"
+"pHist","mRow3","Select history 3","40","410","400","72","events/pHist_mRow3.txt","vaSel.val=3 | prints ""HSEL\r\n"",0"
+"pHist","mBack","BACK","84","720","150","44","events/pHist_mBack.txt","page pKuat"
+"pHist","mDetail","VIEW LOG","245","720","150","44","events/pHist_mDetail.txt","prints ""DETAIL\r\n"",0 | page pHistD"
+"pHistD","mBack","BACK","84","720","312","44","events/pHistD_mBack.txt","page pHist"
+"pSet","mBack","","84","700","150","44","events/nav_pMain.txt","page pMain"
+"pSet","mSave","","245","700","150","44","events/nav_pMain.txt","page pMain"
+"pDev","mBack","","84","720","312","44","events/nav_pMain.txt","page pMain"
