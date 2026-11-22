@@ -1,45 +1,40 @@
-# ConMT — paket sumber Nextion (Windows)
+# ConMT — Nextion Build Kit
 
-Ini **bukan** file `.HMI` binary jadi. Nextion Editor hanya bisa membuat/menyimpan `.HMI` sendiri.  
-Paket ini = **blueprint + aset + kode event** supaya kamu bisa rakit cepat di laptop Windows, lalu simulasikan di emulator Nextion.
+Paket siap rakit untuk panel **480×800**.  
+Bukan file `.HMI` binary — Nextion Editor (Windows) yang membuatnya. Isi folder ini sudah lengkap supaya **tidak perlu setup desain ulang**.
 
-## Apa yang ada di folder ini
+## Mulai di sini
+
+1. Baca **[BUILD.md](./BUILD.md)** — langkah New Project → page → Compile.
+2. Centang **[CHECKLIST.md](./CHECKLIST.md)** saat merakit.
+3. Serial MCU: **[SERIAL.md](./SERIAL.md)**.
+4. Alur layar: **[FLOW.md](./FLOW.md)**.
+5. Inventaris: **[MANIFEST.json](./MANIFEST.json)** + **[hotspots.csv](./hotspots.csv)**.
+
+## Isi folder
 
 | Path | Isi |
-|---|---|
-| `project.json` | Resolusi 480×800, daftar page |
-| `assets/pages/*.png` | Background tiap layar (dari Figma 480×800) |
-| `pages/*.json` | Komponen + koordinat TouchCap |
-| `events/*.txt` | Kode event Nextion (`page xxx`) |
-| `FLOW.md` | Alur navigasi |
+|------|-----|
+| `project.json` | 17 page, resolusi 480×800 |
+| `assets/pages/*.png` | Background tiap layar |
+| `pages/*.json` | Komponen + TouchCap + event map |
+| `events/*.txt` | Kode event (copy ke Editor) |
+| `shared/statusCorners.json` | Template `tClock` / `tBatt` |
+| `assets/_unused/` | PNG lama, jangan diimport |
 
-## Cara build di Nextion Editor (Windows)
+## Validasi (sebelum copy ke Windows)
 
-1. Install **Nextion Editor** (versi terbaru dari situs Itead).
-2. **File → New** → pilih resolusi **Custom 480 × 800** (portrait).
-3. Untuk tiap page di `project.json`:
-   - Tambah page, rename sesuai `name` (contoh `pMain`).
-   - Import PNG dari `assets/pages/` sebagai **page background** (atau komponen Picture 0,0,480,800).
-   - Tambah **TouchCap** (area sentuh transparan) sesuai `x,y,w,h` di JSON.
-   - Di event **Touch Press Event**, tempel isi file `events/...txt` (biasanya satu baris `page pXxx`).
-4. Page pertama / boot: `pInit`.
-5. Di `pInit`, aktifkan **Timer** (mis. 500ms) → setelah beberapa tick: `page pUser` (lihat `events/pInit_tm0.txt`).
-6. **Debug → Simulate** untuk emulator di Windows.
-7. Kalau sudah OK: **Compile** → dapat `.TFT` untuk upload ke panel.
+```bash
+npm run validate:nextion
+```
 
-## Catatan penting
+## Setelah .HMI ada
 
-- **HTML `select` tidak ada di Nextion.** Untuk Datum Temperature, pakai Text + list page / Number / keyboard Nextion.
-- Data sensor realtime: MCU kirim perintah serial, contoh:  
-  `tS1.txt="25.6"` + `0xFF 0xFF 0xFF`
-- **pMatu SENSOR flow:** tap field Temperature (`mTempN` → `va0.val=N`) lalu `mSensor` mengirim `SEN` ke MCU. MCU tulis rata-rata ke `tTN.txt` (contoh `tT3.txt="25.7"`) + update `tHint.txt`. `mAddDay` mengirim `ADD`.
-- Koordinat TouchCap di JSON adalah titik awal dari Figma; fine-tune 2–4px di Editor bila perlu.
-- Emulator web React di root project tetap untuk preview UI; folder `nextion/` untuk target panel.
+Simpan `ConMT.hmi` dari Editor. Update berikutnya: ganti PNG/event → Compile → `.TFT`. Tidak perlu New Project lagi.
 
-## Flow singkat (baseline)
+## Catatan UI (parity React preview)
 
-`pInit` → `pUser` → `pMain` → `pBase` → `pNewB` → `pMat` → `pMatu` → `pBaseR` → `pSaveB`
-
-## Flow kuat tekan
-
-`pMain` → `pKuat` → `pSelB` → `pRT` → `pStr` → `pHist` → `pHistD`
+- **pRT**: ADD DAY, demo days, live M/Fc/%, logged days — tanpa elapsed.
+- **pStr**: Fc + % target, avg = initial pour temp — tanpa status READY.
+- **pHist/pHistD**: jumlah logged days + detail Time/Temp/M/Fc.
+- Formula dihitung di **MCU**, bukan di HMI (`fc_FKZ = max(0,(a+b·ln(M))·FKZ)`).
