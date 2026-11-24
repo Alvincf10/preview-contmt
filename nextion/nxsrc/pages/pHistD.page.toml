@@ -1,0 +1,1078 @@
+[page]
+name = "pHistD"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "14_history_detail"
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBase"
+type = "text"
+x = 108
+y = 350
+w = 294
+h = 15
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tTarget"
+type = "text"
+x = 108
+y = 391
+w = 143
+h = 15
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tDatum"
+type = "text"
+x = 268
+y = 391
+w = 134
+h = 15
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tFc"
+type = "text"
+x = 160
+y = 300
+w = 160
+h = 40
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tOp"
+type = "text"
+x = 75
+y = 272
+w = 157
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tProj"
+type = "text"
+x = 247
+y = 272
+w = 158
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tDate"
+type = "text"
+x = 190
+y = 120
+w = 120
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tSavedAt"
+type = "text"
+x = 190
+y = 212
+w = 100
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tLastT"
+type = "text"
+x = 304
+y = 212
+w = 101
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tMsg"
+type = "text"
+x = 484
+y = 8
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tPDate"
+type = "text"
+x = 484
+y = 30
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tPour"
+type = "text"
+x = 484
+y = 52
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tInitTemp"
+type = "text"
+x = 484
+y = 74
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tM"
+type = "text"
+x = 484
+y = 96
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tPct"
+type = "text"
+x = 484
+y = 118
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tElapsed"
+type = "text"
+x = 484
+y = 140
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tRefDay"
+type = "text"
+x = 484
+y = 162
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tDay0"
+type = "text"
+x = 484
+y = 184
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tAt0"
+type = "text"
+x = 484
+y = 206
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tTmp0"
+type = "text"
+x = 484
+y = 228
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCm0"
+type = "text"
+x = 484
+y = 250
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCf0"
+type = "text"
+x = 484
+y = 272
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tDay1"
+type = "text"
+x = 484
+y = 294
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tAt1"
+type = "text"
+x = 484
+y = 316
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tTmp1"
+type = "text"
+x = 484
+y = 338
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCm1"
+type = "text"
+x = 484
+y = 360
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCf1"
+type = "text"
+x = 484
+y = 382
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tDay2"
+type = "text"
+x = 484
+y = 404
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tAt2"
+type = "text"
+x = 484
+y = 426
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tTmp2"
+type = "text"
+x = 484
+y = 448
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCm2"
+type = "text"
+x = 484
+y = 470
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCf2"
+type = "text"
+x = 484
+y = 492
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tDay3"
+type = "text"
+x = 484
+y = 514
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tAt3"
+type = "text"
+x = 484
+y = 536
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tTmp3"
+type = "text"
+x = 484
+y = 558
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCm3"
+type = "text"
+x = 484
+y = 580
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCf3"
+type = "text"
+x = 484
+y = 602
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tDay4"
+type = "text"
+x = 592
+y = 8
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tAt4"
+type = "text"
+x = 592
+y = 30
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tTmp4"
+type = "text"
+x = 592
+y = 52
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCm4"
+type = "text"
+x = 592
+y = 74
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCf4"
+type = "text"
+x = 592
+y = 96
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tDay5"
+type = "text"
+x = 592
+y = 118
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tAt5"
+type = "text"
+x = 592
+y = 140
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tTmp5"
+type = "text"
+x = 592
+y = 162
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCm5"
+type = "text"
+x = 592
+y = 184
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCf5"
+type = "text"
+x = 592
+y = 206
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tStatus"
+type = "text"
+x = 592
+y = 228
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tS1"
+type = "text"
+x = 592
+y = 250
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tS2"
+type = "text"
+x = 592
+y = 272
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tS3"
+type = "text"
+x = 592
+y = 294
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tCount"
+type = "text"
+x = 592
+y = 316
+w = 72
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 65
+y = 709
+w = 350
+h = 52
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto0"
+type = "hotspot"
+x = 75
+y = 446
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto1"
+type = "hotspot"
+x = 75
+y = 500
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto2"
+type = "hotspot"
+x = 75
+y = 554
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto3"
+type = "hotspot"
+x = 75
+y = 608
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto6"
+type = "hotspot"
+x = 75
+y = 770
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto7"
+type = "hotspot"
+x = 75
+y = 824
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto8"
+type = "hotspot"
+x = 75
+y = 878
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto9"
+type = "hotspot"
+x = 75
+y = 932
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto10"
+type = "hotspot"
+x = 75
+y = 986
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto11"
+type = "hotspot"
+x = 75
+y = 1040
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto12"
+type = "hotspot"
+x = 75
+y = 1094
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto13"
+type = "hotspot"
+x = 75
+y = 1148
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto14"
+type = "hotspot"
+x = 75
+y = 1202
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto15"
+type = "hotspot"
+x = 75
+y = 1256
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto16"
+type = "hotspot"
+x = 75
+y = 1310
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto17"
+type = "hotspot"
+x = 75
+y = 1364
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto18"
+type = "hotspot"
+x = 75
+y = 1418
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto19"
+type = "hotspot"
+x = 75
+y = 1472
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto20"
+type = "hotspot"
+x = 75
+y = 1526
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto21"
+type = "hotspot"
+x = 75
+y = 1580
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto22"
+type = "hotspot"
+x = 75
+y = 1634
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto23"
+type = "hotspot"
+x = 75
+y = 1688
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto24"
+type = "hotspot"
+x = 75
+y = 1742
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto25"
+type = "hotspot"
+x = 75
+y = 1796
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto26"
+type = "hotspot"
+x = 75
+y = 1850
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto27"
+type = "hotspot"
+x = 75
+y = 1904
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto28"
+type = "hotspot"
+x = 75
+y = 1958
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto29"
+type = "hotspot"
+x = 75
+y = 2012
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto30"
+type = "hotspot"
+x = 75
+y = 2066
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto31"
+type = "hotspot"
+x = 75
+y = 2120
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto32"
+type = "hotspot"
+x = 75
+y = 2174
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto33"
+type = "hotspot"
+x = 75
+y = 2228
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto34"
+type = "hotspot"
+x = 75
+y = 2282
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto35"
+type = "hotspot"
+x = 75
+y = 2336
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto36"
+type = "hotspot"
+x = 75
+y = 2390
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto37"
+type = "hotspot"
+x = 75
+y = 2444
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto38"
+type = "hotspot"
+x = 75
+y = 2498
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto39"
+type = "hotspot"
+x = 75
+y = 2552
+w = 330
+h = 50
+events = ["down", "up"]
+
+[[component]]
+name = "mAuto40"
+type = "hotspot"
+x = 75
+y = 2606
+w = 330
+h = 50
+events = ["down", "up"]

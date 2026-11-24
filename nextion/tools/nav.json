@@ -1,0 +1,1349 @@
+{
+ "pInit": [],
+ "pUser": [
+  {
+   "text": "SAVE",
+   "cls": "btn btn-orange btn-block",
+   "x": 67,
+   "y": 575,
+   "w": 346,
+   "h": 48,
+   "to": "main"
+  }
+ ],
+ "pMain": [
+  {
+   "text": "BASELINE",
+   "cls": "menu-row",
+   "x": 67,
+   "y": 339,
+   "w": 346,
+   "h": 64,
+   "to": "baselineMenu"
+  },
+  {
+   "text": "KUAT TEKAN",
+   "cls": "menu-row",
+   "x": 67,
+   "y": 418,
+   "w": 346,
+   "h": 64,
+   "to": "kuatTekanMenu"
+  },
+  {
+   "text": "SETTINGS",
+   "cls": "menu-row",
+   "x": 67,
+   "y": 497,
+   "w": 346,
+   "h": 64,
+   "to": "settings"
+  },
+  {
+   "text": "DEVICE INFO",
+   "cls": "menu-row",
+   "x": 67,
+   "y": 576,
+   "w": 346,
+   "h": 64,
+   "to": "deviceInfo"
+  }
+ ],
+ "pBase": [
+  {
+   "text": "BACK",
+   "cls": "back-chip",
+   "x": 30,
+   "y": 112,
+   "w": 88,
+   "h": 36,
+   "to": "main"
+  },
+  {
+   "text": "NEW BASELINECreate a new concrete model ",
+   "cls": "menu-row menu-row-desc",
+   "x": 66,
+   "y": 395,
+   "w": 348,
+   "h": 108,
+   "to": "newBaseline"
+  },
+  {
+   "text": "SAVED BASELINEView, manage, and use exis",
+   "cls": "menu-row menu-row-desc",
+   "x": 66,
+   "y": 515,
+   "w": 348,
+   "h": 108,
+   "to": "savedBaseline"
+  }
+ ],
+ "pNewB": [
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark",
+   "x": 67,
+   "y": 578,
+   "w": 143,
+   "h": 40,
+   "to": "baselineMenu"
+  },
+  {
+   "text": "NEXT",
+   "cls": "btn btn-orange",
+   "x": 220,
+   "y": 578,
+   "w": 193,
+   "h": 40,
+   "to": "materialData"
+  }
+ ],
+ "pMat": [
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark",
+   "x": 67,
+   "y": 699,
+   "w": 143,
+   "h": 40,
+   "to": "newBaseline"
+  },
+  {
+   "text": "NEXT",
+   "cls": "btn btn-orange",
+   "x": 220,
+   "y": 699,
+   "w": 193,
+   "h": 40,
+   "to": "maturityData"
+  }
+ ],
+ "pMatu": [
+  {
+   "text": "",
+   "cls": "title-info-btn",
+   "x": 373,
+   "y": 129,
+   "w": 40,
+   "h": 40,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 248,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 287,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 326,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 365,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 404,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 443,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 482,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 521,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 560,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 599,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 638,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 677,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 716,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 755,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 794,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 833,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 872,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 911,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 950,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 989,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1028,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1067,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1106,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1145,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1184,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1223,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1262,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1301,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1340,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1379,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1418,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1457,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1496,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1535,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1574,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1613,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1652,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1691,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1730,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1769,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "×",
+   "cls": "row-del",
+   "x": 370,
+   "y": 1808,
+   "w": 34,
+   "h": 30,
+   "to": "maturityData"
+  },
+  {
+   "text": "+ ADD DAY",
+   "cls": "add-day-btn",
+   "x": 67,
+   "y": 1857,
+   "w": 168,
+   "h": 44,
+   "to": "maturityData"
+  },
+  {
+   "text": "SENSOR",
+   "cls": "sensor-btn",
+   "x": 245,
+   "y": 1857,
+   "w": 168,
+   "h": 44,
+   "to": "maturityData"
+  },
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark btn-fs-10",
+   "x": 67,
+   "y": 719,
+   "w": 143,
+   "h": 40,
+   "to": "materialData"
+  },
+  {
+   "text": "GENERATE BASELINE",
+   "cls": "btn btn-orange btn-fs-10",
+   "x": 220,
+   "y": 719,
+   "w": 193,
+   "h": 40,
+   "to": "baselineResult"
+  }
+ ],
+ "pBaseR": [
+  {
+   "text": "BACK",
+   "cls": "back-chip br-back",
+   "x": 28,
+   "y": 112,
+   "w": 77,
+   "h": 34,
+   "to": "maturityData"
+  },
+  {
+   "text": "SAVE",
+   "cls": "btn btn-orange br-save-btn",
+   "x": 102,
+   "y": 746,
+   "w": 277,
+   "h": 40,
+   "to": "savedBaseline"
+  }
+ ],
+ "pSaveB": [
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange active",
+   "x": 338,
+   "y": 236,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "DELETE",
+   "cls": "mini-btn dark",
+   "x": 338,
+   "y": 267,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange",
+   "x": 338,
+   "y": 323,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "DELETE",
+   "cls": "mini-btn dark",
+   "x": 338,
+   "y": 354,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange",
+   "x": 338,
+   "y": 410,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "DELETE",
+   "cls": "mini-btn dark",
+   "x": 338,
+   "y": 441,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange",
+   "x": 338,
+   "y": 497,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "DELETE",
+   "cls": "mini-btn dark",
+   "x": 338,
+   "y": 528,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange",
+   "x": 338,
+   "y": 584,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "DELETE",
+   "cls": "mini-btn dark",
+   "x": 338,
+   "y": 615,
+   "w": 64,
+   "h": 26,
+   "to": "savedBaseline"
+  },
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark",
+   "x": 67,
+   "y": 674,
+   "w": 143,
+   "h": 40,
+   "to": "baselineMenu"
+  },
+  {
+   "text": "SELECT",
+   "cls": "btn btn-orange",
+   "x": 220,
+   "y": 674,
+   "w": 193,
+   "h": 40,
+   "to": "maturityData"
+  }
+ ],
+ "pKuat": [
+  {
+   "text": "START TEST›",
+   "cls": "dark-menu-row",
+   "x": 67,
+   "y": 416,
+   "w": 346,
+   "h": 58,
+   "to": "selectBaseline"
+  },
+  {
+   "text": "HISTORY›",
+   "cls": "dark-menu-row",
+   "x": 67,
+   "y": 486,
+   "w": 346,
+   "h": 58,
+   "to": "history"
+  },
+  {
+   "text": "BACK",
+   "cls": "dark-menu-row",
+   "x": 67,
+   "y": 556,
+   "w": 346,
+   "h": 58,
+   "to": "main"
+  }
+ ],
+ "pSelB": [
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange",
+   "x": 338,
+   "y": 275,
+   "w": 64,
+   "h": 26,
+   "to": "selectBaseline"
+  },
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange",
+   "x": 338,
+   "y": 350,
+   "w": 64,
+   "h": 26,
+   "to": "selectBaseline"
+  },
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange",
+   "x": 338,
+   "y": 425,
+   "w": 64,
+   "h": 26,
+   "to": "selectBaseline"
+  },
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange",
+   "x": 338,
+   "y": 500,
+   "w": 64,
+   "h": 26,
+   "to": "selectBaseline"
+  },
+  {
+   "text": "SELECT",
+   "cls": "mini-btn orange",
+   "x": 338,
+   "y": 575,
+   "w": 64,
+   "h": 26,
+   "to": "selectBaseline"
+  },
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark",
+   "x": 67,
+   "y": 644,
+   "w": 143,
+   "h": 40,
+   "to": "kuatTekanMenu"
+  },
+  {
+   "text": "START",
+   "cls": "btn btn-orange",
+   "x": 220,
+   "y": 644,
+   "w": 193,
+   "h": 40,
+   "to": "realtime"
+  }
+ ],
+ "pRT": [
+  {
+   "text": "+ ADD DAY (Day 1)",
+   "cls": "rt-day-btn",
+   "x": 43,
+   "y": 796,
+   "w": 394,
+   "h": 42,
+   "to": "realtime"
+  },
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark",
+   "x": 43,
+   "y": 735,
+   "w": 163,
+   "h": 40,
+   "to": "selectBaseline"
+  },
+  {
+   "text": "NEXT",
+   "cls": "btn btn-orange",
+   "x": 216,
+   "y": 735,
+   "w": 221,
+   "h": 40,
+   "to": "strengthResult"
+  }
+ ],
+ "pStr": [
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark",
+   "x": 67,
+   "y": 635,
+   "w": 143,
+   "h": 40,
+   "to": "realtime"
+  },
+  {
+   "text": "SAVE RESULT",
+   "cls": "btn btn-orange",
+   "x": 220,
+   "y": 635,
+   "w": 193,
+   "h": 40,
+   "to": "history"
+  }
+ ],
+ "pHist": [
+  {
+   "text": "Test IDTEST-002Baseline NameBeton Jalan ",
+   "cls": "history-card",
+   "x": 67,
+   "y": 322,
+   "w": 346,
+   "h": 104,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Test IDTEST-EXCEL-01Baseline Namefc30 ma",
+   "cls": "history-card",
+   "x": 67,
+   "y": 436,
+   "w": 346,
+   "h": 120,
+   "to": "historyDetail"
+  },
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark",
+   "x": 67,
+   "y": 578,
+   "w": 143,
+   "h": 40,
+   "to": "kuatTekanMenu"
+  },
+  {
+   "text": "VIEW LOG",
+   "cls": "btn btn-orange",
+   "x": 220,
+   "y": 578,
+   "w": 193,
+   "h": 40,
+   "to": "historyDetail"
+  }
+ ],
+ "pHistD": [
+  {
+   "text": "Day 028-09-2026 · 08:00:00 · 36.0°CM 0 ·",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 448,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 08:30:00 · 37.0°CM 28 ",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 502,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 09:00:00 · 37.2°CM 57 ",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 556,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 09:30:00 · 37.1°CM 85 ",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 610,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 10:00:00 · 37.4°CM 114",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 664,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 10:30:00 · 37.1°CM 143",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 718,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 11:00:00 · 36.8°CM 171",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 772,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 11:30:00 · 36.5°CM 199",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 826,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 12:00:00 · 36.6°CM 228",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 880,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 12:30:00 · 37.2°CM 256",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 934,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 13:00:00 · 37.8°CM 285",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 988,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 13:30:00 · 37.6°CM 314",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1042,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 028-09-2026 · 14:00:00 · 37.1°CM 342",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1096,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 129-09-2026 · 08:00:00 · 29.5°CM 1,3",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1150,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 230-09-2026 · 08:00:00 · 29.3°CM 2,4",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1204,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 301-10-2026 · 08:00:00 · 29.6°CM 3,6",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1258,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 402-10-2026 · 08:00:00 · 29.5°CM 4,8",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1312,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 503-10-2026 · 08:00:00 · 29.0°CM 6,0",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1366,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 604-10-2026 · 08:00:00 · 29.0°CM 7,2",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1420,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 705-10-2026 · 08:00:00 · 28.7°CM 8,3",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1474,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 806-10-2026 · 08:00:00 · 28.1°CM 9,5",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1528,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 907-10-2026 · 08:00:00 · 29.1°CM 10,",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1582,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1008-10-2026 · 08:00:00 · 28.1°CM 11",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1636,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1109-10-2026 · 08:00:00 · 30.2°CM 13",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1690,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1210-10-2026 · 08:00:00 · 29.6°CM 14",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1744,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1311-10-2026 · 08:00:00 · 29.6°CM 15",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1798,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1412-10-2026 · 08:00:00 · 30.1°CM 16",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1852,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1513-10-2026 · 08:00:00 · 29.9°CM 17",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1906,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1614-10-2026 · 08:00:00 · 30.4°CM 19",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 1960,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1715-10-2026 · 08:00:00 · 30.9°CM 20",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2014,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1816-10-2026 · 08:00:00 · 30.6°CM 21",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2068,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 1917-10-2026 · 08:00:00 · 31.8°CM 22",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2122,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 2018-10-2026 · 08:00:00 · 30.6°CM 23",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2176,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 2119-10-2026 · 08:00:00 · 30.4°CM 25",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2230,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 2220-10-2026 · 08:00:00 · 30.7°CM 26",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2284,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 2321-10-2026 · 08:00:00 · 31.5°CM 27",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2338,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 2422-10-2026 · 08:00:00 · 31.8°CM 28",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2392,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 2523-10-2026 · 08:00:00 · 30.6°CM 30",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2446,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 2624-10-2026 · 08:00:00 · 30.6°CM 31",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2500,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 2725-10-2026 · 08:00:00 · 31.8°CM 32",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2554,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "Day 2826-10-2026 · 08:00:00 · 30.6°CM 33",
+   "cls": "rdh-log-toggle",
+   "x": 77,
+   "y": 2608,
+   "w": 326,
+   "h": 46,
+   "to": "historyDetail"
+  },
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark",
+   "x": 67,
+   "y": 711,
+   "w": 346,
+   "h": 48,
+   "to": "history"
+  }
+ ],
+ "pSet": [
+  {
+   "text": "▴",
+   "cls": "",
+   "x": 146,
+   "y": 314,
+   "w": 28,
+   "h": 22,
+   "to": "settings"
+  },
+  {
+   "text": "▾",
+   "cls": "",
+   "x": 146,
+   "y": 338,
+   "w": 28,
+   "h": 22,
+   "to": "settings"
+  },
+  {
+   "text": "▴",
+   "cls": "",
+   "x": 256,
+   "y": 314,
+   "w": 28,
+   "h": 22,
+   "to": "settings"
+  },
+  {
+   "text": "▾",
+   "cls": "",
+   "x": 256,
+   "y": 338,
+   "w": 28,
+   "h": 22,
+   "to": "settings"
+  },
+  {
+   "text": "▴",
+   "cls": "",
+   "x": 365,
+   "y": 314,
+   "w": 28,
+   "h": 22,
+   "to": "settings"
+  },
+  {
+   "text": "▾",
+   "cls": "",
+   "x": 365,
+   "y": 338,
+   "w": 28,
+   "h": 22,
+   "to": "settings"
+  },
+  {
+   "text": "▴",
+   "cls": "",
+   "x": 365,
+   "y": 497,
+   "w": 28,
+   "h": 22,
+   "to": "settings"
+  },
+  {
+   "text": "▾",
+   "cls": "",
+   "x": 365,
+   "y": 521,
+   "w": 28,
+   "h": 22,
+   "to": "settings"
+  },
+  {
+   "text": "ON",
+   "cls": "toggle on",
+   "x": 336,
+   "y": 562,
+   "w": 64,
+   "h": 30,
+   "to": "settings"
+  },
+  {
+   "text": "ON",
+   "cls": "toggle on",
+   "x": 336,
+   "y": 611,
+   "w": 64,
+   "h": 30,
+   "to": "settings"
+  },
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark",
+   "x": 67,
+   "y": 685,
+   "w": 143,
+   "h": 40,
+   "to": "main"
+  },
+  {
+   "text": "SAVE›",
+   "cls": "btn btn-orange",
+   "x": 220,
+   "y": 685,
+   "w": 193,
+   "h": 40,
+   "to": "main"
+  }
+ ],
+ "pDev": [
+  {
+   "text": "BACK",
+   "cls": "btn btn-dark btn-block",
+   "x": 67,
+   "y": 711,
+   "w": 346,
+   "h": 48,
+   "to": "main"
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+// Postinitialize: the panel announces PAGE_READY.
+on pBaseR.loadend:
+  prints "CM1|",0
+  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  prints pInit.tNum.txt,0
+  prints "|0|7|0|PAGE_READY|2",0
+  printh 0A
+
+on mBack.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vReqBoot.val=pInit.vBoot.val
+  pInit.tReq.txt="CM1|"
+  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="7|"
+  covx pInit.vView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|NAV"
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="BACK"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+
+on mSave.down:
+  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vReqBoot.val=pInit.vBoot.val
+  pInit.tReq.txt="CM1|"
+  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="7|"
+  covx pInit.vView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|BASE_SAVE"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }

@@ -1,0 +1,147 @@
+[page]
+name = "pNewB"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "04_new_baseline"
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tName"
+type = "text"
+x = 67
+y = 348
+w = 346
+h = 42
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tFc"
+type = "text"
+x = 67
+y = 431
+w = 280
+h = 42
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tTemp"
+type = "text"
+x = 67
+y = 514
+w = 280
+h = 42
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tMsg"
+type = "text"
+x = 484
+y = 8
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tPDate"
+type = "text"
+x = 484
+y = 34
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tPClock"
+type = "text"
+x = 484
+y = 60
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "mTemp"
+type = "hotspot"
+x = 90
+y = 450
+w = 240
+h = 42
+events = ["down", "up"]
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 65
+y = 576
+w = 147
+h = 44
+events = ["down", "up"]
+
+[[component]]
+name = "mNext"
+type = "hotspot"
+x = 218
+y = 576
+w = 197
+h = 44
+events = ["down", "up"]

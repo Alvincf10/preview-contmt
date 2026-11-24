@@ -1,0 +1,216 @@
+[page]
+name = "pStr"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "12_strength_result"
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBase"
+type = "text"
+x = 130
+y = 302
+w = 270
+h = 16
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tTarget"
+type = "text"
+x = 130
+y = 348
+w = 130
+h = 16
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tDatum"
+type = "text"
+x = 270
+y = 348
+w = 130
+h = 16
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tM"
+type = "text"
+x = 305
+y = 547
+w = 50
+h = 32
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tFc"
+type = "text"
+x = 125
+y = 419
+w = 231
+h = 34
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tPct"
+type = "text"
+x = 261
+y = 415
+w = 95
+h = 41
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+
+[[component]]
+name = "tMsg"
+type = "text"
+x = 484
+y = 8
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tPDate"
+type = "text"
+x = 484
+y = 34
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tPour"
+type = "text"
+x = 484
+y = 60
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tInitTemp"
+type = "text"
+x = 484
+y = 86
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tElapsed"
+type = "text"
+x = 484
+y = 112
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tRefDay"
+type = "text"
+x = 484
+y = 138
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 65
+y = 616
+w = 147
+h = 44
+events = ["down", "up"]
+
+[[component]]
+name = "mSave"
+type = "hotspot"
+x = 218
+y = 616
+w = 197
+h = 44
+events = ["down", "up"]

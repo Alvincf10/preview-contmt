@@ -1,0 +1,359 @@
+[page]
+name = "pBaseR"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "07_baseline_result"
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tName"
+type = "text"
+x = 234
+y = 239
+w = 197
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tTarget"
+type = "text"
+x = 234
+y = 264
+w = 196
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tDatum"
+type = "text"
+x = 234
+y = 289
+w = 196
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tOp"
+type = "text"
+x = 234
+y = 340
+w = 196
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tProj"
+type = "text"
+x = 234
+y = 365
+w = 196
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tDate"
+type = "text"
+x = 234
+y = 315
+w = 196
+h = 14
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tMsg"
+type = "text"
+x = 484
+y = 8
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tA"
+type = "text"
+x = 484
+y = 34
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tB"
+type = "text"
+x = 484
+y = 60
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tR2"
+type = "text"
+x = 484
+y = 86
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCount"
+type = "text"
+x = 484
+y = 112
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tEq"
+type = "text"
+x = 484
+y = 138
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCem"
+type = "text"
+x = 484
+y = 164
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tWat"
+type = "text"
+x = 484
+y = 190
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tCoa"
+type = "text"
+x = 484
+y = 216
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tFin"
+type = "text"
+x = 484
+y = 242
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tRetP"
+type = "text"
+x = 484
+y = 268
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tRetB"
+type = "text"
+x = 484
+y = 294
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tAccP"
+type = "text"
+x = 484
+y = 320
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tAccB"
+type = "text"
+x = 484
+y = 346
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tFlyP"
+type = "text"
+x = 484
+y = 372
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tFlyB"
+type = "text"
+x = 484
+y = 398
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tWC"
+type = "text"
+x = 484
+y = 424
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 26
+y = 110
+w = 81
+h = 38
+events = ["down", "up"]
+
+[[component]]
+name = "mSave"
+type = "hotspot"
+x = 100
+y = 744
+w = 281
+h = 44
+events = ["down", "up"]

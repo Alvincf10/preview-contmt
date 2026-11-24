@@ -1,1 +1,5 @@
+# Binary build outputs: rebuilt from nxsrc, never edited by hand.
+conmt.HMI
+conmt.HMI.*.bak
+conmt.tft
 conmt-nextion-kit.zip

@@ -17,9 +17,11 @@ Folder [`nextion/`](nextion/README.md):
 
 - Aset page PNG 480×800
 - Definisi TouchCap + event `page ...`
-- Panduan rakit di **Nextion Editor** → Simulate → Compile `.TFT`
+- `nxsrc/` — HMI yang sama sebagai teks, yang bisa diedit Cursor dan agent
+- `conmt.HMI` + `conmt.tft` — hasil build, siap dibuka di Editor / di-upload
 
-File `.HMI` binary hanya bisa dibuat/disimpan oleh Nextion Editor; paket ini adalah sumber untuk dirakit di sana.
+Baca [`nextion/AGENT.md`](nextion/AGENT.md) untuk alur edit → build → compile dan
+untuk aturan yang harus dijaga agent.
 
 Lihat: [`nextion/README.md`](nextion/README.md)
 

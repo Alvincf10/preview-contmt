@@ -1,0 +1,82 @@
+[page]
+name = "pKuat"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "09_kuat_tekan"
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tMsg"
+type = "text"
+x = 484
+y = 8
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "mStart"
+type = "hotspot"
+x = 65
+y = 414
+w = 350
+h = 62
+events = ["down", "up"]
+
+[[component]]
+name = "mHist"
+type = "hotspot"
+x = 65
+y = 484
+w = 350
+h = 62
+events = ["down", "up"]
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 65
+y = 554
+w = 350
+h = 62
+events = ["down", "up"]

@@ -1,0 +1,1220 @@
+{
+ "pMatu": [
+  {
+   "name": "mAuto0",
+   "x": 371,
+   "y": 127,
+   "w": 44,
+   "h": 44,
+   "label": "",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto1",
+   "x": 368,
+   "y": 246,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto2",
+   "x": 368,
+   "y": 285,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto3",
+   "x": 368,
+   "y": 324,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto4",
+   "x": 368,
+   "y": 363,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto5",
+   "x": 368,
+   "y": 402,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto6",
+   "x": 368,
+   "y": 441,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto7",
+   "x": 368,
+   "y": 480,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto10",
+   "x": 368,
+   "y": 597,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto11",
+   "x": 368,
+   "y": 636,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto12",
+   "x": 368,
+   "y": 675,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto15",
+   "x": 368,
+   "y": 792,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto16",
+   "x": 368,
+   "y": 831,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto17",
+   "x": 368,
+   "y": 870,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto18",
+   "x": 368,
+   "y": 909,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto19",
+   "x": 368,
+   "y": 948,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto20",
+   "x": 368,
+   "y": 987,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto21",
+   "x": 368,
+   "y": 1026,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto22",
+   "x": 368,
+   "y": 1065,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto23",
+   "x": 368,
+   "y": 1104,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto24",
+   "x": 368,
+   "y": 1143,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto25",
+   "x": 368,
+   "y": 1182,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto26",
+   "x": 368,
+   "y": 1221,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto27",
+   "x": 368,
+   "y": 1260,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto28",
+   "x": 368,
+   "y": 1299,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto29",
+   "x": 368,
+   "y": 1338,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto30",
+   "x": 368,
+   "y": 1377,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto31",
+   "x": 368,
+   "y": 1416,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto32",
+   "x": 368,
+   "y": 1455,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto33",
+   "x": 368,
+   "y": 1494,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto34",
+   "x": 368,
+   "y": 1533,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto35",
+   "x": 368,
+   "y": 1572,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto36",
+   "x": 368,
+   "y": 1611,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto37",
+   "x": 368,
+   "y": 1650,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto38",
+   "x": 368,
+   "y": 1689,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto39",
+   "x": 368,
+   "y": 1728,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto40",
+   "x": 368,
+   "y": 1767,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto41",
+   "x": 368,
+   "y": 1806,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto42",
+   "x": 65,
+   "y": 1855,
+   "w": 172,
+   "h": 48,
+   "label": "+ ADD DAY",
+   "verb": "ROW_ADD_LAB",
+   "args": []
+  },
+  {
+   "name": "mAuto43",
+   "x": 243,
+   "y": 1855,
+   "w": 172,
+   "h": 48,
+   "label": "SENSOR",
+   "verb": "ROW_SENSOR",
+   "args": [
+    "0"
+   ]
+  }
+ ],
+ "pSaveB": [
+  {
+   "name": "mAuto0",
+   "x": 336,
+   "y": 234,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto2",
+   "x": 336,
+   "y": 321,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto3",
+   "x": 336,
+   "y": 352,
+   "w": 68,
+   "h": 30,
+   "label": "DELETE",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto4",
+   "x": 336,
+   "y": 408,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto5",
+   "x": 336,
+   "y": 439,
+   "w": 68,
+   "h": 30,
+   "label": "DELETE",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto6",
+   "x": 336,
+   "y": 495,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto7",
+   "x": 336,
+   "y": 526,
+   "w": 68,
+   "h": 30,
+   "label": "DELETE",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto8",
+   "x": 336,
+   "y": 582,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto9",
+   "x": 336,
+   "y": 613,
+   "w": 68,
+   "h": 30,
+   "label": "DELETE",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mAuto10",
+   "x": 65,
+   "y": 672,
+   "w": 147,
+   "h": 44,
+   "label": "BACK",
+   "verb": "NAV",
+   "args": "BACK"
+  },
+  {
+   "name": "mAuto11",
+   "x": 218,
+   "y": 672,
+   "w": 197,
+   "h": 44,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  }
+ ],
+ "pSelB": [
+  {
+   "name": "mAuto0",
+   "x": 336,
+   "y": 273,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto1",
+   "x": 336,
+   "y": 348,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto2",
+   "x": 336,
+   "y": 423,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto3",
+   "x": 336,
+   "y": 498,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto4",
+   "x": 336,
+   "y": 573,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  }
+ ],
+ "pRT": [
+  {
+   "name": "mAuto0",
+   "x": 41,
+   "y": 794,
+   "w": 398,
+   "h": 46,
+   "label": "+ ADD DAY (Day 1)",
+   "verb": "ROW_ADD_LAB",
+   "args": []
+  }
+ ],
+ "pHist": [
+  {
+   "name": "mAuto2",
+   "x": 65,
+   "y": 576,
+   "w": 147,
+   "h": 44,
+   "label": "BACK",
+   "verb": "NAV",
+   "args": "BACK"
+  },
+  {
+   "name": "mAuto3",
+   "x": 218,
+   "y": 576,
+   "w": 197,
+   "h": 44,
+   "label": "VIEW LOG",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  }
+ ],
+ "pHistD": [
+  {
+   "name": "mAuto0",
+   "x": 75,
+   "y": 446,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto1",
+   "x": 75,
+   "y": 500,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 08:30:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto2",
+   "x": 75,
+   "y": 554,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 09:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto3",
+   "x": 75,
+   "y": 608,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 09:30:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto6",
+   "x": 75,
+   "y": 770,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 11:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto7",
+   "x": 75,
+   "y": 824,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 11:30:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto8",
+   "x": 75,
+   "y": 878,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 12:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto9",
+   "x": 75,
+   "y": 932,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 12:30:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto10",
+   "x": 75,
+   "y": 986,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 13:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto11",
+   "x": 75,
+   "y": 1040,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 13:30:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto12",
+   "x": 75,
+   "y": 1094,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 14:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto13",
+   "x": 75,
+   "y": 1148,
+   "w": 330,
+   "h": 50,
+   "label": "Day 129-09-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto14",
+   "x": 75,
+   "y": 1202,
+   "w": 330,
+   "h": 50,
+   "label": "Day 230-09-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto15",
+   "x": 75,
+   "y": 1256,
+   "w": 330,
+   "h": 50,
+   "label": "Day 301-10-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto16",
+   "x": 75,
+   "y": 1310,
+   "w": 330,
+   "h": 50,
+   "label": "Day 402-10-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto17",
+   "x": 75,
+   "y": 1364,
+   "w": 330,
+   "h": 50,
+   "label": "Day 503-10-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto18",
+   "x": 75,
+   "y": 1418,
+   "w": 330,
+   "h": 50,
+   "label": "Day 604-10-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto19",
+   "x": 75,
+   "y": 1472,
+   "w": 330,
+   "h": 50,
+   "label": "Day 705-10-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto20",
+   "x": 75,
+   "y": 1526,
+   "w": 330,
+   "h": 50,
+   "label": "Day 806-10-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto21",
+   "x": 75,
+   "y": 1580,
+   "w": 330,
+   "h": 50,
+   "label": "Day 907-10-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto22",
+   "x": 75,
+   "y": 1634,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1008-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto23",
+   "x": 75,
+   "y": 1688,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1109-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto24",
+   "x": 75,
+   "y": 1742,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1210-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto25",
+   "x": 75,
+   "y": 1796,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1311-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto26",
+   "x": 75,
+   "y": 1850,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1412-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto27",
+   "x": 75,
+   "y": 1904,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1513-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto28",
+   "x": 75,
+   "y": 1958,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1614-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto29",
+   "x": 75,
+   "y": 2012,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1715-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto30",
+   "x": 75,
+   "y": 2066,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1816-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto31",
+   "x": 75,
+   "y": 2120,
+   "w": 330,
+   "h": 50,
+   "label": "Day 1917-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto32",
+   "x": 75,
+   "y": 2174,
+   "w": 330,
+   "h": 50,
+   "label": "Day 2018-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto33",
+   "x": 75,
+   "y": 2228,
+   "w": 330,
+   "h": 50,
+   "label": "Day 2119-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto34",
+   "x": 75,
+   "y": 2282,
+   "w": 330,
+   "h": 50,
+   "label": "Day 2220-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto35",
+   "x": 75,
+   "y": 2336,
+   "w": 330,
+   "h": 50,
+   "label": "Day 2321-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto36",
+   "x": 75,
+   "y": 2390,
+   "w": 330,
+   "h": 50,
+   "label": "Day 2422-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto37",
+   "x": 75,
+   "y": 2444,
+   "w": 330,
+   "h": 50,
+   "label": "Day 2523-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto38",
+   "x": 75,
+   "y": 2498,
+   "w": 330,
+   "h": 50,
+   "label": "Day 2624-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto39",
+   "x": 75,
+   "y": 2552,
+   "w": 330,
+   "h": 50,
+   "label": "Day 2725-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mAuto40",
+   "x": 75,
+   "y": 2606,
+   "w": 330,
+   "h": 50,
+   "label": "Day 2826-10-2026 \u00b7 08:00",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  }
+ ],
+ "pSet": [
+  {
+   "name": "mAuto0",
+   "x": 144,
+   "y": 312,
+   "w": 32,
+   "h": 26,
+   "label": "\u25b4",
+   "verb": "SETTINGS_STEP",
+   "args": [
+    "1"
+   ]
+  },
+  {
+   "name": "mAuto1",
+   "x": 144,
+   "y": 336,
+   "w": 32,
+   "h": 26,
+   "label": "\u25be",
+   "verb": "SETTINGS_STEP",
+   "args": [
+    "-1"
+   ]
+  },
+  {
+   "name": "mAuto2",
+   "x": 254,
+   "y": 312,
+   "w": 32,
+   "h": 26,
+   "label": "\u25b4",
+   "verb": "SETTINGS_STEP",
+   "args": [
+    "1"
+   ]
+  },
+  {
+   "name": "mAuto3",
+   "x": 254,
+   "y": 336,
+   "w": 32,
+   "h": 26,
+   "label": "\u25be",
+   "verb": "SETTINGS_STEP",
+   "args": [
+    "-1"
+   ]
+  },
+  {
+   "name": "mAuto4",
+   "x": 363,
+   "y": 312,
+   "w": 32,
+   "h": 26,
+   "label": "\u25b4",
+   "verb": "SETTINGS_STEP",
+   "args": [
+    "1"
+   ]
+  },
+  {
+   "name": "mAuto5",
+   "x": 363,
+   "y": 336,
+   "w": 32,
+   "h": 26,
+   "label": "\u25be",
+   "verb": "SETTINGS_STEP",
+   "args": [
+    "-1"
+   ]
+  },
+  {
+   "name": "mAuto6",
+   "x": 363,
+   "y": 495,
+   "w": 32,
+   "h": 26,
+   "label": "\u25b4",
+   "verb": "SETTINGS_STEP",
+   "args": [
+    "1"
+   ]
+  },
+  {
+   "name": "mAuto7",
+   "x": 363,
+   "y": 519,
+   "w": 32,
+   "h": 26,
+   "label": "\u25be",
+   "verb": "SETTINGS_STEP",
+   "args": [
+    "-1"
+   ]
+  },
+  {
+   "name": "mAuto8",
+   "x": 334,
+   "y": 560,
+   "w": 68,
+   "h": 34,
+   "label": "ON",
+   "verb": "SETTINGS_TOGGLE",
+   "args": [
+    "sound"
+   ]
+  },
+  {
+   "name": "mAuto9",
+   "x": 334,
+   "y": 609,
+   "w": 68,
+   "h": 34,
+   "label": "ON",
+   "verb": "SETTINGS_TOGGLE",
+   "args": [
+    "sound"
+   ]
+  }
+ ]
+}
