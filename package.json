@@ -16,7 +16,8 @@
     "hmi:compile": "nxwright compile nextion/nxsrc nextion/conmt.tft --overwrite",
     "hmi:render": "python nextion/tools/render_pages.py",
     "hmi:layout": "node nextion/tools/extract_layout.mjs && node nextion/tools/extract_nav.mjs && python nextion/tools/plan_hotspots.py",
-    "hmi:serve": "nxwright mcp"
+    "hmi:serve": "nxwright mcp",
+    "hmi:sync": "python nextion/tools/check_sync.py"
   },
   "dependencies": {
     "react": "^19.3.1",
