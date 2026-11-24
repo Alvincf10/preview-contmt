@@ -14,7 +14,16 @@ using namespace conmt;
 struct Rig {
     host::MemoryStorage io; Journal journal; Repository repo;
     host::FakeClock clock; host::RecordedSensor sensors; host::Devices devices; Controller app;
-    Rig() : journal(io),repo(journal),app(repo,clock,sensors,devices) { OK(app.boot()); }
+    Rig() : journal(io),repo(journal),app(repo,clock,sensors,devices) { OK(app.boot()); leaveSplash(); }
+    // The panel starts on its splash and leaves only once the self-check passes,
+    // so a rig that wants to be on the first working page does that first.
+    void leaveSplash() {
+        sensors.poll(clock.value.monoMs);
+        Status sensorsStatus, clockStatus, deviceStatus;
+        OK(app.selfCheck(sensorsStatus, clockStatus, deviceStatus));
+        OK(app.dispatch("SELF_CHECK"));
+        CHECK(app.page() == Page::User);
+    }
     void baseline() {
         OK(app.setField("operator","OP-1")); OK(app.setField("project","ConMT")); OK(app.setField("date","2026-11-16"));
         OK(app.dispatch("USER_SAVE")); OK(app.dispatch("NAV","3")); OK(app.newBaseline());

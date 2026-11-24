@@ -34,6 +34,10 @@ int main(int argc,char** argv) {
         CHECK(at==wire.bytes.size());
     };
     capture("initial"); OK(app.boot()); capture("empty identity");
+    // The panel starts on its splash; leaving it is what the self-check does.
+    sensors.poll(clock.value.monoMs);
+    OK(app.dispatch("SELF_CHECK"));
+    capture("splash passed");
     OK(app.setField("operator","OP-1")); OK(app.setField("project","ConMT")); OK(app.setField("date","2026-11-16")); capture("identity");
     OK(app.dispatch("USER_SAVE")); capture("main"); OK(app.dispatch("NAV","3")); capture("baseline menu");
     OK(app.newBaseline()); OK(app.setField("name","Mix A")); OK(app.setField("target","30")); capture("new baseline");
@@ -60,6 +64,14 @@ int main(int argc,char** argv) {
     OK(app.dispatch("SETTINGS_SAVE")); OK(app.dispatch("NAV","16")); capture("device info");
     if(argc==3&&std::string(argv[1])=="--capture") { std::ofstream file(argv[2]); file<<output.str(); CHECK(bool(file)); return 0; }
     std::ifstream file(CONMT_HMI_FIXTURE); CHECK(bool(file)); std::ostringstream expected; expected<<file.rdbuf();
-    if(expected.str()!=output.str()) { std::cerr<<"HMI snapshot differs\n"<<output.str(); return 1; }
+    // The file is a checkout of a stored snapshot, so its line endings follow the
+    // platform's. What is compared is the wire text, so CRLF is normalised away
+    // rather than treated as a difference.
+    auto strip=[](std::string text) {
+        std::string out; out.reserve(text.size());
+        for(size_t i=0;i<text.size();++i) { if(text[i]=='\r'&&i+1<text.size()&&text[i+1]=='\n') continue; out.push_back(text[i]); }
+        return out;
+    };
+    if(strip(expected.str())!=strip(output.str())) { std::cerr<<"HMI snapshot differs\n"<<output.str(); return 1; }
     std::cout<<"All 17 pages: populated/empty fields, laboratory text, frozen history and settings match wire snapshot\n";
 }

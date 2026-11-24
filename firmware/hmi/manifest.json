@@ -21,10 +21,20 @@
       "textComponents": [
         "tClock",
         "tBatt",
-        "tMsg"
+        "tMsg",
+        "tChkSensors",
+        "tChkClock",
+        "tChkDevice",
+        "tReady"
       ],
-      "actions": {},
-      "postinitialize": "events/pInit_postinitialize.txt"
+      "actions": {
+        "mSelfCheck": {
+          "verb": "SELF_CHECK",
+          "args": []
+        }
+      },
+      "postinitialize": "events/pInit_postinitialize.txt",
+      "notes": "The panel boots on this page and leaves only when SELF_CHECK answers Ok. tChkSensors/tChkClock/tChkDevice/tReady show each check, so a fault stays visible."
     },
     {
       "id": 1,
