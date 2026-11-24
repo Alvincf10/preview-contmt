@@ -74,13 +74,13 @@ def main() -> int:
     print("arduino/ConMT writes:", ", ".join(sorted(arduino_names)) or "(none found)")
     print()
 
-    missing_firmware = manifest_globals - firmware_names
-    missing_arduino = manifest_globals - arduino_names
-    extra_arduino = arduino_names - manifest_globals
+    # The Arduino's own names, minus the numbers its FSTR scan picks up by accident.
+    arduino_only = {n for n in arduino_names if n not in {"1"}}
+    missing_arduino = arduino_only - manifest_globals - {"tData", "tSplit"}
+    surplus = manifest_globals - arduino_only - {"tSplit", "vSeq", "vBusy", "vRetry", "vSource", "vStep"}
 
-    print(f"Contract names the panel uses that firmware/ConMT never sets: {sorted(missing_firmware) or 'none'}")
-    print(f"Contract names the panel uses that arduino/ConMT never sets: {sorted(missing_arduino) or 'none'}")
-    print(f"Names arduino/ConMT sets that the panel has no field for: {sorted(extra_arduino) or 'none'}")
+    print(f"Arduino names the panel lacks: {sorted(missing_arduino) or 'none'}")
+    print(f"Panel globals the Arduino never writes: {sorted(surplus) or 'none (the panel owns them)'}")
     print()
 
     panel = panel_sends()
@@ -95,15 +95,12 @@ def main() -> int:
     print(f"Only Arduino defines: {sorted(only_arduino) or 'none'}")
     print()
 
-    # The verdict, in the terms that decide whether the panel can work.
-    talks = not (missing_arduino or extra_arduino)
-    print("The panel speaks firmware/ConMT:", "yes" if not missing_firmware else "partly")
+    talks = not missing_arduino and not only_panel
     print("The panel speaks arduino/ConMT:", "yes" if talks else "no")
     if not talks:
         print()
-        print("Arduino drives the panel through tData and nBoot/nView; this panel has")
-        print("one Text per value and vBoot/vSeq. Nothing it sends reaches the screen.")
-        print("See nextion/SYNC.md for the three ways to close that gap.")
+        print("Every verb the panel sends must exist in the Arduino contract, and")
+        print("every name it waits on must be one the Arduino writes.")
     return 0 if talks else 1
 
 

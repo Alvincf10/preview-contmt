@@ -1856,33 +1856,32 @@
     "page": "pInit",
     "scope": "global",
     "variables": [
-      "vBoot",
+      "nBoot",
+      "nView",
+      "nAckSeq",
+      "nAckCode",
+      "nAckValue",
       "vSeq",
-      "vView",
-      "vAck",
-      "vStatus",
       "vBusy",
       "vRetry",
-      "vRender",
-      "vAckBoot",
-      "vReqBoot"
+      "vSource",
+      "vStep"
     ],
     "texts": {
       "tReq": 191,
       "tNum": 16,
+      "tSplit": 255,
+      "tData": 255,
       "tEdit": 64,
       "tDayInput": 24
-    }
+    },
+    "note": "Names follow arduino/ConMT: nBoot/nView/nAckSeq/nAckCode/nAckValue, and tData holding a page's values as pipe-separated columns. The panel keeps vSeq/vBusy/vRetry for its own request, and vSource to know which answer is arriving."
   },
   "notes": [
-    "apply_* snippets run after keyboard Apply; Cancel sends nothing",
-    "Confirmation widgets must ask before calling *Confirm events",
-    "vSeq must not wrap; reconnect before UINT32_MAX",
-    "retry current tReq on timer while vBusy and no ACK; do not increment vSeq",
-    "PAGE_READY never resets MCU session",
-    "vBusy is client-owned; clear only when vAckBoot/vAck match vReqBoot/vSeq or explicit timeout",
-    "vRender is MCU-owned and must not arm retry",
-    "Active-page retry timer placement requires Editor/model verification",
-    "Editor/model validation pending; this manifest is not HMI/TFT"
+    "The panel speaks arduino/ConMT, not firmware/ConMT: see nextion/SYNC.md.",
+    "PAGE_READY is sent without a version suffix; the Arduino firmware refuses one.",
+    "nAckSeq is written last by the firmware, so its event is what splits tData.",
+    "One request outstanding: vBusy guards it, nAckSeq releases it.",
+    "A page asks for one source at a time because tData holds one at a time."
   ]
 }

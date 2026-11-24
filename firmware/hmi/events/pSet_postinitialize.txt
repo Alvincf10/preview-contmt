@@ -1,5 +1,5 @@
-prints "CM1|",0
-covx pInit.vBoot.val,pInit.tNum.txt,0,0
-prints pInit.tNum.txt,0
-prints "|0|15|0|PAGE_READY|2",0
-printh 0A
+// The page starts its conversation at step 0; the timer carries it.
+if(pInit.vBusy.val==0)
+{
+pInit.vStep.val=0
+}

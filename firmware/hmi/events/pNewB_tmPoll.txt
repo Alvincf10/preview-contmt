@@ -1,0 +1,94 @@
+// One step per tick: split a finished answer, then ask for the next.
+if(pInit.vBusy.val==1)
+{
+if(pInit.nAckSeq.val==pInit.vSeq.val)
+{
+if(pInit.vSource.val==1)
+{
+    // status: 20 columns
+    spstr pInit.tData.txt,pInit.tSplit.txt,"|",1
+    tClock.txt=pInit.tSplit.txt
+    spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+    tBatt.txt=pInit.tSplit.txt
+}
+else if(pInit.vSource.val==3)
+{
+    // baseline: 9 columns
+    spstr pInit.tData.txt,pInit.tSplit.txt,"|",1
+    tName.txt=pInit.tSplit.txt
+    spstr pInit.tData.txt,pInit.tSplit.txt,"|",2
+    tFc.txt=pInit.tSplit.txt
+    spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+    tTemp.txt=pInit.tSplit.txt
+}
+pInit.vStep.val+=1
+pInit.vBusy.val=0
+pInit.vRetry.val=0
+}else
+{
+pInit.vRetry.val+=1
+if(pInit.vRetry.val<6)
+{
+prints pInit.tReq.txt,0
+printh 0A
+}else
+{
+pInit.vBusy.val=0
+pInit.vRetry.val=0
+pInit.vStep.val+=1
+pInit.tMsg.txt="No answer from MCU"
+}
+}
+}
+// Ask for the next thing this page needs.
+if(pInit.vBusy.val==0&&pInit.vStep.val>=0)
+{
+if(pInit.vStep.val==0)
+{
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="4|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|PAGE_READY"
+  pInit.vSource.val=1
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+}
+else if(pInit.vStep.val==1)
+{
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="4|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|GET"
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="baseline"
+  pInit.vSource.val=3
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+}
+}

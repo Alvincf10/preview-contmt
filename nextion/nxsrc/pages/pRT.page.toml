@@ -16,6 +16,13 @@ h = 800
 pic = "11_realtime"
 
 [[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = ["timer"]
+
+[[component]]
 name = "tClock"
 type = "text"
 x = 14
@@ -248,6 +255,7 @@ txt = ""
 txt_maxl = 24
 pco = "#ffffff"
 font = "NotoSans16"
+vscope = 1
 
 [[component]]
 name = "tElapsed"

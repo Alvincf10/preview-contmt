@@ -16,6 +16,13 @@ h = 800
 pic = "10_select_baseline"
 
 [[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = ["timer"]
+
+[[component]]
 name = "tClock"
 type = "text"
 x = 14
@@ -157,6 +164,7 @@ txt = ""
 txt_maxl = 24
 pco = "#ffffff"
 font = "NotoSans16"
+vscope = 1
 
 [[component]]
 name = "tId0"
@@ -385,7 +393,7 @@ h = 44
 events = ["down", "up"]
 
 [[component]]
-name = "mAuto0"
+name = "mTap0"
 type = "hotspot"
 x = 336
 y = 310
@@ -394,7 +402,7 @@ h = 30
 events = ["down", "up"]
 
 [[component]]
-name = "mAuto1"
+name = "mTap1"
 type = "hotspot"
 x = 336
 y = 385
@@ -403,7 +411,7 @@ h = 30
 events = ["down", "up"]
 
 [[component]]
-name = "mAuto2"
+name = "mTap2"
 type = "hotspot"
 x = 336
 y = 461
@@ -412,7 +420,7 @@ h = 30
 events = ["down", "up"]
 
 [[component]]
-name = "mAuto3"
+name = "mTap3"
 type = "hotspot"
 x = 336
 y = 536

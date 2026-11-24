@@ -47,7 +47,10 @@ HOTSPOTS: dict[str, dict[str, str]] = {
 
     "pSaveB": {
         "mBack": "BACK",
-        "mSelect": "SELECT",
+        # The footer's own SELECT. The card's SELECT is covered by mPick0, which
+        # marks the whole card: matching by text alone would take the first
+        # "SELECT" on the page, which is a card's.
+        "mSelect": "footer SELECT",
         **{f"mPick{i}": f"card {i}" for i in range(6)},
         **{f"mDelete{i}": f"delete {i}" for i in range(6)},
     },

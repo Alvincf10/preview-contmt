@@ -16,9 +16,9 @@ h = 800
 pic = "00_init"
 
 [[component]]
-name = "tm0"
+name = "tmPoll"
 type = "timer"
-tim = 500
+tim = 250
 en = 1
 events = ["timer"]
 
@@ -39,6 +39,22 @@ txt = "0"
 txt_maxl = 16
 
 [[component]]
+name = "tSplit"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tData"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
 name = "tEdit"
 type = "variable"
 vscope = 1
@@ -55,31 +71,37 @@ txt = "0"
 txt_maxl = 24
 
 [[component]]
-name = "vBoot"
+name = "nBoot"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "nView"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "nAckSeq"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "nAckCode"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "nAckValue"
 type = "variable"
 vscope = 1
 val = 0
 
 [[component]]
 name = "vSeq"
-type = "variable"
-vscope = 1
-val = 0
-
-[[component]]
-name = "vView"
-type = "variable"
-vscope = 1
-val = 0
-
-[[component]]
-name = "vAck"
-type = "variable"
-vscope = 1
-val = 0
-
-[[component]]
-name = "vStatus"
 type = "variable"
 vscope = 1
 val = 0
@@ -97,19 +119,13 @@ vscope = 1
 val = 0
 
 [[component]]
-name = "vRender"
+name = "vSource"
 type = "variable"
 vscope = 1
 val = 0
 
 [[component]]
-name = "vAckBoot"
-type = "variable"
-vscope = 1
-val = 0
-
-[[component]]
-name = "vReqBoot"
+name = "vStep"
 type = "variable"
 vscope = 1
 val = 0
@@ -208,3 +224,4 @@ txt = ""
 txt_maxl = 24
 pco = "#ffffff"
 font = "NotoSans16"
+vscope = 1

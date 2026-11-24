@@ -1,27 +1,144 @@
 // Postinitialize: the panel announces PAGE_READY.
 on pMatu.loadend:
-  prints "CM1|",0
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
-  prints pInit.tNum.txt,0
-  prints "|0|6|0|PAGE_READY|2",0
+  // The page starts its conversation at step 0; the timer carries it.
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vStep.val=0
+  }
+
+// Timer tmPoll: runs while the page is showing.
+on tmPoll.timer:
+  // One step per tick: split a finished answer, then ask for the next.
+  if(pInit.vBusy.val==1)
+  {
+  if(pInit.nAckSeq.val==pInit.vSeq.val)
+  {
+  if(pInit.vSource.val==1)
+  {
+      // status: 20 columns
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",1
+      tClock.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+      tBatt.txt=pInit.tSplit.txt
+  }
+  else if(pInit.vSource.val==3)
+  {
+      // baseline: 9 columns
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",1
+      tHint.txt=pInit.tSplit.txt
+  }
+  pInit.vStep.val+=1
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  }else
+  {
+  pInit.vRetry.val+=1
+  if(pInit.vRetry.val<6)
+  {
+  prints pInit.tReq.txt,0
   printh 0A
+  }else
+  {
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  pInit.vStep.val+=1
+  pInit.tMsg.txt="No answer from MCU"
+  }
+  }
+  }
+  // Ask for the next thing this page needs.
+  if(pInit.vBusy.val==0&&pInit.vStep.val>=0)
+  {
+  if(pInit.vStep.val==0)
+  {
+    if(pInit.vBusy.val==0)
+    {
+    pInit.vSeq.val+=1
+    pInit.vBusy.val=1
+    pInit.vRetry.val=0
+    pInit.tReq.txt="CM1|"
+    covx pInit.nBoot.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    covx pInit.vSeq.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    pInit.tReq.txt+="6|"
+    covx pInit.nView.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|PAGE_READY"
+    pInit.vSource.val=1
+    prints pInit.tReq.txt,0
+    printh 0A
+    }
+  }
+  else if(pInit.vStep.val==1)
+  {
+    if(pInit.vBusy.val==0)
+    {
+    pInit.vSeq.val+=1
+    pInit.vBusy.val=1
+    pInit.vRetry.val=0
+    pInit.tReq.txt="CM1|"
+    covx pInit.nBoot.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    covx pInit.vSeq.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    pInit.tReq.txt+="6|"
+    covx pInit.nView.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|GET"
+    pInit.tReq.txt+="|"
+    pInit.tReq.txt+="baseline"
+    pInit.vSource.val=3
+    prints pInit.tReq.txt,0
+    printh 0A
+    }
+  }
+  else if(pInit.vStep.val==2)
+  {
+    if(pInit.vBusy.val==0)
+    {
+    pInit.vSeq.val+=1
+    pInit.vBusy.val=1
+    pInit.vRetry.val=0
+    pInit.tReq.txt="CM1|"
+    covx pInit.nBoot.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    covx pInit.vSeq.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    pInit.tReq.txt+="6|"
+    covx pInit.nView.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|GET"
+    pInit.tReq.txt+="|"
+    pInit.tReq.txt+="labrow"
+    pInit.vSource.val=7
+    prints pInit.tReq.txt,0
+    printh 0A
+    }
+  }
+  }
 
 on mTemp0.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|ROW_SENSOR"
   pInit.tReq.txt+="|"
@@ -31,21 +148,20 @@ on mTemp0.down:
   }
 
 on mTemp1.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|ROW_SENSOR"
   pInit.tReq.txt+="|"
@@ -55,21 +171,20 @@ on mTemp1.down:
   }
 
 on mTemp2.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|ROW_SENSOR"
   pInit.tReq.txt+="|"
@@ -79,21 +194,20 @@ on mTemp2.down:
   }
 
 on mTemp3.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|ROW_SENSOR"
   pInit.tReq.txt+="|"
@@ -103,21 +217,20 @@ on mTemp3.down:
   }
 
 on mTemp4.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|ROW_SENSOR"
   pInit.tReq.txt+="|"
@@ -127,21 +240,20 @@ on mTemp4.down:
   }
 
 on mTemp5.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|ROW_SENSOR"
   pInit.tReq.txt+="|"
@@ -151,21 +263,20 @@ on mTemp5.down:
   }
 
 on mAddDay.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|ROW_ADD_LAB"
   prints pInit.tReq.txt,0
@@ -173,21 +284,20 @@ on mAddDay.down:
   }
 
 on mSensor.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|ROW_SENSOR"
   pInit.tReq.txt+="|"
@@ -202,16 +312,15 @@ on mBack.down:
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   pInit.tReq.txt+="|"
@@ -221,263 +330,335 @@ on mBack.down:
   }
 
 on mGen.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|BASE_GENERATE"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto0.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap0.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto1.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap1.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto2.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap2.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto3.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap3.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto4.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap4.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto5.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap5.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto6.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap6.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto7.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap7.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto10.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap8.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto11.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap9.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
 
-on mAuto12.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+on mTap10.down:
+  if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
   pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   covx pInit.vSeq.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|"
   pInit.tReq.txt+="6|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|NAV"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+
+on mTap11.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="6|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|NAV"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+
+on mTap12.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="6|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|NAV"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+
+on mTap13.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="6|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|NAV"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+
+on mTap14.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="6|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0

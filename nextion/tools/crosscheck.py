@@ -129,11 +129,20 @@ def main() -> int:
                 problems.append(f"{page}: fields {a['name']} and {b['name']} overlap")
 
         # 4. Two tap areas over one spot: the later one wins, so the other is dead.
+        #    A small control inside a wide one is the exception: the panel takes the
+        #    last component, and small tap areas are written after the wide ones, so
+        #    the cross on a table row takes its own taps while the footer button
+        #    keeps the rest.
         for a, b in itertools.combinations(hotspots, 2):
             if not (centre_inside(a) and centre_inside(b)):
                 continue
-            if overlaps(a, b, pad=-2):
-                problems.append(f"{page}: tap areas {a['name']} and {b['name']} cover the same spot")
+            if not overlaps(a, b, pad=-2):
+                continue
+            small = min(a["w"] * a["h"], b["w"] * b["h"])
+            big = max(a["w"] * a["h"], b["w"] * b["h"])
+            if small <= 48 * 40 and big > small * 2:
+                continue
+            problems.append(f"{page}: tap areas {a['name']} and {b['name']} cover the same spot")
 
         # 5. A tap area that swallows another control's cell. A row tap must not
         #    span several inputs, because the cells hold different values. A

@@ -61,7 +61,17 @@ BY_LABEL = {
 }
 
 # A settings stepper and a toggle carry their own meaning, from the control.
-SETTINGS_STEP = {"▴": "1", "▾": "-1"}
+# The Arduino sets an absolute value, so a stepper step becomes a SETTINGS_SET of
+# the new value: the panel reads the field it shows, adjusts it, and sends that.
+STEPPER_FIELD = {
+    "▴": "1",
+    "▾": "-1",
+}
+
+# Which settings field a stepper belongs to, by its place on the page: hour,
+# minute, second from the first three pairs, brightness from the fourth.
+STEPPER_KEYS = ["hour", "minute", "second", "brightness"]
+TOGGLE_KEYS = ["sound", "autoSave"]
 
 
 def covered(page: str, button: dict, kit: dict[str, dict], used: set[str]) -> bool:
@@ -125,6 +135,50 @@ def claimed_boxes(page: str, kit: dict[str, dict]) -> list[dict]:
     return boxes
 
 
+def is_small_control(entry: dict) -> bool:
+    """Whether a control is a small one inside a table row.
+
+    A row's delete cross is a few dozen pixels square, while a footer button is
+    wide. The small one is the more specific target: an operator aiming at it means
+    it, not the wide button that reaches across it.
+    """
+    return entry["w"] <= 48 and entry["h"] <= 40
+
+
+def trim_clear(entry: dict, taken: list[dict]) -> dict | None:
+    """The part of a button that no existing tap area claims, or None.
+
+    A row of a list can reach into the footer band where BACK sits. Refusing the
+    whole row leaves it dead; giving the whole row steals the button. So the row
+    keeps the part the obstruction does not cover.
+
+    Only an obstruction that actually overlaps the row in both directions can
+    shorten it. A control far to the left shares the row's vertical band but takes
+    none of its width, and must not clip it.
+    """
+    top, bottom = entry["y"], entry["y"] + entry["h"]
+    for other in taken:
+        # No horizontal overlap means no obstruction.
+        if not (entry["x"] < other["x"] + other["w"] and other["x"] < entry["x"] + entry["w"]):
+            continue
+        other_top = other["y"]
+        other_bottom = other_top + other["h"]
+        if not (other_top < bottom and top < other_bottom):
+            continue
+        if other_top <= top:
+            # The obstruction covers the row's top: start below it.
+            top = max(top, other_bottom)
+        else:
+            # The obstruction covers the row's bottom: end above it.
+            bottom = min(bottom, other_top)
+    if bottom - top < 16:
+        return None
+    trimmed = dict(entry)
+    trimmed["y"] = top
+    trimmed["h"] = bottom - top
+    return trimmed
+
+
 def main() -> None:
     generated = {}
     # The kit's own tap areas decide which buttons still need one.
@@ -159,26 +213,35 @@ def main() -> None:
         # A hotspot covers one button, so a name spent on an earlier button of
         # the same label is no longer available.
         used: set[str] = set()
-        # Where the contract's own tap areas will land. A generated tap area must
-        # keep clear of them, or a tap on SENSOR would delete a row.
+        # Where the contract's own tap areas will land.
         taken = claimed_boxes(page, kit)
         for index, entry in enumerate(entries):
             if covered(page, entry, kit, used):
                 continue
-            if any(
-                entry["x"] < b["x"] + b["w"]
-                and b["x"] < entry["x"] + entry["w"]
-                and entry["y"] < b["y"] + b["h"]
-                and b["y"] < entry["y"] + entry["h"]
-                for b in taken
-            ):
-                continue
+            # A small control the kit does not name is more specific than a wide
+            # footer button that happens to reach over it. The small one keeps its
+            # own tap area; the wide one is trimmed elsewhere so a tap on the cross
+            # does not press SENSOR. Nextion resolves a touch to the last component
+            # at that point, and these are written after the kit's.
+            if is_small_control(entry):
+                pass
+            else:
+                entry = trim_clear(entry, taken)
+                if entry is None:
+                    continue
             label = (entry.get("text") or "").replace("\n", " ").strip().lower()
             verb, args = None, []
-            if page == "pSet" and label in SETTINGS_STEP:
-                verb, args = "SETTINGS_STEP", [SETTINGS_STEP[label]]
+            if page == "pSet" and label in STEPPER_FIELD:
+                # The Arduino sets an absolute value, so the tap becomes a
+                # SETTINGS_SET of the new one. The step field and the direction are
+                # recorded here; the event generator writes the arithmetic.
+                index = len([m for m in made if m["verb"] == "SETTINGS_SET"])
+                key = STEPPER_KEYS[min(index // 2, len(STEPPER_KEYS) - 1)]
+                verb, args = "SETTINGS_SET", [key, STEPPER_FIELD[label]]
             elif page == "pSet" and label == "on":
-                verb, args = "SETTINGS_TOGGLE", ["sound"]
+                index = len([m for m in made if m["verb"] == "SETTINGS_SET" and m["args"][-1] == "toggle"])
+                key = TOGGLE_KEYS[min(index, len(TOGGLE_KEYS) - 1)]
+                verb, args = "SETTINGS_SET", [key, "toggle"]
             elif page == "pHistD":
                 verb, args = "HISTORY_PICK", ["0"]
             else:
@@ -188,7 +251,12 @@ def main() -> None:
                         break
             made.append(
                 {
-                    "name": f"mAuto{index}",
+                    # A distinct prefix: `write_missing_events` also names its
+                    # hotspots mAuto<N>, and two components cannot share a name on
+                    # one page. The counter is the length of `made`, which is unique
+                    # by construction; `index` counts entries, and two entries can
+                    # end up with the same number after a skip.
+                    "name": f"mTap{len(made)}",
                     "x": entry["x"] - 2,
                     "y": entry["y"] - 2,
                     "w": entry["w"] + 4,

@@ -84,24 +84,33 @@ ROW_PREFIXES = ("tId", "tName", "tVal", "tDate", "tCount", "tDay", "tAt", "tTmp"
 
 # Global variables the contract keeps on pInit, with their starting value.
 GLOBALS = [
-    ("vBoot", 0),
+    # The Arduino handshake. These are the firmware's own names, so a value it
+    # writes lands where the panel expects it.
+    ("nBoot", 0),
+    ("nView", 0),
+    ("nAckSeq", 0),
+    ("nAckCode", 0),
+    ("nAckValue", 0),
+    # The panel's own request state. It keeps one request outstanding and retries
+    # it on a timer; the firmware knows nothing about these.
     ("vSeq", 0),
-    ("vView", 0),
-    ("vAck", 0),
-    ("vStatus", 0),
     ("vBusy", 0),
     ("vRetry", 0),
-    ("vRender", 0),
-    ("vAckBoot", 0),
-    ("vReqBoot", 0),
+    ("vSource", 0),
+    ("vStep", 0),
 ]
 
-# Global texts the contract keeps on pInit: name -> (width, initial text, string capacity).
-# `sta = 1` puts a Variable in string mode, which `covx` and `.txt` both need; a
-# number-mode Variable refuses `.txt`, and every request snippet writes `tNum.txt`.
+# The globals a generated manifest may list that this file should not create: they
+# are the firmware's, not the panel's.
+FIRMWARE_OWNED = set()
+
+# Texts shared by every page. `tData` is the firmware's answer, `tSplit` holds one
+# column of it while it is copied to its field.
 GLOBAL_TEXTS = {
     "tReq": (191, "", 191),
     "tNum": (16, "0", 16),
+    "tSplit": (255, "", 255),
+    "tData": (255, "", 255),
     "tEdit": (64, "", 64),
     "tDayInput": (24, "0", 24),
 }
@@ -176,24 +185,23 @@ def load_auto_hotspots() -> dict[str, list[dict]]:
 
 
 def auto_event(page: str, hotspot: dict) -> str:
-    """The event for a generated hotspot, in the contract's own frame."""
+    """The event for a generated hotspot, in the Arduino firmware's frame."""
     index = PAGES_ORDER.index(page)
     lines = [
-        "if(pInit.vBusy.val==0&&pInit.vRender.val==0)",
+        "if(pInit.vBusy.val==0)",
         "{",
         "pInit.vSeq.val+=1",
         "pInit.vBusy.val=1",
         "pInit.vRetry.val=0",
-        "pInit.vReqBoot.val=pInit.vBoot.val",
         'pInit.tReq.txt="CM1|"',
-        "covx pInit.vBoot.val,pInit.tNum.txt,0,0",
+        "covx pInit.nBoot.val,pInit.tNum.txt,0,0",
         "pInit.tReq.txt+=pInit.tNum.txt",
         'pInit.tReq.txt+="|"',
         "covx pInit.vSeq.val,pInit.tNum.txt,0,0",
         "pInit.tReq.txt+=pInit.tNum.txt",
         'pInit.tReq.txt+="|"',
         f'pInit.tReq.txt+="{index}|"',
-        "covx pInit.vView.val,pInit.tNum.txt,0,0",
+        "covx pInit.nView.val,pInit.tNum.txt,0,0",
         "pInit.tReq.txt+=pInit.tNum.txt",
         f'pInit.tReq.txt+="|{hotspot["verb"]}"',
     ]
@@ -242,6 +250,21 @@ def hotspot_box(page: str, hotspot: str, kit_component: dict) -> tuple[int, int,
     """
     label = HOTSPOTS.get(page, {}).get(hotspot)
     if label:
+        # The footer's own button, chosen from the bottom of the page. A page with
+        # several buttons of one label - a SELECT on every card and one in the
+        # footer - would otherwise take the first, which is a card's.
+        if label.lower().startswith("footer "):
+            wanted = label.split(" ", 1)[1].upper()
+            candidates = [
+                b for b in DESIGN_CACHE.get(page, {}).get("button", [])
+                if (b.get("text") or "").strip().upper() == wanted
+                and b["y"] + b["h"] // 2 < HEIGHT
+            ]
+            if candidates:
+                item = max(candidates, key=lambda b: b["y"])
+                return (item["x"] - 2, item["y"] - 2, item["w"] + 4, item["h"] + 4)
+            return (kit_component["x"], kit_component["y"], kit_component["w"], kit_component["h"])
+
         for element in DESIGN_CACHE.get(page, {}).get("button", []):
             # A button the picture draws below the screen is not a target: it is a
             # row of a table the panel cannot show at once. Choosing it would put
@@ -252,6 +275,7 @@ def hotspot_box(page: str, hotspot: str, kit_component: dict) -> tuple[int, int,
             if text.upper().startswith(label.upper()):
                 # Pad by a few pixels: a finger is wider than the drawn shape.
                 return (element["x"] - 2, element["y"] - 2, element["w"] + 4, element["h"] + 4)
+
         # A card, a log row, or a delete button: matched by class, never by
         # position, so a card's tap area cannot land on the footer's BACK. A row
         # the picture does not draw has no place at all, so it is left out
@@ -630,20 +654,24 @@ def build() -> dict:
                 path.write_text(auto_event(name, extra), encoding="utf-8")
             stats["events"] += 1
 
-        # Timers.
+        # Timers. Every page needs one: a Variable has no events in Nextion, so
+        # the only way to notice that the firmware finished an answer is to look
+        # at the handshake from a timer. A page without one never splits its data.
+        #
+        # The kit's own timers are dropped: they were written for the other
+        # firmware, and a second timer on the same page would run its old frame
+        # alongside this one.
         timers: list[str] = []
-        for component in components:
-            if component["type"] == "Timer":
-                body = {
-                    "name": component["objname"],
-                    "type": "timer",
-                    "tim": component.get("tim", 500),
-                    "en": component.get("en", 1),
-                }
-                lines = ["[[component]]"] + [f"{k} = {toml_value(v)}" for k, v in body.items()]
-                lines.append('events = ["timer"]')
-                tables.append("\n".join(lines))
-                timers.append(component["objname"])
+        timer_body = {
+            "name": "tmPoll",
+            "type": "timer",
+            "tim": 250,
+            "en": 1,
+        }
+        timer_lines = ["[[component]]"] + [f"{k} = {toml_value(v)}" for k, v in timer_body.items()]
+        timer_lines.append('events = ["timer"]')
+        tables.append("\n".join(timer_lines))
+        timers.append("tmPoll")
 
         # The globals live on pInit, so every page can reach them. A Variable
         # has no place on the screen, so these carry no geometry.
@@ -717,6 +745,10 @@ def build() -> dict:
             # in the exact rows these statuses occupy, so they need a background
             # of their own to sit on. The colour is the panel's own fill there.
             attributes["sta"] = 3
+            # A status line the error path writes from other pages must be global,
+            # or only pInit could show it.
+            if field == "tMsg":
+                attributes["vscope"] = 1
             if field in SPLASH_STATUS:
                 attributes["sta"] = 1
                 attributes["bco"] = SPLASH_PANEL
@@ -777,6 +809,10 @@ def build() -> dict:
                     "pco": "#ffffff",
                     "font": FONT_BIG if big else flow.font,
                 }
+                # A status line the error path writes from other pages must be
+                # global, or only the page that owns it could show it.
+                if field == "tMsg":
+                    attributes["vscope"] = 1
                 tables.append(text_component(field, rect, attributes))
 
         (OUT / "pages" / f"{name}.page.toml").write_text("\n\n".join(tables + hotspot_tables) + "\n", encoding="utf-8")

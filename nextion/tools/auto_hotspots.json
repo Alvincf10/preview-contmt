@@ -1,7 +1,7 @@
 {
  "pMatu": [
   {
-   "name": "mAuto0",
+   "name": "mTap0",
    "x": 371,
    "y": 127,
    "w": 44,
@@ -11,7 +11,7 @@
    "args": []
   },
   {
-   "name": "mAuto1",
+   "name": "mTap1",
    "x": 368,
    "y": 246,
    "w": 38,
@@ -21,7 +21,7 @@
    "args": []
   },
   {
-   "name": "mAuto2",
+   "name": "mTap2",
    "x": 368,
    "y": 285,
    "w": 38,
@@ -31,7 +31,7 @@
    "args": []
   },
   {
-   "name": "mAuto3",
+   "name": "mTap3",
    "x": 368,
    "y": 324,
    "w": 38,
@@ -41,7 +41,7 @@
    "args": []
   },
   {
-   "name": "mAuto4",
+   "name": "mTap4",
    "x": 368,
    "y": 363,
    "w": 38,
@@ -51,7 +51,7 @@
    "args": []
   },
   {
-   "name": "mAuto5",
+   "name": "mTap5",
    "x": 368,
    "y": 402,
    "w": 38,
@@ -61,7 +61,7 @@
    "args": []
   },
   {
-   "name": "mAuto6",
+   "name": "mTap6",
    "x": 368,
    "y": 441,
    "w": 38,
@@ -71,7 +71,7 @@
    "args": []
   },
   {
-   "name": "mAuto7",
+   "name": "mTap7",
    "x": 368,
    "y": 480,
    "w": 38,
@@ -81,7 +81,27 @@
    "args": []
   },
   {
-   "name": "mAuto10",
+   "name": "mTap8",
+   "x": 368,
+   "y": 519,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap9",
+   "x": 368,
+   "y": 558,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap10",
    "x": 368,
    "y": 597,
    "w": 38,
@@ -91,7 +111,7 @@
    "args": []
   },
   {
-   "name": "mAuto11",
+   "name": "mTap11",
    "x": 368,
    "y": 636,
    "w": 38,
@@ -101,9 +121,29 @@
    "args": []
   },
   {
-   "name": "mAuto12",
+   "name": "mTap12",
    "x": 368,
    "y": 675,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap13",
+   "x": 368,
+   "y": 714,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap14",
+   "x": 368,
+   "y": 753,
    "w": 38,
    "h": 34,
    "label": "\u00d7",
@@ -113,7 +153,19 @@
  ],
  "pSaveB": [
   {
-   "name": "mAuto1",
+   "name": "mTap0",
+   "x": 336,
+   "y": 277,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap1",
    "x": 336,
    "y": 308,
    "w": 68,
@@ -123,7 +175,7 @@
    "args": []
   },
   {
-   "name": "mAuto2",
+   "name": "mTap2",
    "x": 336,
    "y": 364,
    "w": 68,
@@ -135,7 +187,7 @@
    ]
   },
   {
-   "name": "mAuto3",
+   "name": "mTap3",
    "x": 336,
    "y": 395,
    "w": 68,
@@ -145,7 +197,7 @@
    "args": []
   },
   {
-   "name": "mAuto4",
+   "name": "mTap4",
    "x": 336,
    "y": 451,
    "w": 68,
@@ -157,7 +209,7 @@
    ]
   },
   {
-   "name": "mAuto5",
+   "name": "mTap5",
    "x": 336,
    "y": 482,
    "w": 68,
@@ -167,7 +219,7 @@
    "args": []
   },
   {
-   "name": "mAuto6",
+   "name": "mTap6",
    "x": 336,
    "y": 538,
    "w": 68,
@@ -179,7 +231,7 @@
    ]
   },
   {
-   "name": "mAuto7",
+   "name": "mTap7",
    "x": 336,
    "y": 569,
    "w": 68,
@@ -187,23 +239,11 @@
    "label": "DELETE",
    "verb": "NAV",
    "args": []
-  },
-  {
-   "name": "mAuto9",
-   "x": 218,
-   "y": 628,
-   "w": 197,
-   "h": 44,
-   "label": "SELECT",
-   "verb": "BASE_PICK",
-   "args": [
-    "0"
-   ]
   }
  ],
  "pSelB": [
   {
-   "name": "mAuto0",
+   "name": "mTap0",
    "x": 336,
    "y": 310,
    "w": 68,
@@ -215,7 +255,7 @@
    ]
   },
   {
-   "name": "mAuto1",
+   "name": "mTap1",
    "x": 336,
    "y": 385,
    "w": 68,
@@ -227,7 +267,7 @@
    ]
   },
   {
-   "name": "mAuto2",
+   "name": "mTap2",
    "x": 336,
    "y": 461,
    "w": 68,
@@ -239,7 +279,7 @@
    ]
   },
   {
-   "name": "mAuto3",
+   "name": "mTap3",
    "x": 336,
    "y": 536,
    "w": 68,
@@ -253,7 +293,7 @@
  ],
  "pHistD": [
   {
-   "name": "mAuto0",
+   "name": "mTap0",
    "x": 75,
    "y": 446,
    "w": 330,
@@ -265,7 +305,7 @@
    ]
   },
   {
-   "name": "mAuto1",
+   "name": "mTap1",
    "x": 75,
    "y": 500,
    "w": 330,
@@ -277,7 +317,7 @@
    ]
   },
   {
-   "name": "mAuto2",
+   "name": "mTap2",
    "x": 75,
    "y": 554,
    "w": 330,
@@ -289,7 +329,7 @@
    ]
   },
   {
-   "name": "mAuto3",
+   "name": "mTap3",
    "x": 75,
    "y": 608,
    "w": 330,
@@ -301,7 +341,19 @@
    ]
   },
   {
-   "name": "mAuto6",
+   "name": "mTap4",
+   "x": 75,
+   "y": 662,
+   "w": 330,
+   "h": 49,
+   "label": "Day 028-09-2026 \u00b7 10:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap5",
    "x": 75,
    "y": 770,
    "w": 330,
@@ -315,123 +367,133 @@
  ],
  "pSet": [
   {
-   "name": "mAuto0",
+   "name": "mTap0",
    "x": 144,
    "y": 312,
    "w": 32,
    "h": 26,
    "label": "\u25b4",
-   "verb": "SETTINGS_STEP",
+   "verb": "SETTINGS_SET",
    "args": [
+    "hour",
     "1"
    ]
   },
   {
-   "name": "mAuto1",
+   "name": "mTap1",
    "x": 144,
    "y": 336,
    "w": 32,
    "h": 26,
    "label": "\u25be",
-   "verb": "SETTINGS_STEP",
+   "verb": "SETTINGS_SET",
    "args": [
+    "hour",
     "-1"
    ]
   },
   {
-   "name": "mAuto2",
+   "name": "mTap2",
    "x": 254,
    "y": 312,
    "w": 32,
    "h": 26,
    "label": "\u25b4",
-   "verb": "SETTINGS_STEP",
+   "verb": "SETTINGS_SET",
    "args": [
+    "minute",
     "1"
    ]
   },
   {
-   "name": "mAuto3",
+   "name": "mTap3",
    "x": 254,
    "y": 336,
    "w": 32,
    "h": 26,
    "label": "\u25be",
-   "verb": "SETTINGS_STEP",
+   "verb": "SETTINGS_SET",
    "args": [
+    "minute",
     "-1"
    ]
   },
   {
-   "name": "mAuto4",
+   "name": "mTap4",
    "x": 363,
    "y": 312,
    "w": 32,
    "h": 26,
    "label": "\u25b4",
-   "verb": "SETTINGS_STEP",
+   "verb": "SETTINGS_SET",
    "args": [
+    "second",
     "1"
    ]
   },
   {
-   "name": "mAuto5",
+   "name": "mTap5",
    "x": 363,
    "y": 336,
    "w": 32,
    "h": 26,
    "label": "\u25be",
-   "verb": "SETTINGS_STEP",
+   "verb": "SETTINGS_SET",
    "args": [
+    "second",
     "-1"
    ]
   },
   {
-   "name": "mAuto6",
+   "name": "mTap6",
    "x": 363,
    "y": 495,
    "w": 32,
    "h": 26,
    "label": "\u25b4",
-   "verb": "SETTINGS_STEP",
+   "verb": "SETTINGS_SET",
    "args": [
+    "brightness",
     "1"
    ]
   },
   {
-   "name": "mAuto7",
+   "name": "mTap7",
    "x": 363,
    "y": 519,
    "w": 32,
    "h": 26,
    "label": "\u25be",
-   "verb": "SETTINGS_STEP",
+   "verb": "SETTINGS_SET",
    "args": [
+    "brightness",
     "-1"
    ]
   },
   {
-   "name": "mAuto8",
+   "name": "mTap8",
    "x": 334,
    "y": 560,
    "w": 68,
    "h": 34,
    "label": "ON",
-   "verb": "SETTINGS_TOGGLE",
+   "verb": "SETTINGS_SET",
    "args": [
-    "sound"
+    "sound",
+    "toggle"
    ]
   },
   {
-   "name": "mAuto9",
+   "name": "mTap9",
    "x": 334,
    "y": 609,
    "w": 68,
    "h": 34,
    "label": "ON",
-   "verb": "SETTINGS_TOGGLE",
+   "verb": "SETTINGS_SET",
    "args": [
-    "sound"
+    "autoSave",
+    "toggle"
    ]
   }
  ]
