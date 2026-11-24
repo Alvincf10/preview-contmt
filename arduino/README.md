@@ -12,11 +12,11 @@ HEX lokal `arduino/out/ConMT-ATmega328P-ISP.hex` untuk unit yang diuji via Ardui
 | --- | ---: | ---: |
 | Build terkecil sebelumnya | 37.718 byte | 1.090 byte |
 | HEX sebelum koreksi hasil dan driver board | 31.718 byte | 1.193 byte |
-| **HEX hasil pipeline Arduino** | **32.176 byte** | **1.194 byte** |
+| **HEX hasil pipeline Arduino (raw journal)** | **30.250 byte** | **1.194 byte** |
 
-Flash dihitung dari `.text + .data`. Profil Arduino menyediakan 32.256 byte, sehingga ruang yang tersisa adalah 80 byte. Kapasitas fisik chip 32.768 byte. SRAM statis mencakup `.data`, `.bss`, dan `.noinit`.
+Flash dihitung dari `.text + .data`. Profil Arduino menyediakan 32.256 byte, sehingga ruang yang tersisa adalah 2.006 byte. Kapasitas fisik chip 32.768 byte. SRAM statis mencakup `.data`, `.bss`, dan `.noinit`.
 
-Build ini masuk kapasitas chip dan profil Arduino. Ukurannya masih 1.456 byte di atas sasaran cadangan engineering 30.720 byte dalam paket rencana lokal.
+Build ini masuk kapasitas chip dan profil Arduino. Ukurannya 470 byte di bawah sasaran cadangan engineering 30.720 byte dalam paket rencana lokal.
 
 Perubahan source memakai satu buffer sektor SD untuk mengakses record jurnal, satu area kerja untuk snapshot sesi, dan satu root transaksi yang diterbitkan setelah commit. Pipeline build menggabungkan rangkaian instruksi AVR yang identik sebelum link akhir dengan target ATmega328P. Link akhir memakai batas memori MCU dan pemeriksaan kedua terhadap batas profil Arduino.
 
@@ -45,9 +45,9 @@ Pemetaan berasal dari skema Maturity Control LCD rev. 1.0 di paket rencana lokal
 
 ## Penyimpanan SD
 
-Firmware menggunakan `CMTLOG.BIN` yang dialokasikan kontigu di root volume FAT16/FAT32 dengan sektor 512 byte. Ukuran file minimum 4.096 byte dan kelipatan 512. File baru berisi nol. Kapasitas praktis harus memperhitungkan checkpoint periodik yang memakai sekitar 512 byte per commit. Firmware memeriksa rantai cluster dan membatasi penulisan pada file tersebut. Penyediaan file pada kartu uji dan validasi SD fisik masih diperlukan.
+Firmware memakai region jurnal 1 MiB di akhir kartu, yaitu 2.048 sektor 512 byte. Tidak perlu filesystem, FAT, atau `CMTLOG.BIN`. Dua sektor pertama region adalah anchor; slot record 128 byte mengikuti, dengan kapasitas 8.184 slot. Format kartu tidak relevan karena region ditulis langsung. Gunakan kartu khusus perangkat: region ini berada di luar pembukuan partisi dan dapat menimpa data lain di kartu. Penyediaan file tidak diperlukan; validasi SD fisik masih perlu dilakukan.
 
-Jurnal menyimpan record ber-versi dengan CRC dan commit logis yang diverifikasi sebelum menulis salah satu dari dua sektor penunjuk. Baseline dan sesi lama tetap tersedia untuk riwayat. Optimasi ukuran mempertahankan format `CMTLOG.BIN` versi Arduino. Format firmware lama di luar folder `arduino` belum memiliki jalur impor.
+Jurnal menyimpan record ber-versi dengan CRC dan commit logis yang diverifikasi sebelum menulis salah satu dari dua sektor penunjuk. Baseline dan sesi lama tetap tersedia untuk riwayat. Format record tetap, tetapi firmware berbasis file FAT lama tidak kompatibel dengan region raw ini dan datanya tidak diimpor. Format firmware lama di luar folder `arduino` juga belum memiliki jalur impor.
 
 ## Build dan uji
 
@@ -59,19 +59,17 @@ python -B .\arduino\build.py --avr-bin 'C:\path\avr-gcc-16.1.0-x64-windows\bin' 
 
 Tombol Verify standar di Arduino IDE mengukur ukuran sebelum penggabungan instruksi dan masih melaporkan overflow. Perintah build di atas menghasilkan HEX yang lulus batas flash.
 
-Uji host mengompilasi sumber yang sama untuk rumus, alur, jurnal, FAT, dan CM1. Simulasi menggantikan I/O sensor, UART, dan sektor kartu. [Fixture uji](tests/reference-vectors.json) berisi nilai pembanding dari Excel klien dan dataset preview. Jalankan dari root repositori dengan compiler C++11 dan Python.
+Uji host mengompilasi sumber yang sama untuk rumus, alur, jurnal, kartu, dan CM1. Simulasi menggantikan I/O sensor, UART, dan sektor kartu. [Fixture uji](tests/reference-vectors.json) berisi nilai pembanding dari Excel klien dan dataset preview. Jalankan dari root repositori dengan compiler C++11 dan Python.
 
 ```powershell
 zig c++ -std=c++11 -O2 -I arduino/ConMT/src arduino/tests/ConMTTest.cpp arduino/ConMT/src/Domain.cpp arduino/ConMT/src/Engine.cpp arduino/ConMT/src/Journal.cpp arduino/ConMT/src/Panel.cpp arduino/ConMT/src/SdStore.cpp -o conmt-host.exe
 python arduino/tests/run.py .\conmt-host.exe
 ```
 
-Kedua dataset memverifikasi 41 observasi, 10 pasangan lab dan FKZ, M per checkpoint hingga toleransi 0,025 °C·jam, serta Fc hingga 0,002 MPa. Pengujian juga mencakup pembulatan M untuk hasil akhir, penolakan record FKZ dengan versi tak didukung, suhu valid 0 °C, AutoSave, koreksi gap, restart setelah commit yang ACK-nya hilang, pemulihan dua jenis putus tulis, pembacaan riwayat setelah hapus baseline, FAT16/FAT32 pada image, dan frame CM1 kedaluwarsa.
+Kedua dataset memverifikasi 41 observasi, 10 pasangan lab dan FKZ, M per checkpoint hingga toleransi 0,025 °C·jam, serta Fc hingga 0,002 MPa. Pengujian juga mencakup pembulatan M untuk hasil akhir, penolakan record FKZ dengan versi tak didukung, suhu valid 0 °C, AutoSave, koreksi gap, restart setelah commit yang ACK-nya hilang, pemulihan dua jenis putus tulis, pembacaan riwayat setelah hapus baseline, region raw pada image kartu, dan frame CM1 kedaluwarsa.
 
 Simulator AVR menjalankan 91 pemeriksaan komponen hitung dengan 0 kegagalan. Cakupannya adalah M untuk kedua dataset, koefisien regresi, R², dan tiga kondisi fungsi FKZ.
 
-Pengujian kompatibilitas membuka dan menambah record pada image SD dari build Arduino sebelumnya. Riwayat 41 checkpoint tetap dapat dibaca. HEX akhir diperiksa checksum tiap record dan kecocokan byte dengan ELF pada alamat `0x0000` sampai `0x7DAF`. Dua build bersih menghasilkan SHA-256 yang sama.
+Firmware 1.0.1 memakai alamat variabel komunikasi global di `pInit` untuk pasangan HMI K050. Paket pasangan terbaru adalah `nextion/conmt-NX8048K050-CM1-final.tft` dan `arduino/out/ConMT-ATmega328P-ISP-CM1-K050-raw.hex`. Uji integrasi menjalankan simulator panel dengan parser dan engine produksi serta image kartu raw di komputer. Riwayat 41 checkpoint tetap dapat dibaca dalam format jurnal yang sama.
 
-```text
-274411be9084388201122c54eeb2bc315c542e7b9bd1fde4976b6f33837ddd3d
-```
+Laporan SHA-256 dan batas pengujian pasangan K050 dicatat pada `nextion/conmt-NX8048K050-CM1-final.validation.json`.

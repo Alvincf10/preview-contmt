@@ -155,7 +155,7 @@ void id(const char* assignment, uint32_t value) {
   end();
 }
 
-void beginData() { flash(FSTR("tData.txt=\"")); }
+void beginData() { flash(FSTR("pInit.tData.txt=\"")); }
 void finishData() { board::transmit('"'); end(); }
 void sep() { board::transmit('|'); }
 
@@ -238,14 +238,14 @@ void openPage() {
 void dim() { id(FSTR("dim="), engine.config.brightness); }
 
 void publish() {
-  id(FSTR("nBoot.val="), boot);
-  id(FSTR("nView.val="), view);
+  id(FSTR("pInit.nBoot.val="), boot);
+  id(FSTR("pInit.nView.val="), view);
 }
 
 void ack(uint32_t seq, Answer answer) {
-  id(FSTR("nAckValue.val="), answer.value());
-  id(FSTR("nAckCode.val="), static_cast<uint8_t>(answer.error()));
-  id(FSTR("nAckSeq.val="), seq);
+  id(FSTR("pInit.nAckValue.val="), answer.value());
+  id(FSTR("pInit.nAckCode.val="), static_cast<uint8_t>(answer.error()));
+  id(FSTR("pInit.nAckSeq.val="), seq);
 }
 
 Ref runRef(Result& result) {
@@ -393,7 +393,7 @@ Answer readView(View source, uint16_t index) {
       if (battery >= 0) digits(battery);
       sep(); digits(static_cast<uint8_t>(engine.disk.error())); sep(); digits(root.active);
       sep(); digits(engine.config.interval); sep(); digits(engine.config.brightness);
-      sep(); digits(engine.config.flags); sep(); flash(FSTR("1.0.0"));
+      sep(); digits(engine.config.flags); sep(); flash(FSTR("1.0.1"));
       sep(); sensors(sensor); sep(); digits(selected);
       sep(); digits(selectedHistory); sep(); digits(root.identityReady);
       sep(); digits(root.draftFromSaved); sep(); digits(root.baselines.count);

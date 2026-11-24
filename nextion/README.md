@@ -1,5 +1,7 @@
 # ConMT — Nextion HMI
 
+Pasangan Arduino 1.0.1 untuk panel NX8048K050 tersedia pada `conmt-NX8048K050-CM1-final.HMI` dan `conmt-NX8048K050-CM1-final.tft`. Sumbernya adalah `nxsrc-K050`, dengan generator `tools/k050_protocol.py`. Baca [petunjuk K050](NX8048K050-README.txt) dan [status integrasi](SYNC.md) untuk pasangan firmware serta hasil pengujiannya.
+
 Panel **480×800**, 17 page. Ada tiga lapis, dan penting tahu mana yang diedit:
 
 - **`pages/` + `assets/pages/`** — build kit awal: koordinat, PNG desain. Ini

@@ -1,0 +1,158 @@
+[page]
+name = "pKuat"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "09_kuat_tekan"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 43
+y = 81
+w = 40
+h = 13
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "09_kuat_tekan"
+xcen = 0
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 429
+y = 81
+w = 32
+h = 12
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "09_kuat_tekan"
+xcen = 0
+
+[[component]]
+name = "tMsg"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+vscope = 1
+
+[[component]]
+name = "tNotice"
+type = "text"
+x = 10
+y = 775
+w = 460
+h = 24
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 96
+
+[[component]]
+name = "tS1"
+type = "text"
+x = 115
+y = 377
+w = 41
+h = 17
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "09_kuat_tekan"
+xcen = 0
+
+[[component]]
+name = "tS2"
+type = "text"
+x = 230
+y = 377
+w = 41
+h = 17
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "09_kuat_tekan"
+xcen = 0
+
+[[component]]
+name = "tS3"
+type = "text"
+x = 345
+y = 377
+w = 41
+h = 17
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "09_kuat_tekan"
+xcen = 0
+
+[[component]]
+name = "mStart"
+type = "hotspot"
+x = 67
+y = 416
+w = 346
+h = 58
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "mHist"
+type = "hotspot"
+x = 67
+y = 486
+w = 346
+h = 58
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 67
+y = 556
+w = 346
+h = 58
+events = [
+    "down",
+    "up",
+]

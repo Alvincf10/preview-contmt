@@ -1,0 +1,968 @@
+on pPoints.loadend:
+  pInit.vBusy.val=0
+  pInit.vStep.val=0
+  pInit.vOffset.val=0
+
+on tDay0.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="day"
+  pInit.tTitle.txt="day"
+  pInit.tEdit.txt=tDay0.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+0
+  page pEdit
+  }
+
+on tDay1.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="day"
+  pInit.tTitle.txt="day"
+  pInit.tEdit.txt=tDay1.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+1
+  page pEdit
+  }
+
+on tDay2.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="day"
+  pInit.tTitle.txt="day"
+  pInit.tEdit.txt=tDay2.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+2
+  page pEdit
+  }
+
+on tDay3.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="day"
+  pInit.tTitle.txt="day"
+  pInit.tEdit.txt=tDay3.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+3
+  page pEdit
+  }
+
+on tDay4.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="day"
+  pInit.tTitle.txt="day"
+  pInit.tEdit.txt=tDay4.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+4
+  page pEdit
+  }
+
+on tDay5.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="day"
+  pInit.tTitle.txt="day"
+  pInit.tEdit.txt=tDay5.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+5
+  page pEdit
+  }
+
+on tDate0.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="date"
+  pInit.tTitle.txt="date"
+  pInit.tEdit.txt=tDate0.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+0
+  page pEdit
+  }
+
+on tDate1.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="date"
+  pInit.tTitle.txt="date"
+  pInit.tEdit.txt=tDate1.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+1
+  page pEdit
+  }
+
+on tDate2.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="date"
+  pInit.tTitle.txt="date"
+  pInit.tEdit.txt=tDate2.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+2
+  page pEdit
+  }
+
+on tDate3.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="date"
+  pInit.tTitle.txt="date"
+  pInit.tEdit.txt=tDate3.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+3
+  page pEdit
+  }
+
+on tDate4.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="date"
+  pInit.tTitle.txt="date"
+  pInit.tEdit.txt=tDate4.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+4
+  page pEdit
+  }
+
+on tDate5.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="date"
+  pInit.tTitle.txt="date"
+  pInit.tEdit.txt=tDate5.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+5
+  page pEdit
+  }
+
+on tTime0.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="clock"
+  pInit.tTitle.txt="clock"
+  pInit.tEdit.txt=tTime0.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+0
+  page pEdit
+  }
+
+on tTime1.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="clock"
+  pInit.tTitle.txt="clock"
+  pInit.tEdit.txt=tTime1.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+1
+  page pEdit
+  }
+
+on tTime2.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="clock"
+  pInit.tTitle.txt="clock"
+  pInit.tEdit.txt=tTime2.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+2
+  page pEdit
+  }
+
+on tTime3.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="clock"
+  pInit.tTitle.txt="clock"
+  pInit.tEdit.txt=tTime3.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+3
+  page pEdit
+  }
+
+on tTime4.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="clock"
+  pInit.tTitle.txt="clock"
+  pInit.tEdit.txt=tTime4.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+4
+  page pEdit
+  }
+
+on tTime5.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="clock"
+  pInit.tTitle.txt="clock"
+  pInit.tEdit.txt=tTime5.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+5
+  page pEdit
+  }
+
+on tTemp0.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="temp"
+  pInit.tTitle.txt="temp"
+  pInit.tEdit.txt=tTemp0.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+0
+  page pEdit
+  }
+
+on tTemp1.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="temp"
+  pInit.tTitle.txt="temp"
+  pInit.tEdit.txt=tTemp1.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+1
+  page pEdit
+  }
+
+on tTemp2.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="temp"
+  pInit.tTitle.txt="temp"
+  pInit.tEdit.txt=tTemp2.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+2
+  page pEdit
+  }
+
+on tTemp3.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="temp"
+  pInit.tTitle.txt="temp"
+  pInit.tEdit.txt=tTemp3.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+3
+  page pEdit
+  }
+
+on tTemp4.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="temp"
+  pInit.tTitle.txt="temp"
+  pInit.tEdit.txt=tTemp4.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+4
+  page pEdit
+  }
+
+on tTemp5.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="temp"
+  pInit.tTitle.txt="temp"
+  pInit.tEdit.txt=tTemp5.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=24
+  pInit.vEditRow.val=pInit.vOffset.val+5
+  page pEdit
+  }
+
+on mGap0.up:
+  pInit.tEdit.txt="0"
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="gap"
+  pInit.tTitle.txt="Review interval, apply 0 to reconcile"
+  pInit.tEdit.txt=pInit.tEdit.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=1
+  pInit.vEditRow.val=pInit.vOffset.val+0
+  page pEdit
+  }
+
+on mGap1.up:
+  pInit.tEdit.txt="0"
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="gap"
+  pInit.tTitle.txt="Review interval, apply 0 to reconcile"
+  pInit.tEdit.txt=pInit.tEdit.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=1
+  pInit.vEditRow.val=pInit.vOffset.val+1
+  page pEdit
+  }
+
+on mGap2.up:
+  pInit.tEdit.txt="0"
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="gap"
+  pInit.tTitle.txt="Review interval, apply 0 to reconcile"
+  pInit.tEdit.txt=pInit.tEdit.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=1
+  pInit.vEditRow.val=pInit.vOffset.val+2
+  page pEdit
+  }
+
+on mGap3.up:
+  pInit.tEdit.txt="0"
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="gap"
+  pInit.tTitle.txt="Review interval, apply 0 to reconcile"
+  pInit.tEdit.txt=pInit.tEdit.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=1
+  pInit.vEditRow.val=pInit.vOffset.val+3
+  page pEdit
+  }
+
+on mGap4.up:
+  pInit.tEdit.txt="0"
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="gap"
+  pInit.tTitle.txt="Review interval, apply 0 to reconcile"
+  pInit.tEdit.txt=pInit.tEdit.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=1
+  pInit.vEditRow.val=pInit.vOffset.val+4
+  page pEdit
+  }
+
+on mGap5.up:
+  pInit.tEdit.txt="0"
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="gap"
+  pInit.tTitle.txt="Review interval, apply 0 to reconcile"
+  pInit.tEdit.txt=pInit.tEdit.txt
+  pInit.vEditKind.val=3
+  pInit.vEditPage.val=20
+  pInit.vMax.val=1
+  pInit.vEditRow.val=pInit.vOffset.val+5
+  page pEdit
+  }
+
+on mPrevious.up:
+  if(pInit.vBusy.val==0&&pInit.vOffset.val>=6)
+  {
+  pInit.vOffset.val-=6
+  pInit.vStep.val=1
+  }
+
+on mNext.up:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vOffset.val+=6
+  pInit.vStep.val=1
+  }
+
+on mBack.up:
+  if(pInit.vBusy.val==0)
+  {
+  page pInit.vPage.val
+  }
+
+on tmPoll.timer:
+  if(pInit.vBusy.val==1)
+  {
+  if(pInit.nAckSeq.val==pInit.vSeq.val)
+  {
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  if(pInit.nAckCode.val==4||pInit.nAckCode.val==8)
+  {
+  pInit.nBoot.val=0
+  pInit.vStep.val=0
+  }else
+  {
+  if(pInit.vTask.val==0)
+  {
+  if(pInit.vGet.val==1)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  pInit.tStatus.txt=pInit.tData.txt
+  spstr pInit.tData.txt,tClock.txt,"|",1
+  spstr pInit.tData.txt,tBatt.txt,"|",3
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
+  covx pInit.tSplit.txt,pInit.vStorage.val,0,0
+  spstr pInit.tData.txt,pInit.tDate.txt,"|",0
+  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",14
+  covx pInit.tSplit.txt,pInit.vMask.val,0,0
+  pInit.vSensors.val=0
+  pInit.vCount.val=pInit.vMask.val
+  if(pInit.vCount.val>=4)
+  {
+  pInit.vSensors.val+=1
+  pInit.vCount.val-=4
+  }
+  if(pInit.vCount.val>=2)
+  {
+  pInit.vSensors.val+=1
+  pInit.vCount.val-=2
+  }
+  if(pInit.vCount.val>=1)
+  {
+  pInit.vSensors.val+=1
+  }
+  }
+  }
+  if(pInit.vGet.val==2)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  
+  pInit.vRevision.val=pInit.nAckValue.val
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",2
+  covx pInit.tSplit.txt,pInit.vTotal.val,0,0
+  }
+  }
+  if(pInit.vGet.val==3)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  spstr pInit.tData.txt,tDay0.txt,"|",0
+  spstr pInit.tData.txt,tDate0.txt,"|",1
+  spstr pInit.tData.txt,tTime0.txt,"|",2
+  spstr pInit.tData.txt,tTemp0.txt,"|",3
+  spstr pInit.tData.txt,tM0.txt,"|",4
+  spstr pInit.tData.txt,tFc0.txt,"|",5
+  }
+  else
+  {
+  tDay0.txt=""
+  tDate0.txt=""
+  tTime0.txt=""
+  tTemp0.txt=""
+  tM0.txt=""
+  tFc0.txt=""
+  }
+  }
+  if(pInit.vGet.val==4)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  spstr pInit.tData.txt,tDay1.txt,"|",0
+  spstr pInit.tData.txt,tDate1.txt,"|",1
+  spstr pInit.tData.txt,tTime1.txt,"|",2
+  spstr pInit.tData.txt,tTemp1.txt,"|",3
+  spstr pInit.tData.txt,tM1.txt,"|",4
+  spstr pInit.tData.txt,tFc1.txt,"|",5
+  }
+  else
+  {
+  tDay1.txt=""
+  tDate1.txt=""
+  tTime1.txt=""
+  tTemp1.txt=""
+  tM1.txt=""
+  tFc1.txt=""
+  }
+  }
+  if(pInit.vGet.val==5)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  spstr pInit.tData.txt,tDay2.txt,"|",0
+  spstr pInit.tData.txt,tDate2.txt,"|",1
+  spstr pInit.tData.txt,tTime2.txt,"|",2
+  spstr pInit.tData.txt,tTemp2.txt,"|",3
+  spstr pInit.tData.txt,tM2.txt,"|",4
+  spstr pInit.tData.txt,tFc2.txt,"|",5
+  }
+  else
+  {
+  tDay2.txt=""
+  tDate2.txt=""
+  tTime2.txt=""
+  tTemp2.txt=""
+  tM2.txt=""
+  tFc2.txt=""
+  }
+  }
+  if(pInit.vGet.val==6)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  spstr pInit.tData.txt,tDay3.txt,"|",0
+  spstr pInit.tData.txt,tDate3.txt,"|",1
+  spstr pInit.tData.txt,tTime3.txt,"|",2
+  spstr pInit.tData.txt,tTemp3.txt,"|",3
+  spstr pInit.tData.txt,tM3.txt,"|",4
+  spstr pInit.tData.txt,tFc3.txt,"|",5
+  }
+  else
+  {
+  tDay3.txt=""
+  tDate3.txt=""
+  tTime3.txt=""
+  tTemp3.txt=""
+  tM3.txt=""
+  tFc3.txt=""
+  }
+  }
+  if(pInit.vGet.val==7)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  spstr pInit.tData.txt,tDay4.txt,"|",0
+  spstr pInit.tData.txt,tDate4.txt,"|",1
+  spstr pInit.tData.txt,tTime4.txt,"|",2
+  spstr pInit.tData.txt,tTemp4.txt,"|",3
+  spstr pInit.tData.txt,tM4.txt,"|",4
+  spstr pInit.tData.txt,tFc4.txt,"|",5
+  }
+  else
+  {
+  tDay4.txt=""
+  tDate4.txt=""
+  tTime4.txt=""
+  tTemp4.txt=""
+  tM4.txt=""
+  tFc4.txt=""
+  }
+  }
+  if(pInit.vGet.val==8)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  spstr pInit.tData.txt,tDay5.txt,"|",0
+  spstr pInit.tData.txt,tDate5.txt,"|",1
+  spstr pInit.tData.txt,tTime5.txt,"|",2
+  spstr pInit.tData.txt,tTemp5.txt,"|",3
+  spstr pInit.tData.txt,tM5.txt,"|",4
+  spstr pInit.tData.txt,tFc5.txt,"|",5
+  }
+  else
+  {
+  tDay5.txt=""
+  tDate5.txt=""
+  tTime5.txt=""
+  tTemp5.txt=""
+  tM5.txt=""
+  tFc5.txt=""
+  }
+  }
+  pInit.vStep.val+=1
+  }else
+  {
+  if(pInit.nAckCode.val==13)
+  {
+  pInit.vToken.val=pInit.nAckValue.val
+  page pConfirm
+  }else
+  {
+  if(pInit.nAckCode.val!=0)
+  {
+  pInit.tMsg.txt="ConMT error "
+  covx pInit.nAckCode.val,pInit.tNum.txt,0,0
+  pInit.tMsg.txt+=pInit.tNum.txt
+  if(pInit.nAckCode.val==1)
+  {
+  pInit.tMsg.txt="Invalid input. Check the field format."
+  }
+  if(pInit.nAckCode.val==2)
+  {
+  pInit.tMsg.txt="Complete the required fields"
+  }
+  if(pInit.nAckCode.val==6)
+  {
+  pInit.tMsg.txt="Check the microSD card"
+  }
+  if(pInit.nAckCode.val==9)
+  {
+  pInit.tMsg.txt="Connect a temperature probe"
+  }
+  if(pInit.nAckCode.val==10)
+  {
+  pInit.tMsg.txt="Set date/time before measurement"
+  }
+  if(pInit.nAckCode.val==11)
+  {
+  pInit.tMsg.txt="Enter at least two valid lab pairs"
+  }
+  if(pInit.nAckCode.val==12)
+  {
+  pInit.tMsg.txt="Add a later checkpoint before SAVE"
+  }
+  }else
+  {
+  pInit.tMsg.txt=""
+  }
+  pInit.vStep.val=1
+  }
+  }
+  }
+  }
+  else
+  {
+  pInit.vRetry.val+=1
+  if(pInit.vRetry.val==15)
+  {
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  if(pInit.vRetry.val>=30)
+  {
+  pInit.vBusy.val=0
+  pInit.nBoot.val=0
+  pInit.vStep.val=0
+  pInit.tMsg.txt="No answer from MCU"
+  }
+  }
+  }
+  tNotice.txt=pInit.tMsg.txt
+  if(pInit.vBusy.val==0&&dp==20)
+  {
+  if(pInit.vStep.val==0)
+  {
+  pInit.vGet.val=0
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="PAGE_READY"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val==1)
+  {
+  pInit.vGet.val=1
+  pInit.tCommand.txt="GET|status"
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val==2)
+  {
+  pInit.vGet.val=2
+  pInit.tCommand.txt="GET|run"
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val==3)
+  {
+  pInit.vGet.val=3
+  pInit.tCommand.txt="GET|point"
+  pInit.vIndex.val=pInit.vOffset.val+0
+  covx pInit.vIndex.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+="|"
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val==4)
+  {
+  pInit.vGet.val=4
+  pInit.tCommand.txt="GET|point"
+  pInit.vIndex.val=pInit.vOffset.val+1
+  covx pInit.vIndex.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+="|"
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val==5)
+  {
+  pInit.vGet.val=5
+  pInit.tCommand.txt="GET|point"
+  pInit.vIndex.val=pInit.vOffset.val+2
+  covx pInit.vIndex.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+="|"
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val==6)
+  {
+  pInit.vGet.val=6
+  pInit.tCommand.txt="GET|point"
+  pInit.vIndex.val=pInit.vOffset.val+3
+  covx pInit.vIndex.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+="|"
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val==7)
+  {
+  pInit.vGet.val=7
+  pInit.tCommand.txt="GET|point"
+  pInit.vIndex.val=pInit.vOffset.val+4
+  covx pInit.vIndex.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+="|"
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val==8)
+  {
+  pInit.vGet.val=8
+  pInit.tCommand.txt="GET|point"
+  pInit.vIndex.val=pInit.vOffset.val+5
+  covx pInit.vIndex.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+="|"
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val>8)
+  {
+  pInit.vPoll.val+=1
+  if(pInit.vPoll.val>=5)
+  {
+  pInit.vPoll.val=0
+  pInit.vStep.val=1
+  }
+  }
+  }

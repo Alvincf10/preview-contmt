@@ -1,12 +1,4 @@
 #include <string.h>
-#ifdef __AVR__
-#include <avr/pgmspace.h>
-#define FLASH PROGMEM
-#define compareName memcmp_P
-#else
-#define FLASH
-#define compareName memcmp
-#endif
 
 #include "Board.h"
 #include "Journal.h"
@@ -19,17 +11,11 @@ namespace {
 constexpr uint16_t BlockBytes = 512;
 constexpr uint32_t Uncached = UINT32_MAX;
 constexpr uint32_t AnchorMagic = 0x314c4d43;  // CML1
-const char LogName[] FLASH = "CMTLOG  BIN";
-
-struct Volume {
-  uint32_t fat;
-  uint32_t fatSectors;
-  uint32_t data;
-  uint32_t root;
-  uint32_t clusters;
-  uint16_t rootSectors;  // Zero means the FAT32 root is a cluster chain.
-  uint8_t clusterShift;
-};
+// The journal owns the last 1 MiB of the card. It needs no filesystem and no
+// CMTLOG.BIN: the two anchor blocks sit at the start of this region and the
+// slots follow. Use a card dedicated to the device, because this region is
+// written directly and is not part of any partition's free-space bookkeeping.
+constexpr uint32_t JournalBlocks = 2048;
 
 uint8_t buffer[BlockBytes];
 uint32_t cached = Uncached;
@@ -62,125 +48,6 @@ bool load(uint32_t block) {
   return true;
 }
 
-uint16_t u16(const uint8_t* p) {
-  uint16_t value;
-  memcpy(&value, p, sizeof(value));
-  return value;
-}
-
-uint32_t u32(const uint8_t* p) {
-  uint32_t value;
-  memcpy(&value, p, sizeof(value));
-  return value;
-}
-
-bool volumeAt(Volume& volume, uint32_t sector, uint32_t limit) {
-  if (!load(sector) || u16(buffer + 510) != 0xaa55 || u16(buffer + 11) != BlockBytes) return false;
-  uint32_t blocks = u16(buffer + 19);
-  if (!blocks) blocks = u32(buffer + 32);
-  const uint16_t reserved = u16(buffer + 14);
-  const uint8_t count = buffer[16];
-  const uint8_t clusterSize = buffer[13];
-  if (blocks > limit || blocks <= reserved || !reserved || !count || count > 2 ||
-      !clusterSize || (clusterSize & (clusterSize - 1))) return false;
-  volume.clusterShift = 0;
-  while ((1U << volume.clusterShift) != clusterSize) ++volume.clusterShift;
-  volume.fatSectors = u16(buffer + 22);
-  const bool fat16 = volume.fatSectors != 0;
-  if (!fat16) volume.fatSectors = u32(buffer + 36);
-  const uint16_t entries = u16(buffer + 17);
-  volume.rootSectors = entries / 16 + (entries % 16 != 0);
-  if (fat16 != (volume.rootSectors != 0) || !volume.fatSectors) return false;
-  uint32_t available = blocks - reserved;
-  for (uint8_t i = 0; i < count; ++i) {
-    if (available < volume.fatSectors) return false;
-    available -= volume.fatSectors;
-  }
-  if (available <= volume.rootSectors) return false;
-  const uint32_t root = blocks - available;
-  const uint32_t data = root + volume.rootSectors;
-  volume.clusters = (blocks - data) >> volume.clusterShift;
-  if (volume.clusters < 4085 || fat16 != (volume.clusters < 65525) ||
-      volume.clusters >= (fat16 ? 0xfff5UL : 0x0ffffff5UL)) return false;
-  const uint16_t flags = fat16 ? 0 : u16(buffer + 40);
-  const uint8_t active = flags & 0x80 ? flags & 15 : 0;
-  if (active >= count) return false;
-  volume.root = fat16 ? sector + root : u32(buffer + 44);
-  volume.data = sector + data;
-  volume.fat = sector + reserved;
-  if (active) volume.fat += volume.fatSectors;
-  return true;
-}
-
-bool mountVolume(Volume& volume, uint32_t capacityBlocks) {
-  if (volumeAt(volume, 0, capacityBlocks)) return true;
-  if (cached || u16(buffer + 510) != 0xaa55) return false;
-  for (uint16_t entry = 446; entry <= 494; entry += 16) {
-    if (!load(0)) return false;
-    const uint8_t type = buffer[entry + 4];
-    const uint32_t first = u32(buffer + entry + 8);
-    const uint32_t size = u32(buffer + entry + 12);
-    if ((type == 4 || type == 6 || type == 0xb || type == 0xc || type == 0xe) &&
-        first && first < capacityBlocks && size <= capacityBlocks - first &&
-        volumeAt(volume, first, size)) return true;
-  }
-  return false;
-}
-
-uint32_t blockOf(const Volume& volume, uint32_t cluster) {
-  return volume.data + ((cluster - 2) << volume.clusterShift);
-}
-
-bool validCluster(const Volume& volume, uint32_t cluster) {
-  return cluster >= 2 && cluster - 2 < volume.clusters;
-}
-
-uint32_t nextCluster(const Volume& volume, uint32_t cluster) {
-  const bool fat16 = volume.rootSectors != 0;
-  const uint32_t offset = cluster << (fat16 ? 1 : 2);
-  const uint32_t sector = offset >> 9;
-  if (sector >= volume.fatSectors || !load(volume.fat + sector)) return 0;
-  const uint8_t* entry = buffer + (offset & (BlockBytes - 1));
-  return fat16 ? u16(entry) : u32(entry) & 0x0fffffffUL;
-}
-
-bool locateLog(const Volume& volume, uint32_t& first, uint32_t& bytes) {
-  const bool fat16 = volume.rootSectors != 0;
-  uint32_t cluster = volume.root;
-  for (uint32_t visited = 0; visited < volume.clusters; ++visited) {
-    if (!fat16 && !validCluster(volume, cluster)) return false;
-    const uint32_t start = fat16 ? cluster : blockOf(volume, cluster);
-    const uint16_t blocks = fat16 ? volume.rootSectors : 1U << volume.clusterShift;
-    for (uint16_t i = 0; i < blocks; ++i) {
-      if (!load(start + i)) return false;
-      for (uint16_t at = 0; at < BlockBytes; at += 32) {
-        const uint8_t* entry = buffer + at;
-        if (!entry[0]) return false;
-        if (!(entry[11] & 0x19) && !compareName(entry, LogName, 11)) {
-          first = u16(entry + 26) | (fat16 ? 0UL : (static_cast<uint32_t>(u16(entry + 20)) << 16));
-          bytes = u32(entry + 28);
-          return true;
-        }
-      }
-      poll();
-    }
-    if (fat16) return false;
-    cluster = nextCluster(volume, cluster);
-  }
-  return false;
-}
-
-bool contiguous(const Volume& volume, uint32_t first, uint32_t blocks) {
-  const uint32_t count = ((blocks - 1) >> volume.clusterShift) + 1;
-  if (!validCluster(volume, first) || count > volume.clusters - (first - 2)) return false;
-  const uint32_t last = first + count - 1;
-  for (uint32_t cluster = first; cluster < last; ++cluster) {
-    if (nextCluster(volume, cluster) != cluster + 1) return false;
-    poll();
-  }
-  return nextCluster(volume, last) >= (volume.rootSectors ? 0xfff8UL : 0x0ffffff8UL);
-}
-
 bool anchorValid(const Anchor& anchor) {
   return anchor.magic == AnchorMagic && anchor.generation &&
          !(anchor.used & (BlockBytes - 1)) && anchor.used / SlotBytes <= capacitySlots &&
@@ -193,16 +60,12 @@ bool mount() {
   dirty = false;
   cached = Uncached;
   const uint32_t blocks = card::begin();
-  Volume volume;
-  if (!blocks || !mountVolume(volume, blocks)) return false;
-  uint32_t first, bytes;
-  if (!locateLog(volume, first, bytes) || bytes < 4096 || (bytes & (BlockBytes - 1)) ||
-      !contiguous(volume, first, bytes >> 9)) return false;
-  logStart = blockOf(volume, first);
-  if (logStart >= blocks || (bytes >> 9) > blocks - logStart) return false;
-  capacitySlots = (bytes - 2 * BlockBytes) / SlotBytes;
+  if (!blocks || blocks <= JournalBlocks) return false;
+  logStart = blocks - JournalBlocks;
+  capacitySlots = ((JournalBlocks - 2) * BlockBytes) / SlotBytes;
   occupied = generation = 0;
-  bool blank = true;
+  // A blank card, or one that still holds a previous CMTLOG file, is accepted:
+  // the first commit writes fresh anchors and slots over this region.
   for (uint8_t i = 0; i < 2; ++i) {
     if (!load(logStart + i)) return false;
     Anchor candidate;
@@ -211,9 +74,8 @@ bool mount() {
       generation = candidate.generation;
       occupied = candidate.used / SlotBytes;
     }
-    if (candidate.magic || candidate.generation || candidate.used || candidate.crc) blank = false;
   }
-  return generation || blank;
+  return true;
 }
 
 uint32_t usedSlots() { return occupied; }

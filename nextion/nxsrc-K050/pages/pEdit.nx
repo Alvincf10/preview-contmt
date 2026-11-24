@@ -1,0 +1,644 @@
+on pEdit.loadend:
+  tTitle.txt=pInit.tTitle.txt
+  tInput.txt=pInit.tEdit.txt
+  tError.txt=""
+  vCase.val=0
+  vis kProbe,0
+  if(pInit.vEditKind.val==1&&pInit.tField.txt=="temp")
+  {
+  vis kProbe,1
+  }
+
+on k00.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k00.txt
+  }
+  }
+
+on k01.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k01.txt
+  }
+  }
+
+on k02.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k02.txt
+  }
+  }
+
+on k03.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k03.txt
+  }
+  }
+
+on k04.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k04.txt
+  }
+  }
+
+on k05.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k05.txt
+  }
+  }
+
+on k06.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k06.txt
+  }
+  }
+
+on k07.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k07.txt
+  }
+  }
+
+on k08.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k08.txt
+  }
+  }
+
+on k09.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k09.txt
+  }
+  }
+
+on k10.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k10.txt
+  }
+  }
+
+on k11.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k11.txt
+  }
+  }
+
+on k12.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k12.txt
+  }
+  }
+
+on k13.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k13.txt
+  }
+  }
+
+on k14.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k14.txt
+  }
+  }
+
+on k15.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k15.txt
+  }
+  }
+
+on k16.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k16.txt
+  }
+  }
+
+on k17.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k17.txt
+  }
+  }
+
+on k18.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k18.txt
+  }
+  }
+
+on k19.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k19.txt
+  }
+  }
+
+on k20.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k20.txt
+  }
+  }
+
+on k21.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k21.txt
+  }
+  }
+
+on k22.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k22.txt
+  }
+  }
+
+on k23.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k23.txt
+  }
+  }
+
+on k24.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k24.txt
+  }
+  }
+
+on k25.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k25.txt
+  }
+  }
+
+on k26.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k26.txt
+  }
+  }
+
+on k27.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k27.txt
+  }
+  }
+
+on k28.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k28.txt
+  }
+  }
+
+on k30.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k30.txt
+  }
+  }
+
+on k31.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k31.txt
+  }
+  }
+
+on k32.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k32.txt
+  }
+  }
+
+on k33.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k33.txt
+  }
+  }
+
+on k34.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k34.txt
+  }
+  }
+
+on k35.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k35.txt
+  }
+  }
+
+on k36.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k36.txt
+  }
+  }
+
+on k37.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k37.txt
+  }
+  }
+
+on k38.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k38.txt
+  }
+  }
+
+on k39.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=k39.txt
+  }
+  }
+
+on kSpace.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val<pInit.vMax.val)
+  {
+  tInput.txt+=" "
+  }
+  }
+
+on kClear.up:
+  if(pInit.vBusy.val==0)
+  {
+  tInput.txt=""
+  }
+
+on kDel.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,pInit.vTemp.val
+  if(pInit.vTemp.val>0)
+  {
+  pInit.vTemp.val-=1
+  substr tInput.txt,pInit.tEdit.txt,0,pInit.vTemp.val
+  tInput.txt=pInit.tEdit.txt
+  }
+  }
+
+on kCancel.up:
+  if(pInit.vBusy.val==0)
+  {
+  page pInit.vEditPage.val
+  }
+
+on kProbe.up:
+  pInit.tCommand.txt="ROW_SENSOR|"
+  pInit.vTemp.val=pInit.vEditRow.val
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+
+on kCase.up:
+  if(vCase.val==0)
+  {
+  vCase.val=1
+  k10.txt="q"
+  k11.txt="w"
+  k12.txt="e"
+  k13.txt="r"
+  k14.txt="t"
+  k15.txt="y"
+  k16.txt="u"
+  k17.txt="i"
+  k18.txt="o"
+  k19.txt="p"
+  k20.txt="a"
+  k21.txt="s"
+  k22.txt="d"
+  k23.txt="f"
+  k24.txt="g"
+  k25.txt="h"
+  k26.txt="j"
+  k27.txt="k"
+  k28.txt="l"
+  k30.txt="z"
+  k31.txt="x"
+  k32.txt="c"
+  k33.txt="v"
+  k34.txt="b"
+  k35.txt="n"
+  k36.txt="m"
+  }
+  else
+  {
+  vCase.val=0
+  k10.txt="Q"
+  k11.txt="W"
+  k12.txt="E"
+  k13.txt="R"
+  k14.txt="T"
+  k15.txt="Y"
+  k16.txt="U"
+  k17.txt="I"
+  k18.txt="O"
+  k19.txt="P"
+  k20.txt="A"
+  k21.txt="S"
+  k22.txt="D"
+  k23.txt="F"
+  k24.txt="G"
+  k25.txt="H"
+  k26.txt="J"
+  k27.txt="K"
+  k28.txt="L"
+  k30.txt="Z"
+  k31.txt="X"
+  k32.txt="C"
+  k33.txt="V"
+  k34.txt="B"
+  k35.txt="N"
+  k36.txt="M"
+  }
+
+on kSave.up:
+  if(pInit.vEditKind.val==2)
+  {
+  if(pInit.tField.txt=="date")
+  {
+  pInit.tDate.txt=tInput.txt
+  }else
+  {
+  pInit.tTime.txt=tInput.txt
+  }
+  page pClock
+  }else
+  {
+  pInit.tCommand.txt="FIELD_SET|"
+  if(pInit.vEditKind.val==1)
+  {
+  pInit.tCommand.txt="ROW_SET|"
+  covx pInit.vEditRow.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  pInit.tCommand.txt+="|"
+  }
+  if(pInit.vEditKind.val==3)
+  {
+  pInit.tCommand.txt="CHECK_SET|"
+  covx pInit.vEditRow.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  pInit.tCommand.txt+="|"
+  }
+  pInit.tCommand.txt+=pInit.tField.txt
+  pInit.tCommand.txt+="|"
+  pInit.tCommand.txt+=tInput.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on tmEdit.timer:
+  if(pInit.vBusy.val==1)
+  {
+  if(pInit.nAckSeq.val==pInit.vSeq.val)
+  {
+  pInit.vBusy.val=0
+  if(pInit.nAckCode.val==0)
+  {
+  page pInit.vEditPage.val
+  }else
+  {
+  pInit.tMsg.txt="ConMT error "
+  covx pInit.nAckCode.val,pInit.tNum.txt,0,0
+  pInit.tMsg.txt+=pInit.tNum.txt
+  if(pInit.nAckCode.val==1)
+  {
+  pInit.tMsg.txt="Invalid input. Check the field format."
+  }
+  if(pInit.nAckCode.val==2)
+  {
+  pInit.tMsg.txt="Complete the required fields"
+  }
+  if(pInit.nAckCode.val==6)
+  {
+  pInit.tMsg.txt="Check the microSD card"
+  }
+  if(pInit.nAckCode.val==9)
+  {
+  pInit.tMsg.txt="Connect a temperature probe"
+  }
+  if(pInit.nAckCode.val==10)
+  {
+  pInit.tMsg.txt="Set date/time before measurement"
+  }
+  if(pInit.nAckCode.val==11)
+  {
+  pInit.tMsg.txt="Enter at least two valid lab pairs"
+  }
+  if(pInit.nAckCode.val==12)
+  {
+  pInit.tMsg.txt="Add a later checkpoint before SAVE"
+  }
+  tError.txt=pInit.tMsg.txt
+  }
+  }
+  else
+  {
+  pInit.vRetry.val+=1
+  if(pInit.vRetry.val==15)
+  {
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  if(pInit.vRetry.val>=30)
+  {
+  pInit.vBusy.val=0
+  tError.txt="No answer. Return and reconnect."
+  }
+  }
+  }

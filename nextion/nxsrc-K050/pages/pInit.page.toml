@@ -1,0 +1,510 @@
+[page]
+name = "pInit"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "00_init"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "tReq"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 191
+
+[[component]]
+name = "tNum"
+type = "variable"
+vscope = 1
+sta = 1
+txt = "0"
+txt_maxl = 16
+
+[[component]]
+name = "tSplit"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tData"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tEdit"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tDayInput"
+type = "variable"
+vscope = 1
+sta = 1
+txt = "0"
+txt_maxl = 24
+
+[[component]]
+name = "nBoot"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "nView"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "nAckSeq"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "nAckCode"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "nAckValue"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vSeq"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vBusy"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vRetry"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vSource"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vStep"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "00_init"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "00_init"
+
+[[component]]
+name = "statusArea"
+type = "text"
+x = 96
+y = 523
+w = 300
+h = 141
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 1
+
+[[component]]
+name = "tChkSensors"
+type = "text"
+x = 98
+y = 595
+w = 295
+h = 30
+sta = 1
+bco = "#1e2326"
+txt = "Checking sensors: --"
+txt_maxl = 40
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tChkClock"
+type = "text"
+x = 98
+y = 560
+w = 295
+h = 30
+sta = 1
+bco = "#1e2326"
+txt = "Loading database: --"
+txt_maxl = 40
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tChkDevice"
+type = "text"
+x = 98
+y = 630
+w = 295
+h = 30
+sta = 1
+bco = "#1e2326"
+txt = "Checking hardware: --"
+txt_maxl = 40
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tReady"
+type = "text"
+x = 98
+y = 525
+w = 295
+h = 30
+sta = 1
+bco = "#1e2326"
+txt = "Starting application: --"
+txt_maxl = 40
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tMsg"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 96
+
+[[component]]
+name = "vPage"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vTask"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vGet"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vOffset"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vTotal"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vIndex"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vPoll"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vIdentity"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vStorage"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vMask"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vRevision"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vToken"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vEditPage"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vEditKind"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vEditRow"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vMax"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vTemp"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vInterval"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vBright"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vFlags"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vId0"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vId1"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vId2"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vId3"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tField"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 20
+
+[[component]]
+name = "tTitle"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 48
+
+[[component]]
+name = "tCommand"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 150
+
+[[component]]
+name = "tDate"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 10
+
+[[component]]
+name = "tTime"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 8
+
+[[component]]
+name = "tNotice"
+type = "text"
+x = 10
+y = 775
+w = 460
+h = 24
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 96
+
+[[component]]
+name = "tStatus"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "vChosen"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tProgress"
+type = "text"
+x = 350
+y = 464
+w = 55
+h = 28
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = "0%"
+txt_maxl = 8
+
+[[component]]
+name = "jLink"
+type = "progress-bar"
+x = 100
+y = 494
+w = 294
+h = 18
+sta = 0
+val = 0
+bco = "#343c42"
+pco = "#ff8814"
+
+[[component]]
+name = "vProtocolReady"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vSplashStage"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tmSplash"
+type = "timer"
+tim = 650
+en = 0
+events = [
+    "timer",
+]
+
+[[component]]
+name = "vSensors"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vCount"
+type = "variable"
+vscope = 1
+val = 0

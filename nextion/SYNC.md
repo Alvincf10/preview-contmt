@@ -1,90 +1,15 @@
-# Apakah HMI sudah sinkron dengan firmware?
+# Integrasi Arduino dan Nextion K050
 
-Jawaban singkat: **belum.** Repo ini punya **dua firmware** yang berbicara dengan
-**dua protokol berbeda**, dan panel yang saya bangun hanya bisa bicara ke salah
-satunya.
+Pasangan aktif memakai firmware Arduino 1.0.1 dan HMI conmt-NX8048K050-CM1-final.tft yang dibangun dari nxsrc-K050. Kontrak frame, field, revisi, dan error mengikuti [kontrak Arduino](../arduino/CONTRACT.md).
 
-Diukur dengan `python nextion/tools/check_sync.py`.
+Firmware mengalamatkan seluruh variabel handshake dan data dengan awalan pInit. Panel mengirim satu request pada satu waktu, menunggu nAckSeq, memeriksa nAckCode, dan memakai nView terbaru. Permintaan yang kehilangan balasan dikirim ulang dengan nomor urut dan payload yang sama.
 
-## Dua firmware, dua protokol
+Splash mengikuti urutan preview ConMT. Sesudah handshake MCU, empat tahap berjalan setiap 650 ms hingga 100%. Panel menampilkan 100% selama 700 ms, lalu otomatis membuka User Information. SAVE pada User Information membuka Main Menu. Angka 85% pada gambar ditutup dengan progres dinamis. Status sensor atau penyimpanan yang perlu perhatian tetap ditampilkan saat pemeriksaan selesai. Versi MCU yang perlu diperbarui ditampilkan secara eksplisit.
 
-| | `firmware/ConMT` | `arduino/ConMT` |
-| --- | --- | --- |
-| Bahasa | C++ (host, AVR) | Arduino sketch |
-| Panel dikendalikan lewat | `vBoot`, `vSeq`, `vAck`, `vRender` | `nBoot`, `nView`, `nAckSeq`, `tData` |
-| Nilai ditampilkan lewat | satu Text per nilai (`tM`, `tFc`, `tS1`, …) | satu Text `tData` berisi kolom dipisah `|` |
-| Halaman | `page 11` (nomor) | `page pRT` (nama) |
-| Arah | **HMI sekarang mengikuti yang ini** | tidak cocok dengan HMI |
+Keyboard mengirim nilai operator, proyek, tanggal, baseline, material, dan lab melalui perintah produksi. Penyimpanan baseline serta hasil mengirim revisi yang sedang ditinjau. Konfirmasi memakai token dari MCU. Pemilihan baseline memakai ID balasan, dan BACK mempertahankan konteks draft atau sesi.
 
-## Yang tidak cocok
+Halaman utama mempertahankan ID 0–16. Lima halaman lokal menangani keyboard, konfirmasi, jam, koreksi checkpoint, dan kurva. Frame dari halaman lokal tetap memakai ID domain asal di MCU. Seluruh baris dapat dibaca melalui paginasi.
 
-**Variabel sinkronisasi.** Panel menulis dan membaca `vBoot/vSeq/vAck/vBusy/…`.
-Arduino tidak punya satu pun dari itu; ia memakai `nBoot/nView/nAckSeq/nAckCode/nAckValue`.
+Uji integrasi menggunakan simulator K050 dan parser, engine, serta jurnal Arduino yang sebenarnya, dengan image kartu raw dan sensor/jam terkontrol di komputer. Cakupannya meliputi input sampai SAVE dan riwayat, koreksi checkpoint, grafik, konfirmasi hapus, balasan serial hilang, dan MCU reset/reconnect. Laporan build dan checksum ada di conmt-NX8048K050-CM1-final.validation.json.
 
-**Cara nilai sampai ke layar.** Panel punya satu Text per nilai — `tM`, `tFc`,
-`tS1`, `tTarget`, dan seterusnya. Arduino tidak mengisi field itu sama sekali; ia
-mengirim **satu** `tData.txt` berisi semua kolom sekaligus, dan mengharapkan panel
-memecahnya sendiri. Panel yang saya bangun tidak punya `tData`, dan tidak punya
-kode untuk memecahnya.
-
-**Delapan perintah tidak ada di Arduino:**
-
-```
-DATUM_PICK  GAP_RECONCILE  PAGE_ROWS  SELF_CHECK
-SESSION_RESUME  SETTINGS_STEP  SETTINGS_TOGGLE  STORAGE_RESCAN
-```
-
-Termasuk `SELF_CHECK` — tanpa itu, Arduino tidak akan pernah memindahkan panel
-dari splash, karena Arduino memang tidak mengenal perintahnya.
-
-**Delapan perintah Arduino tidak dikirim panel:**
-
-```
-CLOCK_SET  CONFIRM  GET  MEASURE_RESUME  PAGE_READY  RETRY  ROW_FOCUS  STORAGE_RETRY
-```
-
-`PAGE_READY` paling penting: Arduino menunggu frame itu setiap kali halaman
-berganti. Panel saya mengirimnya, tapi dalam bentuk `CM1|boot|0|0|0|PAGE_READY|2`
-— Arduino mengharapkan `CM1|0|0|0|0|PAGE_READY` tanpa versi kontrak di ujung.
-
-## Apa artinya
-
-Kalau panel ini di-upload sekarang dan disambungkan ke Arduino dengan sketch
-`arduino/ConMT`:
-
-- panel menyala, menampilkan splash, lalu **berhenti** — `SELF_CHECK` tidak dikenali;
-- kalau dilewati, halaman berpindah tapi **semua nilai tetap kosong** — Arduino
-  menulis ke `tData`, yang tidak ada di panel;
-- jam dan baterai tidak muncul — Arduino tidak menulis `tClock`/`tBatt`.
-
-Jadi tidak ada satu pun nilai yang sampai ke layar.
-
-## Tiga jalan keluar
-
-**1. Pakai `firmware/ConMT`.** Ini yang sudah sinkron dengan panel: protokolnya
-sama, nama field-nya sama, `SELF_CHECK` ada. Firmware ini sudah punya tes sendiri
-(11 dari 13 lolos di sini; 2 gagal karena toolchain, bukan kode).
-
-**2. Ubah `arduino/ConMT` agar bicara protokol panel.** Perlu:
-- ganti `nBoot/nView/nAckSeq` menjadi `vBoot/vSeq/vAck`;
-- kirim satu Text per nilai, bukan `tData`;
-- tambahkan `SELF_CHECK`, dan tangani `SETTINGS_STEP`, `SETTINGS_TOGGLE`, `PAGE_ROWS`.
-
-**3. Ubah panel agar mengikuti Arduino.** Perlu:
-- tambah `tData` (Text 255 karakter) dan `nBoot/nView/nAckSeq` di 17 halaman;
-- tulis kode Nextion untuk memecah `tData` menjadi field;
-- sesuaikan seluruh event.
-
-Jalan 3 paling mahal dan paling rapuh: memecah teks berpemisah di Nextion butuh
-`substr` berantai, dan setiap kolom harus dihitung ulang bila urutannya berubah.
-
-## Catatan
-
-`arduino/CONTRACT.md` sudah menyebut arah yang benar untuk masa depan — ia
-menunjuk ke `nextion/project.json` sebagai acuan nama halaman. Tapi isinya
-menggambarkan protokol `tData` yang berbeda dari yang dipakai panel sekarang.
-Dua dokumen kontrak yang hidup berdampingan adalah sumber kebingungan ini, dan
-salah satunya harus jadi acuan tunggal.
-
-Panel yang dibangun di repo ini mengikuti `firmware/hmi/manifest.json`, yang
-dihasilkan dari `firmware/ConMT/src/hmi/Transport.h`.
+Firmware raw sudah di-upload ke unit uji lewat COM12 (Arduino as ISP); verifikasi flash, fuse, lock, dan EEPROM lulus. Upload TFT final ke panel, pengoperasian fisik pasangan baru, kestabilan probe, serta baca/tulis dan recovery microSD masih memerlukan pengujian pada unit. [Petunjuk file dan build](NX8048K050-README.txt)

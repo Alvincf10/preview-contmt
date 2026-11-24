@@ -1,0 +1,145 @@
+[page]
+name = "pClock"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+bco = "#1e2326"
+
+[[component]]
+name = "tmClock"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "tTitle"
+type = "text"
+x = 20
+y = 50
+w = 440
+h = 50
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans28"
+txt = "Device date and time"
+txt_maxl = 64
+
+[[component]]
+name = "tDateLabel"
+type = "text"
+x = 30
+y = 190
+w = 420
+h = 30
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = "Date YYYY-MM-DD"
+txt_maxl = 64
+
+[[component]]
+name = "tDate"
+type = "text"
+x = 30
+y = 230
+w = 420
+h = 60
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 64
+events = [
+    "up",
+]
+
+[[component]]
+name = "tTimeLabel"
+type = "text"
+x = 30
+y = 340
+w = 420
+h = 30
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = "Time HH:MM:SS"
+txt_maxl = 64
+
+[[component]]
+name = "tTime"
+type = "text"
+x = 30
+y = 380
+w = 420
+h = 60
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 64
+events = [
+    "up",
+]
+
+[[component]]
+name = "tError"
+type = "text"
+x = 30
+y = 490
+w = 420
+h = 50
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "mCancel"
+type = "button"
+x = 30
+y = 650
+w = 190
+h = 50
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Back"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "mSave"
+type = "button"
+x = 250
+y = 650
+w = 200
+h = 50
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Set clock"
+txt_maxl = 9
+events = [
+    "up",
+]

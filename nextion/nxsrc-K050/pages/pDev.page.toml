@@ -1,0 +1,111 @@
+[page]
+name = "pDev"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "16_device_info"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 43
+y = 81
+w = 40
+h = 13
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "16_device_info"
+xcen = 0
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 429
+y = 81
+w = 32
+h = 12
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "16_device_info"
+xcen = 0
+
+[[component]]
+name = "tMsg"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+vscope = 1
+
+[[component]]
+name = "tNotice"
+type = "text"
+x = 10
+y = 775
+w = 460
+h = 24
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 96
+
+[[component]]
+name = "mClock"
+type = "hotspot"
+x = 43
+y = 81
+w = 40
+h = 13
+events = [
+    "up",
+]
+
+[[component]]
+name = "mStorage"
+type = "hotspot"
+x = 313
+y = 589
+w = 87
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 67
+y = 711
+w = 346
+h = 48
+events = [
+    "down",
+    "up",
+]

@@ -1,5 +1,7 @@
 # ConMT HMI — source yang bisa diedit agent
 
+Untuk pasangan Arduino 1.0.1 dan NX8048K050, gunakan `nxsrc-K050` serta generator `tools/k050_protocol.py`. Protokol pasangan ini mengikuti `arduino/CONTRACT.md`. Variabel komunikasi global berada di `pInit`. Generator, manifest, dan perintah `hmi:source` pada uraian lama di bawah memakai target awal yang terpisah. Petunjuk pasangan K050 tercatat pada `NX8048K050-README.txt`.
+
 `.HMI` adalah biner tertutup: tidak bisa di-diff, tidak bisa diedit Cursor, dan tidak
 bisa dibaca agent. Folder `nextion/nxsrc/` adalah HMI yang sama sebagai teks. Agent
 (dan kamu) mengedit teks itu; `nxwright` membangunnya kembali menjadi `.HMI`, atau

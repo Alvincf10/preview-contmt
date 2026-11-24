@@ -1,0 +1,155 @@
+[page]
+name = "pUser"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "01_user_info"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "01_user_info"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "01_user_info"
+
+[[component]]
+name = "tOp"
+type = "text"
+x = 80
+y = 368
+w = 310
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "01_user_info"
+events = [
+    "up",
+]
+xcen = 0
+ycen = 1
+
+[[component]]
+name = "tProj"
+type = "text"
+x = 80
+y = 468
+w = 310
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 64
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "01_user_info"
+events = [
+    "up",
+]
+xcen = 0
+ycen = 1
+
+[[component]]
+name = "tDate"
+type = "text"
+x = 80
+y = 568
+w = 310
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "01_user_info"
+events = [
+    "up",
+]
+xcen = 0
+ycen = 1
+
+[[component]]
+name = "tMsg"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+vscope = 1
+
+[[component]]
+name = "tNotice"
+type = "text"
+x = 10
+y = 775
+w = 460
+h = 24
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 96
+
+[[component]]
+name = "mClock"
+type = "hotspot"
+x = 8
+y = 62
+w = 100
+h = 44
+events = [
+    "up",
+]
+
+[[component]]
+name = "mSave"
+type = "hotspot"
+x = 84
+y = 625
+w = 312
+h = 57
+events = [
+    "down",
+    "up",
+]

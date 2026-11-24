@@ -1,0 +1,686 @@
+on pSet.loadend:
+  if(pInit.vPage.val!=15)
+  {
+  pInit.vOffset.val=0
+  }
+  pInit.vPage.val=15
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  pInit.vStep.val=0
+  pInit.vPoll.val=0
+  pInit.tMsg.txt=""
+
+on mBack.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="NAV|2"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+
+on mSave.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="SETTINGS_SAVE"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+
+on tmPoll.timer:
+  if(pInit.vBusy.val==1)
+  {
+  if(pInit.nAckSeq.val==pInit.vSeq.val)
+  {
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  if(pInit.nAckCode.val==4||pInit.nAckCode.val==8)
+  {
+  pInit.nBoot.val=0
+  pInit.vStep.val=0
+  }else
+  {
+  if(pInit.vTask.val==0)
+  {
+  if(pInit.vGet.val==1)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  pInit.tStatus.txt=pInit.tData.txt
+  spstr pInit.tData.txt,tClock.txt,"|",1
+  spstr pInit.tData.txt,tBatt.txt,"|",3
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
+  covx pInit.tSplit.txt,pInit.vStorage.val,0,0
+  spstr pInit.tData.txt,pInit.tDate.txt,"|",0
+  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",14
+  covx pInit.tSplit.txt,pInit.vMask.val,0,0
+  pInit.vSensors.val=0
+  pInit.vCount.val=pInit.vMask.val
+  if(pInit.vCount.val>=4)
+  {
+  pInit.vSensors.val+=1
+  pInit.vCount.val-=4
+  }
+  if(pInit.vCount.val>=2)
+  {
+  pInit.vSensors.val+=1
+  pInit.vCount.val-=2
+  }
+  if(pInit.vCount.val>=1)
+  {
+  pInit.vSensors.val+=1
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",6
+  covx pInit.tSplit.txt,pInit.vInterval.val,0,0
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",7
+  covx pInit.tSplit.txt,pInit.vBright.val,0,0
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",8
+  covx pInit.tSplit.txt,pInit.vFlags.val,0,0
+  pInit.vTemp.val=pInit.vInterval.val/3600
+  covx pInit.vTemp.val,tHour.txt,2,0
+  pInit.vTemp.val=pInit.vInterval.val/60%60
+  covx pInit.vTemp.val,tMin.txt,2,0
+  pInit.vTemp.val=pInit.vInterval.val%60
+  covx pInit.vTemp.val,tSec.txt,2,0
+  covx pInit.vBright.val,tBright.txt,0,0
+  pInit.vTemp.val=pInit.vFlags.val&1
+  tSound.txt="OFF"
+  if(pInit.vTemp.val!=0)
+  {
+  tSound.txt="ON"
+  }
+  pInit.vTemp.val=pInit.vFlags.val&2
+  pInit.vTemp.val/=2
+  tAuto.txt="OFF"
+  if(pInit.vTemp.val!=0)
+  {
+  tAuto.txt="ON"
+  }
+  }
+  }
+  pInit.vStep.val+=1
+  }else
+  {
+  if(pInit.nAckCode.val==13)
+  {
+  pInit.vToken.val=pInit.nAckValue.val
+  page pConfirm
+  }else
+  {
+  if(pInit.nAckCode.val!=0)
+  {
+  pInit.tMsg.txt="ConMT error "
+  covx pInit.nAckCode.val,pInit.tNum.txt,0,0
+  pInit.tMsg.txt+=pInit.tNum.txt
+  if(pInit.nAckCode.val==1)
+  {
+  pInit.tMsg.txt="Invalid input. Check the field format."
+  }
+  if(pInit.nAckCode.val==2)
+  {
+  pInit.tMsg.txt="Complete the required fields"
+  }
+  if(pInit.nAckCode.val==6)
+  {
+  pInit.tMsg.txt="Check the microSD card"
+  }
+  if(pInit.nAckCode.val==9)
+  {
+  pInit.tMsg.txt="Connect a temperature probe"
+  }
+  if(pInit.nAckCode.val==10)
+  {
+  pInit.tMsg.txt="Set date/time before measurement"
+  }
+  if(pInit.nAckCode.val==11)
+  {
+  pInit.tMsg.txt="Enter at least two valid lab pairs"
+  }
+  if(pInit.nAckCode.val==12)
+  {
+  pInit.tMsg.txt="Add a later checkpoint before SAVE"
+  }
+  }else
+  {
+  pInit.tMsg.txt=""
+  }
+  pInit.vStep.val=1
+  }
+  }
+  }
+  }
+  else
+  {
+  pInit.vRetry.val+=1
+  if(pInit.vRetry.val==15)
+  {
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  if(pInit.vRetry.val>=30)
+  {
+  pInit.vBusy.val=0
+  pInit.nBoot.val=0
+  pInit.vStep.val=0
+  pInit.tMsg.txt="No answer from MCU"
+  }
+  }
+  }
+  tNotice.txt=pInit.tMsg.txt
+  if(pInit.vBusy.val==0&&dp==pInit.vPage.val)
+  {
+  if(pInit.vStep.val==0)
+  {
+  pInit.vGet.val=0
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="PAGE_READY"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val==1)
+  {
+  pInit.vGet.val=1
+  pInit.tCommand.txt="GET|status"
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(pInit.vStep.val>1)
+  {
+  pInit.vPoll.val+=1
+  if(pInit.vPoll.val>=5)
+  {
+  pInit.vPoll.val=0
+  pInit.vStep.val=1
+  }
+  }
+  }
+
+on mTap0.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vInterval.val/3600
+  pInit.vTemp.val+=1
+  if(pInit.vTemp.val<0)
+  {
+  pInit.vTemp.val=0
+  }
+  if(pInit.vTemp.val>=24)
+  {
+  pInit.vTemp.val=23
+  }
+  pInit.tCommand.txt="SETTINGS_SET|hour|"
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on mTap1.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vInterval.val/3600
+  pInit.vTemp.val+=-1
+  if(pInit.vTemp.val<0)
+  {
+  pInit.vTemp.val=0
+  }
+  if(pInit.vTemp.val>=24)
+  {
+  pInit.vTemp.val=23
+  }
+  pInit.tCommand.txt="SETTINGS_SET|hour|"
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on mTap2.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vInterval.val/60%60
+  pInit.vTemp.val+=1
+  if(pInit.vTemp.val<0)
+  {
+  pInit.vTemp.val=0
+  }
+  if(pInit.vTemp.val>=60)
+  {
+  pInit.vTemp.val=59
+  }
+  pInit.tCommand.txt="SETTINGS_SET|minute|"
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on mTap3.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vInterval.val/60%60
+  pInit.vTemp.val+=-1
+  if(pInit.vTemp.val<0)
+  {
+  pInit.vTemp.val=0
+  }
+  if(pInit.vTemp.val>=60)
+  {
+  pInit.vTemp.val=59
+  }
+  pInit.tCommand.txt="SETTINGS_SET|minute|"
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on mTap4.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vInterval.val%60
+  pInit.vTemp.val+=1
+  if(pInit.vTemp.val<0)
+  {
+  pInit.vTemp.val=0
+  }
+  if(pInit.vTemp.val>=60)
+  {
+  pInit.vTemp.val=59
+  }
+  pInit.tCommand.txt="SETTINGS_SET|second|"
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on mTap5.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vInterval.val%60
+  pInit.vTemp.val+=-1
+  if(pInit.vTemp.val<0)
+  {
+  pInit.vTemp.val=0
+  }
+  if(pInit.vTemp.val>=60)
+  {
+  pInit.vTemp.val=59
+  }
+  pInit.tCommand.txt="SETTINGS_SET|second|"
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on mTap6.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vBright.val
+  pInit.vTemp.val+=1
+  if(pInit.vTemp.val<0)
+  {
+  pInit.vTemp.val=0
+  }
+  if(pInit.vTemp.val>=101)
+  {
+  pInit.vTemp.val=100
+  }
+  pInit.tCommand.txt="SETTINGS_SET|brightness|"
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on mTap7.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vBright.val
+  pInit.vTemp.val+=-1
+  if(pInit.vTemp.val<0)
+  {
+  pInit.vTemp.val=0
+  }
+  if(pInit.vTemp.val>=101)
+  {
+  pInit.vTemp.val=100
+  }
+  pInit.tCommand.txt="SETTINGS_SET|brightness|"
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on mTap8.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vFlags.val&1
+  pInit.tCommand.txt="SETTINGS_SET|sound|"
+  if(pInit.vTemp.val==0)
+  {
+  pInit.tCommand.txt+="1"
+  }else
+  {
+  pInit.tCommand.txt+="0"
+  }
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+
+on mTap9.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vTemp.val=pInit.vFlags.val&2
+  pInit.tCommand.txt="SETTINGS_SET|autoSave|"
+  if(pInit.vTemp.val==0)
+  {
+  pInit.tCommand.txt+="1"
+  }else
+  {
+  pInit.tCommand.txt+="0"
+  }
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }

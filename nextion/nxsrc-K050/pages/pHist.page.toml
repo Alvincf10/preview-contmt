@@ -1,0 +1,373 @@
+[page]
+name = "pHist"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "13_history"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 43
+y = 81
+w = 40
+h = 13
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "13_history"
+xcen = 0
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 429
+y = 81
+w = 32
+h = 12
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "13_history"
+xcen = 0
+
+[[component]]
+name = "tId0"
+type = "text"
+x = 86
+y = 405
+w = 94
+h = 31
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "13_history"
+xcen = 0
+
+[[component]]
+name = "tName0"
+type = "text"
+x = 180
+y = 405
+w = 166
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "13_history"
+xcen = 0
+
+[[component]]
+name = "tVal0"
+type = "text"
+x = 86
+y = 472
+w = 127
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "13_history"
+xcen = 0
+
+[[component]]
+name = "tDate0"
+type = "text"
+x = 233
+y = 472
+w = 84
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "13_history"
+xcen = 0
+
+[[component]]
+name = "tCount0"
+type = "text"
+x = 338
+y = 472
+w = 54
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "13_history"
+xcen = 0
+
+[[component]]
+name = "tMsg"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+vscope = 1
+
+[[component]]
+name = "tId1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tName1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tVal1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDate1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCount1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tId2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tName2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tVal2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDate2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCount2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tId3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tName3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tVal3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDate3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCount3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tId4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tName4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tVal4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDate4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCount4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tId5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tName5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tVal5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDate5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCount5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tNotice"
+type = "text"
+x = 10
+y = 775
+w = 460
+h = 24
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 96
+
+[[component]]
+name = "mPrevRows"
+type = "hotspot"
+x = 4
+y = 240
+w = 24
+h = 280
+events = [
+    "up",
+]
+
+[[component]]
+name = "mNextRows"
+type = "hotspot"
+x = 452
+y = 240
+w = 24
+h = 280
+events = [
+    "up",
+]
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 67
+y = 521
+w = 143
+h = 40
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "mDetail"
+type = "hotspot"
+x = 220
+y = 521
+w = 193
+h = 40
+events = [
+    "down",
+    "up",
+]

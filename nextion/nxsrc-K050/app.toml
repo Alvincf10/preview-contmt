@@ -1,0 +1,55 @@
+format = 1
+name = "ConMT"
+language = "nextion_do_not_change_manually"
+screen = "NX8048K050"
+rotation = 90
+encoding = "iso-8859-1"
+pages = [
+    "pInit",
+    "pUser",
+    "pMain",
+    "pBase",
+    "pNewB",
+    "pMat",
+    "pMatu",
+    "pBaseR",
+    "pSaveB",
+    "pKuat",
+    "pSelB",
+    "pRT",
+    "pStr",
+    "pHist",
+    "pHistD",
+    "pSet",
+    "pDev",
+    "pEdit",
+    "pConfirm",
+    "pClock",
+    "pPoints",
+    "pChart",
+    "pAddRow",
+]
+pictures = [
+    "00_init",
+    "01_user_info",
+    "02_main_menu",
+    "03_baseline",
+    "04_new_baseline",
+    "05_material_data",
+    "06_maturity_data",
+    "07_baseline_result",
+    "08_saved_baseline",
+    "09_kuat_tekan",
+    "10_select_baseline",
+    "11_realtime",
+    "12_strength_result",
+    "13_history",
+    "14_history_detail",
+    "15_settings",
+    "16_device_info",
+]
+fonts = [
+    "NotoSans16",
+    "NotoSans20",
+    "NotoSans28",
+]

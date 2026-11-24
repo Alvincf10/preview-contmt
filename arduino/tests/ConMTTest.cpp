@@ -17,9 +17,9 @@ namespace {
 using namespace conmt;
 
 const uint32_t CardBlocks = 16384;
-const uint32_t DataStart = 66;
-const uint32_t LogBlocks = 8192;
-uint32_t fileStart = DataStart;
+const uint32_t RawBlocks = 2048;
+const uint32_t LogBlocks = RawBlocks;
+uint32_t fileStart = CardBlocks - RawBlocks;
 std::vector<uint8_t> image;
 std::deque<uint8_t> incoming;
 std::string output;
@@ -40,55 +40,9 @@ void write32(size_t offset, uint32_t value) {
   write16(offset + 2, value >> 16);
 }
 
-void formatFat16() {
-  fileStart = DataStart;
+void formatCard() {
+  fileStart = CardBlocks - RawBlocks;
   image.assign(CardBlocks * 512, 0);
-  write16(11, 512);
-  image[13] = 1;
-  write16(14, 1);
-  image[16] = 1;
-  write16(17, 16);
-  write16(19, CardBlocks);
-  write16(22, 64);
-  write16(510, 0xaa55);
-  for (uint16_t cluster = 2; cluster < LogBlocks + 2; ++cluster)
-    write16(512 + cluster * 2, cluster == LogBlocks + 1 ? 0xffff : cluster + 1);
-  const size_t directory = 65 * 512;
-  memcpy(&image[directory], "CMTLOG  BIN", 11);
-  image[directory + 11] = 0x20;
-  write16(directory + 26, 2);
-  write32(directory + 28, LogBlocks * 512);
-}
-
-void formatFat32() {
-  constexpr uint32_t Partition = 64;
-  constexpr uint32_t Blocks = 70000;
-  constexpr uint32_t Reserved = 32;
-  constexpr uint32_t FatBlocks = 547;
-  image.assign((Partition + Blocks) * 512, 0);
-  image[450] = 0xc;
-  write32(454, Partition);
-  write32(458, Blocks);
-  write16(510, 0xaa55);
-  const size_t boot = Partition * 512;
-  write16(boot + 11, 512);
-  image[boot + 13] = 1;
-  write16(boot + 14, Reserved);
-  image[boot + 16] = 1;
-  write32(boot + 32, Blocks);
-  write32(boot + 36, FatBlocks);
-  write32(boot + 44, 2);
-  write16(boot + 510, 0xaa55);
-  const size_t fat = (Partition + Reserved) * 512;
-  write32(fat + 8, 0x0fffffff);
-  for (uint32_t cluster = 3; cluster < LogBlocks + 3; ++cluster)
-    write32(fat + cluster * 4, cluster == LogBlocks + 2 ? 0x0fffffff : cluster + 1);
-  fileStart = Partition + Reserved + FatBlocks + 1;
-  const size_t dir = (fileStart - 1) * 512;
-  memcpy(&image[dir], "CMTLOG  BIN", 11);
-  image[dir + 11] = 0x20;
-  write16(dir + 26, 3);
-  write32(dir + 28, LogBlocks * 512);
 }
 
 struct Calibration {
@@ -504,7 +458,7 @@ int main() {
   near(correction(-0.05f), 1, 0.00001);
   near(correction(-0.1f), 1, 0.00001);
   near(correction(-0.3f), 1.2, 0.00001);
-  formatFat16();
+  formatCard();
   Engine engine;
   assert(engine.recover());
   const Stamp begin = setUser(engine);
@@ -519,13 +473,11 @@ int main() {
   success(engine.deleteBaseline(saved));
   assert(!engine.exists(saved));
   wire(data);
-  formatFat32();
+  formatCard();
   assert(engine.recover());
-  success(engine.set(Field::Operator, "FAT32-MBR"));
+  success(engine.set(Field::Operator, "RAW-CARD"));
   assert(engine.recover());
-  uint32_t fatOffset = (64 + 32) * 512;
-  write32(fatOffset + 3 * 4, 7);
-  assert(!engine.recover());
   std::cout << "41 rows, 10 FKZ values, rounded result, FKZ version errors, AutoSave, "
-               "3 SD interruption modes, FAT16/32 and CM1 passed\n";
+               "3 SD interruption modes, raw card and CM1 passed\n";
+  return 0;
 }
