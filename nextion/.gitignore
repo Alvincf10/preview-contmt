@@ -1,5 +1,3 @@
-# Binary build outputs: rebuilt from nxsrc, never edited by hand.
-conmt.HMI
+# Local editor backups and kit zip; keep built panel binaries tracked.
 conmt.HMI.*.bak
-conmt.tft
 conmt-nextion-kit.zip
