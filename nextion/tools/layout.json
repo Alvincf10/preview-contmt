@@ -1745,6 +1745,267 @@
     "cls": "row-del"
    },
    {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 794,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 833,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 872,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 911,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 950,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 989,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1028,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1067,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1106,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1145,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1184,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1223,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1262,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1301,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1340,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1379,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1418,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1457,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1496,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1535,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1574,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1613,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1652,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1691,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1730,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1769,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "×",
+    "x": 370,
+    "y": 1808,
+    "w": 34,
+    "h": 30,
+    "cls": "row-del"
+   },
+   {
+    "kind": "button",
+    "text": "+ ADD DAY",
+    "x": 67,
+    "y": 1857,
+    "w": 168,
+    "h": 44,
+    "cls": "add-day-btn"
+   },
+   {
+    "kind": "button",
+    "text": "SENSOR",
+    "x": 245,
+    "y": 1857,
+    "w": 168,
+    "h": 44,
+    "cls": "sensor-btn"
+   },
+   {
     "kind": "text",
     "text": "BACK",
     "x": 78,
@@ -3501,6 +3762,24 @@
     "cls": "rt-cell-value"
    },
    {
+    "kind": "button",
+    "text": "+ ADD DAY (Day 1)",
+    "x": 43,
+    "y": 796,
+    "w": 394,
+    "h": 42,
+    "cls": "rt-day-btn"
+   },
+   {
+    "kind": "button",
+    "text": "LOAD EXCEL DEMO DAYS",
+    "x": 43,
+    "y": 846,
+    "w": 394,
+    "h": 42,
+    "cls": "rt-day-btn rt-day-btn-ghost"
+   },
+   {
     "kind": "text",
     "text": "BACK",
     "x": 74,
@@ -4459,6 +4738,321 @@
     "text": "Day 028-09-2026 · 10:30:00 · 37.1°CM 143",
     "x": 77,
     "y": 718,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 028-09-2026 · 11:00:00 · 36.8°CM 171",
+    "x": 77,
+    "y": 772,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 028-09-2026 · 11:30:00 · 36.5°CM 199",
+    "x": 77,
+    "y": 826,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 028-09-2026 · 12:00:00 · 36.6°CM 228",
+    "x": 77,
+    "y": 880,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 028-09-2026 · 12:30:00 · 37.2°CM 256",
+    "x": 77,
+    "y": 934,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 028-09-2026 · 13:00:00 · 37.8°CM 285",
+    "x": 77,
+    "y": 988,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 028-09-2026 · 13:30:00 · 37.6°CM 314",
+    "x": 77,
+    "y": 1042,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 028-09-2026 · 14:00:00 · 37.1°CM 342",
+    "x": 77,
+    "y": 1096,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 129-09-2026 · 08:00:00 · 29.5°CM 1,3",
+    "x": 77,
+    "y": 1150,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 230-09-2026 · 08:00:00 · 29.3°CM 2,4",
+    "x": 77,
+    "y": 1204,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 301-10-2026 · 08:00:00 · 29.6°CM 3,6",
+    "x": 77,
+    "y": 1258,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 402-10-2026 · 08:00:00 · 29.5°CM 4,8",
+    "x": 77,
+    "y": 1312,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 503-10-2026 · 08:00:00 · 29.0°CM 6,0",
+    "x": 77,
+    "y": 1366,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 604-10-2026 · 08:00:00 · 29.0°CM 7,2",
+    "x": 77,
+    "y": 1420,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 705-10-2026 · 08:00:00 · 28.7°CM 8,3",
+    "x": 77,
+    "y": 1474,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 806-10-2026 · 08:00:00 · 28.1°CM 9,5",
+    "x": 77,
+    "y": 1528,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 907-10-2026 · 08:00:00 · 29.1°CM 10,",
+    "x": 77,
+    "y": 1582,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1008-10-2026 · 08:00:00 · 28.1°CM 11",
+    "x": 77,
+    "y": 1636,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1109-10-2026 · 08:00:00 · 30.2°CM 13",
+    "x": 77,
+    "y": 1690,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1210-10-2026 · 08:00:00 · 29.6°CM 14",
+    "x": 77,
+    "y": 1744,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1311-10-2026 · 08:00:00 · 29.6°CM 15",
+    "x": 77,
+    "y": 1798,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1412-10-2026 · 08:00:00 · 30.1°CM 16",
+    "x": 77,
+    "y": 1852,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1513-10-2026 · 08:00:00 · 29.9°CM 17",
+    "x": 77,
+    "y": 1906,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1614-10-2026 · 08:00:00 · 30.4°CM 19",
+    "x": 77,
+    "y": 1960,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1715-10-2026 · 08:00:00 · 30.9°CM 20",
+    "x": 77,
+    "y": 2014,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1816-10-2026 · 08:00:00 · 30.6°CM 21",
+    "x": 77,
+    "y": 2068,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 1917-10-2026 · 08:00:00 · 31.8°CM 22",
+    "x": 77,
+    "y": 2122,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 2018-10-2026 · 08:00:00 · 30.6°CM 23",
+    "x": 77,
+    "y": 2176,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 2119-10-2026 · 08:00:00 · 30.4°CM 25",
+    "x": 77,
+    "y": 2230,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 2220-10-2026 · 08:00:00 · 30.7°CM 26",
+    "x": 77,
+    "y": 2284,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 2321-10-2026 · 08:00:00 · 31.5°CM 27",
+    "x": 77,
+    "y": 2338,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 2422-10-2026 · 08:00:00 · 31.8°CM 28",
+    "x": 77,
+    "y": 2392,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 2523-10-2026 · 08:00:00 · 30.6°CM 30",
+    "x": 77,
+    "y": 2446,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 2624-10-2026 · 08:00:00 · 30.6°CM 31",
+    "x": 77,
+    "y": 2500,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 2725-10-2026 · 08:00:00 · 31.8°CM 32",
+    "x": 77,
+    "y": 2554,
+    "w": 326,
+    "h": 46,
+    "cls": "rdh-log-toggle"
+   },
+   {
+    "kind": "button",
+    "text": "Day 2826-10-2026 · 08:00:00 · 30.6°CM 33",
+    "x": 77,
+    "y": 2608,
     "w": 326,
     "h": 46,
     "cls": "rdh-log-toggle"

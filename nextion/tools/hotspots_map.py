@@ -31,7 +31,7 @@ HOTSPOTS: dict[str, dict[str, str]] = {
 
     "pBase": {"mBack": "BACK", "mNew": "NEW BASELINE", "mSaved": "SAVED BASELINE"},
 
-    "pNewB": {"mBack": "BACK", "mNext": "NEXT", "mTemp": "Datum Temperature"},
+    "pNewB": {"mBack": "BACK", "mNext": "NEXT", "mTemp": "input -20"},
 
     "pMat": {"mBack": "BACK", "mNext": "NEXT"},
 

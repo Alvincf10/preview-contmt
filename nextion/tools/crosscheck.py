@@ -161,6 +161,10 @@ def main() -> int:
                 continue
             if any(f in (entry.get("cls") or "") for f in FURNITURE):
                 continue
+            # A button the picture draws below the screen cannot be pressed, so it
+            # needs no tap area. The panel pages its table instead.
+            if entry["y"] + entry["h"] // 2 >= HEIGHT or entry["x"] + entry["w"] // 2 >= WIDTH:
+                continue
             if not any(overlaps(tap, entry) for tap in hotspots):
                 label = (entry.get("text") or entry.get("cls", "?"))[:24]
                 problems.append(f"{page}: the drawn button {label!r} has no tap area")

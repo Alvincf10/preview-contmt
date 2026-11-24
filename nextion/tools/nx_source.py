@@ -243,6 +243,11 @@ def hotspot_box(page: str, hotspot: str, kit_component: dict) -> tuple[int, int,
     label = HOTSPOTS.get(page, {}).get(hotspot)
     if label:
         for element in DESIGN_CACHE.get(page, {}).get("button", []):
+            # A button the picture draws below the screen is not a target: it is a
+            # row of a table the panel cannot show at once. Choosing it would put
+            # the tap area off the screen, where nothing can reach it.
+            if element["y"] + element["h"] // 2 >= HEIGHT or element["x"] + element["w"] // 2 >= WIDTH:
+                continue
             text = (element.get("text") or "").strip()
             if text.upper().startswith(label.upper()):
                 # Pad by a few pixels: a finger is wider than the drawn shape.
@@ -270,6 +275,15 @@ def hotspot_box(page: str, hotspot: str, kit_component: dict) -> tuple[int, int,
                 cell = inputs[index * 4 + 3]
                 return (cell["x"] - 2, cell["y"] - 2, cell["w"] + 4, cell["h"] + 4)
             return None
+
+        # An input is a field the operator presses to edit it, so its tap area is
+        # the box itself. The label names the box by the sample it holds.
+        if label.lower().startswith("input "):
+            sample = label.split(" ", 1)[1]
+            for element in DESIGN_CACHE.get(page, {}).get("input", []):
+                if (element.get("text") or "") == sample:
+                    return (element["x"] - 2, element["y"] - 2, element["w"] + 4, element["h"] + 4)
+            return (kit_component["x"], kit_component["y"], kit_component["w"], kit_component["h"])
     return (kit_component["x"], kit_component["y"], kit_component["w"], kit_component["h"])
 
 

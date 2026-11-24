@@ -48,7 +48,6 @@ LAYOUT: dict[str, dict[str, tuple[str, str, int]]] = {
         "tFc": ("input", "30", 0),
         "tTemp": ("input", "-20", 0),
     },
-
     # The material form, each box by its own sample value.
     "pMat": {
         "tCem": ("input", "385", 0),

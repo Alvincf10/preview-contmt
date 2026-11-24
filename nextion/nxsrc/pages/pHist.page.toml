@@ -470,21 +470,3 @@ y = 519
 w = 197
 h = 44
 events = ["down", "up"]
-
-[[component]]
-name = "mAuto2"
-type = "hotspot"
-x = 65
-y = 576
-w = 147
-h = 44
-events = ["down", "up"]
-
-[[component]]
-name = "mAuto3"
-type = "hotspot"
-x = 218
-y = 576
-w = 197
-h = 44
-events = ["down", "up"]

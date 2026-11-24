@@ -52,7 +52,7 @@ on mSelect.down:
   printh 0A
   }
 
-on mAuto0.down:
+on mAuto1.down:
   if(pInit.vBusy.val==0&&pInit.vRender.val==0)
   {
   pInit.vSeq.val+=1
@@ -69,9 +69,7 @@ on mAuto0.down:
   pInit.tReq.txt+="8|"
   covx pInit.vView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|BASE_PICK"
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="0"
+  pInit.tReq.txt+="|NAV"
   prints pInit.tReq.txt,0
   printh 0A
   }
@@ -214,30 +212,6 @@ on mAuto7.down:
   printh 0A
   }
 
-on mAuto8.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
-  pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="8|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|BASE_PICK"
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-
 on mAuto9.down:
   if(pInit.vBusy.val==0&&pInit.vRender.val==0)
   {
@@ -256,60 +230,6 @@ on mAuto9.down:
   covx pInit.vView.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
   pInit.tReq.txt+="|NAV"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-
-on mAuto10.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
-  pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="8|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|NAV"
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="B"
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="A"
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="C"
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="K"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-
-on mAuto11.down:
-  if(pInit.vBusy.val==0&&pInit.vRender.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vReqBoot.val=pInit.vBoot.val
-  pInit.tReq.txt="CM1|"
-  covx pInit.vBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="8|"
-  covx pInit.vView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|BASE_PICK"
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="0"
   prints pInit.tReq.txt,0
   printh 0A
   }

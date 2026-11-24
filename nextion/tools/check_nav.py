@@ -67,6 +67,10 @@ def main() -> int:
                 continue
             if any(f in entry.get("cls", "") for f in FURNITURE):
                 continue
+            # A button the picture draws below the screen cannot be pressed, so it
+            # needs no tap area. The panel pages its table instead.
+            if entry["y"] + entry["h"] // 2 >= 800 or entry["x"] + entry["w"] // 2 >= 480:
+                continue
             total += 1
             if any(overlaps(tap, entry) for tap in taps):
                 covered += 1

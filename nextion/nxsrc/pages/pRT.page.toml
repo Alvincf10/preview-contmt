@@ -700,12 +700,3 @@ y = 733
 w = 225
 h = 44
 events = ["down", "up"]
-
-[[component]]
-name = "mAuto0"
-type = "hotspot"
-x = 41
-y = 794
-w = 398
-h = 46
-events = ["down", "up"]

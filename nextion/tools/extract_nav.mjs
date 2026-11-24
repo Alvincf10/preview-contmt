@@ -39,6 +39,16 @@ const SCREENS = {
 
 const browser = await chromium.launch()
 const page = await browser.newPage({ viewport: { width: 900, height: 1000 } })
+
+// The preview keeps its sample data in localStorage, and a click changes it: a
+// SELECT marks a card, a BACK moves the list, so the next load shows a different
+// screen. Each load therefore starts from the same stored state, and the
+// positions recorded here line up with the ones extract_layout.mjs measured.
+await page.addInitScript(() => {
+  window.localStorage.clear()
+  window.sessionStorage.clear()
+})
+
 const report = {}
 
 for (const [screen, pageName] of Object.entries(SCREENS)) {

@@ -99,12 +99,12 @@ sendiri; dan field status berada di dalam panel splash.
 | `nxwright check` | 0 error, 0 warning |
 | Unit test nilai & checklist | **10/10 lolos** |
 | Field berisi teks contoh | **0** (kecuali 4 baris status splash) |
-| Piksel angka contoh di gambar | **0** (diukur, bukan dilihat) |
-| Field terlalu sempit | 0 longgar, 1 dibatasi desain (`pHist.tName0`) |
-| Tumpang tindih field | 0 |
-| Tombol desain punya area sentuh | **144/144** |
-| Area sentuh tanpa event | **0** |
-| Hotspot ditekan di simulator | **87/87 mengirim frame valid** |
+| Piksel angka contoh di gambar | **0** |
+| Tombol di layar punya tap area | **76/76** |
+| Hotspot meleset dari tombolnya | **0** (diukur per kotak) |
+| Hotspot bertumpuk | **0** |
+| Jam & baterai di 17 page | **17/17** |
+| Hotspot ditekan di simulator | **83/83 mengirim frame valid** |
 | Firmware: tes splash | **6/6 lolos** |
 | `.TFT` | 8,6 MB, series P |
 
@@ -159,6 +159,38 @@ git clone https://github.com/nixiewright/nxwright
 cd nxwright && pip install -e .
 npx playwright install chromium   # untuk membaca layout dari preview
 ```
+
+## Tombol: label dan aksinya di kotak yang sama
+
+Panel digambar sebagai foto dengan area sentuh tak terlihat di atasnya. Area yang
+duduk **di samping** tombolnya, bukan di atasnya, adalah kegagalan yang paling
+cepat terasa: tombol terlihat, ditekan, dan tidak terjadi apa-apa.
+
+`check_hotspot_fit.py` mengukur setiap area sentuh terhadap tombol yang digambar
+dan melaporkan yang menutupi kurang dari 55% tombolnya. Hasilnya **0**.
+
+Dua kesalahan yang sempat membuat tombol meleset, dan cara memperbaikinya:
+
+**1. Dua sumber koordinat yang berbeda.** `extract_nav.mjs` mengklik tombol untuk
+mencatat tujuannya, dan klik itu mengubah data contoh di `localStorage` — kartu
+bertambah, daftar bergeser. Pembacaan berikutnya memberi posisi yang berbeda 38px.
+Sekarang setiap pemuatan mengosongkan `localStorage`, jadi kedua extractor
+membaca layar yang sama.
+
+**2. Tombol yang digambar di luar layar.** `nav.json` memuat baris tabel yang
+desainnya menggambar sampai y=1800. Area sentuh untuk baris itu hanya bisa
+diletakkan di atas tombol nyata, jadi `plan_hotspots.py` melewatinya. Tombol di
+layar tetap mendapat area sentuh: **76/76**.
+
+## Jam dan baterai
+
+Kedua field ada di **17 page**, di (14,70) dan (378,70), tanpa latar. Isinya
+kosong saat dibangun karena **MCU yang mengisinya** — `Transport::renderField`
+mengirim `tClock` dan `tBatt` di setiap halaman.
+
+Konsekuensinya: di Nextion Editor, tanpa MCU terhubung, kolom itu **tampak
+kosong**. Itu bukan field yang hilang. `check_corners.py` memeriksa kedua hal itu
+di 17 page.
 
 ## Cara kerja penempatan
 

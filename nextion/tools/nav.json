@@ -559,7 +559,7 @@
    "text": "SELECT",
    "cls": "mini-btn orange active",
    "x": 338,
-   "y": 236,
+   "y": 279,
    "w": 64,
    "h": 26,
    "to": "savedBaseline"
@@ -568,7 +568,7 @@
    "text": "DELETE",
    "cls": "mini-btn dark",
    "x": 338,
-   "y": 267,
+   "y": 310,
    "w": 64,
    "h": 26,
    "to": "savedBaseline"
@@ -577,7 +577,7 @@
    "text": "SELECT",
    "cls": "mini-btn orange",
    "x": 338,
-   "y": 323,
+   "y": 366,
    "w": 64,
    "h": 26,
    "to": "savedBaseline"
@@ -586,7 +586,7 @@
    "text": "DELETE",
    "cls": "mini-btn dark",
    "x": 338,
-   "y": 354,
+   "y": 397,
    "w": 64,
    "h": 26,
    "to": "savedBaseline"
@@ -595,7 +595,7 @@
    "text": "SELECT",
    "cls": "mini-btn orange",
    "x": 338,
-   "y": 410,
+   "y": 453,
    "w": 64,
    "h": 26,
    "to": "savedBaseline"
@@ -604,7 +604,7 @@
    "text": "DELETE",
    "cls": "mini-btn dark",
    "x": 338,
-   "y": 441,
+   "y": 484,
    "w": 64,
    "h": 26,
    "to": "savedBaseline"
@@ -613,7 +613,7 @@
    "text": "SELECT",
    "cls": "mini-btn orange",
    "x": 338,
-   "y": 497,
+   "y": 540,
    "w": 64,
    "h": 26,
    "to": "savedBaseline"
@@ -622,25 +622,7 @@
    "text": "DELETE",
    "cls": "mini-btn dark",
    "x": 338,
-   "y": 528,
-   "w": 64,
-   "h": 26,
-   "to": "savedBaseline"
-  },
-  {
-   "text": "SELECT",
-   "cls": "mini-btn orange",
-   "x": 338,
-   "y": 584,
-   "w": 64,
-   "h": 26,
-   "to": "savedBaseline"
-  },
-  {
-   "text": "DELETE",
-   "cls": "mini-btn dark",
-   "x": 338,
-   "y": 615,
+   "y": 571,
    "w": 64,
    "h": 26,
    "to": "savedBaseline"
@@ -649,7 +631,7 @@
    "text": "BACK",
    "cls": "btn btn-dark",
    "x": 67,
-   "y": 674,
+   "y": 630,
    "w": 143,
    "h": 40,
    "to": "baselineMenu"
@@ -658,7 +640,7 @@
    "text": "SELECT",
    "cls": "btn btn-orange",
    "x": 220,
-   "y": 674,
+   "y": 630,
    "w": 193,
    "h": 40,
    "to": "maturityData"
@@ -696,9 +678,9 @@
  "pSelB": [
   {
    "text": "SELECT",
-   "cls": "mini-btn orange",
+   "cls": "mini-btn orange active",
    "x": 338,
-   "y": 275,
+   "y": 312,
    "w": 64,
    "h": 26,
    "to": "selectBaseline"
@@ -707,7 +689,7 @@
    "text": "SELECT",
    "cls": "mini-btn orange",
    "x": 338,
-   "y": 350,
+   "y": 387,
    "w": 64,
    "h": 26,
    "to": "selectBaseline"
@@ -716,7 +698,7 @@
    "text": "SELECT",
    "cls": "mini-btn orange",
    "x": 338,
-   "y": 425,
+   "y": 463,
    "w": 64,
    "h": 26,
    "to": "selectBaseline"
@@ -725,16 +707,7 @@
    "text": "SELECT",
    "cls": "mini-btn orange",
    "x": 338,
-   "y": 500,
-   "w": 64,
-   "h": 26,
-   "to": "selectBaseline"
-  },
-  {
-   "text": "SELECT",
-   "cls": "mini-btn orange",
-   "x": 338,
-   "y": 575,
+   "y": 538,
    "w": 64,
    "h": 26,
    "to": "selectBaseline"
@@ -743,7 +716,7 @@
    "text": "BACK",
    "cls": "btn btn-dark",
    "x": 67,
-   "y": 644,
+   "y": 606,
    "w": 143,
    "h": 40,
    "to": "kuatTekanMenu"
@@ -752,7 +725,7 @@
    "text": "START",
    "cls": "btn btn-orange",
    "x": 220,
-   "y": 644,
+   "y": 606,
    "w": 193,
    "h": 40,
    "to": "realtime"
@@ -764,6 +737,15 @@
    "cls": "rt-day-btn",
    "x": 43,
    "y": 796,
+   "w": 394,
+   "h": 42,
+   "to": "realtime"
+  },
+  {
+   "text": "LOAD EXCEL DEMO DAYS",
+   "cls": "rt-day-btn rt-day-btn-ghost",
+   "x": 43,
+   "y": 846,
    "w": 394,
    "h": 42,
    "to": "realtime"
@@ -792,7 +774,7 @@
    "text": "BACK",
    "cls": "btn btn-dark",
    "x": 67,
-   "y": 635,
+   "y": 618,
    "w": 143,
    "h": 40,
    "to": "realtime"
@@ -801,7 +783,7 @@
    "text": "SAVE RESULT",
    "cls": "btn btn-orange",
    "x": 220,
-   "y": 635,
+   "y": 618,
    "w": 193,
    "h": 40,
    "to": "history"
@@ -809,19 +791,10 @@
  ],
  "pHist": [
   {
-   "text": "Test IDTEST-002Baseline NameBeton Jalan ",
-   "cls": "history-card",
-   "x": 67,
-   "y": 322,
-   "w": 346,
-   "h": 104,
-   "to": "historyDetail"
-  },
-  {
    "text": "Test IDTEST-EXCEL-01Baseline Namefc30 ma",
-   "cls": "history-card",
+   "cls": "history-card selected",
    "x": 67,
-   "y": 436,
+   "y": 379,
    "w": 346,
    "h": 120,
    "to": "historyDetail"
@@ -830,7 +803,7 @@
    "text": "BACK",
    "cls": "btn btn-dark",
    "x": 67,
-   "y": 578,
+   "y": 521,
    "w": 143,
    "h": 40,
    "to": "kuatTekanMenu"
@@ -839,7 +812,7 @@
    "text": "VIEW LOG",
    "cls": "btn btn-orange",
    "x": 220,
-   "y": 578,
+   "y": 521,
    "w": 193,
    "h": 40,
    "to": "historyDetail"

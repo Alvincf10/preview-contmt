@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "validate:nextion": "node nextion/validate.mjs",
     "hmi:source": "python nextion/tools/rebuild.py",
-    "hmi:check": "nxwright check nextion/nxsrc && python nextion/tools/check_layout.py && python nextion/tools/check_nav.py && python nextion/tools/crosscheck.py && python nextion/tools/find_narrow.py && python nextion/tests/test_values.py",
+    "hmi:check": "nxwright check nextion/nxsrc && python nextion/tools/check_layout.py && python nextion/tools/check_nav.py && python nextion/tools/crosscheck.py && python nextion/tools/check_hotspot_fit.py && python nextion/tools/check_corners.py && python nextion/tools/find_narrow.py && python nextion/tests/test_values.py",
     "hmi:test": "python nextion/tools/tap_all.py",
     "hmi:build": "nxwright build nextion/nxsrc nextion/conmt.HMI --overwrite --no-lock",
     "hmi:compile": "nxwright compile nextion/nxsrc nextion/conmt.tft --overwrite",

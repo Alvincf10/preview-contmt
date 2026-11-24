@@ -42,6 +42,17 @@ const SCREENS = {
 const browser = await chromium.launch()
 const page = await browser.newPage({ viewport: { width: 900, height: 1000 } })
 
+// The preview keeps its sample data in localStorage, and a click changes it: a
+// SELECT marks a card, a BACK moves the list. Left alone, a second run would read
+// a screen with five cards where the first read four, and everything below them
+// would differ by one card's height. Each load therefore starts from the same
+// stored state.
+const RESET_STATE = () => {
+  window.localStorage.clear()
+  window.sessionStorage.clear()
+}
+await page.addInitScript(RESET_STATE)
+
 // The preview draws a live clock and a live session, so its sample text would
 // change on every run. A fixed clock and a seeded random make the extraction
 // repeatable, which is what lets the layout mapping match on that text.
