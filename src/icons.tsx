@@ -188,8 +188,8 @@ export function IconThermo({ className }: IconProps) {
 export function IconClock({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.45" />
-      <path d="M12 7.5V12l3 2" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round" />
+      <circle cx="12" cy="12" r="8.2" stroke="currentColor" strokeWidth="2" />
+      <path d="M12 7.2V12l3.2 2.1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   )
 }
@@ -200,9 +200,9 @@ export function IconBattery({ className, pct = 80 }: IconProps & { pct?: number 
   const fillW = 12.5 * (level / 100)
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect x="2.5" y="7" width="16" height="10" rx="1.6" stroke="currentColor" strokeWidth="1.45" />
-      <path d="M19.5 10v4h1.2a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H19.5Z" fill="currentColor" />
-      <rect x="4.2" y="8.7" width={fillW} height="6.6" rx="0.8" fill="currentColor" opacity={0.95} />
+      <rect x="2.5" y="6.5" width="16" height="11" rx="1.8" stroke="currentColor" strokeWidth="2" />
+      <path d="M19.5 9.5v5h1.4a1.1 1.1 0 0 0 1.1-1.1v-2.8a1.1 1.1 0 0 0-1.1-1.1H19.5Z" fill="currentColor" />
+      <rect x="4.2" y="8.4" width={fillW} height="7.2" rx="0.9" fill="currentColor" opacity={0.95} />
     </svg>
   )
 }
