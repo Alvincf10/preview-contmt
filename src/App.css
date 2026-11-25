@@ -20,8 +20,8 @@
   --hmi-h: 800px;
   --brand-h: 64px;
   /* Status HUD band below brand strip (offset + pill height + gap) */
-  --status-top: 10px;
-  --status-h: 26px;
+  --status-top: 6px;
+  --status-h: 48px;
   --status-clear: calc(var(--status-top) + var(--status-h) + 8px);
   --panel-x: 50px;
   --panel-w: 380px;
@@ -152,38 +152,25 @@ select {
 .status-batt {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   height: var(--status-h);
-  padding: 0 8px;
-  border-radius: 6px;
+  padding: 0 14px;
+  border-radius: 8px;
   background: rgba(8, 12, 18, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.26);
   color: #fff;
   line-height: 1;
 }
 
-.status-clock-ico {
-  width: 13px;
-  height: 13px;
-  color: #fff;
-  flex-shrink: 0;
-}
-
 .status-clock-value {
-  font-size: 13px;
+  font-size: 22px;
   font-weight: var(--fw-bold);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
 }
 
-.status-batt-ico {
-  width: 15px;
-  height: 15px;
-  color: #fff;
-}
-
 .status-batt-pct {
-  font-size: 12px;
+  font-size: 20px;
   font-weight: var(--fw-semibold);
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
@@ -781,6 +768,23 @@ select {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+}
+
+/* After .ico so status HUD sizes win over the 16px default.
+   Sized for Nextion 480×800 readability at arm's length. */
+.status-clock-ico.ico,
+.status-clock .status-clock-ico {
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.status-batt-ico.ico,
+.status-batt .status-batt-ico {
+  width: 38px;
+  height: 38px;
+  color: #fff;
 }
 
 .ico-sm {
