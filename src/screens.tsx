@@ -32,6 +32,7 @@ import {
   IconSound,
   IconSun,
   IconThermo,
+  IconTrash,
   IconUser,
   IconBaselineNew,
   IconBaselineSaved,
@@ -147,13 +148,14 @@ export function UserInfoScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="USER INFORMATION"
+      className="screen-user-info"
       footer={
         <BtnPrimary block iconLeft={<IconSave className="ico ico-xl ico-white" />} onClick={() => go('main')}>
           SAVE
         </BtnPrimary>
       }
     >
-      <div className="stack">
+      <div className="stack user-info-stack">
         <FieldBlock label="Operator ID" icon={<IconUser className="ico ico-xl ico-white" />}>
           <TextInput
             value={state.operatorId}
@@ -175,7 +177,7 @@ export function UserInfoScreen({ state, setState, go }: Props) {
               value={state.date}
               onChange={(e) => setState((s) => ({ ...s, date: e.target.value }))}
             />
-            <IconCalendar className="ico ico-sm ico-white trailing" />
+            <IconCalendar className="ico ico-white trailing" />
           </div>
         </FieldBlock>
       </div>
@@ -1030,8 +1032,8 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
             />
             <span className="pour-clock-eq">= jam 0</span>
           </div>
-          <div>Datum Temperature: {state.baselineDraft.datumTemp} °C</div>
-          <div>Formula: M = Σ(T − T₀)Δt</div>
+          <div className="info-box-item">Datum Temperature: {state.baselineDraft.datumTemp} °C</div>
+          <div className="info-box-item">Formula: M = Σ(T − T₀)Δt</div>
           <p>
             {sensorHint ??
               (activeRow == null
@@ -1302,7 +1304,7 @@ export function SavedBaselineScreen({ state, setState, go }: Props) {
         ) : null
       }
     >
-      <div className="stack gap-sm">
+      <div className="stack baseline-list">
         {state.baselines.map((b) => {
           const selected = state.selectedBaselineId === b.id
           return (
@@ -1319,42 +1321,34 @@ export function SavedBaselineScreen({ state, setState, go }: Props) {
                 }
               }}
             >
-              <IconDatabase className="ico ico-accent card-ico" />
               <div className="baseline-card-body">
-                <strong>{b.name}</strong>
-                <div className="triple">
-                  <span>
-                    Target Fc' <b>{b.targetFc} MPa</b>
-                  </span>
-                  <span>
-                    Datum Temp. <b>{b.datumTemp} °C</b>
-                  </span>
-                  <span>
-                    Created <b>{b.createdAt}</b>
-                  </span>
+                <div className="baseline-card-top">
+                  <strong title={b.name}>{b.name}</strong>
+                  <button
+                    type="button"
+                    className="trash-btn"
+                    aria-label={`Delete ${b.name}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setPendingDeleteId(b.id)
+                    }}
+                  >
+                    <IconTrash className="ico" />
+                  </button>
                 </div>
-              </div>
-              <div className="card-actions">
-                <button
-                  type="button"
-                  className={`mini-btn orange${selected ? ' active' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    select(b.id)
-                  }}
-                >
-                  SELECT
-                </button>
-                <button
-                  type="button"
-                  className="mini-btn dark"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setPendingDeleteId(b.id)
-                  }}
-                >
-                  DELETE
-                </button>
+                <div className="baseline-meta">
+                  <div className="baseline-meta-row">
+                    <span>
+                      <span className="mini-label">Target Fc'</span>
+                      <b>{b.targetFc} MPa</b>
+                    </span>
+                    <span>
+                      <span className="mini-label">Datum Temp.</span>
+                      <b>{b.datumTemp} °C</b>
+                    </span>
+                  </div>
+                  <div className="baseline-meta-created">Created: {b.createdAt}</div>
+                </div>
               </div>
             </div>
           )
@@ -1436,7 +1430,7 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
         />
       }
     >
-      <div className="stack gap-sm">
+      <div className="stack baseline-list">
         {state.baselines.map((b) => {
           const selected = state.selectedBaselineId === b.id
           return (
@@ -1454,32 +1448,21 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
                 }
               }}
             >
-              <IconDatabase className="ico ico-accent card-ico" />
               <div className="baseline-card-body">
-                <strong>{b.name}</strong>
-                <div className="triple">
-                  <span>
-                    Target Fc' <b>{b.targetFc} MPa</b>
-                  </span>
-                  <span>
-                    Datum Temp. <b>{b.datumTemp} °C</b>
-                  </span>
-                  <span>
-                    Created <b>{b.createdAt}</b>
-                  </span>
+                <strong title={b.name}>{b.name}</strong>
+                <div className="baseline-meta">
+                  <div className="baseline-meta-row">
+                    <span>
+                      <span className="mini-label">Target Fc'</span>
+                      <b>{b.targetFc} MPa</b>
+                    </span>
+                    <span>
+                      <span className="mini-label">Datum Temp.</span>
+                      <b>{b.datumTemp} °C</b>
+                    </span>
+                  </div>
+                  <div className="baseline-meta-created">Created: {b.createdAt}</div>
                 </div>
-              </div>
-              <div className="card-actions">
-                <button
-                  type="button"
-                  className={`mini-btn orange${selected ? ' active' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    select(b.id)
-                  }}
-                >
-                  SELECT
-                </button>
               </div>
             </div>
           )
@@ -1514,35 +1497,35 @@ function nextAutoLogDay(logs: { day: number }[]): number {
 }
 
 /** One checkpoint per day from baseline maturity rows (Excel demo fill). */
-function demoLogsFromBaseline(
-  rows: MaturityRow[] | undefined,
-  pourStartMs: number,
-): { day: number; atMs: number; temp: number }[] {
-  if (!rows?.length) return []
-  const byDay = new Map<number, { timeH: number; temp: number }>()
-  for (const r of rows) {
-    const day = Number(r.day)
-    const timeH = Number(r.timeH)
-    const temp = Number(r.temperature)
-    if (!Number.isFinite(day) || !Number.isFinite(timeH) || !Number.isFinite(temp)) continue
-    const prev = byDay.get(day)
-    if (day === 0) {
-      if (!prev || timeH < prev.timeH) byDay.set(day, { timeH, temp })
-      continue
-    }
-    const target = day * 24
-    if (!prev || Math.abs(timeH - target) < Math.abs(prev.timeH - target)) {
-      byDay.set(day, { timeH, temp })
-    }
-  }
-  return [...byDay.entries()]
-    .sort((a, b) => a[0] - b[0])
-    .map(([day, v]) => ({
-      day,
-      atMs: pourStartMs + Math.round(Math.max(0, v.timeH) * 3_600_000),
-      temp: v.temp,
-    }))
-}
+// function demoLogsFromBaseline(
+//   rows: MaturityRow[] | undefined,
+//   pourStartMs: number,
+// ): { day: number; atMs: number; temp: number }[] {
+//   if (!rows?.length) return []
+//   const byDay = new Map<number, { timeH: number; temp: number }>()
+//   for (const r of rows) {
+//     const day = Number(r.day)
+//     const timeH = Number(r.timeH)
+//     const temp = Number(r.temperature)
+//     if (!Number.isFinite(day) || !Number.isFinite(timeH) || !Number.isFinite(temp)) continue
+//     const prev = byDay.get(day)
+//     if (day === 0) {
+//       if (!prev || timeH < prev.timeH) byDay.set(day, { timeH, temp })
+//       continue
+//     }
+//     const target = day * 24
+//     if (!prev || Math.abs(timeH - target) < Math.abs(prev.timeH - target)) {
+//       byDay.set(day, { timeH, temp })
+//     }
+//   }
+//   return [...byDay.entries()]
+//     .sort((a, b) => a[0] - b[0])
+//     .map(([day, v]) => ({
+//       day,
+//       atMs: pourStartMs + Math.round(Math.max(0, v.timeH) * 3_600_000),
+//       temp: v.temp,
+//     }))
+// }
 
 export function RealtimeScreen({ state, setState, go }: Props) {
   const baseline = selectedBaseline(state)
@@ -1673,26 +1656,27 @@ export function RealtimeScreen({ state, setState, go }: Props) {
     setDayHint(`Day ${nextDay} logged · ${temp.toFixed(1)} °C`)
   }
 
-  const fillDemoDays = () => {
-    const startMs = pourStartRef.current.getTime()
-    const demo = demoLogsFromBaseline(baseline?.rows, startMs)
-    if (demo.length < 2) {
-      setDayHint('Baseline has no demo temperature rows.')
-      return
-    }
-    setState((s) => ({
-      ...s,
-      measurement: {
-        ...s.measurement,
-        pourStartMs: startMs,
-        endMs: null,
-        logs: demo,
-        sensorTemps: temps,
-        initialPourTemp: demo[0]?.temp ?? s.measurement.initialPourTemp,
-      },
-    }))
-    setDayHint(`Loaded ${demo.length} demo days from baseline / Excel`)
-  }
+  // Demo fill kept for later (button currently commented out)
+  // const fillDemoDays = () => {
+  //   const startMs = pourStartRef.current.getTime()
+  //   const demo = demoLogsFromBaseline(baseline?.rows, startMs)
+  //   if (demo.length < 2) {
+  //     setDayHint('Baseline has no demo temperature rows.')
+  //     return
+  //   }
+  //   setState((s) => ({
+  //     ...s,
+  //     measurement: {
+  //       ...s.measurement,
+  //       pourStartMs: startMs,
+  //       endMs: null,
+  //       logs: demo,
+  //       sensorTemps: temps,
+  //       initialPourTemp: demo[0]?.temp ?? s.measurement.initialPourTemp,
+  //     },
+  //   }))
+  //   setDayHint(`Loaded ${demo.length} demo days from baseline / Excel`)
+  // }
 
   const commitLogTemp = (day: number, atMs: number, raw: string) => {
     const temp = Number(raw)
@@ -1798,7 +1782,7 @@ export function RealtimeScreen({ state, setState, go }: Props) {
   const targetFc = baseline?.targetFc ?? 0
   const livePct =
     liveFc != null && targetFc > 0 ? Math.max(0, (liveFc / targetFc) * 100) : null
-  const canFillDemo = (baseline?.rows?.length ?? 0) > 1
+  // const canFillDemo = (baseline?.rows?.length ?? 0) > 1
 
   return (
     <Screen
@@ -1847,7 +1831,7 @@ export function RealtimeScreen({ state, setState, go }: Props) {
         <div className="sensor-row">
           {temps.map((t, i) => (
             <div key={i} className="sensor-box">
-              <IconThermo className="ico ico-accent ico-md" />
+              <IconThermo className="ico ico-accent" />
               <span>Sensor {i + 1}</span>
               <strong>{t.toFixed(1)} °C</strong>
             </div>
@@ -1902,11 +1886,11 @@ export function RealtimeScreen({ state, setState, go }: Props) {
           <button type="button" className="rt-day-btn" onClick={addDayAuto}>
             + ADD DAY {nextDay > 0 ? `(Day ${nextDay})` : ''}
           </button>
-          {canFillDemo ? (
+          {/* {canFillDemo ? (
             <button type="button" className="rt-day-btn rt-day-btn-ghost" onClick={fillDemoDays}>
               LOAD EXCEL DEMO DAYS
             </button>
-          ) : null}
+          ) : null} */}
         </div>
 
         <div className="rt-log-card" aria-label="Logged days">
@@ -2096,8 +2080,10 @@ export function StrengthResultScreen({ state, setState, go }: Props) {
           <IconDoc className="ico ico-accent sr-baseline-ico" />
           <div className="sr-baseline-body">
             <span className="mini-label">Baseline Name</span>
-            <strong className="sr-baseline-name">{baseline?.name}</strong>
-            <div className="split-line sr-baseline-split">
+            <strong className="sr-baseline-name" title={baseline?.name}>
+              {baseline?.name}
+            </strong>
+            <div className="sr-baseline-split">
               <span>
                 <span className="mini-label">Target Fc'</span>
                 <b>{baseline?.targetFc} MPa</b>
@@ -2170,7 +2156,7 @@ export function HistoryScreen({ state, setState, go }: Props) {
         />
       }
     >
-      <div className="stack gap-sm history-list">
+      <div className="stack history-list">
         {state.history.map((h) => {
           const logCount = h.logs?.length ?? 0
           return (
@@ -2478,7 +2464,6 @@ export function SettingsScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="SETTINGS"
-      subtitle="Configure timer and device operation parameters."
       rule="short"
       footer={
         <NavFooter
@@ -2513,10 +2498,6 @@ export function SettingsScreen({ state, setState, go }: Props) {
               onUp={() => bump('second', 1, 59)}
               onDown={() => bump('second', -1, 59)}
             />
-          </div>
-          <div className="info-bar">
-            <IconInfo className="ico ico-sm ico-muted" /> Measurement interval timer for monitoring
-            process.
           </div>
         </div>
 
@@ -2584,16 +2565,14 @@ function Stepper({
 }) {
   return (
     <div className={`stepper${compact ? ' compact' : ''}`}>
-      {label ? <span>{label}</span> : null}
-      <strong>{value}</strong>
-      <div className="stepper-arrows">
-        <button type="button" aria-label="Increase" onClick={onUp}>
-          ▴
-        </button>
-        <button type="button" aria-label="Decrease" onClick={onDown}>
-          ▾
-        </button>
-      </div>
+      {label ? <span className="stepper-label">{label}</span> : null}
+      <button type="button" className="stepper-btn" aria-label="Increase" onClick={onUp}>
+        +
+      </button>
+      <strong className="stepper-value">{value}</strong>
+      <button type="button" className="stepper-btn" aria-label="Decrease" onClick={onDown}>
+        −
+      </button>
     </div>
   )
 }
@@ -2619,21 +2598,41 @@ export function DeviceInfoScreen({ go }: Props) {
         </BtnGhost>
       }
     >
-      <div className="stack gap-sm">
-        <InfoRow icon={<IconDevice className="ico ico-xl ico-accent" />} label="Device Name" value="Concrete Maturity Test" />
+      <div className="stack device-info-stack">
+        <InfoRow
+          icon={<IconDevice className="ico ico-xl ico-accent" />}
+          label="Device Name"
+          value="Concrete Maturity Test"
+        />
         <InfoRow icon={<IconDoc className="ico ico-xl ico-accent" />} label="Device ID" value="HK ConMT" />
-        <InfoRow icon={<IconGear className="ico ico-xl ico-accent" />} label="Firmware Version" value="V1.0.1" />
-        <InfoRow icon={<IconChip className="ico ico-xl ico-accent" />} label="Hardware" value="Nexion Touch Display" />
-        <InfoRow icon={<IconThermo className="ico ico-xl ico-accent" />} label="Sensor Channels" value="3 Temperature Inputs" />
-        <InfoRow icon={<IconDatabase className="ico ico-xl ico-accent" />} label="Communication" value="Serial / Modbus" />
+
+        <div className="device-info-tiles">
+          <InfoRow icon={<IconGear className="ico ico-xl ico-accent" />} label="Firmware" value="V1.0.1" />
+          <InfoRow
+            icon={<IconChip className="ico ico-xl ico-accent" />}
+            label="Hardware"
+            value="Nextion Touch Display"
+          />
+          <InfoRow icon={<IconThermo className="ico ico-xl ico-accent" />} label="Sensors" value="3 Temp Inputs" />
+          <InfoRow
+            icon={<IconDatabase className="ico ico-xl ico-accent" />}
+            label="Comm"
+            value="Serial / Modbus"
+          />
+        </div>
+
         <div className="info-row info-row-status">
           <IconCheck className="ico ico-xl ico-accent" />
-          <span className="info-status-label">Status</span>
+          <div className="info-row-text">
+            <span className="mini-label">Status</span>
+            <strong>Device ready</strong>
+          </div>
           <StatusPill>
             <span className="status-spin" aria-hidden />
             READY
           </StatusPill>
         </div>
+
         <div className="about-box">
           <IconDoc className="ico ico-xl ico-accent" />
           <div>
@@ -2661,7 +2660,7 @@ function InfoRow({
   return (
     <div className="info-row">
       {icon}
-      <div>
+      <div className="info-row-text">
         <span className="mini-label">{label}</span>
         <strong>{value}</strong>
       </div>
