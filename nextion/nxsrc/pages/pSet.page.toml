@@ -1,0 +1,262 @@
+[page]
+name = "pSet"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "15_settings"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = ["timer"]
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBright"
+type = "text"
+x = 320
+y = 510
+w = 37
+h = 20
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tHour"
+type = "text"
+x = 89
+y = 324
+w = 49
+h = 26
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tMin"
+type = "text"
+x = 198
+y = 324
+w = 49
+h = 26
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tSec"
+type = "text"
+x = 308
+y = 324
+w = 49
+h = 26
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tMsg"
+type = "text"
+x = 484
+y = 8
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+vscope = 1
+
+[[component]]
+name = "tInterval"
+type = "text"
+x = 484
+y = 34
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tSound"
+type = "text"
+x = 484
+y = 60
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "tAuto"
+type = "text"
+x = 484
+y = 86
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 65
+y = 683
+w = 147
+h = 44
+events = ["down", "up"]
+
+[[component]]
+name = "mSave"
+type = "hotspot"
+x = 218
+y = 683
+w = 197
+h = 44
+events = ["down", "up"]
+
+[[component]]
+name = "mTap0"
+type = "hotspot"
+x = 144
+y = 312
+w = 32
+h = 26
+events = ["down", "up"]
+
+[[component]]
+name = "mTap1"
+type = "hotspot"
+x = 144
+y = 336
+w = 32
+h = 26
+events = ["down", "up"]
+
+[[component]]
+name = "mTap2"
+type = "hotspot"
+x = 254
+y = 312
+w = 32
+h = 26
+events = ["down", "up"]
+
+[[component]]
+name = "mTap3"
+type = "hotspot"
+x = 254
+y = 336
+w = 32
+h = 26
+events = ["down", "up"]
+
+[[component]]
+name = "mTap4"
+type = "hotspot"
+x = 363
+y = 312
+w = 32
+h = 26
+events = ["down", "up"]
+
+[[component]]
+name = "mTap5"
+type = "hotspot"
+x = 363
+y = 336
+w = 32
+h = 26
+events = ["down", "up"]
+
+[[component]]
+name = "mTap6"
+type = "hotspot"
+x = 363
+y = 495
+w = 32
+h = 26
+events = ["down", "up"]
+
+[[component]]
+name = "mTap7"
+type = "hotspot"
+x = 363
+y = 519
+w = 32
+h = 26
+events = ["down", "up"]
+
+[[component]]
+name = "mTap8"
+type = "hotspot"
+x = 334
+y = 560
+w = 68
+h = 34
+events = ["down", "up"]
+
+[[component]]
+name = "mTap9"
+type = "hotspot"
+x = 334
+y = 609
+w = 68
+h = 34
+events = ["down", "up"]

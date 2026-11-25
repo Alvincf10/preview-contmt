@@ -80,7 +80,10 @@
       "w": 240,
       "h": 42,
       "label": "open temp picker",
-      "note": "Opsional: page pTempList dengan opsi -20/-10/0/10 lalu print tTemp.txt"
+      "events": {
+        "touchpress": "prints \"TEMP\\r\\n\",0"
+      },
+      "note": "MCU buka picker datum (-20/-10/0/10) lalu tulis tTemp.txt"
     },
     {
       "type": "TouchCap",
@@ -108,6 +111,7 @@
     }
   ],
   "events": {
+    "mTemp.touchpress": "events/pNewB_mTemp.txt",
     "mBack.touchpress": "events/pNewB_mBack.txt",
     "mNext.touchpress": "events/pNewB_mNext.txt"
   }

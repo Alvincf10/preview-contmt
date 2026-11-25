@@ -1,0 +1,939 @@
+[page]
+name = "pEdit"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+bco = "#1e2326"
+
+[[component]]
+name = "tmEdit"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "vCase"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tTitle"
+type = "text"
+x = 20
+y = 45
+w = 440
+h = 45
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans28"
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tInput"
+type = "text"
+x = 20
+y = 110
+w = 440
+h = 90
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans20"
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tError"
+type = "text"
+x = 20
+y = 210
+w = 440
+h = 45
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "k00"
+type = "button"
+x = 12
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "1"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k01"
+type = "button"
+x = 58
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "2"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k02"
+type = "button"
+x = 104
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "3"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k03"
+type = "button"
+x = 150
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "4"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k04"
+type = "button"
+x = 196
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "5"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k05"
+type = "button"
+x = 242
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "6"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k06"
+type = "button"
+x = 288
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "7"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k07"
+type = "button"
+x = 334
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "8"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k08"
+type = "button"
+x = 380
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "9"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k09"
+type = "button"
+x = 426
+y = 280
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "0"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k10"
+type = "button"
+x = 12
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Q"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k11"
+type = "button"
+x = 58
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "W"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k12"
+type = "button"
+x = 104
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "E"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k13"
+type = "button"
+x = 150
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "R"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k14"
+type = "button"
+x = 196
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "T"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k15"
+type = "button"
+x = 242
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Y"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k16"
+type = "button"
+x = 288
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "U"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k17"
+type = "button"
+x = 334
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "I"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k18"
+type = "button"
+x = 380
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "O"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k19"
+type = "button"
+x = 426
+y = 340
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "P"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k20"
+type = "button"
+x = 12
+y = 400
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "A"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k21"
+type = "button"
+x = 58
+y = 400
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "S"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k22"
+type = "button"
+x = 104
+y = 400
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "D"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k23"
+type = "button"
+x = 150
+y = 400
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "F"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k24"
+type = "button"
+x = 196
+y = 400
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "G"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k25"
+type = "button"
+x = 242
+y = 400
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "H"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k26"
+type = "button"
+x = 288
+y = 400
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "J"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k27"
+type = "button"
+x = 334
+y = 400
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "K"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k28"
+type = "button"
+x = 380
+y = 400
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "L"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k30"
+type = "button"
+x = 12
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Z"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k31"
+type = "button"
+x = 58
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "X"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k32"
+type = "button"
+x = 104
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "C"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k33"
+type = "button"
+x = 150
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "V"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k34"
+type = "button"
+x = 196
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "B"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k35"
+type = "button"
+x = 242
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "N"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k36"
+type = "button"
+x = 288
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "M"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k37"
+type = "button"
+x = 334
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "-"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k38"
+type = "button"
+x = 380
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "."
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "k39"
+type = "button"
+x = 426
+y = 460
+w = 43
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = ":"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "kSpace"
+type = "button"
+x = 12
+y = 525
+w = 210
+h = 50
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Space"
+txt_maxl = 5
+events = [
+    "up",
+]
+
+[[component]]
+name = "kDel"
+type = "button"
+x = 230
+y = 525
+w = 110
+h = 50
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Delete"
+txt_maxl = 6
+events = [
+    "up",
+]
+
+[[component]]
+name = "kClear"
+type = "button"
+x = 348
+y = 525
+w = 120
+h = 50
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Clear"
+txt_maxl = 5
+events = [
+    "up",
+]
+
+[[component]]
+name = "kCase"
+type = "button"
+x = 12
+y = 585
+w = 100
+h = 45
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Aa"
+txt_maxl = 4
+events = [
+    "up",
+]
+
+[[component]]
+name = "kProbe"
+type = "button"
+x = 130
+y = 585
+w = 220
+h = 45
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Use probe"
+txt_maxl = 9
+events = [
+    "up",
+]
+
+[[component]]
+name = "kCancel"
+type = "button"
+x = 20
+y = 650
+w = 210
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Cancel"
+txt_maxl = 6
+events = [
+    "up",
+]
+
+[[component]]
+name = "kSave"
+type = "button"
+x = 250
+y = 650
+w = 210
+h = 52
+sta = 1
+bco = "#343c42"
+bco2 = "#ed792e"
+pco = "#ffffff"
+pco2 = "#ffffff"
+font = "NotoSans16"
+txt = "Apply"
+txt_maxl = 5
+events = [
+    "up",
+]

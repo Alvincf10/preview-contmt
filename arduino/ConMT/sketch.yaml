@@ -1,0 +1,8 @@
+profiles:
+  conmt328p:
+    fqbn: arduino:avr:uno
+    platforms:
+      - platform: arduino:avr (1.8.8)
+    libraries:
+      - OneWire (2.3.8)
+default_profile: conmt328p

@@ -27,7 +27,10 @@ Status Controller::newConnection() {
 Status Controller::boot() {
     mounted_=false; loading_=true; sampleKnown_=false; gapLatched_=false; inGap_=false; replayLive_=false;
     liveM_=liveCompensation_=0; selected_=session_=draft_=0;
-    page_=Page::User;
+    // The panel starts on its splash. The MCU moves it on only when the splash
+    // reports that its self-check passed, so a fault is visible at power-on
+    // instead of being hidden by a page change.
+    page_=Page::Init;
     Status st=load(); loading_=false;
     if(st!=Status::Ok) repo_.journal().abort();
     mounted_=st==Status::Ok; status_=health_=st;
@@ -35,7 +38,7 @@ Status Controller::boot() {
 }
 Status Controller::load() {
     Status s=repo_.journal().mount(); status_=s;
-    if(s!=Status::Ok) { page_=Page::User; return s; }
+    if(s!=Status::Ok) { return s; }
 
     TRY(repo_.journal().maxObject(Kind::Draft,draft_));
     TRY(repo_.journal().maxObject(Kind::Session,session_));
@@ -67,7 +70,10 @@ Status Controller::load() {
     if(s!=Status::Ok && s!=Status::Missing) return s;
     if(selected) { uint32_t exists=0; s=repo_.integer(Key(Kind::Baseline,selected,Field::Exists),exists); if(s!=Status::Ok&&s!=Status::Missing) return s; if(s==Status::Ok&&exists) selected_=selected; }
     if(!selected_) { s=repo_.list(Kind::Baseline,0,selected_); if(s!=Status::Ok&&s!=Status::Missing) return s; }
-    page_=Page::User; return Status::Ok;
+    // The page is not set here. The splash screen decides when to leave, so
+    // that a fault at power-on stays visible instead of being covered by the
+    // first page. See Controller::boot and the SELF_CHECK request.
+    return Status::Ok;
 }
 Status Controller::getAverage(Average& avg,SensorFrame* frame) {
     avg={0,0,0}; if(frame) *frame=SensorFrame();
@@ -75,6 +81,31 @@ Status Controller::getAverage(Average& avg,SensorFrame* frame) {
     Status s=average(f,clock_.now().monoMs,5000,avg);
     if(frame) *frame=f;
     return s;
+}
+Status Controller::selfCheck(Status& sensors,Status& clock,Status& devices) {
+    // What the splash screen shows, and what decides whether the panel may move
+    // on. The three checks are the three things the panel cannot do without: a
+    // sensor reading it can trust, a clock it can stamp with, and the storage
+    // it needs to hold a session.
+    //
+    // A failed check does not move the panel, so the operator sees which one is
+    // still waiting. That is the whole point of the splash: a fault stays
+    // visible instead of being hidden behind a page change.
+    const Time now=clock_.now();
+    SensorFrame frame; Average avg;
+    // Read the port first: a frame that was never fetched is empty, and an
+    // empty frame looks exactly like a sensor that reports nothing.
+    const Status read=sensors_.latest(frame);
+    sensors=(read==Status::Ok&&average(frame,now.monoMs,5000,avg)==Status::Ok)?Status::Ok:Status::NoSensor;
+    clock=now.valid?Status::Ok:Status::NoClock;
+    uint8_t battery=0; const Status b=devices_.battery(battery);
+    // A battery reading is nice to have, not required: the panel works without
+    // one, and a device that cannot report it is not a fault.
+    devices=(b==Status::Ok||b==Status::Unsupported)?Status::Ok:b;
+    if(!mounted_) return Status::Absent;
+    if(sensors!=Status::Ok) return sensors;
+    if(clock!=Status::Ok) return clock;
+    return devices;
 }
 Status Controller::state(SessionState& out) {
     Record record(repo_,Kind::Session,session_);
@@ -548,7 +579,11 @@ Status Controller::setting(const char* name,const char* value,const uint64_t& op
             {TxOp::Integer,TxTarget::Destination,Field::AutoSave,0}
         };
         const Entity entity={Kind::Settings,0};
-        saved=finish(applyTransaction(repo_,clock_,steps+uint8_t(field)-uint8_t(Field::Interval),1,entity,entity,&v));
+        // Index the array instead of forming a pointer past its end: `steps+field`
+        // is undefined behaviour before the subtraction, and a bounds-checking
+        // build stops on it.
+        const uint8_t offset=uint8_t(uint8_t(field)-uint8_t(Field::Interval));
+        saved=finish(applyTransaction(repo_,clock_,steps+offset,1,entity,entity,&v));
     }
     if(saved!=Status::Ok) {
         if(field==Field::Brightness) devices_.brightness(settings_.brightness);
@@ -615,6 +650,15 @@ Status Controller::dispatch(const char* verb,const char* a,const char* b,const c
             } else TRY(parseU32(a,n));
             if(n>16||!validNavigation(Page(n))) return status_=Status::Invalid;
             page_=Page(n); cursor_=0; ++view_; result=Status::Ok; break;
+        }
+        case Command::SELF_CHECK: {
+            // The splash asks whether everything it needs is ready. It moves on
+            // only when all three checks pass, so a panel that cannot read a
+            // sensor stays where the operator can see why.
+            Status sensors, clock, devices;
+            Status ready=selfCheck(sensors,clock,devices);
+            if(ready==Status::Ok) { page_=Page::User; cursor_=0; ++view_; }
+            result=ready; break;
         }
         case Command::USER_SAVE: result=saveIdentity(); break;
         case Command::FIELD_SET: {

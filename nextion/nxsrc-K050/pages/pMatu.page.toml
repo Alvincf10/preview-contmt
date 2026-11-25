@@ -1,0 +1,1185 @@
+[page]
+name = "pMatu"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "06_maturity_data"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 43
+y = 81
+w = 40
+h = 13
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "06_maturity_data"
+xcen = 0
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 429
+y = 81
+w = 32
+h = 12
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "06_maturity_data"
+xcen = 0
+
+[[component]]
+name = "tDay0"
+type = "text"
+x = 72
+y = 248
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim0"
+type = "text"
+x = 119
+y = 248
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc0"
+type = "text"
+x = 187
+y = 248
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT0"
+type = "text"
+x = 278
+y = 248
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay1"
+type = "text"
+x = 72
+y = 287
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim1"
+type = "text"
+x = 119
+y = 287
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc1"
+type = "text"
+x = 187
+y = 287
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT1"
+type = "text"
+x = 278
+y = 287
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay2"
+type = "text"
+x = 72
+y = 326
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim2"
+type = "text"
+x = 119
+y = 326
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc2"
+type = "text"
+x = 187
+y = 326
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT2"
+type = "text"
+x = 278
+y = 326
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay3"
+type = "text"
+x = 72
+y = 365
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim3"
+type = "text"
+x = 119
+y = 365
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc3"
+type = "text"
+x = 187
+y = 365
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT3"
+type = "text"
+x = 278
+y = 365
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay4"
+type = "text"
+x = 72
+y = 404
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim4"
+type = "text"
+x = 119
+y = 404
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc4"
+type = "text"
+x = 187
+y = 404
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT4"
+type = "text"
+x = 278
+y = 404
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay5"
+type = "text"
+x = 72
+y = 443
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim5"
+type = "text"
+x = 119
+y = 443
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc5"
+type = "text"
+x = 187
+y = 443
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT5"
+type = "text"
+x = 278
+y = 443
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tMsg"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+vscope = 1
+
+[[component]]
+name = "tRid0"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tRid1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tRid2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tRid3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tRid4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tRid5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tNotice"
+type = "text"
+x = 10
+y = 775
+w = 460
+h = 24
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 96
+
+[[component]]
+name = "tDay6"
+type = "text"
+x = 72
+y = 482
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim6"
+type = "text"
+x = 119
+y = 482
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc6"
+type = "text"
+x = 187
+y = 482
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT6"
+type = "text"
+x = 278
+y = 482
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay7"
+type = "text"
+x = 72
+y = 521
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim7"
+type = "text"
+x = 119
+y = 521
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc7"
+type = "text"
+x = 187
+y = 521
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT7"
+type = "text"
+x = 278
+y = 521
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay8"
+type = "text"
+x = 72
+y = 560
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim8"
+type = "text"
+x = 119
+y = 560
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc8"
+type = "text"
+x = 187
+y = 560
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT8"
+type = "text"
+x = 278
+y = 560
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay9"
+type = "text"
+x = 72
+y = 599
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim9"
+type = "text"
+x = 119
+y = 599
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc9"
+type = "text"
+x = 187
+y = 599
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT9"
+type = "text"
+x = 278
+y = 599
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay10"
+type = "text"
+x = 72
+y = 638
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim10"
+type = "text"
+x = 119
+y = 638
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc10"
+type = "text"
+x = 187
+y = 638
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT10"
+type = "text"
+x = 278
+y = 638
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tDay11"
+type = "text"
+x = 72
+y = 677
+w = 39
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tTim11"
+type = "text"
+x = 119
+y = 677
+w = 59
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tFc11"
+type = "text"
+x = 187
+y = 677
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "tT11"
+type = "text"
+x = 278
+y = 677
+w = 83
+h = 30
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "06_maturity_data"
+events = [
+    "up",
+]
+xcen = 0
+
+[[component]]
+name = "mDelete0"
+type = "hotspot"
+x = 370
+y = 248
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete1"
+type = "hotspot"
+x = 370
+y = 287
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete2"
+type = "hotspot"
+x = 370
+y = 326
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete3"
+type = "hotspot"
+x = 370
+y = 365
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete4"
+type = "hotspot"
+x = 370
+y = 404
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete5"
+type = "hotspot"
+x = 370
+y = 443
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete6"
+type = "hotspot"
+x = 370
+y = 482
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete7"
+type = "hotspot"
+x = 370
+y = 521
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete8"
+type = "hotspot"
+x = 370
+y = 560
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete9"
+type = "hotspot"
+x = 370
+y = 599
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete10"
+type = "hotspot"
+x = 370
+y = 638
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mDelete11"
+type = "hotspot"
+x = 370
+y = 677
+w = 34
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mPrevRows"
+type = "hotspot"
+x = 4
+y = 240
+w = 24
+h = 270
+events = [
+    "up",
+]
+
+[[component]]
+name = "mNextRows"
+type = "hotspot"
+x = 452
+y = 240
+w = 24
+h = 270
+events = [
+    "up",
+]
+
+[[component]]
+name = "mAddDay"
+type = "hotspot"
+x = 68
+y = 199
+w = 47
+h = 45
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "mSensor"
+type = "hotspot"
+x = 274
+y = 199
+w = 91
+h = 45
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 67
+y = 719
+w = 143
+h = 40
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "mGen"
+type = "hotspot"
+x = 220
+y = 719
+w = 193
+h = 40
+events = [
+    "down",
+    "up",
+]

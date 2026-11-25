@@ -1,0 +1,98 @@
+on pChart.loadend:
+  pInit.vBusy.val=0
+  vPoint.val=0
+  line 40,140,40,620,65535
+  line 40,620,440,620,65535
+
+on mBack.up:
+  if(pInit.vBusy.val==0)
+  {
+  page pInit.vPage.val
+  }
+
+on tmChart.timer:
+  if(pInit.vBusy.val==1)
+  {
+  if(pInit.nAckSeq.val==pInit.vSeq.val)
+  {
+  pInit.vBusy.val=0
+  if(pInit.nAckCode.val==0)
+  {
+  spstr pInit.tData.txt,tNumber.txt,"|",0
+  spstr tNumber.txt,tWhole.txt,".",0
+  covx tWhole.txt,vX.val,0,0
+  spstr pInit.tData.txt,tNumber.txt,"|",1
+  spstr tNumber.txt,tWhole.txt,".",0
+  covx tWhole.txt,vY.val,0,0
+  spstr pInit.tData.txt,tNumber.txt,"|",2
+  spstr tNumber.txt,tWhole.txt,".",0
+  covx tWhole.txt,vScale.val,0,0
+  vScale.val/=400
+  vScale.val+=1
+  vX.val/=vScale.val
+  vX.val+=40
+  if(vY.val>50)
+  {
+  vY.val=50
+  }
+  vY.val*=9
+  vY.val=620-vY.val
+  if(vPoint.val>0)
+  {
+  line vLastX.val,vLastY.val,vX.val,vY.val,64992
+  }
+  vLastX.val=vX.val
+  vLastY.val=vY.val
+  vPoint.val+=1
+  }
+  else
+  {
+  vPoint.val=65
+  tError.txt="Select or generate a valid baseline"
+  }
+  }
+  else
+  {
+  pInit.vRetry.val+=1
+  if(pInit.vRetry.val==15)
+  {
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  if(pInit.vRetry.val>=30)
+  {
+  pInit.vBusy.val=0
+  tError.txt="No answer. Return and reconnect."
+  }
+  }
+  }
+  if(pInit.vBusy.val==0&&vPoint.val<65)
+  {
+  pInit.tCommand.txt="GET|curve|"
+  covx vPoint.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }

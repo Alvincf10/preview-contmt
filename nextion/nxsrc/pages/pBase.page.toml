@@ -1,0 +1,90 @@
+[page]
+name = "pBase"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "03_baseline"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = ["timer"]
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tMsg"
+type = "text"
+x = 484
+y = 8
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+vscope = 1
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 28
+y = 110
+w = 92
+h = 40
+events = ["down", "up"]
+
+[[component]]
+name = "mNew"
+type = "hotspot"
+x = 64
+y = 393
+w = 352
+h = 112
+events = ["down", "up"]
+
+[[component]]
+name = "mSaved"
+type = "hotspot"
+x = 64
+y = 513
+w = 352
+h = 112
+events = ["down", "up"]

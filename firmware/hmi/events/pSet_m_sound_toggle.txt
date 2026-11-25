@@ -1,20 +1,19 @@
-if(pInit.vBusy.val==0&&pInit.vRender.val==0)
+if(pInit.vBusy.val==0)
 {
 pInit.vSeq.val+=1
 pInit.vBusy.val=1
 pInit.vRetry.val=0
-pInit.vReqBoot.val=pInit.vBoot.val
 pInit.tReq.txt="CM1|"
-covx pInit.vBoot.val,pInit.tNum.txt,0,0
+covx pInit.nBoot.val,pInit.tNum.txt,0,0
 pInit.tReq.txt+=pInit.tNum.txt
 pInit.tReq.txt+="|"
 covx pInit.vSeq.val,pInit.tNum.txt,0,0
 pInit.tReq.txt+=pInit.tNum.txt
 pInit.tReq.txt+="|"
 pInit.tReq.txt+="15|"
-covx pInit.vView.val,pInit.tNum.txt,0,0
+covx pInit.nView.val,pInit.tNum.txt,0,0
 pInit.tReq.txt+=pInit.tNum.txt
-pInit.tReq.txt+="|SETTINGS_TOGGLE"
+pInit.tReq.txt+="|SETTINGS_SET"
 pInit.tReq.txt+="|"
 pInit.tReq.txt+="sound"
 prints pInit.tReq.txt,0

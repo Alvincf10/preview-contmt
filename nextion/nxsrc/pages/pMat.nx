@@ -1,0 +1,166 @@
+// Postinitialize: the panel announces PAGE_READY.
+on pMat.loadend:
+  // The page starts its conversation at step 0; the timer carries it.
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vStep.val=0
+  }
+
+// Timer tmPoll: runs while the page is showing.
+on tmPoll.timer:
+  // One step per tick: split a finished answer, then ask for the next.
+  if(pInit.vBusy.val==1)
+  {
+  if(pInit.nAckSeq.val==pInit.vSeq.val)
+  {
+  if(pInit.vSource.val==1)
+  {
+      // status: 20 columns
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",1
+      tClock.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+      tBatt.txt=pInit.tSplit.txt
+  }
+  else if(pInit.vSource.val==5)
+  {
+      // mix: 11 columns
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
+      tCem.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",1
+      tWat.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",2
+      tCoa.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+      tFin.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
+      tRetP.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",5
+      tAccP.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",6
+      tFlyP.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",7
+      tRetB.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",8
+      tAccB.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",9
+      tFlyB.txt=pInit.tSplit.txt
+      spstr pInit.tData.txt,pInit.tSplit.txt,"|",10
+      tWC.txt=pInit.tSplit.txt
+  }
+  pInit.vStep.val+=1
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  }else
+  {
+  pInit.vRetry.val+=1
+  if(pInit.vRetry.val<6)
+  {
+  prints pInit.tReq.txt,0
+  printh 0A
+  }else
+  {
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  pInit.vStep.val+=1
+  pInit.tMsg.txt="No answer from MCU"
+  }
+  }
+  }
+  // Ask for the next thing this page needs.
+  if(pInit.vBusy.val==0&&pInit.vStep.val>=0)
+  {
+  if(pInit.vStep.val==0)
+  {
+    if(pInit.vBusy.val==0)
+    {
+    pInit.vSeq.val+=1
+    pInit.vBusy.val=1
+    pInit.vRetry.val=0
+    pInit.tReq.txt="CM1|"
+    covx pInit.nBoot.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    covx pInit.vSeq.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    pInit.tReq.txt+="5|"
+    covx pInit.nView.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|PAGE_READY"
+    pInit.vSource.val=1
+    prints pInit.tReq.txt,0
+    printh 0A
+    }
+  }
+  else if(pInit.vStep.val==1)
+  {
+    if(pInit.vBusy.val==0)
+    {
+    pInit.vSeq.val+=1
+    pInit.vBusy.val=1
+    pInit.vRetry.val=0
+    pInit.tReq.txt="CM1|"
+    covx pInit.nBoot.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    covx pInit.vSeq.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|"
+    pInit.tReq.txt+="5|"
+    covx pInit.nView.val,pInit.tNum.txt,0,0
+    pInit.tReq.txt+=pInit.tNum.txt
+    pInit.tReq.txt+="|GET"
+    pInit.tReq.txt+="|"
+    pInit.tReq.txt+="mix"
+    pInit.vSource.val=5
+    prints pInit.tReq.txt,0
+    printh 0A
+    }
+  }
+  }
+
+on mBack.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="5|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|NAV"
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="BACK"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+
+on mNext.down:
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="5|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|NAV"
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="6"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }

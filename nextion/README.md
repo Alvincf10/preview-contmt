@@ -1,45 +1,67 @@
-# ConMT — paket sumber Nextion (Windows)
+# ConMT — Nextion HMI
 
-Ini **bukan** file `.HMI` binary jadi. Nextion Editor hanya bisa membuat/menyimpan `.HMI` sendiri.  
-Paket ini = **blueprint + aset + kode event** supaya kamu bisa rakit cepat di laptop Windows, lalu simulasikan di emulator Nextion.
+Pasangan Arduino 1.0.1 untuk panel NX8048K050 tersedia pada `conmt-NX8048K050-CM1-final.HMI` dan `conmt-NX8048K050-CM1-final.tft`. Sumbernya adalah `nxsrc-K050`, dengan generator `tools/k050_protocol.py`. Baca [petunjuk K050](NX8048K050-README.txt) dan [status integrasi](SYNC.md) untuk pasangan firmware serta hasil pengujiannya.
 
-## Apa yang ada di folder ini
+Panel **480×800**, 17 page. Ada tiga lapis, dan penting tahu mana yang diedit:
+
+- **`pages/` + `assets/pages/`** — build kit awal: koordinat, PNG desain. Ini
+  sumber desain. Jangan diedit kecuali desainnya berubah.
+- **`assets/clean/`** — salinan PNG tanpa angka contoh. Dihasilkan
+  `clean_pictures.py`, dan ini yang dipakai panel.
+- **`nxsrc/`** — HMI sebagai teks, **dihasilkan** `nx_source.py` dari ketiga
+  sumber di atas. Build membaca folder ini.
+
+`.HMI` dan `.TFT` adalah hasil build, bukan sumber.
+
+> **`nxsrc/` ditimpa setiap `npm run hmi:source`.** Untuk mengubah tampilan,
+> ubah sumbernya (desain, kontrak di `firmware/hmi`, atau peta di
+> `nextion/tools/`), lalu regenerasi. Mengedit `nxsrc/` langsung hanya aman
+> bila kamu tidak akan menjalankan `hmi:source` lagi.
+
+## Mulai di sini
+
+1. **[AGENT.md](./AGENT.md)** — alur edit → build → compile, perintah, dan aturan
+   yang harus dijaga agent. Baca ini dulu.
+2. **[SERIAL.md](./SERIAL.md)** — protokol MCU ↔ panel.
+3. **[FLOW.md](./FLOW.md)** — alur layar.
+4. **[BUILD.md](./BUILD.md)** — cara merakit manual di Nextion Editor, bila perlu.
+
+## Isi folder
 
 | Path | Isi |
-|---|---|
-| `project.json` | Resolusi 480×800, daftar page |
-| `assets/pages/*.png` | Background tiap layar (dari Figma 480×800) |
-| `pages/*.json` | Komponen + koordinat TouchCap |
-| `events/*.txt` | Kode event Nextion (`page xxx`) |
-| `FLOW.md` | Alur navigasi |
+|------|-----|
+| `nxsrc/` | **Hasil generate**: page `.toml`, event `.nx`, gambar, font |
+| `conmt.HMI` | project file untuk Nextion Editor, hasil `npm run hmi:build` |
+| `conmt.tft` | firmware panel, hasil `npm run hmi:compile` |
+| `pages/*.json` | koordinat + TouchCap dari build kit |
+| `assets/pages/*.png` | background desain, apa adanya |
+| `assets/clean/*.png` | background tanpa angka contoh, yang dipakai panel |
+| `events/*.txt` | kode event versi kit |
+| `tools/nx_source.py` | generator `nxsrc/` dari kit + `firmware/hmi` |
+| `tools/clean_pictures.py` | hapus angka contoh dari PNG desain |
+| `tools/rebuild.py` | jalankan generator + pembersihan dalam urutan benar |
+| `project.json` | 17 page, resolusi 480×800 |
+| `shared/statusCorners.json` | template `tClock` / `tBatt` |
+| `assets/_unused/` | PNG lama, jangan diimport |
 
-## Cara build di Nextion Editor (Windows)
+## Alur kerja
 
-1. Install **Nextion Editor** (versi terbaru dari situs Itead).
-2. **File → New** → pilih resolusi **Custom 480 × 800** (portrait).
-3. Untuk tiap page di `project.json`:
-   - Tambah page, rename sesuai `name` (contoh `pMain`).
-   - Import PNG dari `assets/pages/` sebagai **page background** (atau komponen Picture 0,0,480,800).
-   - Tambah **TouchCap** (area sentuh transparan) sesuai `x,y,w,h` di JSON.
-   - Di event **Touch Press Event**, tempel isi file `events/...txt` (biasanya satu baris `page pXxx`).
-4. Page pertama / boot: `pInit`.
-5. Di `pInit`, aktifkan **Timer** (mis. 500ms) → setelah beberapa tick: `page pUser` (lihat `events/pInit_tm0.txt`).
-6. **Debug → Simulate** untuk emulator di Windows.
-7. Kalau sudah OK: **Compile** → dapat `.TFT` untuk upload ke panel.
+```bash
+npm run hmi:source    # regenerasi nxsrc + bersihkan gambar (dua putaran)
+npm run hmi:check     # validasi: layout, navigasi, lebar field, nilai kosong
+npm run hmi:test      # tekan semua hotspot di simulator
+npm run hmi:build     # nxsrc -> conmt.HMI
+npm run hmi:compile   # nxsrc -> conmt.tft
+npm run hmi:serve     # MCP: agent bisa mensimulasikan dan menekan layar
+```
 
-## Catatan penting
+`npm run hmi:source` menulis ulang `nxsrc/` dari nol, jadi jangan dipakai setelah
+mengedit `nxsrc/` secara manual. Untuk perubahan tetap, ubah sumbernya lalu
+regenerasi.
 
-- **HTML `select` tidak ada di Nextion.** Untuk Datum Temperature, pakai Text + list page / Number / keyboard Nextion.
-- Data sensor realtime: MCU kirim perintah serial, contoh:  
-  `tS1.txt="25.6"` + `0xFF 0xFF 0xFF`
-- **pMatu SENSOR flow:** tap field Temperature (`mTempN` → `va0.val=N`) lalu `mSensor` mengirim `SEN` ke MCU. MCU tulis rata-rata ke `tTN.txt` (contoh `tT3.txt="25.7"`) + update `tHint.txt`. `mAddDay` mengirim `ADD`.
-- Koordinat TouchCap di JSON adalah titik awal dari Figma; fine-tune 2–4px di Editor bila perlu.
-- Emulator web React di root project tetap untuk preview UI; folder `nextion/` untuk target panel.
+## Catatan UI (parity React preview)
 
-## Flow singkat (baseline)
-
-`pInit` → `pUser` → `pMain` → `pBase` → `pNewB` → `pMat` → `pMatu` → `pBaseR` → `pSaveB`
-
-## Flow kuat tekan
-
-`pMain` → `pKuat` → `pSelB` → `pRT` → `pStr` → `pHist` → `pHistD`
+- **pRT**: ADD DAY, demo days, live M/Fc/%, logged days — tanpa elapsed.
+- **pStr**: Fc + % target, avg = initial pour temp — tanpa status READY.
+- **pHist/pHistD**: jumlah logged days + detail Time/Temp/M/Fc.
+- Formula dihitung di **MCU**, bukan di HMI (`fc_FKZ = max(0,(a+b·ln(M))·FKZ)`).

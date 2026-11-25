@@ -24,7 +24,7 @@
       "pco": 65535,
       "bco": 1055,
       "sta": "cropimage",
-      "note": "Jam pojok kiri bawah strip logo. MCU: tClock.txt=\"HH:MM\". Salin ke setiap page."
+      "note": "Jam pojok kiri. MCU: tClock.txt=\"HH:MM\""
     },
     {
       "type": "Text",
@@ -38,13 +38,79 @@
       "pco": 65535,
       "bco": 1055,
       "sta": "cropimage",
-      "note": "Baterai pojok kanan. MCU: tBatt.txt=\"87%\". Opsional Picture pBatt di x=352 y=72."
+      "note": "Baterai pojok kanan. MCU: tBatt.txt=\"87%\""
+    },
+    {
+      "type": "Text",
+      "objname": "tBaseName",
+      "x": 84,
+      "y": 118,
+      "w": 320,
+      "h": 28,
+      "txt": "C30-MixA",
+      "pco": 65535,
+      "note": "Baseline Name — set saat START dari pSelB"
+    },
+    {
+      "type": "Text",
+      "objname": "tTarget",
+      "x": 84,
+      "y": 150,
+      "w": 120,
+      "h": 24,
+      "txt": "30 MPa",
+      "pco": 65535,
+      "note": "Target Fc'"
+    },
+    {
+      "type": "Text",
+      "objname": "tDatum",
+      "x": 260,
+      "y": 150,
+      "w": 120,
+      "h": 24,
+      "txt": "0 °C",
+      "pco": 65535,
+      "note": "Datum Temperature"
+    },
+    {
+      "type": "Text",
+      "objname": "tM",
+      "x": 40,
+      "y": 196,
+      "w": 180,
+      "h": 36,
+      "txt": "0",
+      "pco": 65535,
+      "note": "Live Maturity M (°C·h). MCU update tiap log / tick."
+    },
+    {
+      "type": "Text",
+      "objname": "tFcLive",
+      "x": 240,
+      "y": 196,
+      "w": 120,
+      "h": 36,
+      "txt": "—",
+      "pco": 65535,
+      "note": "Live Predicted Fc' (MPa) = max(0,(a+b·ln(M))·FKZ)"
+    },
+    {
+      "type": "Text",
+      "objname": "tPctLive",
+      "x": 360,
+      "y": 196,
+      "w": 80,
+      "h": 36,
+      "txt": "",
+      "pco": 65535,
+      "note": "% of target: (Fc/target)·100. Kosong jika target=0."
     },
     {
       "type": "Text",
       "objname": "tS1",
       "x": 50,
-      "y": 320,
+      "y": 268,
       "w": 100,
       "h": 30,
       "txt": "25.6",
@@ -54,7 +120,7 @@
       "type": "Text",
       "objname": "tS2",
       "x": 190,
-      "y": 320,
+      "y": 268,
       "w": 100,
       "h": 30,
       "txt": "25.8",
@@ -64,7 +130,7 @@
       "type": "Text",
       "objname": "tS3",
       "x": 330,
-      "y": 320,
+      "y": 268,
       "w": 100,
       "h": 30,
       "txt": "25.7",
@@ -73,34 +139,163 @@
     {
       "type": "Text",
       "objname": "tAvg",
-      "x": 280,
-      "y": 400,
-      "w": 120,
-      "h": 30,
+      "x": 300,
+      "y": 318,
+      "w": 100,
+      "h": 28,
       "txt": "25.7",
       "pco": 65535
     },
     {
       "type": "Text",
-      "objname": "tPour",
-      "x": 50,
-      "y": 520,
-      "w": 120,
-      "h": 28,
-      "txt": "23:12:59",
+      "objname": "tPourDate",
+      "x": 40,
+      "y": 380,
+      "w": 160,
+      "h": 24,
+      "txt": "28 Sep 2026",
       "pco": 65535,
-      "note": "Initial Pour Time — di-set saat START di pSelB"
+      "note": "Initial Pour Date — locked at START"
+    },
+    {
+      "type": "Text",
+      "objname": "tCurDate",
+      "x": 260,
+      "y": 380,
+      "w": 160,
+      "h": 24,
+      "txt": "28 Sep 2026",
+      "pco": 65535
+    },
+    {
+      "type": "Text",
+      "objname": "tPour",
+      "x": 40,
+      "y": 416,
+      "w": 160,
+      "h": 24,
+      "txt": "13:00:00",
+      "pco": 65535,
+      "note": "Initial Pour Time — locked at START"
+    },
+    {
+      "type": "Text",
+      "objname": "tCurTime",
+      "x": 260,
+      "y": 416,
+      "w": 160,
+      "h": 24,
+      "txt": "14:32:10",
+      "pco": 65535
     },
     {
       "type": "Text",
       "objname": "tInitTemp",
-      "x": 50,
-      "y": 548,
-      "w": 120,
-      "h": 28,
+      "x": 40,
+      "y": 452,
+      "w": 160,
+      "h": 24,
       "txt": "25.6 °C",
       "pco": 65535,
-      "note": "Suhu awal penuangan = rata-rata sensor saat tombol START. Freeze, jangan overwrite tiap detik."
+      "note": "Initial Temp = avg sensor at START. Freeze."
+    },
+    {
+      "type": "Text",
+      "objname": "tCurTemp",
+      "x": 260,
+      "y": 452,
+      "w": 160,
+      "h": 24,
+      "txt": "25.7 °C",
+      "pco": 65535
+    },
+    {
+      "type": "Text",
+      "objname": "tHint",
+      "x": 40,
+      "y": 492,
+      "w": 400,
+      "h": 22,
+      "txt": "Day 0 = pour. Tap ADD DAY for next day.",
+      "pco": 50712
+    },
+    {
+      "type": "Text",
+      "objname": "tLogCount",
+      "x": 360,
+      "y": 520,
+      "w": 60,
+      "h": 22,
+      "txt": "1",
+      "pco": 65535,
+      "note": "Jumlah logged days"
+    },
+    {
+      "type": "Text",
+      "objname": "tL0",
+      "x": 40,
+      "y": 548,
+      "w": 400,
+      "h": 28,
+      "txt": "Day 0  13:00  25.6C  M0  Fc—",
+      "pco": 65535,
+      "note": "Log slot 0 (oldest visible). MCU format bebas."
+    },
+    {
+      "type": "Text",
+      "objname": "tL1",
+      "x": 40,
+      "y": 580,
+      "w": 400,
+      "h": 28,
+      "txt": "",
+      "pco": 65535
+    },
+    {
+      "type": "Text",
+      "objname": "tL2",
+      "x": 40,
+      "y": 612,
+      "w": 400,
+      "h": 28,
+      "txt": "",
+      "pco": 65535
+    },
+    {
+      "type": "Text",
+      "objname": "tL3",
+      "x": 40,
+      "y": 644,
+      "w": 400,
+      "h": 28,
+      "txt": "",
+      "pco": 65535
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mAddDay",
+      "x": 40,
+      "y": 488,
+      "w": 200,
+      "h": 40,
+      "label": "+ ADD DAY",
+      "events": {
+        "touchpress": "prints \"ADD\\r\\n\",0"
+      },
+      "note": "MCU menambah checkpoint hari berikutnya (auto temp dari baseline/sensor)."
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mDemo",
+      "x": 250,
+      "y": 488,
+      "w": 190,
+      "h": 40,
+      "label": "LOAD EXCEL DEMO",
+      "events": {
+        "touchpress": "prints \"DEMO\\r\\n\",0"
+      },
+      "note": "Opsional: MCU isi semua day dari baris baseline/Excel."
     },
     {
       "type": "TouchCap",
@@ -109,6 +304,7 @@
       "y": 700,
       "w": 150,
       "h": 44,
+      "label": "BACK",
       "events": {
         "touchpress": "page pSelB"
       }
@@ -120,14 +316,34 @@
       "y": 700,
       "w": 150,
       "h": 44,
+      "label": "NEXT",
       "events": {
-        "touchpress": "page pStr"
-      }
+        "touchpress": "prints \"NEXT\\r\\n\",0\r\npage pStr"
+      },
+      "note": "Kirim NEXT ke MCU (lock endMs ke last log) lalu buka pStr."
     }
   ],
   "events": {
+    "mAddDay.touchpress": "events/pRT_mAddDay.txt",
+    "mDemo.touchpress": "events/pRT_mDemo.txt",
     "mBack.touchpress": "events/pRT_mBack.txt",
     "mNext.touchpress": "events/pRT_mNext.txt"
   },
-  "note": "Update tS1/tS2/tS3/tAvg dari MCU via serial: tS1.txt=\"25.6\""
+  "serialProtocol": {
+    "fromHmi": [
+      "ADD   — log next day checkpoint",
+      "DEMO  — fill demo days from baseline rows",
+      "NEXT  — finalize measurement (endMs = last log)"
+    ],
+    "fromMcu": [
+      "tS1/tS2/tS3/tAvg.txt — live sensors",
+      "tM.txt / tFcLive.txt / tPctLive.txt — live prediction",
+      "tPourDate/tPour/tInitTemp — locked at START",
+      "tCurDate/tCurTime/tCurTemp — live clock/temp",
+      "tL0..tL3.txt — logged day lines",
+      "tLogCount.txt / tHint.txt",
+      "Each command ends with 0xFF 0xFF 0xFF"
+    ]
+  },
+  "note": "Elapsed dihapus dari UI. Result lock ke last logged checkpoint, bukan waktu tombol NEXT."
 }

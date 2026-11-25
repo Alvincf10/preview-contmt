@@ -34,8 +34,9 @@ static const char commands[] CM_ROM =
     "SETTINGS_SAVE\0"
     "SESSION_RESUME\0"
     "GAP_RECONCILE\0"
+    "SELF_CHECK\0"
 ;
-static const uint8_t argumentCounts[] CM_ROM = {255,0,1,1,0,2,0,0,0,0,3,1,2,1,1,0,0,1,0,1,128,1,3,0,0,1,1,2,2,1,0,0,2};
+static const uint8_t argumentCounts[] CM_ROM = {255,0,1,1,0,2,0,0,0,0,3,1,2,1,1,0,0,1,0,1,128,1,3,0,0,1,1,2,2,1,0,0,2,0};
 Command commandFromText(const char* text) {
     return Command(flashToken(text,commands,sizeof(argumentCounts)-1));
 }
@@ -57,7 +58,7 @@ bool allowedPage(Command command,uint8_t page) {
         0,0x1ffffUL,0x1ffffUL,0x1ffffUL,P(1),P(1)|P(4)|P(5)|P(6),P(3),
         P(6),P(6),P(6),P(6),P(6),P(6),P(6),P(6),P(6),P(7),P(8)|P(10),P(8),P(8),P(10),
         P(11),P(11),P(11),P(12),P(13),P(6)|P(8)|P(10)|P(11)|P(13)|P(14),
-        P(15),P(15),P(15),P(15),P(10),P(11)
+        P(15),P(15),P(15),P(15),P(10),P(11),P(0)
     };
 #undef P
     uint8_t id=uint8_t(command);

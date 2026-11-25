@@ -1,0 +1,224 @@
+[page]
+name = "pMat"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "05_material_data"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = ["timer"]
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 14
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 378
+y = 70
+w = 88
+h = 28
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tCem"
+type = "text"
+x = 220
+y = 234
+w = 107
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tWat"
+type = "text"
+x = 220
+y = 284
+w = 107
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tCoa"
+type = "text"
+x = 220
+y = 384
+w = 107
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tFin"
+type = "text"
+x = 220
+y = 434
+w = 107
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tRetP"
+type = "text"
+x = 171
+y = 541
+w = 45
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tRetB"
+type = "text"
+x = 310
+y = 541
+w = 103
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tAccP"
+type = "text"
+x = 171
+y = 591
+w = 45
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tAccB"
+type = "text"
+x = 310
+y = 591
+w = 115
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tFlyP"
+type = "text"
+x = 171
+y = 641
+w = 45
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tFlyB"
+type = "text"
+x = 310
+y = 641
+w = 103
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tWC"
+type = "text"
+x = 220
+y = 334
+w = 107
+h = 36
+sta = 3
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+
+[[component]]
+name = "tMsg"
+type = "text"
+x = 484
+y = 8
+w = 96
+h = 24
+sta = 3
+txt = ""
+txt_maxl = 24
+pco = "#ffffff"
+font = "NotoSans16"
+vscope = 1
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 65
+y = 697
+w = 147
+h = 44
+events = ["down", "up"]
+
+[[component]]
+name = "mNext"
+type = "hotspot"
+x = 218
+y = 697
+w = 197
+h = 44
+events = ["down", "up"]

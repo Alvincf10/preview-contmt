@@ -6,9 +6,12 @@ pInit
                └─(SAVE)→ pMain
                            ├─ BASELINE → pBase
                            │              ├─ NEW → pNewB → pMat → pMatu → pBaseR → pSaveB
+                           │              │                      └─ ADD/SENSOR (MCU)
                            │              └─ SAVED → pSaveB
                            ├─ KUAT TEKAN → pKuat
-                           │                 ├─ START → pSelB → pRT → pStr → pHist → pHistD
+                           │                 ├─ START → pSelB → pRT ⇄ pStr → pHist → pHistD
+                           │                 │                      ├─ ADD / DEMO (MCU)
+                           │                 │                      └─ NEXT → lock last log → pStr
                            │                 └─ HISTORY → pHist → pHistD
                            ├─ SETTINGS → pSet → pMain
                            └─ DEVICE INFO → pDev → pMain
@@ -16,22 +19,26 @@ pInit
 
 ## Event code pattern
 
-Semua navigasi memakai instruksi Nextion:
+Navigasi:
 
 ```
 page pMain
 ```
 
-Tempel di **Touch Press Event** komponen TouchCap.
+Ke MCU (prints):
 
-## Serial dari MCU (contoh)
+```
+prints "ADD\r\n",0
+```
+
+Tempel verbatim dari `events/*.txt` ke **Touch Press Event**.
+
+## Serial ringkas
 
 ```
 tS1.txt="25.6"
-tS2.txt="25.8"
-tS3.txt="25.7"
-tAvg.txt="25.7"
 tFc.txt="35.4"
+tPct.txt="(118%)"
 ```
 
-Setiap perintah diakhiri 3 byte `0xFF 0xFF 0xFF`.
+Setiap perintah diakhiri `0xFF 0xFF 0xFF`. Detail: `SERIAL.md`.

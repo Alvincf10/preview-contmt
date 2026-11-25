@@ -99,7 +99,19 @@ bool Transport::renderField(uint16_t i,char* component,size_t cc,char* value,siz
     if(i==0) { char date[12]; Time now=app_.clock().now(); if(now.valid) calendarText(now.wallMs,date,sizeof(date),value,vc); else CM_TEXT(value,vc,"--"); CM_TEXT(component,cc,"tClock"); return true; }
     if(i==1) { uint8_t battery; Status s=app_.devices().battery(battery); if(s==Status::Ok) Text(value,vc).number(battery).character('%'); else CM_TEXT(value,vc,"--"); CM_TEXT(component,cc,"tBatt"); return true; }
     if(i==2) { formatStatus(value,vc,ack_==Status::Ok?app_.status():ack_); CM_TEXT(component,cc,"tMsg"); return true; }
-    i-=3;
+    // The splash shows what the self-check found. Its picture fills the panel
+    // with a sample checklist, so each of these lines takes a row of its own and
+    // names the part it reports: what the operator reads is the real state, not
+    // the sample the picture drew.
+    if(app_.page()==Page::Init) {
+        Status sensors, clock, devices;
+        const Status ready=app_.selfCheck(sensors,clock,devices);
+        if(i==3) { CM_TEXT(component,cc,"tChkSensors"); Text(value,vc).ram("Checking Sensors: ").ram(statusName(sensors)); return true; }
+        if(i==4) { CM_TEXT(component,cc,"tChkClock"); Text(value,vc).ram("Checking Clock: ").ram(statusName(clock)); return true; }
+        if(i==5) { CM_TEXT(component,cc,"tChkDevice"); Text(value,vc).ram("Checking Hardware: ").ram(statusName(devices)); return true; }
+        if(i==6) { CM_TEXT(component,cc,"tReady"); Text(value,vc).ram("Starting Application: ").ram(statusName(ready)); return true; }
+        i-=7;
+    } else i-=3;
     if(app_.page()==Page::RT) {
         if(i<4) {
             static const char names[][5] CM_ROM={"tS1","tS2","tS3","tAvg"}; copyFlash(component,cc,names[i]);
@@ -117,7 +129,10 @@ void Transport::receive(uint32_t now) {
     parser_.expire(now);
 }
 bool Transport::renderNext() {
-    if((full_||field_<(app_.page()==Page::RT?9:3))&&renderField(field_,component_,sizeof(component_),value_,sizeof(value_))) {
+    // The splash carries the self-check lines, so it has more fields than the
+    // three every other page always has (clock, battery, status).
+    const uint16_t always=app_.page()==Page::Init?7:(app_.page()==Page::RT?9:3);
+    if((full_||field_<always)&&renderField(field_,component_,sizeof(component_),value_,sizeof(value_))) {
         Status st=encode(); if(st!=Status::Ok) ack_=st;
         ++field_; return true;
     }

@@ -1,0 +1,165 @@
+{
+  "created_at_utc": "2026-11-24T20:26:01.455433+00:00",
+  "target_model": "NX8048K050",
+  "rotation": 90,
+  "firmware_version": "1.0.1",
+  "domain_pages": 17,
+  "local_pages": [
+    "pEdit",
+    "pConfirm",
+    "pClock",
+    "pPoints",
+    "pChart",
+    "pAddRow"
+  ],
+  "serial": {
+    "baud": 9600,
+    "data_bits": 8,
+    "parity": "none",
+    "stop_bits": 1,
+    "protocol": "CM1"
+  },
+  "binaries": {
+    "nextion/conmt-NX8048K050-CM1-final.tft": {
+      "bytes": 14310764,
+      "sha256": "e147215fc44ad14864c792cabd36c50c0f5d26ace28fa86d7f637ab96d1f8a4a"
+    },
+    "nextion/conmt-NX8048K050-CM1-final.HMI": {
+      "bytes": 28204956,
+      "sha256": "a8ec6489f5137602f44fa7cebc214856b29dead5dc3f69bd3e8146e2a8f817b4",
+      "status": "locked open in Nextion Editor; hash is the previous final HMI, before the pInit SD error text change; the TFT below is the current flash artifact"
+    },
+    "arduino/out/ConMT-ATmega328P.hex": {
+      "bytes": 85096,
+      "sha256": "6ad467394237e39075dd9340d6b7b0856439158835b3a8eef55bd9c47f10faca",
+      "application_end": "0x762A"
+    },
+    "arduino/out/ConMT-ATmega328P-ISP.hex": {
+      "bytes": 90124,
+      "sha256": "eb9520ea0ebbb83e8b102d3b027883c19b91f3feda1340dd64ae3f838770635d",
+      "boot_reset": "JMP 0 at 0x7E00"
+    },
+    "arduino/out/ConMT-ATmega328P-ISP-CM1-K050-raw.hex": {
+      "bytes": 90124,
+      "sha256": "eb9520ea0ebbb83e8b102d3b027883c19b91f3feda1340dd64ae3f838770635d",
+      "boot_reset": "JMP 0 at 0x7E00"
+    },
+    "arduino/out/CMTLOG-card-8mb.img": {
+      "bytes": 8388608,
+      "sha256": "1525b9e9f2406592a278ace176909d44f8755150c8e27f5af3347ac2a3c67fb5",
+      "legacy": "not used by the raw-journal firmware"
+    },
+    "arduino/out/CMTLOG.BIN": {
+      "bytes": 4194304,
+      "sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+      "legacy": "not used by the raw-journal firmware"
+    }
+  },
+  "nextion": {
+    "source_errors": 0,
+    "source_warnings": 0,
+    "memory_capacity": 8192,
+    "max_page_bytes": 6068,
+    "page_memory": {
+      "pInit": 2812,
+      "pUser": 2668,
+      "pMain": 2504,
+      "pBase": 2504,
+      "pNewB": 2736,
+      "pMat": 2996,
+      "pMatu": 4876,
+      "pBaseR": 3192,
+      "pSaveB": 3400,
+      "pKuat": 2640,
+      "pSelB": 3396,
+      "pRT": 4192,
+      "pStr": 2984,
+      "pHist": 3556,
+      "pHistD": 5160,
+      "pSet": 2768,
+      "pDev": 2504,
+      "pEdit": 3496,
+      "pConfirm": 2572,
+      "pClock": 2804,
+      "pPoints": 6068,
+      "pChart": 2480,
+      "pAddRow": 2560
+    }
+  },
+  "ui_match": {
+    "coordinate_source": "pixel-measured from nextion/assets/pages; layout.json is the web DOM and was not used for these fields",
+    "sample_text_cleaner": "nextion/tools/clean_k050_fields.py",
+    "user_info_buttons": "SAVE only; clock set is a hidden hotspot over the top-left clock",
+    "device_info_buttons": "BACK only; no Set date/time or Retry storage button",
+    "material_data": "fields at the design boxes y=306/335/364/393/422 and 497/526/555; sample text cleared",
+    "web_backgrounds": "pages 6-16 use the 480x800 web screenshot; fields/hotspots follow layout.json",
+    "maturity_data": "twelve visible rows, paging by twelve; Delete crosses are hotspots; Add row sheet",
+    "history_detail": "visible meta/baseline/log fields only; five log rows",
+    "device_info": "static web screenshot, no extra dynamic fields",
+    "realtime": "checkpoint add/review are hotspots, no buttons over the monitoring card",
+    "paging": "list paging is invisible edge hotspots",
+    "pInit_error_text": "Check the microSD card (no CMTLOG.BIN reference)"
+  },
+  "integration": {
+    "status": "PASS",
+    "requests": 444,
+    "domain_pages_visited": 17,
+    "production_parser_engine_journal": true,
+    "host_io": "raw 1 MiB end-of-card journal, controlled sensor and clock",
+    "notes": "Add-row sheet opens from + ADD DAY; raw journal committed and recovered; sensor/status fields verified on pDev"
+  },
+  "sd_card": {
+    "firmware_creates_journal": true,
+    "storage": "last 1 MiB of the card, 2048 sectors of 512 bytes; 8184 slots of 128 bytes",
+    "required_file": "none; no FAT, filesystem, or CMTLOG.BIN needed",
+    "card_requirement": "dedicated card; the last 1 MiB is overwritten directly",
+    "host_raw_image_verified": "PASS: 41 rows, recovery, 3 interruption modes",
+    "physical_status": "pending"
+  },
+  "physical_validation_pending": [
+    "upload nextion/conmt-NX8048K050-CM1-final.tft to the panel and test the installed HMI UART",
+    "test SD mount, journal commit and reboot recovery with a dedicated card",
+    "sensor count and three probes on the physical unit",
+    "battery calibration and peak stack"
+  ],
+  "firmware_build": {
+    "flash_bytes": 30250,
+    "flash_limit": 32256,
+    "free_flash_bytes": 2006,
+    "static_sram_bytes": 1194,
+    "storage": "raw journal in last 1 MiB of card"
+  },
+  "physical_upload_performed": true,
+  "upload_deferred_by_user": false,
+  "physical_upload": {
+    "completed_at_utc": "2026-11-24T20:35:47.288259+00:00",
+    "method": "Arduino as ISP; Arduino Serial Monitor transport; avrdude over local net proxy",
+    "port": "COM12",
+    "target": "ATmega328P",
+    "signature": "1E950F",
+    "hex": "arduino/out/ConMT-ATmega328P-ISP-CM1-K050-raw.hex",
+    "hex_sha256": "eb9520ea0ebbb83e8b102d3b027883c19b91f3feda1340dd64ae3f838770635d",
+    "flash_bytes_verified": 32768,
+    "upload_verify": "PASS",
+    "independent_isp_readback": "PASS: signature, flash samples, complete 512-byte boot area, fuses, lock bits and EEPROM",
+    "fuses": {
+      "lfuse": 255,
+      "hfuse": 222,
+      "efuse": 253,
+      "lock": 207
+    },
+    "boot_area_bytes": 512,
+    "eeprom": "empty (all 0xFF); preserved",
+    "backup_directory": "arduino/out/physical-backup-20261125.local",
+    "backup_files": [
+      "ConMT-unit.hex",
+      "arduino-upload.log",
+      "before-device.json",
+      "before-eeprom.bin",
+      "before-flash.bin",
+      "device.json"
+    ],
+    "nextion_tft_uploaded": false,
+    "sd_physical_test": false
+  }
+}

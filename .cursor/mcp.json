@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "nxwright": {
+      "command": "nxwright",
+      "args": ["mcp"]
+    }
+  }
+}

@@ -1,0 +1,557 @@
+[page]
+name = "pRT"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+
+[[component]]
+name = "bg"
+type = "picture"
+x = 0
+y = 0
+w = 480
+h = 800
+pic = "11_realtime"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "tClock"
+type = "text"
+x = 43
+y = 81
+w = 40
+h = 13
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tBatt"
+type = "text"
+x = 429
+y = 81
+w = 32
+h = 12
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tS1"
+type = "text"
+x = 69
+y = 465
+w = 75
+h = 24
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tS2"
+type = "text"
+x = 202
+y = 465
+w = 76
+h = 24
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tS3"
+type = "text"
+x = 336
+y = 465
+w = 76
+h = 24
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tAvg"
+type = "text"
+x = 173
+y = 523
+w = 134
+h = 36
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tNowD"
+type = "text"
+x = 318
+y = 644
+w = 93
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tNowT"
+type = "text"
+x = 347
+y = 696
+w = 66
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tBase"
+type = "text"
+x = 110
+y = 253
+w = 314
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tTarget"
+type = "text"
+x = 110
+y = 302
+w = 146
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tDatum"
+type = "text"
+x = 383
+y = 302
+w = 49
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tPDate"
+type = "text"
+x = 69
+y = 644
+w = 93
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tPour"
+type = "text"
+x = 69
+y = 696
+w = 66
+h = 16
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tM"
+type = "text"
+x = 56
+y = 364
+w = 153
+h = 18
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans28"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tFc"
+type = "text"
+x = 234
+y = 364
+w = 118
+h = 18
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans20"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tPct"
+type = "text"
+x = 360
+y = 364
+w = 64
+h = 18
+sta = 0
+txt = ""
+txt_maxl = 32
+pco = "#ffffff"
+font = "NotoSans16"
+picc = "11_realtime"
+xcen = 0
+
+[[component]]
+name = "tMsg"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+vscope = 1
+
+[[component]]
+name = "tElapsed"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tRefDay"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDay0"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tAt0"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tTmp0"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCm0"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCf0"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDay1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tAt1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tTmp1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCm1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCf1"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDay2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tAt2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tTmp2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCm2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCf2"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDay3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tAt3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tTmp3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCm3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCf3"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDay4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tAt4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tTmp4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCm4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCf4"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tDay5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tAt5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tTmp5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCm5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tCf5"
+type = "variable"
+sta = 1
+txt = ""
+txt_maxl = 24
+
+[[component]]
+name = "tNotice"
+type = "text"
+x = 10
+y = 775
+w = 460
+h = 24
+sta = 1
+bco = "#1e2326"
+pco = "#ffffff"
+font = "NotoSans16"
+txt = ""
+txt_maxl = 96
+
+[[component]]
+name = "mAddCheck"
+type = "hotspot"
+x = 313
+y = 575
+w = 90
+h = 34
+events = [
+    "up",
+]
+
+[[component]]
+name = "mPoints"
+type = "hotspot"
+x = 56
+y = 585
+w = 200
+h = 30
+events = [
+    "up",
+]
+
+[[component]]
+name = "mBack"
+type = "hotspot"
+x = 43
+y = 735
+w = 163
+h = 40
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "mNext"
+type = "hotspot"
+x = 216
+y = 735
+w = 221
+h = 40
+events = [
+    "down",
+    "up",
+]

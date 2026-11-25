@@ -23,8 +23,7 @@
       "font": 0,
       "pco": 65535,
       "bco": 1055,
-      "sta": "cropimage",
-      "note": "Jam pojok kiri bawah strip logo. MCU: tClock.txt=\"HH:MM\". Salin ke setiap page."
+      "sta": "cropimage"
     },
     {
       "type": "Text",
@@ -37,8 +36,101 @@
       "font": 0,
       "pco": 65535,
       "bco": 1055,
-      "sta": "cropimage",
-      "note": "Baterai pojok kanan. MCU: tBatt.txt=\"87%\". Opsional Picture pBatt di x=352 y=72."
+      "sta": "cropimage"
+    },
+    {
+      "type": "Text",
+      "objname": "tH0",
+      "x": 40,
+      "y": 140,
+      "w": 400,
+      "h": 72,
+      "txt": "TEST-001  C30-MixA  35.4 MPa  3 days",
+      "pco": 65535,
+      "note": "History card 0 — MCU isi Test ID / Baseline / Fc / Logged Days"
+    },
+    {
+      "type": "Text",
+      "objname": "tH1",
+      "x": 40,
+      "y": 230,
+      "w": 400,
+      "h": 72,
+      "txt": "",
+      "pco": 65535
+    },
+    {
+      "type": "Text",
+      "objname": "tH2",
+      "x": 40,
+      "y": 320,
+      "w": 400,
+      "h": 72,
+      "txt": "",
+      "pco": 65535
+    },
+    {
+      "type": "Text",
+      "objname": "tH3",
+      "x": 40,
+      "y": 410,
+      "w": 400,
+      "h": 72,
+      "txt": "",
+      "pco": 65535
+    },
+    {
+      "type": "Variable",
+      "objname": "vaSel",
+      "note": "Selected history index 0..3. Set by mRow*; read by MCU on DETAIL."
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mRow0",
+      "x": 40,
+      "y": 140,
+      "w": 400,
+      "h": 72,
+      "label": "Select history 0",
+      "events": {
+        "touchpress": "vaSel.val=0\r\nprints \"HSEL\\r\\n\",0"
+      }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mRow1",
+      "x": 40,
+      "y": 230,
+      "w": 400,
+      "h": 72,
+      "label": "Select history 1",
+      "events": {
+        "touchpress": "vaSel.val=1\r\nprints \"HSEL\\r\\n\",0"
+      }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mRow2",
+      "x": 40,
+      "y": 320,
+      "w": 400,
+      "h": 72,
+      "label": "Select history 2",
+      "events": {
+        "touchpress": "vaSel.val=2\r\nprints \"HSEL\\r\\n\",0"
+      }
+    },
+    {
+      "type": "TouchCap",
+      "objname": "mRow3",
+      "x": 40,
+      "y": 410,
+      "w": 400,
+      "h": 72,
+      "label": "Select history 3",
+      "events": {
+        "touchpress": "vaSel.val=3\r\nprints \"HSEL\\r\\n\",0"
+      }
     },
     {
       "type": "TouchCap",
@@ -47,6 +139,7 @@
       "y": 720,
       "w": 150,
       "h": 44,
+      "label": "BACK",
       "events": {
         "touchpress": "page pKuat"
       }
@@ -58,13 +151,28 @@
       "y": 720,
       "w": 150,
       "h": 44,
+      "label": "VIEW LOG",
       "events": {
-        "touchpress": "page pHistD"
+        "touchpress": "prints \"DETAIL\\r\\n\",0\r\npage pHistD"
       }
     }
   ],
   "events": {
+    "mRow0.touchpress": "events/pHist_mRow0.txt",
+    "mRow1.touchpress": "events/pHist_mRow1.txt",
+    "mRow2.touchpress": "events/pHist_mRow2.txt",
+    "mRow3.touchpress": "events/pHist_mRow3.txt",
     "mBack.touchpress": "events/pHist_mBack.txt",
     "mDetail.touchpress": "events/pHist_mDetail.txt"
+  },
+  "serialProtocol": {
+    "fromHmi": [
+      "HSEL — select row vaSel.val",
+      "DETAIL — open selected history detail"
+    ],
+    "fromMcu": [
+      "tH0..tH3.txt — history card lines (Test ID, Baseline, Fc, Logged Days count)",
+      "Each command ends with 0xFF 0xFF 0xFF"
+    ]
   }
 }

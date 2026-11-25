@@ -65,6 +65,7 @@ public:
     Status baselineAt(uint32_t slot,uint32_t& id);
     Status historyAt(uint32_t slot,uint32_t& id);
     Status getAverage(Average& out,SensorFrame* frame=nullptr);
+    Status selfCheck(Status& sensors,Status& clock,Status& devices);
     Status state(SessionState& out);
     Status select(uint32_t id);
     Page page() const { return page_; }

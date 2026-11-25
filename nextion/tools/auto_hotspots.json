@@ -1,0 +1,500 @@
+{
+ "pMatu": [
+  {
+   "name": "mTap0",
+   "x": 371,
+   "y": 127,
+   "w": 44,
+   "h": 44,
+   "label": "",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap1",
+   "x": 368,
+   "y": 246,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap2",
+   "x": 368,
+   "y": 285,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap3",
+   "x": 368,
+   "y": 324,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap4",
+   "x": 368,
+   "y": 363,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap5",
+   "x": 368,
+   "y": 402,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap6",
+   "x": 368,
+   "y": 441,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap7",
+   "x": 368,
+   "y": 480,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap8",
+   "x": 368,
+   "y": 519,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap9",
+   "x": 368,
+   "y": 558,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap10",
+   "x": 368,
+   "y": 597,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap11",
+   "x": 368,
+   "y": 636,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap12",
+   "x": 368,
+   "y": 675,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap13",
+   "x": 368,
+   "y": 714,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap14",
+   "x": 368,
+   "y": 753,
+   "w": 38,
+   "h": 34,
+   "label": "\u00d7",
+   "verb": "NAV",
+   "args": []
+  }
+ ],
+ "pSaveB": [
+  {
+   "name": "mTap0",
+   "x": 336,
+   "y": 277,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap1",
+   "x": 336,
+   "y": 308,
+   "w": 68,
+   "h": 30,
+   "label": "DELETE",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap2",
+   "x": 336,
+   "y": 364,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap3",
+   "x": 336,
+   "y": 395,
+   "w": 68,
+   "h": 30,
+   "label": "DELETE",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap4",
+   "x": 336,
+   "y": 451,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap5",
+   "x": 336,
+   "y": 482,
+   "w": 68,
+   "h": 30,
+   "label": "DELETE",
+   "verb": "NAV",
+   "args": []
+  },
+  {
+   "name": "mTap6",
+   "x": 336,
+   "y": 538,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap7",
+   "x": 336,
+   "y": 569,
+   "w": 68,
+   "h": 30,
+   "label": "DELETE",
+   "verb": "NAV",
+   "args": []
+  }
+ ],
+ "pSelB": [
+  {
+   "name": "mTap0",
+   "x": 336,
+   "y": 310,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap1",
+   "x": 336,
+   "y": 385,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap2",
+   "x": 336,
+   "y": 461,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap3",
+   "x": 336,
+   "y": 536,
+   "w": 68,
+   "h": 30,
+   "label": "SELECT",
+   "verb": "BASE_PICK",
+   "args": [
+    "0"
+   ]
+  }
+ ],
+ "pHistD": [
+  {
+   "name": "mTap0",
+   "x": 75,
+   "y": 446,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 08:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap1",
+   "x": 75,
+   "y": 500,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 08:30:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap2",
+   "x": 75,
+   "y": 554,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 09:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap3",
+   "x": 75,
+   "y": 608,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 09:30:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap4",
+   "x": 75,
+   "y": 662,
+   "w": 330,
+   "h": 49,
+   "label": "Day 028-09-2026 \u00b7 10:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  },
+  {
+   "name": "mTap5",
+   "x": 75,
+   "y": 770,
+   "w": 330,
+   "h": 50,
+   "label": "Day 028-09-2026 \u00b7 11:00:",
+   "verb": "HISTORY_PICK",
+   "args": [
+    "0"
+   ]
+  }
+ ],
+ "pSet": [
+  {
+   "name": "mTap0",
+   "x": 144,
+   "y": 312,
+   "w": 32,
+   "h": 26,
+   "label": "\u25b4",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "hour",
+    "1"
+   ]
+  },
+  {
+   "name": "mTap1",
+   "x": 144,
+   "y": 336,
+   "w": 32,
+   "h": 26,
+   "label": "\u25be",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "hour",
+    "-1"
+   ]
+  },
+  {
+   "name": "mTap2",
+   "x": 254,
+   "y": 312,
+   "w": 32,
+   "h": 26,
+   "label": "\u25b4",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "minute",
+    "1"
+   ]
+  },
+  {
+   "name": "mTap3",
+   "x": 254,
+   "y": 336,
+   "w": 32,
+   "h": 26,
+   "label": "\u25be",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "minute",
+    "-1"
+   ]
+  },
+  {
+   "name": "mTap4",
+   "x": 363,
+   "y": 312,
+   "w": 32,
+   "h": 26,
+   "label": "\u25b4",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "second",
+    "1"
+   ]
+  },
+  {
+   "name": "mTap5",
+   "x": 363,
+   "y": 336,
+   "w": 32,
+   "h": 26,
+   "label": "\u25be",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "second",
+    "-1"
+   ]
+  },
+  {
+   "name": "mTap6",
+   "x": 363,
+   "y": 495,
+   "w": 32,
+   "h": 26,
+   "label": "\u25b4",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "brightness",
+    "1"
+   ]
+  },
+  {
+   "name": "mTap7",
+   "x": 363,
+   "y": 519,
+   "w": 32,
+   "h": 26,
+   "label": "\u25be",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "brightness",
+    "-1"
+   ]
+  },
+  {
+   "name": "mTap8",
+   "x": 334,
+   "y": 560,
+   "w": 68,
+   "h": 34,
+   "label": "ON",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "sound",
+    "toggle"
+   ]
+  },
+  {
+   "name": "mTap9",
+   "x": 334,
+   "y": 609,
+   "w": 68,
+   "h": 34,
+   "label": "ON",
+   "verb": "SETTINGS_SET",
+   "args": [
+    "autoSave",
+    "toggle"
+   ]
+  }
+ ]
+}
