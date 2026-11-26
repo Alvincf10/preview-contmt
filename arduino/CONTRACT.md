@@ -52,18 +52,18 @@ Indeks baris dimulai dari 0. Panel dapat mengelompokkan enam baris per tampilan 
 | `BASE_NEW` | Pertahankan isi draft, ambil konteks identitas dan waktu awal |
 | `ROW_FOCUS\|i` | ACK memuat ID baris |
 | `ROW_SET\|i\|field\|value` | Ubah baris lab dan urutkan hasil. Indeks 0 pada draft kosong membuat baris Day 0 dalam transaksi yang sama |
-| `ROW_SENSOR\|i` | Masukkan rerata suhu ke baris yang dituju. Indeks 0 pada draft kosong dapat menyimpan pembacaan pertama ke Day 0 |
+| `ROW_SENSOR\|i` | SENSOR pada keypad Temperature menyimpan rerata kanal yang valid ke baris yang sedang diedit. Indeks 0 pada draft kosong dapat menyimpan pembacaan pertama ke Day 0. Bila suhu belum tersedia, ACK 9 dan isian tetap |
 | `ROW_SCHEDULE\|i` | Format `labrow` dengan tanggal/jam jadwal |
 | `ROW_ADD_EARLY` | Tambah slot Day 0 berikutnya dari 0–6 jam. Nilai ACK adalah posisi baris baru mulai dari 1 |
 | `ROW_FILL_EARLY` | Tambah slot Day 0 yang kosong tanpa mengganti data. Nilai ACK adalah posisi baris pertama yang ditambah, atau 0 bila semua slot sudah ada |
 | `ROW_ADD_LAB` | Tambah hari lab positif yang berikutnya tersedia. Draft kosong menyimpan Day 0 kosong bersama hari baru dalam satu transaksi. Nilai ACK adalah posisi baris hari baru mulai dari 1 |
 | `ROW_DELETE\|i` | Meminta konfirmasi. Tabel dipertahankan minimal tiga baris |
-| `BASE_GENERATE` | Simpan model yang dihitung dan buka `pBaseR` |
-| `BASE_SAVE\|revision` | Pakai revisi dari `GET\|baseline`. ACK memuat ID baseline tersimpan |
+| `BASE_GENERATE` | Buka `pBaseR` setelah ada satu baris lengkap dengan Fc Lab positif dan semua baris lab yang mulai diisi lengkap. ACK 2 dengan nilai positif menunjukkan isian yang kurang. `nAckValue / 2` adalah posisi baris mulai dari 1, nilai genap untuk suhu dan ganjil untuk Fc Lab |
+| `BASE_SAVE\|revision` | Simpan revisi hasil Generate dari `GET\|baseline`. Hasil tanpa model disimpan sebagai Draft. ACK memuat ID baseline tersimpan |
 | `BASE_PICK\|id` | Pilih ID dari `savedrow` |
 | `BASE_OPEN` | Buka baseline terpilih sebagai draft |
 | `BASE_DELETE\|id` | Meminta konfirmasi hapus dari daftar |
-| `MEASURE_START` | Mulai rekaman berdasarkan baseline terpilih. Sesi yang sedang aktif memerlukan konfirmasi |
+| `MEASURE_START` | Mulai rekaman dari baseline terpilih dengan model valid. Draft harus dilengkapi hingga model tersedia. Sesi yang sedang aktif memerlukan konfirmasi |
 | `MEASURE_RESUME` | Buka lagi sesi yang tersimpan |
 | `CHECK_ADD` atau `CHECK_ADD\|day` | Catat suhu nyata pada jam perangkat. Opsional label hari |
 | `CHECK_ADD\|day\|date\|clock\|temp` | Tambah observasi historis manual |
@@ -98,7 +98,7 @@ Format `tData` berikut memiliki kolom berurutan dari kiri ke kanan. Tanggal dan 
 | `identity` | Operator, project, tanggal identitas |
 | `baseline`, `savedrow\|i` | Revisi/ID baseline, nama, target, datum, tanggal tuang, jam tuang, jumlah baris, ID model, ID identitas. `baseline` memakai pilihan di daftar, draft di editor, dan model sesi di halaman ukur/hasil |
 | `mix` | Cement, water, coarse, fine, retarder, accelerator, flyAsh, tiga merek dalam urutan sama, W/C |
-| `model` | a, b, R², jumlah pasangan, jumlah faktor, M lab maksimum, operator, project, tanggal identitas baseline |
+| `model` | a, b, R², jumlah pasangan, jumlah faktor, M lab maksimum, operator, project, tanggal identitas baseline. Jika model belum tersedia, enam kolom pertama kosong dan ACK bernilai 0 |
 | `labrow\|i` | ID, hari, tanggal jadwal, jam jadwal, suhu, Fc lab, umur dalam detik. ACK memuat jumlah baris |
 | `run` | Revisi sesi, ID baseline, jumlah checkpoint, status parsial, tanggal mulai, jam mulai, tanggal akhir, jam akhir, suhu awal, elapsed detik, M, Fc, persen target |
 | `point\|i` | Hari, tanggal, jam, suhu operasional, M, Fc, persen target, flags checkpoint, S1, S2, S3, rerata kanal, mask kanal valid. ACK memuat jumlah checkpoint |

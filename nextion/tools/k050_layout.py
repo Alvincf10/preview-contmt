@@ -8,7 +8,7 @@ import re
 ROOT = Path(__file__).resolve().parents[2]
 LAYOUT = ROOT / "nextion" / "tools" / "k050_web_layout.json"
 WEB = json.loads(LAYOUT.read_text(encoding="utf-8")) if LAYOUT.exists() else {"pages": {}, "pictures": []}
-LAB_ROWS = 5
+LAB_ROWS = 4
 SURFACE = "#1a2029"
 
 

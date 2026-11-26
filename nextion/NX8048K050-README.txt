@@ -72,9 +72,18 @@ same DOM bounds for the panel fields and touch areas. Live values arrive
 over CM1. Maturity and saved lists reveal rows as data arrives, using the
 matching Web-rendered assets for their controls and selection states.
 Add row, Sample schedule and confirmation are captured from the Preview's
-dialogs. Long lists fetch visible rows from the MCU and reuse overlapping
-rows when scrolling. The export checks that controls fit inside their dialog or panel and
-that the expanded chart title, axis label and plot have separate bounds.
+dialogs. Use the previous and next arrows to page through Maturity Data,
+Sample Schedule, saved and selectable baselines, History, History Detail,
+and Logged Days. The panel fetches the visible rows from the MCU.
+
+In Maturity Data, open a temperature cell and tap the yellow SENSOR key
+to put a live probe average into that row. A single complete lab row can
+be reviewed and saved as a Draft. START requires a valid calibration model.
+If a started lab row is incomplete, Generate highlights it and names the field.
+
+The export checks that components fit the panel and never overlap. The CM1
+integration test compares the touch rectangles to the exported geometry,
+including taps close to the edges of the main controls.
 
 The generator updates the K050 variant. The default nxsrc folder has its own
 earlier generator. Firmware build commands are documented in ../arduino/README.md.
@@ -95,4 +104,7 @@ free-space bookkeeping. The onboard microSD slot uses CS D10, MOSI D11, MISO D12
 SCK D13, 3.3 V and GND; the 6-pin ISP header does not carry SD chip select.
 The battery gauge uses the A0 calibration in firmware/board-evidence/battery.json.
 Verify the displayed percentage with the battery connected to the physical unit.
+On the documented board, all three probe jacks share D2. S1, S2 and S3 show
+the order of discovered probe ROM addresses. Per-jack identification requires
+independently readable data paths.
 Checksums and build evidence are in conmt-NX8048K050-CM1-final.validation.json.

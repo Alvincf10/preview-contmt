@@ -566,18 +566,6 @@ vscope = 1
 val = 0
 
 [[component]]
-name = "vListShift"
-type = "variable"
-vscope = 1
-val = 0
-
-[[component]]
-name = "vListReuse"
-type = "variable"
-vscope = 1
-val = 0
-
-[[component]]
 name = "vListDirty"
 type = "variable"
 vscope = 1
@@ -596,13 +584,25 @@ vscope = 1
 val = 0
 
 [[component]]
-name = "vTouchPhase"
+name = "vFocusRow"
 type = "variable"
 vscope = 1
 val = 0
 
 [[component]]
-name = "vFocusRow"
+name = "vSelectedModel"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vSavedOffset"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vSelectOffset"
 type = "variable"
 vscope = 1
 val = 0

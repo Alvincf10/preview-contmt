@@ -10,6 +10,7 @@ const url = 'http://conmt-preview.test/'
 const output = join(repo, 'nextion/nxsrc-K050/pictures')
 const python = process.env.CONMT_PYTHON || 'python3'
 const generator = join(repo, 'nextion/tools/k050_protocol.py')
+const listSizes = JSON.parse(execFileSync(python, [generator, '--list-sizes'], { encoding: 'utf8' }))
 const screens = [
   ['pInit', 'splash', '00_init'],
   ['pUser', 'userInfo', '01_user_info'],
@@ -78,7 +79,7 @@ try {
 if (process.argv.includes('--source')) execFileSync(python, [generator], { stdio: 'inherit' })
 
 async function configure(page, id) {
-  return page.locator('.phone').evaluate((phone, id) => {
+  return page.locator('.phone').evaluate((phone, { id, listSizes }) => {
     phone.classList.add('k050-export')
     phone.dataset.k050Page = id
     const screen = phone.querySelector('.screen')
@@ -141,6 +142,18 @@ async function configure(page, id) {
       map.hide.push(el.className)
     }
     const resetLength = (selector, count) => all(selector).slice(count).forEach(el => el.remove())
+    const pager = (parent) => {
+      const bar = add(parent, 'div', 'k050-pager')
+      const prev = add(bar, 'button', 'btn btn-dark', '‹')
+      const count = add(bar, 'span', '', ' ')
+      const next = add(bar, 'button', 'btn btn-dark', '›')
+      for (const [name, control] of [['mPrevRows', prev], ['mNextRows', next]]) {
+        dynamicBox(name, control)
+        hideInBase(control)
+      }
+      mark('tPageRows', count, { align: 1 })
+      map.regions.pager = box(bar)
+    }
     const status = one('.status-clock-value')
     const batt = one('.status-batt-pct')
     mark('tClock', status, { hide: true, align: 1 })
@@ -221,30 +234,29 @@ async function configure(page, id) {
       footer('mBack', 'mNext')
     }
     if (id === 'pMatu') {
+      resetLength('.maturity-table tbody tr', listSizes[id])
+      one('.maturity-actions').before(document.createElement('div'))
+      const pagerSlot = one('.maturity-actions').previousElementSibling
+      pager(pagerSlot)
+      one('.sensor-btn').remove()
       action('mInfo', '.title-info-btn')
       footer('mBack', 'mGen')
       const rows = all('.maturity-table tbody tr')
-      if (rows.length !== 5) throw new Error('Expected five maturity slots')
+      if (rows.length !== listSizes[id]) throw new Error('Missing maturity export slots')
       rows.forEach((row, i) => {
         const cells = [...row.cells]
         for (const [j, name] of ['tDay', 'tTim', 'tFc', 'tT'].entries()) {
           const input = cells[j].querySelector('input')
-          mark(name + i, input, { target: cells[j], hide: true, align: 1 })
+          mark(name + i, input, { hide: true, align: 1 })
         }
-        mark('mDelete' + i, cells[4], { kind: 'paint' })
+        mark('mDelete' + i, cells[4].querySelector('button'), { kind: 'paint' })
         hideInBase(row)
       })
-      action('mAddDay', '.add-day-btn')
-      action('mSensor', '.sensor-btn')
-      map.boxes.mAddDay.kind = map.boxes.mSensor.kind = 'paint'
-      const strip = one('.maturity-actions')
-      hideInBase(strip)
-      map.regions.maturityActions = box(strip)
+      dynamicBox('mAddDay', one('.add-day-btn'))
+      hideInBase(one('.add-day-btn'))
       map.regions.rows = rows.map(box)
       value('tPourTime', '.pour-clock-input', 0, { align: 1 })
       value('tDatumLab', '.info-box > div', 1)
-      const [x, y, w] = map.boxes.tNotice.rect
-      dims('tPageRows', [x + 193, y - 12, w - 386, 12], { align: 1, font: 12 })
     }
     if (id === 'pBaseR') {
       fields(['tName', 'tTarget', 'tDatum', 'tDate', 'tOp', 'tProj'], '.br-card:first-child .br-kv strong')
@@ -259,42 +271,43 @@ async function configure(page, id) {
       footer('mBack', 'mSave')
     }
     if (id === 'pSaveB' || id === 'pSelB') {
-      resetLength('.baseline-card', 4)
+      resetLength('.baseline-card', listSizes[id])
+      const body = one('.panel-body > .stack')
+      if (all('.baseline-card').length !== listSizes[id]) throw new Error('Missing saved baseline export slots')
+      let resume
       if (id === 'pSelB') {
-        const body = one('.panel-body > .stack')
-        const resume = add(body, 'button', 'btn btn-dark k050-resume', 'RESUME')
+        resume = add(body, 'button', 'btn btn-dark k050-resume', 'RESUME')
         body.prepend(resume)
-        const hint = add(body, 'div', 'k050-start-hint', ' ')
+        add(one('.panel-footer'), 'div', 'k050-start-hint', ' ')
+      }
+      pager(body)
+      if (resume) {
         dynamicBox('mResume', resume)
         hideInBase(resume)
-        mark('tStartHint', hint, { align: 1 })
+        mark('tStartHint', one('.k050-start-hint'), { align: 1 })
       }
       map.regions.cards = []
       all('.baseline-card').forEach((card, i) => {
         card.classList.remove('selected')
-        card.querySelector('.mini-btn.orange').classList.remove('active')
         const [x, y, w, h] = box(card)
         map.regions.cards.push([x, y, w, h])
         const body = card.querySelector('.baseline-card-body')
         mark('tName' + i, body.querySelector('strong'), { hide: true })
-        const values = body.querySelectorAll('.triple b')
-        const dateLabel = values[2].parentElement.firstChild
-        if (dateLabel.nodeType === Node.TEXT_NODE) dateLabel.textContent = 'Pour Date '
-        const labels = ['tVal', 'tDatum', 'tSavedDate']
-        for (let j = 0; j < labels.length; j++) {
-          const [cx] = box(values[j].parentElement)
-          const [, vy, , vh] = box(values[j])
-          const cw = box(values[j].parentElement)[2]
-          dims(labels[j] + i, [cx, vy, cw, vh], { font: 13, kind: 'draw' })
-          values[j].classList.add('k050-value')
-        }
+        const values = body.querySelectorAll('.baseline-meta-row b')
+        mark('tVal' + i, values[0], { hide: true, kind: 'draw' })
+        mark('tDatum' + i, values[1], { hide: true, kind: 'draw' })
+        const dateLine = body.querySelector('.baseline-meta-created')
+        dateLine.textContent = 'Pour Date: '
+        const date = add(dateLine, 'span', 'k050-card-date', '00-00-0000')
+        mark('tSavedDate' + i, date, { hide: true, kind: 'draw' })
         map.boxes['tName' + i].kind = 'draw'
-        const deleteButton = card.querySelector('.mini-btn.dark')
+        const deleteButton = card.querySelector('.trash-btn')
         if (deleteButton) {
           const [dx, dy, , dh] = box(deleteButton)
+          const end = dy + dh
           dims('mPick' + i, [x, y, dx - x, h], { kind: 'touch' })
-          dims('mPickTag' + i, [dx, y, x + w - dx, dy - y], { kind: 'touch' })
-          dims('mDelete' + i, [dx, dy, x + w - dx, Math.max(dh, y + h - dy)], { kind: 'touch' })
+          dims('mPickTag' + i, [dx, end, x + w - dx, y + h - end], { kind: 'touch' })
+          mark('mDelete' + i, deleteButton, { kind: 'touch' })
         } else {
           dims('mPick' + i, [x, y, w, h], { kind: 'touch' })
         }
@@ -303,8 +316,6 @@ async function configure(page, id) {
       footer('mBack', id === 'pSaveB' ? 'mSelect' : 'mStart')
       const [x, y, w] = box(one('.panel-body'))
       if (id === 'pSaveB') dims('tEmptyList', [x + 16, y + 8, w - 32, 48], { align: 1, kind: 'draw' })
-      const [, ny] = map.boxes.tNotice.rect
-      dims('tPageRows', [206, ny - 13, 68, 13], { font: 12, align: 1 })
     }
     if (id === 'pRT') {
       const header = one('.monitor-head')
@@ -355,8 +366,9 @@ async function configure(page, id) {
     }
     if (id === 'pHist') {
       const template = one('.history-card')
-      const cards = Array.from({ length: 3 }, () => template.cloneNode(true))
+      const cards = Array.from({ length: listSizes[id] }, () => template.cloneNode(true))
       one('.history-list').replaceChildren(...cards)
+      pager(one('.history-list'))
       map.regions.cards = cards.map((card, i) => {
         card.classList.remove('selected')
         const values = card.querySelectorAll('strong')
@@ -375,8 +387,9 @@ async function configure(page, id) {
       dims('tHistEmpty', [x + 10, y + 12, w - 20, Math.min(50, h - 12)], { align: 1, kind: 'draw' })
     }
     if (id === 'pHistD') {
-      resetLength('.rdh-log-item', 5)
+      resetLength('.rdh-log-item', listSizes[id])
       resetLength('.rdh-section', 2)
+      pager(one('.rdh-log-accordion'))
       fields(['tId', 'tSavedAt', 'tDate', 'tOp', 'tProj'], '.rdh-meta strong')
       value('tBase', '.rdh-baseline strong')
       fields(['tTarget', 'tDatum'], '.rdh-baseline-split b')
@@ -392,8 +405,8 @@ async function configure(page, id) {
       footer('mBack')
     }
     if (id === 'pSet') {
-      fields(['tHour', 'tMin', 'tSec', 'tBright'], '.stepper > strong')
-      for (let i = 0; i < 8; i++) action('mTap' + i, '.stepper-arrows button', i)
+      fields(['tHour', 'tMin', 'tSec', 'tBright'], '.stepper-value')
+      for (let i = 0; i < 8; i++) action('mTap' + i, '.stepper-btn', i)
       for (let i = 0; i < 2; i++) action('mTap' + (i + 8), '.toggle', i)
       footer('mBack', 'mSave')
     }
@@ -419,7 +432,7 @@ async function configure(page, id) {
       footer('mBack')
     }
     return map
-  }, id)
+  }, { id, listSizes })
 }
 
 async function screenshot(page, name) {
@@ -454,7 +467,6 @@ async function renderDomain(page, id, screen, picture) {
     await page.locator('.baseline-card').evaluateAll(cards => {
       for (const card of cards) {
         card.classList.add('selected')
-        card.querySelector('.mini-btn.orange').classList.add('active')
       }
     })
     await screenshot(page, entry.alternate)
@@ -477,9 +489,12 @@ async function renderLocals(page) {
   const pages = JSON.parse(execFileSync(python, [generator, '--local-layout'], { encoding: 'utf8' }))
   for (const [name, components] of Object.entries(pages)) {
     const trigger = dialogs[name]
-    await page.goto(url + '?screen=' + (trigger ? 'maturityData' : 'userInfo'), { waitUntil: 'domcontentloaded' })
+    const maturity = trigger || name === 'pNumber'
+    await page.goto(url + '?screen=' + (maturity ? 'maturityData' : 'userInfo'), { waitUntil: 'domcontentloaded' })
     await page.addStyleTag({ content: style })
     await page.evaluate(() => document.fonts.ready)
+    const sensorIcon = name === 'pNumber'
+      ? await page.locator('.sensor-btn .ico').evaluate(el => el.outerHTML) : ''
     const status = await configure(page, trigger ? 'pMatu' : name)
     let entry
     if (trigger) {
@@ -488,7 +503,7 @@ async function renderLocals(page) {
       await page.mouse.move(0, 0)
       entry = await renderDialog(page, name, status)
     } else {
-      entry = await renderPanel(page, name, components, status)
+      entry = await renderPanel(page, name, components, status, sensorIcon)
     }
     entry.picture = 'web_' + name
     if (Object.values(entry.boxes).some(box => box.patch)) {
@@ -503,7 +518,7 @@ async function renderLocals(page) {
 }
 
 async function renderDialog(page, name, status) {
-  return page.locator('.phone').evaluate((phone, { name, status }) => {
+  return page.locator('.phone').evaluate((phone, { name, status, listSizes }) => {
     const dialog = phone.querySelector('.confirm-dialog')
     dialog.classList.add('k050-dialog')
     if (name === 'pConfirm') {
@@ -558,8 +573,18 @@ async function renderDialog(page, name, status) {
       const hint = dialog.querySelector('.add-sheet-hint')
       hint.textContent = 'Locked from start 00-00-0000 00:00:00'
       const rows = [...list.querySelectorAll('.schedule-row:not(.schedule-row-head)')]
-      if (rows.length !== 5) throw new Error('Sample schedule requires five export rows')
+      if (rows.length !== listSizes[name]) throw new Error('Missing sample schedule export slots')
+      const pager = document.createElement('div')
+      pager.className = 'k050-pager'
+      pager.innerHTML = '<button class="btn btn-dark">‹</button><span></span><button class="btn btn-dark">›</button>'
+      actions.before(pager)
       const notice = makeMessage(actions)
+      const [prev, count, next] = pager.children
+      record('tPageRows', count, { align: 1 })
+      for (const [key, button] of [['mPrevRows', prev], ['mNextRows', next]]) {
+        button.dataset.k050LocalPatch = '1'
+        record(key, button, { patch: true, kind: 'paint', align: 1 })
+      }
       regions.rows = rows.map(box)
       rows.forEach((row, i) => {
         row.dataset.k050LocalPatch = '1'
@@ -585,11 +610,11 @@ async function renderDialog(page, name, status) {
     record('tTitle', title, { baked: true })
     regions.container = box(dialog)
     return { boxes, regions }
-  }, { name, status }).then(entry => verifyLocalLayout(name, entry))
+  }, { name, status, listSizes }).then(entry => verifyLocalLayout(name, entry))
 }
 
-async function renderPanel(page, name, components, status) {
-  return page.locator('.phone').evaluate((phone, { components, name, status }) => {
+async function renderPanel(page, name, components, status, sensorIcon) {
+  return page.locator('.phone').evaluate((phone, { components, name, status, sensorIcon }) => {
     const screen = phone.querySelector('.screen')
     const showStatus = components.some(c => c.name === 'tClock')
     screen.className = showStatus ? 'screen has-status' : 'screen'
@@ -633,7 +658,12 @@ async function renderPanel(page, name, components, status) {
       visual.className = 'k050-local-slot'
       if (c.type === 'button') {
         visual.type = 'button'
-        visual.classList.add('btn', primary.has(c.name) ? 'btn-orange' : 'btn-dark')
+        if (c.name === 'kProbe') {
+          visual.classList.add('sensor-btn')
+          visual.insertAdjacentHTML('afterbegin', sensorIcon)
+        } else {
+          visual.classList.add('btn', primary.has(c.name) ? 'btn-orange' : 'btn-dark')
+        }
       } else if (c.name === 'tInput' || c.events?.includes('up')) {
         visual.classList.add('text-input')
       } else if (c.name === 'tTitle') {
@@ -660,7 +690,7 @@ async function renderPanel(page, name, components, status) {
         font: parseFloat(css.fontSize), align: 1, color: css.color,
         baked: Boolean(c.txt && !dynamic), touch: c.events?.includes('up') ?? false,
       }
-      if ((name === 'pNumber' && isKey) || c.name === 'kProbe' ||
+      if ((name === 'pNumber' && isKey) || ['kProbe', 'mPrevRows', 'mNextRows'].includes(c.name) ||
           name === 'pPoints' && /^t(Day|Date|Time|Temp|M|Fc)\d$|^mGap\d$/.test(c.name)) {
         visual.dataset.k050LocalPatch = '1'
         boxes[c.name].patch = true
@@ -682,7 +712,7 @@ async function renderPanel(page, name, components, status) {
     }
     regions.container = box(panel)
     return { boxes, regions }
-  }, { components, name, status }).then(entry => verifyLocalLayout(name, entry))
+  }, { components, name, status, sensorIcon }).then(entry => verifyLocalLayout(name, entry))
 }
 
 function verifyLocalLayout(name, entry) {

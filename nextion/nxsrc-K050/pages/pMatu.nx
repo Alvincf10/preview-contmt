@@ -1,6 +1,7 @@
 on mGen.up:
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
+  pInit.vMatuOffset.val=pInit.vOffset.val
   if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
@@ -119,24 +120,7 @@ on mBack.up:
   }
 
 on mAddDay.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=3
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=0
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
@@ -157,8 +141,6 @@ on mAddDay.up:
   if(pInit.vTask.val==1)
   {
   tNotice.txt="Please wait for the current action"
-  }
-  }
   }
   }
   }
@@ -220,253 +202,8 @@ on tPourTime.up:
   }
   }
 
-on mSensor.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=6
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vFocusId.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
-  {
-  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
-  {
-  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=6
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vFocusId.val
-  }
-  if(pInit.vTask.val==1)
-  {
-  tNotice.txt="Please wait for the current action"
-  }
-  }
-  }
-  }
-  }
-
 on mDelete0.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=7
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab0.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
@@ -506,6 +243,77 @@ on mDelete0.up:
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
+  pInit.vTap.val=6
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vLab0.val
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+  }
+
+on tDay0.up:
+  if(pInit.vListReady.val==1)
+  {
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vLab0.val>0)
+  {
+  pInit.vFocusId.val=pInit.vLab0.val
+  pInit.vFocusFirst.val=0
+  if(pInit.vTotal.val==0)
+  {
+  pInit.vFocusFirst.val=1
+  }
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="day"
+  pInit.tTitle.txt="Day"
+  pInit.tEdit.txt=tDay0.txt
+  pInit.vEditKind.val=1
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=24
+  pInit.vInputMode.val=1
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  pInit.vEditRow.val=pInit.vOffset.val+0
+  page pNumber
+  }
+  }
+  else
+  {
+  if(pInit.vDraft.val>0&&pInit.vTotal.val==0)
+  {
+  pInit.vFocusId.val=pInit.vLab0.val
+  pInit.vFocusFirst.val=0
+  if(pInit.vTotal.val==0)
+  {
+  pInit.vFocusFirst.val=1
+  }
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="day"
+  pInit.tTitle.txt="Day"
+  pInit.tEdit.txt=tDay0.txt
+  pInit.vEditKind.val=1
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=24
+  pInit.vInputMode.val=1
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  pInit.vEditRow.val=pInit.vOffset.val+0
+  page pNumber
+  }
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
   pInit.vTap.val=7
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
@@ -517,118 +325,9 @@ on mDelete0.up:
   }
   }
   }
-  }
-  }
-
-on tDay0.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=8
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab0.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
-  {
-  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLab0.val>0)
-  {
-  pInit.vFocusId.val=pInit.vLab0.val
-  pInit.vFocusFirst.val=0
-  if(pInit.vTotal.val==0)
-  {
-  pInit.vFocusFirst.val=1
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="day"
-  pInit.tTitle.txt="Day"
-  pInit.tEdit.txt=tDay0.txt
-  pInit.vEditKind.val=1
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=24
-  pInit.vInputMode.val=1
-  pInit.vEditView.val=pInit.nView.val
-  pInit.vEditBoot.val=pInit.nBoot.val
-  pInit.vEditRow.val=pInit.vOffset.val+0
-  page pNumber
-  }
-  }
-  else
-  {
-  if(pInit.vDraft.val>0&&pInit.vTotal.val==0)
-  {
-  pInit.vFocusId.val=pInit.vLab0.val
-  pInit.vFocusFirst.val=0
-  if(pInit.vTotal.val==0)
-  {
-  pInit.vFocusFirst.val=1
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="day"
-  pInit.tTitle.txt="Day"
-  pInit.tEdit.txt=tDay0.txt
-  pInit.vEditKind.val=1
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=24
-  pInit.vInputMode.val=1
-  pInit.vEditView.val=pInit.nView.val
-  pInit.vEditBoot.val=pInit.nBoot.val
-  pInit.vEditRow.val=pInit.vOffset.val+0
-  page pNumber
-  }
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=8
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab0.val
-  }
-  if(pInit.vTask.val==1)
-  {
-  tNotice.txt="Please wait for the current action"
-  }
-  }
-  }
-  }
-  }
 
 on tTim0.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=9
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab0.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
@@ -686,7 +385,7 @@ on tTim0.up:
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=9
+  pInit.vTap.val=8
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab0.val
@@ -694,31 +393,12 @@ on tTim0.up:
   if(pInit.vTask.val==1)
   {
   tNotice.txt="Please wait for the current action"
-  }
-  }
   }
   }
   }
 
 on tFc0.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=10
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab0.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
@@ -776,7 +456,7 @@ on tFc0.up:
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=10
+  pInit.vTap.val=9
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab0.val
@@ -784,31 +464,12 @@ on tFc0.up:
   if(pInit.vTask.val==1)
   {
   tNotice.txt="Please wait for the current action"
-  }
-  }
   }
   }
   }
 
 on tT0.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=11
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab0.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
@@ -866,7 +527,7 @@ on tT0.up:
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=11
+  pInit.vTap.val=10
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab0.val
@@ -877,222 +538,11 @@ on tT0.up:
   }
   }
   }
-  }
-  }
 
 on mDelete1.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=12
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab1.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==1)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
   {
   if(pInit.vTotal.val>3&&pInit.vLab1.val>0)
   {
@@ -1126,12 +576,11 @@ on mDelete1.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=12
+  pInit.vTap.val=11
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab1.val
@@ -1142,39 +591,11 @@ on mDelete1.up:
   }
   }
   }
-  }
-  }
 
 on tDay1.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=13
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab1.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==1)
-  {
-  if(pInit.vDraft.val>0)
-  {
-  page pAddRow
-  }
-  }
-  else
   {
   if(pInit.vLab1.val>0)
   {
@@ -1200,12 +621,11 @@ on tDay1.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=13
+  pInit.vTap.val=12
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab1.val
@@ -1216,39 +636,11 @@ on tDay1.up:
   }
   }
   }
-  }
-  }
 
 on tTim1.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=14
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab1.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==1)
-  {
-  if(pInit.vDraft.val>0)
-  {
-  page pAddRow
-  }
-  }
-  else
   {
   if(pInit.vLab1.val>0)
   {
@@ -1274,12 +666,11 @@ on tTim1.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=14
+  pInit.vTap.val=13
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab1.val
@@ -1290,222 +681,11 @@ on tTim1.up:
   }
   }
   }
-  }
-  }
 
 on tFc1.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=15
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab1.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==1)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
   {
   if(pInit.vLab1.val>0)
   {
@@ -1531,12 +711,11 @@ on tFc1.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=15
+  pInit.vTap.val=14
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab1.val
@@ -1547,222 +726,11 @@ on tFc1.up:
   }
   }
   }
-  }
-  }
 
 on tT1.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=16
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab1.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==1)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
   {
   if(pInit.vLab1.val>0)
   {
@@ -1788,12 +756,11 @@ on tT1.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=16
+  pInit.vTap.val=15
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab1.val
@@ -1804,222 +771,11 @@ on tT1.up:
   }
   }
   }
-  }
-  }
 
 on mDelete2.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=17
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab2.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==2)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
   {
   if(pInit.vTotal.val>3&&pInit.vLab2.val>0)
   {
@@ -2053,12 +809,11 @@ on mDelete2.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=17
+  pInit.vTap.val=16
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab2.val
@@ -2069,39 +824,11 @@ on mDelete2.up:
   }
   }
   }
-  }
-  }
 
 on tDay2.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=18
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab2.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==2)
-  {
-  if(pInit.vDraft.val>0)
-  {
-  page pAddRow
-  }
-  }
-  else
   {
   if(pInit.vLab2.val>0)
   {
@@ -2127,12 +854,11 @@ on tDay2.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=18
+  pInit.vTap.val=17
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab2.val
@@ -2143,39 +869,11 @@ on tDay2.up:
   }
   }
   }
-  }
-  }
 
 on tTim2.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=19
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab2.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==2)
-  {
-  if(pInit.vDraft.val>0)
-  {
-  page pAddRow
-  }
-  }
-  else
   {
   if(pInit.vLab2.val>0)
   {
@@ -2201,12 +899,11 @@ on tTim2.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=19
+  pInit.vTap.val=18
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab2.val
@@ -2217,222 +914,11 @@ on tTim2.up:
   }
   }
   }
-  }
-  }
 
 on tFc2.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=20
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab2.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==2)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
   {
   if(pInit.vLab2.val>0)
   {
@@ -2458,12 +944,11 @@ on tFc2.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=20
+  pInit.vTap.val=19
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab2.val
@@ -2474,222 +959,11 @@ on tFc2.up:
   }
   }
   }
-  }
-  }
 
 on tT2.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=21
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab2.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==2)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
   {
   if(pInit.vLab2.val>0)
   {
@@ -2715,12 +989,11 @@ on tT2.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=21
+  pInit.vTap.val=20
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab2.val
@@ -2731,222 +1004,11 @@ on tT2.up:
   }
   }
   }
-  }
-  }
 
 on mDelete3.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=22
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab3.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==3)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
   {
   if(pInit.vTotal.val>3&&pInit.vLab3.val>0)
   {
@@ -2980,12 +1042,11 @@ on mDelete3.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=22
+  pInit.vTap.val=21
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab3.val
@@ -2996,39 +1057,11 @@ on mDelete3.up:
   }
   }
   }
-  }
-  }
 
 on tDay3.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=23
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab3.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==3)
-  {
-  if(pInit.vDraft.val>0)
-  {
-  page pAddRow
-  }
-  }
-  else
   {
   if(pInit.vLab3.val>0)
   {
@@ -3054,12 +1087,11 @@ on tDay3.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=23
+  pInit.vTap.val=22
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab3.val
@@ -3070,39 +1102,11 @@ on tDay3.up:
   }
   }
   }
-  }
-  }
 
 on tTim3.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=24
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab3.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==3)
-  {
-  if(pInit.vDraft.val>0)
-  {
-  page pAddRow
-  }
-  }
-  else
   {
   if(pInit.vLab3.val>0)
   {
@@ -3128,12 +1132,11 @@ on tTim3.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=24
+  pInit.vTap.val=23
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab3.val
@@ -3144,222 +1147,11 @@ on tTim3.up:
   }
   }
   }
-  }
-  }
 
 on tFc3.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=25
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab3.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==3)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
   {
   if(pInit.vLab3.val>0)
   {
@@ -3385,12 +1177,11 @@ on tFc3.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=25
+  pInit.vTap.val=24
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab3.val
@@ -3401,222 +1192,11 @@ on tFc3.up:
   }
   }
   }
-  }
-  }
 
 on tT3.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=26
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab3.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
+  if(pInit.vListReady.val==1)
   {
   if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==3)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
   {
   if(pInit.vLab3.val>0)
   {
@@ -3642,12 +1222,11 @@ on tT3.up:
   }
   }
   }
-  }
   else
   {
   if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=26
+  pInit.vTap.val=25
   pInit.vTapBoot.val=pInit.nBoot.val
   pInit.vTapView.val=pInit.nView.val
   pInit.vTapId.val=pInit.vLab3.val
@@ -3658,943 +1237,21 @@ on tT3.up:
   }
   }
   }
-  }
-  }
-
-on mDelete4.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=27
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
-  {
-  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==4)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
-  {
-  if(pInit.vTotal.val>3&&pInit.vLab4.val>0)
-  {
-  pInit.tCommand.txt="ROW_DELETE|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=27
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  if(pInit.vTask.val==1)
-  {
-  tNotice.txt="Please wait for the current action"
-  }
-  }
-  }
-  }
-  }
-
-on tDay4.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=28
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
-  {
-  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==4)
-  {
-  if(pInit.vDraft.val>0)
-  {
-  page pAddRow
-  }
-  }
-  else
-  {
-  if(pInit.vLab4.val>0)
-  {
-  pInit.vFocusId.val=pInit.vLab4.val
-  pInit.vFocusFirst.val=0
-  if(pInit.vTotal.val==0)
-  {
-  pInit.vFocusFirst.val=1
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="day"
-  pInit.tTitle.txt="Day"
-  pInit.tEdit.txt=tDay4.txt
-  pInit.vEditKind.val=1
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=24
-  pInit.vInputMode.val=1
-  pInit.vEditView.val=pInit.nView.val
-  pInit.vEditBoot.val=pInit.nBoot.val
-  pInit.vEditRow.val=pInit.vOffset.val+4
-  page pNumber
-  }
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=28
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  if(pInit.vTask.val==1)
-  {
-  tNotice.txt="Please wait for the current action"
-  }
-  }
-  }
-  }
-  }
-
-on tTim4.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=29
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
-  {
-  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==4)
-  {
-  if(pInit.vDraft.val>0)
-  {
-  page pAddRow
-  }
-  }
-  else
-  {
-  if(pInit.vLab4.val>0)
-  {
-  pInit.vFocusId.val=pInit.vLab4.val
-  pInit.vFocusFirst.val=0
-  if(pInit.vTotal.val==0)
-  {
-  pInit.vFocusFirst.val=1
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="clock"
-  pInit.tTitle.txt="Time HH:MM[:SS]"
-  pInit.tEdit.txt=tFull4.txt
-  pInit.vEditKind.val=1
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=8
-  pInit.vInputMode.val=4
-  pInit.vEditView.val=pInit.nView.val
-  pInit.vEditBoot.val=pInit.nBoot.val
-  pInit.vEditRow.val=pInit.vOffset.val+4
-  page pNumber
-  }
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=29
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  if(pInit.vTask.val==1)
-  {
-  tNotice.txt="Please wait for the current action"
-  }
-  }
-  }
-  }
-  }
-
-on tFc4.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=30
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
-  {
-  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==4)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
-  {
-  if(pInit.vLab4.val>0)
-  {
-  pInit.vFocusId.val=pInit.vLab4.val
-  pInit.vFocusFirst.val=0
-  if(pInit.vTotal.val==0)
-  {
-  pInit.vFocusFirst.val=1
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="fc"
-  pInit.tTitle.txt="Fc Lab (MPa)"
-  pInit.tEdit.txt=tFc4.txt
-  pInit.vEditKind.val=1
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=24
-  pInit.vInputMode.val=1
-  pInit.vEditView.val=pInit.nView.val
-  pInit.vEditBoot.val=pInit.nBoot.val
-  pInit.vEditRow.val=pInit.vOffset.val+4
-  page pNumber
-  }
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=30
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  if(pInit.vTask.val==1)
-  {
-  tNotice.txt="Please wait for the current action"
-  }
-  }
-  }
-  }
-  }
-
-on tT4.up:
-  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
-  {
-  if(pInit.vTouchPhase.val==2)
-  {
-  if(pInit.vBusy.val==0||pInit.vTask.val==0)
-  {
-  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=31
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTouchPhase.val==0)
-  {
-  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
-  {
-  if(pInit.vLabSlots.val==4)
-  {
-  if(pInit.vTotal.val==0&&pInit.vDraft.val>0)
-  {
-  pInit.vFocusFirst.val=1
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="ROW_SENSOR|0"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab0.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+0
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab1.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+1
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab2.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+2
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab3.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+3
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vFocusId.val>0&&pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.tCommand.txt="ROW_SENSOR|"
-  pInit.vTemp.val=pInit.vOffset.val+4
-  covx pInit.vTemp.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tMsg.txt="Select a temperature row first"
-  }
-  }
-  else
-  {
-  if(pInit.vLab4.val>0)
-  {
-  pInit.vFocusId.val=pInit.vLab4.val
-  pInit.vFocusFirst.val=0
-  if(pInit.vTotal.val==0)
-  {
-  pInit.vFocusFirst.val=1
-  }
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="temp"
-  pInit.tTitle.txt="Temperature (°C)"
-  pInit.tEdit.txt=tT4.txt
-  pInit.vEditKind.val=1
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=24
-  pInit.vInputMode.val=2
-  pInit.vEditView.val=pInit.nView.val
-  pInit.vEditBoot.val=pInit.nBoot.val
-  pInit.vEditRow.val=pInit.vOffset.val+4
-  page pNumber
-  }
-  }
-  }
-  }
-  else
-  {
-  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
-  {
-  pInit.vTap.val=31
-  pInit.vTapBoot.val=pInit.nBoot.val
-  pInit.vTapView.val=pInit.nView.val
-  pInit.vTapId.val=pInit.vLab4.val
-  }
-  if(pInit.vTask.val==1)
-  {
-  tNotice.txt="Please wait for the current action"
-  }
-  }
-  }
-  }
-  }
 
 on pMatu.loadend:
   if(pInit.vPage.val!=6)
   {
   pInit.vOffset.val=0
+  if(pInit.vPage.val==7)
+  {
+  pInit.vOffset.val=pInit.vMatuOffset.val
+  }
+  else
+  {
   pInit.vFocusId.val=0
   pInit.vFocusFirst.val=0
   pInit.vFocusRow.val=0
+  }
   }
   pInit.vPage.val=6
   pInit.vBusy.val=0
@@ -4625,7 +1282,7 @@ on pMatu.loadend:
   vis tT0,0
   tsw mDelete0,0
   vis mDelete0,0
-  picq 68,245,344,57,9
+  picq 68,253,344,57,9
   pInit.vLab1.val=0
   tsw tDay1,0
   vis tDay1,0
@@ -4637,7 +1294,7 @@ on pMatu.loadend:
   vis tT1,0
   tsw mDelete1,0
   vis mDelete1,0
-  picq 68,302,344,57,9
+  picq 68,310,344,57,9
   pInit.vLab2.val=0
   tsw tDay2,0
   vis tDay2,0
@@ -4649,7 +1306,7 @@ on pMatu.loadend:
   vis tT2,0
   tsw mDelete2,0
   vis mDelete2,0
-  picq 68,359,344,57,9
+  picq 68,367,344,57,9
   pInit.vLab3.val=0
   tsw tDay3,0
   vis tDay3,0
@@ -4661,134 +1318,75 @@ on pMatu.loadend:
   vis tT3,0
   tsw mDelete3,0
   vis mDelete3,0
-  picq 68,416,344,57,9
-  pInit.vLab4.val=0
-  tsw tDay4,0
-  vis tDay4,0
-  tsw tTim4,0
-  vis tTim4,0
-  tsw tFc4,0
-  vis tFc4,0
-  tsw tT4,0
-  vis tT4,0
-  tsw mDelete4,0
-  vis mDelete4,0
-  picq 68,473,344,56,9
+  picq 68,424,344,57,9
   pInit.vDraft.val=0
   pInit.vLabSlots.val=-1
   tPageRows.txt=""
   tsw mAddDay,0
   vis mAddDay,0
-  tsw mSensor,0
-  vis mSensor,0
-  tmDrag.en=0
-  vBlockTap.val=0
-  pInit.vTouchPhase.val=0
   pInit.vListBase.val=pInit.vOffset.val
-  pInit.vListShift.val=0
-  pInit.vListReuse.val=0
   pInit.vListDirty.val=1
   pInit.vListReady.val=0
+  tsw mPrevRows,0
+  vis mPrevRows,0
+  tsw mNextRows,0
+  vis mNextRows,0
 
-on tcList.down:
-  if(pInit.vTouchPhase.val==2)
+on mPrevRows.up:
+  if(pInit.vListReady.val==1)
   {
-  pInit.vTap.val=0
-  }
-  tmDrag.en=0
-  pInit.vTouchPhase.val=0
-  vBlockTap.val=0
-  vStartX.val=tch0
-  vStartY.val=tch1
-  if(vStartX.val>=68&&vStartX.val<420&&vStartY.val>=245&&vStartY.val<529)
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
-  pInit.vTouchPhase.val=1
-  vPriorX.val=tch2
-  vPriorY.val=tch3
-  vDragX.val=0
-  vDragY.val=0
-  tmDrag.en=1
-  if(pInit.vListReady.val==0||pInit.vListShift.val!=0)
+  if(pInit.vListBase.val>0)
   {
-  vBlockTap.val=1
-  }
-  }
-
-on tcList.up:
-  if(pInit.vTouchPhase.val==1)
-  {
-  pInit.vTouchPhase.val=2
-  }
-
-on tmDrag.timer:
-  if(pInit.vTouchPhase.val==1)
-  {
-  if(tch0!=0||tch1!=0)
-  {
-  vDragX.val=tch0-vStartX.val
-  if(vDragX.val<0)
-  {
-  vDragX.val*=-1
-  }
-  vDragY.val=vStartY.val-tch1
-  if(vDragX.val>=16||vDragY.val>=16||vDragY.val<=-16)
-  {
-  vBlockTap.val=1
-  }
+  pInit.vListBase.val-=4
+  pInit.vStep.val=1
+  pInit.vListDirty.val=1
+  pInit.vListReady.val=0
   }
   }
   else
   {
-  tmDrag.en=0
-  pInit.vTouchPhase.val=0
-  if(tch0==0&&tch1==0)
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  if(tch2!=vPriorX.val||tch3!=vPriorY.val)
-  {
-  if(tch2>=0&&tch2<480&&tch3>=0&&tch3<800)
-  {
-  vDragX.val=tch2-vStartX.val
-  if(vDragX.val<0)
-  {
-  vDragX.val*=-1
+  pInit.vTap.val=26
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
   }
-  vDragY.val=vStartY.val-tch3
-  if(vDragX.val>=16||vDragY.val>=16||vDragY.val<=-16)
+  if(pInit.vTask.val==1)
   {
-  vBlockTap.val=1
+  tNotice.txt="Please wait for the current action"
   }
   }
   }
-  pInit.vTemp.val=vDragY.val
-  if(pInit.vTemp.val<0)
+
+on mNextRows.up:
+  if(pInit.vListReady.val==1)
   {
-  pInit.vTemp.val*=-1
-  }
-  if(pInit.vTemp.val>=22&&pInit.vTemp.val>vDragX.val)
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
-  pInit.vTemp.val+=28
-  pInit.vTemp.val/=57
-  if(pInit.vTemp.val<1)
+  if(pInit.vListBase.val<pInit.vListMax.val)
   {
-  pInit.vTemp.val=1
-  }
-  if(vDragY.val>0)
-  {
-  pInit.vListShift.val+=pInit.vTemp.val
-  }else
-  {
-  pInit.vListShift.val-=pInit.vTemp.val
-  }
-  vBlockTap.val=1
+  pInit.vListBase.val+=4
+  pInit.vStep.val=1
+  pInit.vListDirty.val=1
+  pInit.vListReady.val=0
   }
   }
   else
   {
-  vBlockTap.val=1
-  }
-  if(vBlockTap.val==1)
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=0
+  pInit.vTap.val=27
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
   }
   }
 
@@ -4934,18 +1532,6 @@ on tmPoll.timer:
   pInit.vListDirty.val=1
   }
   }
-  if(pInit.vGet.val==7)
-  {
-  if(pInit.nAckCode.val!=0)
-  {
-  pInit.tData.txt=""
-  }
-  if(tRowData4.txt!=pInit.tData.txt)
-  {
-  tRowData4.txt=pInit.tData.txt
-  pInit.vListDirty.val=1
-  }
-  }
   pInit.vStep.val+=1
   }else
   {
@@ -5000,6 +1586,29 @@ on tmPoll.timer:
   {
   pInit.tMsg.txt="Add a later checkpoint before SAVE"
   }
+  spstr pInit.tReq.txt,pInit.tSplit.txt,"|",5
+  if(pInit.tSplit.txt=="BASE_GENERATE"&&pInit.nAckCode.val==2)
+  {
+  pInit.tMsg.txt="Complete required fields and one lab row"
+  if(pInit.nAckValue.val>0)
+  {
+  pInit.vFocusFirst.val=0
+  pInit.vFocusRow.val=pInit.nAckValue.val/2
+  pInit.vListBase.val=pInit.vFocusRow.val-1
+  pInit.vListBase.val/=4
+  pInit.vListBase.val*=4
+  pInit.vListDirty.val=1
+  pInit.vListReady.val=0
+  pInit.vTemp.val=pInit.nAckValue.val%2
+  if(pInit.vTemp.val==0)
+  {
+  pInit.tMsg.txt="Fill Temperature in the highlighted row"
+  }else
+  {
+  pInit.tMsg.txt="Fill Fc Lab in the highlighted row"
+  }
+  }
+  }
   }else
   {
   pInit.tMsg.txt=""
@@ -5043,61 +1652,7 @@ on tmPoll.timer:
   {
   tNotice.txt=pInit.tMsg.txt
   }
-  if(pInit.vBusy.val==0&&dp==6)
-  {
-  if(pInit.vTouchPhase.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val!=0)
-  {
-  pInit.vListMax.val=pInit.vTotal.val-5
-  if(pInit.vListMax.val<0)
-  {
-  pInit.vListMax.val=0
-  }
-  pInit.vIndex.val=pInit.vListBase.val+pInit.vListShift.val
-  if(pInit.vIndex.val<0)
-  {
-  pInit.vIndex.val=0
-  }
-  if(pInit.vIndex.val>pInit.vListMax.val)
-  {
-  pInit.vIndex.val=pInit.vListMax.val
-  }
-  if(pInit.vIndex.val!=pInit.vListBase.val)
-  {
-  pInit.vListShift.val=pInit.vIndex.val-pInit.vListBase.val
-  pInit.vListBase.val=pInit.vIndex.val
-  pInit.vListReady.val=0
-  pInit.vListDirty.val=1
-  pInit.vListReuse.val=1
-  pInit.vStep.val=3
-  if(pInit.vListShift.val>=5||pInit.vListShift.val<=-5)
-  {
-  pInit.vListReuse.val=0
-  }else
-  {
-  while(pInit.vListShift.val>0)
-  {
-  tRowData0.txt=tRowData1.txt
-  tRowData1.txt=tRowData2.txt
-  tRowData2.txt=tRowData3.txt
-  tRowData3.txt=tRowData4.txt
-  tRowData4.txt=""
-  pInit.vListShift.val-=1
-  }
-  while(pInit.vListShift.val<0)
-  {
-  tRowData4.txt=tRowData3.txt
-  tRowData3.txt=tRowData2.txt
-  tRowData2.txt=tRowData1.txt
-  tRowData1.txt=tRowData0.txt
-  tRowData0.txt=""
-  pInit.vListShift.val+=1
-  }
-  }
-  }
-  pInit.vListShift.val=0
-  }
-  }
-  if(dp==6&&pInit.vBusy.val==0&&pInit.vTap.val>0&&pInit.vStatusReady.val==1&&pInit.vTouchPhase.val==0&&pInit.vListShift.val==0)
+  if(dp==6&&pInit.vBusy.val==0&&pInit.vTap.val>0&&pInit.vStatusReady.val==1)
   {
   pInit.vDispatch.val=pInit.vTap.val
   pInit.vTap.val=0
@@ -5125,9 +1680,9 @@ on tmPoll.timer:
   }
   if(pInit.vDispatch.val==6)
   {
-  if(pInit.vTapId.val==pInit.vFocusId.val)
+  if(pInit.vTapId.val==pInit.vLab0.val)
   {
-  click mSensor,0
+  click mDelete0,0
   }
   else
   {
@@ -5138,7 +1693,7 @@ on tmPoll.timer:
   {
   if(pInit.vTapId.val==pInit.vLab0.val)
   {
-  click mDelete0,0
+  click tDay0,0
   }
   else
   {
@@ -5149,7 +1704,7 @@ on tmPoll.timer:
   {
   if(pInit.vTapId.val==pInit.vLab0.val)
   {
-  click tDay0,0
+  click tTim0,0
   }
   else
   {
@@ -5160,7 +1715,7 @@ on tmPoll.timer:
   {
   if(pInit.vTapId.val==pInit.vLab0.val)
   {
-  click tTim0,0
+  click tFc0,0
   }
   else
   {
@@ -5171,17 +1726,6 @@ on tmPoll.timer:
   {
   if(pInit.vTapId.val==pInit.vLab0.val)
   {
-  click tFc0,0
-  }
-  else
-  {
-  pInit.tMsg.txt="List updated. Tap the item again."
-  }
-  }
-  if(pInit.vDispatch.val==11)
-  {
-  if(pInit.vTapId.val==pInit.vLab0.val)
-  {
   click tT0,0
   }
   else
@@ -5189,7 +1733,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==12)
+  if(pInit.vDispatch.val==11)
   {
   if(pInit.vTapId.val==pInit.vLab1.val)
   {
@@ -5200,7 +1744,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==13)
+  if(pInit.vDispatch.val==12)
   {
   if(pInit.vTapId.val==pInit.vLab1.val)
   {
@@ -5211,7 +1755,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==14)
+  if(pInit.vDispatch.val==13)
   {
   if(pInit.vTapId.val==pInit.vLab1.val)
   {
@@ -5222,7 +1766,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==15)
+  if(pInit.vDispatch.val==14)
   {
   if(pInit.vTapId.val==pInit.vLab1.val)
   {
@@ -5233,7 +1777,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==16)
+  if(pInit.vDispatch.val==15)
   {
   if(pInit.vTapId.val==pInit.vLab1.val)
   {
@@ -5244,7 +1788,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==17)
+  if(pInit.vDispatch.val==16)
   {
   if(pInit.vTapId.val==pInit.vLab2.val)
   {
@@ -5255,7 +1799,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==18)
+  if(pInit.vDispatch.val==17)
   {
   if(pInit.vTapId.val==pInit.vLab2.val)
   {
@@ -5266,7 +1810,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==19)
+  if(pInit.vDispatch.val==18)
   {
   if(pInit.vTapId.val==pInit.vLab2.val)
   {
@@ -5277,7 +1821,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==20)
+  if(pInit.vDispatch.val==19)
   {
   if(pInit.vTapId.val==pInit.vLab2.val)
   {
@@ -5288,7 +1832,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==21)
+  if(pInit.vDispatch.val==20)
   {
   if(pInit.vTapId.val==pInit.vLab2.val)
   {
@@ -5299,7 +1843,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==22)
+  if(pInit.vDispatch.val==21)
   {
   if(pInit.vTapId.val==pInit.vLab3.val)
   {
@@ -5310,7 +1854,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==23)
+  if(pInit.vDispatch.val==22)
   {
   if(pInit.vTapId.val==pInit.vLab3.val)
   {
@@ -5321,7 +1865,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==24)
+  if(pInit.vDispatch.val==23)
   {
   if(pInit.vTapId.val==pInit.vLab3.val)
   {
@@ -5332,7 +1876,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==25)
+  if(pInit.vDispatch.val==24)
   {
   if(pInit.vTapId.val==pInit.vLab3.val)
   {
@@ -5343,7 +1887,7 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
-  if(pInit.vDispatch.val==26)
+  if(pInit.vDispatch.val==25)
   {
   if(pInit.vTapId.val==pInit.vLab3.val)
   {
@@ -5354,60 +1898,13 @@ on tmPoll.timer:
   pInit.tMsg.txt="List updated. Tap the item again."
   }
   }
+  if(pInit.vDispatch.val==26)
+  {
+  click mPrevRows,0
+  }
   if(pInit.vDispatch.val==27)
   {
-  if(pInit.vTapId.val==pInit.vLab4.val)
-  {
-  click mDelete4,0
-  }
-  else
-  {
-  pInit.tMsg.txt="List updated. Tap the item again."
-  }
-  }
-  if(pInit.vDispatch.val==28)
-  {
-  if(pInit.vTapId.val==pInit.vLab4.val)
-  {
-  click tDay4,0
-  }
-  else
-  {
-  pInit.tMsg.txt="List updated. Tap the item again."
-  }
-  }
-  if(pInit.vDispatch.val==29)
-  {
-  if(pInit.vTapId.val==pInit.vLab4.val)
-  {
-  click tTim4,0
-  }
-  else
-  {
-  pInit.tMsg.txt="List updated. Tap the item again."
-  }
-  }
-  if(pInit.vDispatch.val==30)
-  {
-  if(pInit.vTapId.val==pInit.vLab4.val)
-  {
-  click tFc4,0
-  }
-  else
-  {
-  pInit.tMsg.txt="List updated. Tap the item again."
-  }
-  }
-  if(pInit.vDispatch.val==31)
-  {
-  if(pInit.vTapId.val==pInit.vLab4.val)
-  {
-  click tT4,0
-  }
-  else
-  {
-  pInit.tMsg.txt="List updated. Tap the item again."
-  }
+  click mNextRows,0
   }
   }
   else
@@ -5505,16 +2002,17 @@ on tmPoll.timer:
   }
   if(pInit.vStep.val==3)
   {
-  pInit.vListMax.val=pInit.vTotal.val-5
+  pInit.vListMax.val=pInit.vTotal.val-1
   if(pInit.vListMax.val<0)
   {
   pInit.vListMax.val=0
   }
+  pInit.vListMax.val/=4
+  pInit.vListMax.val*=4
   if(pInit.vListBase.val>pInit.vListMax.val)
   {
   pInit.vListBase.val=pInit.vListMax.val
   pInit.vListReady.val=0
-  pInit.vListReuse.val=0
   pInit.vListDirty.val=1
   }
   pInit.vIndex.val=pInit.vListBase.val+0
@@ -5525,12 +2023,6 @@ on tmPoll.timer:
   tRowData0.txt=""
   pInit.vListDirty.val=1
   }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData0.txt!="")
-  {
   pInit.vStep.val+=1
   }
   else
@@ -5566,7 +2058,6 @@ on tmPoll.timer:
   }
   }
   }
-  }
   if(pInit.vStep.val==4)
   {
   pInit.vIndex.val=pInit.vListBase.val+1
@@ -5577,12 +2068,6 @@ on tmPoll.timer:
   tRowData1.txt=""
   pInit.vListDirty.val=1
   }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData1.txt!="")
-  {
   pInit.vStep.val+=1
   }
   else
@@ -5618,7 +2103,6 @@ on tmPoll.timer:
   }
   }
   }
-  }
   if(pInit.vStep.val==5)
   {
   pInit.vIndex.val=pInit.vListBase.val+2
@@ -5629,12 +2113,6 @@ on tmPoll.timer:
   tRowData2.txt=""
   pInit.vListDirty.val=1
   }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData2.txt!="")
-  {
   pInit.vStep.val+=1
   }
   else
@@ -5670,7 +2148,6 @@ on tmPoll.timer:
   }
   }
   }
-  }
   if(pInit.vStep.val==6)
   {
   pInit.vIndex.val=pInit.vListBase.val+3
@@ -5681,12 +2158,6 @@ on tmPoll.timer:
   tRowData3.txt=""
   pInit.vListDirty.val=1
   }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData3.txt!="")
-  {
   pInit.vStep.val+=1
   }
   else
@@ -5722,60 +2193,7 @@ on tmPoll.timer:
   }
   }
   }
-  }
-  if(pInit.vStep.val==7)
-  {
-  pInit.vIndex.val=pInit.vListBase.val+4
-  if(pInit.vIndex.val>=pInit.vTotal.val)
-  {
-  if(tRowData4.txt!="")
-  {
-  tRowData4.txt=""
-  pInit.vListDirty.val=1
-  }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData4.txt!="")
-  {
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  pInit.vGet.val=7
-  pInit.tCommand.txt="GET|labrow"
-  covx pInit.vIndex.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+="|"
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=0
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  }
-  }
-  if(pInit.vStep.val>7)
+  if(pInit.vStep.val>6)
   {
   if(pInit.vListDirty.val==1)
   {
@@ -5854,7 +2272,7 @@ on tmPoll.timer:
   vis tT0,0
   tsw mDelete0,0
   vis mDelete0,0
-  picq 68,245,344,57,9
+  picq 68,253,344,57,9
   }
   if(tRowData1.txt!="")
   {
@@ -5920,7 +2338,7 @@ on tmPoll.timer:
   vis tT1,0
   tsw mDelete1,0
   vis mDelete1,0
-  picq 68,302,344,57,9
+  picq 68,310,344,57,9
   }
   if(tRowData2.txt!="")
   {
@@ -5986,7 +2404,7 @@ on tmPoll.timer:
   vis tT2,0
   tsw mDelete2,0
   vis mDelete2,0
-  picq 68,359,344,57,9
+  picq 68,367,344,57,9
   }
   if(tRowData3.txt!="")
   {
@@ -6052,82 +2470,16 @@ on tmPoll.timer:
   vis tT3,0
   tsw mDelete3,0
   vis mDelete3,0
-  picq 68,416,344,57,9
-  }
-  if(tRowData4.txt!="")
-  {
-  pInit.tData.txt=tRowData4.txt
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
-  covx pInit.tSplit.txt,pInit.vLab4.val,0,0
-  pInit.vIndex.val=pInit.vOffset.val+5
-  if(pInit.vFocusRow.val==pInit.vIndex.val)
-  {
-  pInit.vFocusId.val=pInit.vLab4.val
-  pInit.vFocusFirst.val=0
-  pInit.vFocusRow.val=0
-  }
-
-
-  pInit.vCrop.val=7
-  if(pInit.vFocusId.val==pInit.vLab4.val)
-  {
-  pInit.vCrop.val=8
-  }
-  tDay4.picc=pInit.vCrop.val
-  tTim4.picc=pInit.vCrop.val
-  tFc4.picc=pInit.vCrop.val
-  tT4.picc=pInit.vCrop.val
-  spstr pInit.tData.txt,tDay4.txt,"|",1
-  spstr pInit.tData.txt,tFc4.txt,"|",5
-  spstr pInit.tData.txt,tT4.txt,"|",4
-  spstr pInit.tData.txt,tFull4.txt,"|",3
-  tTim4.txt=""
-  if(tFull4.txt!="")
-  {
-  substr tFull4.txt,tTim4.txt,0,5
-  }
-  vis tDay4,1
-  tsw tDay4,1
-  vis tTim4,1
-  tsw tTim4,1
-  vis tFc4,1
-  tsw tFc4,1
-  vis tT4,1
-  tsw tT4,1
-  if(pInit.vTotal.val>3)
-  {
-  vis mDelete4,1
-  tsw mDelete4,1
-  }
-  else
-  {
-  tsw mDelete4,0
-  vis mDelete4,0
-  }
-  }
-  else
-  {
-  pInit.vLab4.val=0
-  tsw tDay4,0
-  vis tDay4,0
-  tsw tTim4,0
-  vis tTim4,0
-  tsw tFc4,0
-  vis tFc4,0
-  tsw tT4,0
-  vis tT4,0
-  tsw mDelete4,0
-  vis mDelete4,0
-  picq 68,473,344,56,9
+  picq 68,424,344,57,9
   }
   pInit.vLabSlots.val=pInit.vTotal.val-pInit.vOffset.val
   if(pInit.vLabSlots.val<1)
   {
   pInit.vLabSlots.val=1
   }
-  if(pInit.vLabSlots.val>5)
+  if(pInit.vLabSlots.val>4)
   {
-  pInit.vLabSlots.val=5
+  pInit.vLabSlots.val=4
   }
   if(pInit.vDraft.val==0)
   {
@@ -6166,7 +2518,7 @@ on tmPoll.timer:
   tFc0.picc=pInit.vCrop.val
   tT0.picc=pInit.vCrop.val
   }
-  if(pInit.vLabSlots.val==5)
+  if(pInit.vDraft.val>0)
   {
   vis mAddDay,1
   tsw mAddDay,1
@@ -6176,135 +2528,55 @@ on tmPoll.timer:
   tsw mAddDay,0
   vis mAddDay,0
   }
-  if(pInit.vLabSlots.val==5)
+  pInit.vListMax.val=pInit.vTotal.val-1
+  if(pInit.vListMax.val<0)
   {
-  vis mSensor,1
-  tsw mSensor,1
+  pInit.vListMax.val=0
+  }
+  pInit.vListMax.val/=4
+  pInit.vListMax.val*=4
+  if(pInit.vListBase.val>0)
+  {
+  vis mPrevRows,1
+  tsw mPrevRows,1
   }
   else
   {
-  tsw mSensor,0
-  vis mSensor,0
+  tsw mPrevRows,0
+  vis mPrevRows,0
   }
-  if(pInit.vLabSlots.val==1)
+  if(pInit.vListBase.val<pInit.vListMax.val)
   {
-  tDay1.txt=""
-  vis tDay1,1
-  tsw tDay1,1
-  tTim1.txt=""
-  vis tTim1,1
-  tsw tTim1,1
-  tFc1.txt=""
-  vis tFc1,1
-  tsw tFc1,1
-  tT1.txt=""
-  vis tT1,1
-  tsw tT1,1
-  mDelete1.txt=""
-  vis mDelete1,1
-  tsw mDelete1,1
-  picq 68,302,344,57,9
-  xpic 67,302,346,52,67,535,7
+  vis mNextRows,1
+  tsw mNextRows,1
   }
-  if(pInit.vLabSlots.val==2)
+  else
   {
-  tDay2.txt=""
-  vis tDay2,1
-  tsw tDay2,1
-  tTim2.txt=""
-  vis tTim2,1
-  tsw tTim2,1
-  tFc2.txt=""
-  vis tFc2,1
-  tsw tFc2,1
-  tT2.txt=""
-  vis tT2,1
-  tsw tT2,1
-  mDelete2.txt=""
-  vis mDelete2,1
-  tsw mDelete2,1
-  picq 68,359,344,57,9
-  xpic 67,359,346,52,67,535,7
-  }
-  if(pInit.vLabSlots.val==3)
-  {
-  tDay3.txt=""
-  vis tDay3,1
-  tsw tDay3,1
-  tTim3.txt=""
-  vis tTim3,1
-  tsw tTim3,1
-  tFc3.txt=""
-  vis tFc3,1
-  tsw tFc3,1
-  tT3.txt=""
-  vis tT3,1
-  tsw tT3,1
-  mDelete3.txt=""
-  vis mDelete3,1
-  tsw mDelete3,1
-  picq 68,416,344,57,9
-  xpic 67,416,346,52,67,535,7
-  }
-  if(pInit.vLabSlots.val==4)
-  {
-  tDay4.txt=""
-  vis tDay4,1
-  tsw tDay4,1
-  tTim4.txt=""
-  vis tTim4,1
-  tsw tTim4,1
-  tFc4.txt=""
-  vis tFc4,1
-  tsw tFc4,1
-  tT4.txt=""
-  vis tT4,1
-  tsw tT4,1
-  mDelete4.txt=""
-  vis mDelete4,1
-  tsw mDelete4,1
-  picq 68,473,344,56,9
-  xpic 67,473,346,52,67,535,7
+  tsw mNextRows,0
+  vis mNextRows,0
   }
   tPageRows.txt=""
-  if(pInit.vTotal.val>0)
+  if(pInit.vTotal.val!=0)
   {
   pInit.vTemp.val=pInit.vOffset.val+1
   covx pInit.vTemp.val,tPageRows.txt,0,0
   tPageRows.txt+="-"
-  pInit.vTemp.val=pInit.vOffset.val+5
-  if(pInit.vTemp.val>pInit.vTotal.val)
+  pInit.vTemp.val=pInit.vOffset.val+4
+  if(pInit.vTotal.val>0&&pInit.vTemp.val>pInit.vTotal.val)
   {
   pInit.vTemp.val=pInit.vTotal.val
   }
   covx pInit.vTemp.val,pInit.tNum.txt,0,0
   tPageRows.txt+=pInit.tNum.txt
+  if(pInit.vTotal.val>0)
+  {
   tPageRows.txt+=" / "
   covx pInit.vTotal.val,pInit.tNum.txt,0,0
   tPageRows.txt+=pInit.tNum.txt
   }
-  picq 416,245,3,284,9
-  pInit.vIndex.val=pInit.vTotal.val
-  if(pInit.vIndex.val>5)
-  {
-
-  fill 416,245,3,284,19083
-  pInit.vTemp.val=1420
-  pInit.vTemp.val/=pInit.vIndex.val
-  if(pInit.vTemp.val<20)
-  {
-  pInit.vTemp.val=20
-  }
-  pInit.vCount.val=284-pInit.vTemp.val
-  pInit.vCount.val*=pInit.vOffset.val
-  pInit.vIndex.val-=5
-  pInit.vCount.val/=pInit.vIndex.val
-  pInit.vCount.val+=245
-  fill 416,pInit.vCount.val,3,pInit.vTemp.val,62632
   }
   pInit.vListDirty.val=0
   }
-  pInit.vListReuse.val=0
   pInit.vListReady.val=1
   pInit.vPoll.val+=1
   if(pInit.vPoll.val>=20)

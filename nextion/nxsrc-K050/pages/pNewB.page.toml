@@ -93,9 +93,9 @@ events = []
 [[component]]
 name = "tName"
 x = 67
-y = 333
+y = 319
 w = 346
-h = 52
+h = 60
 type = "text"
 sta = 0
 picc = "04_new_baseline"
@@ -112,9 +112,9 @@ events = [
 [[component]]
 name = "tFc"
 x = 67
-y = 426
+y = 420
 w = 280
-h = 52
+h = 60
 type = "text"
 sta = 0
 picc = "04_new_baseline"
@@ -131,9 +131,9 @@ events = [
 [[component]]
 name = "tTemp"
 x = 67
-y = 519
+y = 521
 w = 280
-h = 52
+h = 60
 type = "text"
 sta = 0
 picc = "04_new_baseline"
@@ -150,9 +150,9 @@ events = [
 [[component]]
 name = "mBack"
 x = 67
-y = 593
+y = 603
 w = 143
-h = 52
+h = 60
 type = "hotspot"
 events = [
     "up",
@@ -161,9 +161,9 @@ events = [
 [[component]]
 name = "mNext"
 x = 220
-y = 593
+y = 603
 w = 193
-h = 52
+h = 60
 type = "hotspot"
 events = [
     "up",

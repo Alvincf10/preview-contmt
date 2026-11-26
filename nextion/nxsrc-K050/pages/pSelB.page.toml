@@ -138,95 +138,36 @@ txt = ""
 txt_maxl = 24
 
 [[component]]
-name = "vStartX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vStartY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vBlockTap"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "tRowData0"
+name = "tName3"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 255
+txt_maxl = 64
 
 [[component]]
-name = "tRowData1"
+name = "tVal3"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 255
+txt_maxl = 64
 
 [[component]]
-name = "tRowData2"
+name = "tDatum3"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 255
+txt_maxl = 64
 
 [[component]]
-name = "tRowData3"
+name = "tSavedDate3"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tcList"
-type = "touch-capture"
-events = [
-    "down",
-    "up",
-]
-
-[[component]]
-name = "tmDrag"
-type = "timer"
-tim = 50
-en = 0
-events = [
-    "timer",
-]
-
-[[component]]
-name = "vPriorX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vPriorY"
-type = "variable"
-vscope = 0
-val = 0
+txt_maxl = 64
 
 [[component]]
 name = "tClock"
@@ -280,9 +221,64 @@ ycen = 1
 events = []
 
 [[component]]
+name = "mPrevRows"
+x = 67
+y = 604
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "10_select_baseline_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "mNextRows"
+x = 349
+y = 604
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "10_select_baseline_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "tPageRows"
+x = 139
+y = 616
+w = 202
+h = 26
+type = "text"
+sta = 0
+picc = "10_select_baseline"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
 name = "mResume"
 x = 67
-y = 245
+y = 185
 w = 346
 h = 48
 type = "text"
@@ -290,7 +286,7 @@ sta = 0
 picc = "10_select_baseline_controls"
 txt = ""
 txt_maxl = 1
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -301,7 +297,7 @@ events = [
 [[component]]
 name = "tStartHint"
 x = 67
-y = 601
+y = 729
 w = 346
 h = 30
 type = "text"
@@ -412,60 +408,35 @@ txt = ""
 txt_maxl = 64
 
 [[component]]
-name = "tName3"
+name = "tRowData0"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 64
+txt_maxl = 255
 
 [[component]]
-name = "tVal3"
+name = "tRowData1"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 64
+txt_maxl = 255
 
 [[component]]
-name = "tDatum3"
+name = "tRowData2"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 64
-
-[[component]]
-name = "tSavedDate3"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 64
-
-[[component]]
-name = "tPageRows"
-x = 206
-y = 762
-w = 68
-h = 13
-type = "text"
-sta = 0
-picc = "10_select_baseline"
-txt = ""
-txt_maxl = 64
-font = "NotoSans16"
-pco = "#ffffff"
-xcen = 1
-ycen = 1
-events = []
+txt_maxl = 255
 
 [[component]]
 name = "mPick0"
 x = 67
-y = 301
+y = 241
 w = 346
-h = 67
+h = 113
 type = "hotspot"
 events = [
     "up",
@@ -474,9 +445,9 @@ events = [
 [[component]]
 name = "mPick1"
 x = 67
-y = 376
+y = 362
 w = 346
-h = 67
+h = 113
 type = "hotspot"
 events = [
     "up",
@@ -485,20 +456,9 @@ events = [
 [[component]]
 name = "mPick2"
 x = 67
-y = 451
+y = 483
 w = 346
-h = 67
-type = "hotspot"
-events = [
-    "up",
-]
-
-[[component]]
-name = "mPick3"
-x = 67
-y = 526
-w = 346
-h = 67
+h = 113
 type = "hotspot"
 events = [
     "up",
@@ -507,9 +467,9 @@ events = [
 [[component]]
 name = "mBack"
 x = 67
-y = 653
+y = 669
 w = 143
-h = 52
+h = 60
 type = "hotspot"
 events = [
     "up",
@@ -518,9 +478,9 @@ events = [
 [[component]]
 name = "mStart"
 x = 220
-y = 653
+y = 669
 w = 193
-h = 52
+h = 60
 type = "hotspot"
 events = [
     "up",

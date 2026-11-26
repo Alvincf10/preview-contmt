@@ -149,89 +149,6 @@ vscope = 0
 val = 0
 
 [[component]]
-name = "vStartX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vStartY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vBlockTap"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "tRowData0"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tRowData1"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tRowData2"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tcList"
-type = "touch-capture"
-events = [
-    "down",
-    "up",
-]
-
-[[component]]
-name = "tmDrag"
-type = "timer"
-tim = 50
-en = 0
-events = [
-    "timer",
-]
-
-[[component]]
-name = "vPriorX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vPriorY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
 name = "tClock"
 x = 49
 y = 69
@@ -276,6 +193,61 @@ sta = 0
 picc = "13_history"
 txt = ""
 txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "mPrevRows"
+x = 67
+y = 646
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "13_history_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "mNextRows"
+x = 349
+y = 646
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "13_history_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "tPageRows"
+x = 139
+y = 658
+w = 202
+h = 26
+type = "text"
+sta = 0
+picc = "13_history"
+txt = ""
+txt_maxl = 64
 font = "NotoSans16"
 pco = "#ffffff"
 xcen = 1
@@ -405,15 +377,15 @@ txt_maxl = 64
 [[component]]
 name = "mDetail"
 x = 220
-y = 652
+y = 699
 w = 193
-h = 52
+h = 60
 type = "text"
 sta = 0
 picc = "13_history_controls"
 txt = ""
 txt_maxl = 1
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -430,11 +402,35 @@ txt = ""
 txt_maxl = 70
 
 [[component]]
+name = "tRowData0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
 name = "mHistory0"
 x = 67
-y = 250
+y = 195
 w = 346
-h = 120
+h = 142
 type = "hotspot"
 events = [
     "up",
@@ -443,9 +439,9 @@ events = [
 [[component]]
 name = "mHistory1"
 x = 67
-y = 380
+y = 345
 w = 346
-h = 120
+h = 143
 type = "hotspot"
 events = [
     "up",
@@ -454,9 +450,9 @@ events = [
 [[component]]
 name = "mHistory2"
 x = 67
-y = 510
+y = 496
 w = 346
-h = 120
+h = 142
 type = "hotspot"
 events = [
     "up",
@@ -465,9 +461,9 @@ events = [
 [[component]]
 name = "mBack"
 x = 67
-y = 652
+y = 699
 w = 143
-h = 52
+h = 60
 type = "hotspot"
 events = [
     "up",

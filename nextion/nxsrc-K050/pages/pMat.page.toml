@@ -79,7 +79,7 @@ events = []
 [[component]]
 name = "tCem"
 x = 220
-y = 215
+y = 209
 w = 107
 h = 52
 type = "text"
@@ -98,7 +98,7 @@ events = [
 [[component]]
 name = "tWat"
 x = 220
-y = 271
+y = 264
 w = 107
 h = 52
 type = "text"
@@ -117,7 +117,7 @@ events = [
 [[component]]
 name = "tWC"
 x = 220
-y = 327
+y = 319
 w = 107
 h = 52
 type = "text"
@@ -134,7 +134,7 @@ events = []
 [[component]]
 name = "tCoa"
 x = 220
-y = 383
+y = 374
 w = 107
 h = 52
 type = "text"
@@ -153,7 +153,7 @@ events = [
 [[component]]
 name = "tFin"
 x = 220
-y = 439
+y = 429
 w = 107
 h = 52
 type = "text"
@@ -172,7 +172,7 @@ events = [
 [[component]]
 name = "tRetP"
 x = 173
-y = 528
+y = 519
 w = 51
 h = 52
 type = "text"
@@ -191,7 +191,7 @@ events = [
 [[component]]
 name = "tRetB"
 x = 311
-y = 528
+y = 519
 w = 102
 h = 52
 type = "text"
@@ -210,7 +210,7 @@ events = [
 [[component]]
 name = "tAccP"
 x = 173
-y = 584
+y = 574
 w = 51
 h = 52
 type = "text"
@@ -229,7 +229,7 @@ events = [
 [[component]]
 name = "tAccB"
 x = 311
-y = 584
+y = 574
 w = 102
 h = 52
 type = "text"
@@ -248,7 +248,7 @@ events = [
 [[component]]
 name = "tFlyP"
 x = 173
-y = 640
+y = 629
 w = 51
 h = 52
 type = "text"
@@ -267,7 +267,7 @@ events = [
 [[component]]
 name = "tFlyB"
 x = 311
-y = 640
+y = 629
 w = 102
 h = 52
 type = "text"
@@ -286,9 +286,9 @@ events = [
 [[component]]
 name = "mBack"
 x = 67
-y = 707
+y = 695
 w = 143
-h = 52
+h = 60
 type = "hotspot"
 events = [
     "up",
@@ -297,9 +297,9 @@ events = [
 [[component]]
 name = "mNext"
 x = 220
-y = 707
+y = 695
 w = 193
-h = 52
+h = 60
 type = "hotspot"
 events = [
     "up",

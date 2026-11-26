@@ -50,7 +50,11 @@ import {
   nurseSaulMaturityLocked,
   predictFcWithFkz,
 } from './maturityFit'
-import type { AppState, ScreenId } from './types'
+import type { AppState, Baseline, ScreenId } from './types'
+
+function hasBaselineFit(baseline: Baseline) {
+  return Number.isFinite(baseline.coeffA) && Number.isFinite(baseline.coeffB)
+}
 
 type Props = {
   state: AppState
@@ -610,6 +614,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
   const [activeRow, setActiveRow] = useState<number | null>(null)
   const [sensorHint, setSensorHint] = useState<string | null>(null)
   const [sensorBusy, setSensorBusy] = useState(false)
+  const [generateError, setGenerateError] = useState<string | null>(null)
   const dayInputRefs = useRef<(HTMLInputElement | null)[]>([])
   const nextLab = nextLabDay(rows)
   const clockLabel = (timeH: number) => elapsedToClock(pourClock, timeH)
@@ -635,11 +640,18 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
     return () => window.clearTimeout(t)
   }, [sensorHint])
 
-  const setRows = (next: MaturityRow[]) =>
+  const setRows = (next: MaturityRow[]) => {
+    setGenerateError(null)
     setState((s) => ({ ...s, baselineDraft: { ...s.baselineDraft, rows: next } }))
+  }
 
   const updateField = (i: number, key: 'fcLab' | 'temperature', value: string) => {
-    setRows(rows.map((r, idx) => (idx === i ? { ...r, [key]: value } : r)))
+    setRows(rows.map((r, idx) => {
+      if (idx !== i) return r
+      if (key === 'temperature') return { ...r, temperature: value }
+      const requiresFc = r.requiresFc || (r.day > 0 && Number(r.fcLab) > 0)
+      return { ...r, fcLab: value, requiresFc }
+    }))
   }
 
   const commitTime = (i: number, raw: string) => {
@@ -675,7 +687,8 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
               ? snapDay0Time(r.timeH)
               : nextDay0Time(rows.filter((_, j) => j !== i))
             : timeFromDay(day)
-        return { ...r, day, timeH }
+        const requiresFc = day > 0 && (r.requiresFc || r.day === 0)
+        return { ...r, day, timeH, requiresFc }
       })
     }
     if (records.length || next[0]?.day !== 0) setRows(sortMaturityRows(next))
@@ -707,7 +720,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
     const day = nextLabDay(rows)
     const next = sortMaturityRows([
       ...records,
-      { day, timeH: timeFromDay(day), fcLab: '', temperature: '' },
+      { day, timeH: timeFromDay(day), fcLab: '', temperature: '', requiresFc: true },
     ])
     focusNewRow(next, (r) => r.day === day && r.fcLab === '' && r.temperature === '')
     setSensorHint(`Day ${day} @ ${clockLabel(timeFromDay(day))} — fill Fc Lab + Temperature`)
@@ -773,6 +786,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
         },
       }))
       setSensorHint(`Day ${day}: ${reading} °C (avg ${result.count} sensor${result.count > 1 ? 's' : ''})`)
+      setGenerateError(null)
       setSensorBusy(false)
     }, 450)
   }
@@ -789,6 +803,29 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
   }
 
   const pendingRow = pendingDelete != null ? rows[pendingDelete] : null
+
+  const generate = () => {
+    let hasLabPair = false
+    for (const [i, row] of rows.entries()) {
+      const temperature = row.temperature.trim()
+      const fc = row.fcLab.trim()
+      if (!temperature && !fc) continue
+      const needsTemperature = !temperature || !Number.isFinite(Number(temperature))
+      const needsFc = (!fc && row.requiresFc) || !Number.isFinite(Number(fc)) || Number(fc) < 0
+      if (needsTemperature || needsFc) {
+        setActiveRow(i)
+        setGenerateError(`Day ${row.day}: fill ${needsTemperature ? 'Temperature' : 'Fc Lab'}`)
+        dayInputRefs.current[i]?.scrollIntoView({ block: 'nearest' })
+        return
+      }
+      if (Number(fc) > 0) hasLabPair = true
+    }
+    if (!hasLabPair) {
+      setGenerateError('Fill Temperature and a positive Fc Lab in one row')
+      return
+    }
+    go('baselineResult')
+  }
 
   return (
     <Screen
@@ -809,7 +846,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
           onBack={() =>
             go(state.baselineEntry === 'saved' ? 'savedBaseline' : 'materialData')
           }
-          onNext={() => go('baselineResult')}
+          onNext={generate}
           nextLabel="GENERATE BASELINE"
           backWithChevron={false}
         />
@@ -1048,8 +1085,8 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
           </div>
           <div className="info-box-item">Datum Temperature: {state.baselineDraft.datumTemp} °C</div>
           <div className="info-box-item">Formula: M = Σ(T − T₀)Δt</div>
-          <p>
-            {sensorHint ??
+          <p role={generateError ? 'alert' : undefined}>
+            {generateError ?? sensorHint ??
               (activeRow == null
                 ? 'Tap a row, then SENSOR to fill Temperature (°C).'
                 : `Active: Day ${rows[activeRow]?.day} @ ${clockLabel(rows[activeRow].timeH)} — SENSOR fills this row.`)}
@@ -1071,7 +1108,7 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
       const temp = Number(r.temperature)
       const fc = Number(r.fcLab)
       const day = Number(r.day)
-      if (!Number.isFinite(timeH) || !Number.isFinite(temp)) return null
+      if (!r.temperature.trim() || !Number.isFinite(timeH) || !Number.isFinite(temp)) return null
       return {
         day: Number.isFinite(day) ? day : 0,
         timeH,
@@ -1088,7 +1125,9 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
     .map((s) => ({ x: s.m, y: s.fc }))
     .sort((a, b) => a.x - b.x)
 
-  const fit = fitLogMaturity(points)
+  const firstBlank = d.rows.findIndex((r) => !r.temperature.trim())
+  const hasGap = firstBlank >= 0 && d.rows.slice(firstBlank + 1).some((r) => r.temperature.trim())
+  const fit = hasGap ? null : fitLogMaturity(points)
   const fkzFactors =
     fit && Number.isFinite(fit.a) && Number.isFinite(fit.b)
       ? computeFkzFactors(samples, t0, fit.a, fit.b)
@@ -1186,7 +1225,7 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
             </div>
             <div className="br-inner br-inner-eq">
               <div className="br-equation">
-                {fit ? formatFcEquation(fit.a, fit.b) : 'fc = a + b ln(M)'}
+                {fit ? formatFcEquation(fit.a, fit.b) : 'Draft. Add more lab data for a fit.'}
               </div>
               <div className="br-equation br-equation-fkz">fc_FKZ = fc · FKZ</div>
               <div className="br-kv">
@@ -1359,7 +1398,9 @@ export function SavedBaselineScreen({ state, setState, go }: Props) {
                       <b>{b.datumTemp} °C</b>
                     </span>
                   </div>
-                  <div className="baseline-meta-created">Created: {b.createdAt}</div>
+                  <div className="baseline-meta-created">
+                    Created: {b.createdAt}{hasBaselineFit(b) ? '' : ' · Draft'}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1408,10 +1449,15 @@ function sampleSensorTemps(base: [number, number, number]): [number, number, num
 }
 
 export function SelectBaselineScreen({ state, setState, go }: Props) {
+  const [startError, setStartError] = useState('')
   const select = (id: string) => setState((s) => ({ ...s, selectedBaselineId: id }))
 
   const startMeasurement = () => {
-    if (!state.selectedBaselineId) return
+    const baseline = state.baselines.find((b) => b.id === state.selectedBaselineId)
+    if (!baseline || !hasBaselineFit(baseline)) {
+      setStartError(baseline ? 'Complete this draft before START' : 'Select a baseline first')
+      return
+    }
     const sensorTemps = sampleSensorTemps(state.measurement.sensorTemps)
     const initialPourTemp = averageReadableTemps(sensorTemps)?.avg ?? 0
     const pourStartMs = Date.now()
@@ -1443,6 +1489,7 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
       }
     >
       <div className="stack baseline-list">
+        {startError && <p role="alert" className="panel-sub">{startError}</p>}
         {state.baselines.map((b) => {
           const selected = state.selectedBaselineId === b.id
           return (
@@ -1452,10 +1499,11 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
               tabIndex={0}
               aria-pressed={selected}
               className={`baseline-card selectable${selected ? ' selected' : ''}`}
-              onClick={() => select(b.id)}
+              onClick={() => { setStartError(''); select(b.id) }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault()
+                  setStartError('')
                   select(b.id)
                 }
               }}
@@ -1473,7 +1521,9 @@ export function SelectBaselineScreen({ state, setState, go }: Props) {
                       <b>{b.datumTemp} °C</b>
                     </span>
                   </div>
-                  <div className="baseline-meta-created">Created: {b.createdAt}</div>
+                  <div className="baseline-meta-created">
+                    Created: {b.createdAt}{hasBaselineFit(b) ? '' : ' · Draft'}
+                  </div>
                 </div>
               </div>
             </div>

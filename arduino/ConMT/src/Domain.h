@@ -11,6 +11,7 @@ using Scaled = int32_t;
 using Real = float;
 
 constexpr Scaled Missing = INT32_MIN;
+constexpr Scaled PendingLabFc = -1;  // Reserved for a lab day whose test value has yet to be entered.
 constexpr Scaled Scale = 100000;
 constexpr Scaled DayScale = 1000;
 constexpr uint32_t DaySeconds = 86400UL;

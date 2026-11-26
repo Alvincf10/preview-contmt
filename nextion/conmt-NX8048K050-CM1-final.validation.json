@@ -19,7 +19,7 @@
     "calibration_and_ui_tests": "PASS",
     "physical_percentage_test": "pending"
   },
-  "created_at_utc": "2026-11-26T05:26:51.973755+00:00",
+  "created_at_utc": "2026-11-26T10:02:48.289472+00:00",
   "local_pages": [
     "pEdit",
     "pConfirm",
@@ -32,23 +32,24 @@
   ],
   "binaries": {
     "nextion/conmt-NX8048K050-CM1-final.HMI": {
-      "bytes": 51738885,
-      "sha256": "fb4df6fa1ff9da34ac1dde39f87d23db31820c5bc5d6c97cd1d82c0addc6e531"
+      "bytes": 51176804,
+      "sha256": "4aeacff8a2c6da4dccd7342112845338d0d1d51310eb1057e3d79dca8e79ddf0"
     },
     "nextion/conmt-NX8048K050-CM1-final.tft": {
-      "bytes": 30669776,
-      "sha256": "09730c090d655a7d2217195824a980376128ff0d4903aa4f828be8ba96181fce"
+      "bytes": 30563072,
+      "sha256": "986d3a9a6cd1fdfcb85466d7740fd6355b0ebafbc48e766b23514e161dd0d124"
     },
     "arduino/out/ConMT-ATmega328P.hex": {
-      "bytes": 86361,
-      "sha256": "79572e56a99895141a6ded630633a116151c9c03f6b2c937d00292a59db57f28",
-      "application_end": "0x77e6"
+      "bytes": 87514,
+      "sha256": "4a57443235243d40b163fe76bf73783ac3d848e878df771d6aa58cae4c2bda3f",
+      "application_end_exclusive": "0x7984"
     },
     "arduino/out/ConMT-ATmega328P-ISP.hex": {
-      "bytes": 85836,
-      "sha256": "8788a1e38d2c6710c36e4519babaf0dc15e29f25df26ecbd95f058ffdee58bda",
-      "boot_reset": "JMP 0 at 0x7E00, BOD/fuse image separate",
-      "boot_section_matches_prior_verified_readback": true
+      "bytes": 92173,
+      "sha256": "b18c050a9028c1f764fe25344d4195bc67585f5281aaa428c3501234841b47ca",
+      "boot_reset": "JMP 0 at 0x7E00 for hfuse 0xDE",
+      "boot_section_matches_prior_verified_readback": true,
+      "expected_flash_image_sha256": "0e40a403d6b682761a38698086c3dd7149fd692766e3e3383f8ddeff396806de"
     }
   },
   "nextion": {
@@ -56,7 +57,7 @@
     "source_errors": 0,
     "source_warnings": 0,
     "memory_capacity": 8192,
-    "max_page_bytes": 7816,
+    "max_page_bytes": 7872,
     "page_memory": {
       "pInit": 3316,
       "pUser": 3064,
@@ -64,78 +65,78 @@
       "pBase": 3064,
       "pNewB": 3132,
       "pMat": 3680,
-      "pMatu": 6328,
+      "pMatu": 5716,
       "pBaseR": 4068,
-      "pSaveB": 5780,
+      "pSaveB": 5496,
       "pKuat": 3064,
-      "pSelB": 5788,
+      "pSelB": 5508,
       "pRT": 5124,
       "pStr": 3536,
-      "pHist": 5360,
-      "pHistD": 7020,
+      "pHist": 5416,
+      "pHistD": 6128,
       "pSet": 3184,
       "pDev": 3288,
       "pEdit": 5920,
       "pConfirm": 2828,
       "pClock": 3076,
-      "pPoints": 7816,
+      "pPoints": 7872,
       "pChart": 3092,
       "pAddRow": 2752,
       "pNumber": 3828,
-      "pSchedule": 5876
+      "pSchedule": 5932
     },
     "tft_read": "PASS",
-    "screen_upload_performed": true,
+    "screen_upload_performed": false,
     "global_memory": 2544,
-    "physical_touch_test": "Pending paired device test with live sensors and microSD",
-    "physical_upload": {
-      "status": "PASS",
-      "completed_at_utc": "2026-11-26T06:23:20.641244+00:00",
-      "model": "NX8048K050_011R",
-      "port": "/dev/cu.usbserial-1140",
-      "uploaded_bytes": 30669776,
-      "file_sha256": "09730c090d655a7d2217195824a980376128ff0d4903aa4f828be8ba96181fce",
-      "serial_boot_check": "../diagnosis_beton/conmt_2026-11-26_daily_entry/nextion-boot-check-1140.json",
-      "log": "../diagnosis_beton/conmt_2026-11-26_daily_entry/nextion-upload.jsonl",
-      "mcu_protocol_ready_at_probe": false
-    }
+    "physical_touch_test": "Pending on K050 panel"
   },
   "ui_match": {
-    "maturity_data": "One editable Day 0, add a lab day with Day 0 empty, focus newly added row, and SENSOR captures into the focused row",
+    "maturity_data": "One initial Day 0; a complete lab row can Generate and save as Draft. Partially entered lab rows stop and focus the missing field.",
     "keyboard": "Text, decimal, signed temperature, datum choices, date and time with automatic separators",
     "datetime": "DD-MM-YYYY on panel, YYYY-MM-DD over CM1, HH:MM from acknowledged device clock",
     "status_corners": "Larger live clock and battery fields and icons",
     "touch": "One queued tap during a read, checked against session, page, view and record ID",
     "selection": "Whole saved baseline card, separate delete, ACK-driven highlight and START prerequisites",
-    "history": "Three tappable cards, empty state, scroll position restored after View Log",
+    "history": "Three tappable cards, empty state, page position restored after View Log",
     "device_info": "Full About text and tappable SET CLOCK",
     "chart": "65 MCU curve samples and lab scatter in original and expanded chart",
-    "scroll": "Swipe by row with fixed headers and buttons. Classify after release and queue row taps until the gesture resolves. Use the last live position when release coordinates are stale.",
-    "realtime_add_day": "ADD DAY records current device time and the mean of valid probes in Logged Days"
+    "realtime_add_day": "ADD DAY records current device time and the mean of valid probes in Logged Days",
+    "sensor_key": "Yellow SENSOR on the Maturity Temperature keyboard; uses the row being edited and live validated probe readings.",
+    "pagination": [
+      "pMatu",
+      "pSchedule",
+      "pSaveB",
+      "pSelB",
+      "pPoints",
+      "pHist",
+      "pHistD"
+    ],
+    "sensor_channels": "S1–S3 are ROM discovery slots on shared D2; rescan between conversions every three seconds."
   },
   "firmware_build": {
     "target": "ATmega328P 16 MHz",
     "arduino_cli": "1.5.1",
     "avr_gcc": "16.2.0",
-    "flash_bytes": 30694,
+    "flash_bytes": 31108,
     "flash_limit": 32256,
     "engineering_target_bytes": 30720,
-    "free_flash_bytes": 1562,
+    "free_flash_bytes": 1148,
     "static_sram_bytes": 1204,
     "sram_available_for_stack_and_interrupts_bytes": 844,
-    "runtime_stack_watermark": "pending"
+    "runtime_stack_watermark": "pending",
+    "engineering_target_met": false
   },
   "integration": {
     "status": "PASS",
-    "commands": 702,
+    "commands": 709,
     "domainPages": 17,
     "startupFlow": "0-25-50-75-100%, automatic User Information, SAVE to Main Menu",
     "missingPeripherals": "boot without SD, insert, save, recover after reset",
     "flow": "connect, identity, clock, settings, lab input, GENERATE, SAVE baseline, select, START, checkpoint correction, NEXT, SAVE result, history detail",
     "reliability": "keyboard taps, deletion confirmation, curve, UART retry, MCU reset/reconnect",
-    "scroll": {
+    "pagination": {
       "status": "PASS",
-      "scroll_pages": [
+      "paged_lists": [
         "pMatu",
         "pSchedule",
         "pSaveB",
@@ -145,18 +146,27 @@
         "pHistD"
       ]
     },
-    "gesture_release": "PASS: quick and late-motion swipes; edit and delete suppression",
-    "daily_entry": "PASS: empty Day 0 and add next day, sensor targeting, checkpoint time and temperature"
+    "touch_rectangles_verified": 225,
+    "one_row_draft": "PASS: empty and partial blocked; Generate, save, restart and reopen; START blocked without model",
+    "daily_entry": "PASS: ADD DAY while incomplete; keypad SENSOR to correct row, with and without probe; checkpoint time and temperature"
   },
   "regression": {
     "host_sanitizers": "PASS: both datasets, 41 rows and 10 FKZ values per dataset, 3 SD interruptions",
-    "avr_emulation": "PASS: current Domain on ATmega328P with both datasets and three FKZ branches",
-    "web_preview": "PASS: touch targets, Day 0, add row, Settings and About"
+    "avr_emulation": "PASS: 41 rows per dataset, regression and three FKZ branches",
+    "web_preview": {
+      "status": "PASS",
+      "tested": [
+        "initial single row",
+        "empty blocked",
+        "partial blocked",
+        "one complete row opens Draft"
+      ]
+    }
   },
-  "physical_upload_performed": true,
-  "physical_peripheral_test": "ATmega readback and Nextion boot verified. Live paired checkpoint and sensor test pending.",
-  "previous_verified_release_backup": "../diagnosis_beton/conmt_2026-11-26_daily_entry/previous",
-  "previous_verified_chip_sha256": "4c3418377ec6fbed005b90a8feaca5f893d2f38642c8f184089fe7a1702b827f",
+  "physical_upload_performed": false,
+  "physical_peripheral_test": "Pending for this release: flash and test paired K050, live probes and microSD",
+  "previous_verified_release_backup": "../diagnosis_beton/conmt_sebelum_ui_2026-11-26_152016_8tgjfdwl",
+  "previous_verified_chip_sha256": "60d2bf7b167958cb85146d7c0f81208745b6971f46c49b0c86abd8b129739a86",
   "web_render": {
     "canvas": [
       480,
@@ -166,37 +176,18 @@
     "artwork": "Chrome screenshots from Preview ConMT and its shared CSS",
     "alignment": "DOM bounds applied to HMI fields and touch areas, with non-overlapping component rectangles",
     "layout_manifest": "nextion/tools/k050_web_layout.json",
-    "layout_sha256": "e604fb1aae2f8adb882d9767cbebcbda0f2d33c448c27273392a8ed2ced6cc5b",
+    "layout_sha256": "9f9bb2b5295fc1f9f95a704eb5ece354c43d39f0f3cc59e0fd4b6704baf8c24d",
     "picture_count": 38,
-    "preview": "../diagnosis_beton/conmt_2026-11-26_k050_scroll/pSchedule-scroll.png",
-    "test_log": "../diagnosis_beton/conmt_2026-11-26_daily_entry/cm1-integration.jsonl",
+    "preview": "nextion/nxsrc-K050/pictures/06_maturity_data_controls.png",
+    "test_log": "../diagnosis_beton/conmt_2026-11-26_k050_web_layout/cm1-integration.jsonl",
     "local_dialogs": "Add row, Sample schedule and confirmation are captured from open Preview dialogs",
     "local_layout": "Centered panels, controls inside panel bounds, 44×48 minimum touch targets",
-    "local_preview": "../diagnosis_beton/conmt_2026-11-26_k050_scroll/pHist-scroll.png"
+    "local_preview": "nextion/nxsrc-K050/pictures/web_pNumber_controls.png"
   },
-  "physical_upload": {
-    "completed_at_utc": "2026-11-26T05:30:29.194192+00:00",
-    "target": "ATmega328P",
-    "signature": "1E950F",
-    "port": "/dev/cu.usbserial-1140",
-    "method": "Arduino CLI, Arduino Mega as ISP (stk500v1 at 19200 baud)",
-    "written": true,
-    "status": "PASS",
-    "hex_sha256": "8788a1e38d2c6710c36e4519babaf0dc15e29f25df26ecbd95f058ffdee58bda",
-    "flash_bytes_verified": 32768,
-    "flash_readback_sha256": "60d2bf7b167958cb85146d7c0f81208745b6971f46c49b0c86abd8b129739a86",
-    "prior_flash_sha256": "4c3418377ec6fbed005b90a8feaca5f893d2f38642c8f184089fe7a1702b827f",
-    "fuses": {
-      "lfuse": "0xFF",
-      "hfuse": "0xDE",
-      "efuse": "0xFD",
-      "lock": "0xCF"
-    },
-    "boot_matches_backup": true,
-    "eeprom_matches_backup": true,
-    "nextion_uploaded": true,
-    "hex": "arduino/out/ConMT-ATmega328P-ISP.hex",
-    "log": "../diagnosis_beton/conmt_2026-11-26_daily_entry/isp/flash-and-verify.log",
-    "backup": "../diagnosis_beton/conmt_2026-11-26_daily_entry/isp/before-flash.bin"
+  "source_integration": {
+    "branch": "integration/k050-web-layout",
+    "upstream_web": "46ff72c",
+    "pre_integration_checkpoint": "e34ca41",
+    "merge": "c384f16"
   }
 }

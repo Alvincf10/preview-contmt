@@ -290,6 +290,7 @@ on kProbe.up:
   {
   if(pInit.vEditBoot.val==pInit.nBoot.val&&pInit.vEditView.val==pInit.nView.val)
   {
+  tError.txt="Reading temperature..."
   pInit.tCommand.txt="ROW_SENSOR|"
   pInit.vTemp.val=pInit.vEditRow.val
   covx pInit.vTemp.val,pInit.tNum.txt,0,0

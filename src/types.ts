@@ -49,6 +49,7 @@ export type MaturityRow = {
   timeH: number
   fcLab: string
   temperature: string
+  requiresFc?: boolean
 }
 
 /** Logged sample for multi-day realtime maturity (Nurse–Saul checkpoints). */

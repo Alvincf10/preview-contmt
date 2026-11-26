@@ -286,7 +286,12 @@ Answer Engine::row(uint16_t index, Field field, const char* value, bool sensor) 
     case Field::Day: {
       uint32_t age;
       if (!number(value, 3, parsed) || !labAge(parsed, true, age)) return bad(Error::Input);
-      if (parsed != changed.day) { changed.day = parsed; changed.age = age; }
+      if (parsed != changed.day) {
+        if (!changed.day && parsed && changed.fc == Missing) changed.fc = PendingLabFc;
+        if (!parsed && changed.fc == PendingLabFc) changed.fc = Missing;
+        changed.day = parsed;
+        changed.age = age;
+      }
       break;
     }
     case Field::Age: {
@@ -303,7 +308,9 @@ Answer Engine::row(uint16_t index, Field field, const char* value, bool sensor) 
       parsed = Missing;
       if (*value && (!number(value, 5, parsed) || (field == Field::Fc && parsed < 0)))
         return bad(Error::Input);
-      if (field == Field::Fc) changed.fc = parsed; else changed.temperature = parsed;
+      if (field == Field::Fc) {
+        changed.fc = parsed == Missing && changed.day && changed.fc != Missing ? PendingLabFc : parsed;
+      } else changed.temperature = parsed;
       break;
     default: return bad(Error::Input);
   }
@@ -349,7 +356,7 @@ Answer Engine::addRows(bool early, bool fill) {
       age = slot * 1800UL;
     } else if (!labAge(day, false, age)) return bad(Error::Full);
     if (!disk.begin()) return stopped();
-    LabRow added{0, day, age, Missing, Missing};
+    LabRow added{0, day, age, Missing, early ? Missing : PendingLabFc};
     const uint16_t keepDayZero = !early && !record.rows.count ? 1 : 0;
     inserted = rewriteRows(record, &added, 0, keepDayZero);
   }
@@ -370,9 +377,10 @@ Answer Engine::deleteRow(uint16_t index) {
 
 Answer Engine::generate() {
   Baseline& record = work_.baseline;
-  if (!baseline(disk.root().draft, record)) return stopped();
-  if (!record.name || record.target <= 0 || !record.datumSet || !validStamp(record.pour) ||
-      record.rows.count < 3) return bad(Error::MissingData);
+  const Ref revision = disk.root().draft;
+  if (!baseline(revision, record)) return stopped();
+  if (!record.name || record.target <= 0 || !record.datumSet || !validStamp(record.pour))
+    return bad(Error::MissingData);
   Model model{};
   {
     Regression regression;
@@ -380,8 +388,18 @@ Answer Engine::generate() {
     Cursor cursor(record.rows);
     LabRow sample;
     Scaled day = 0;
+    uint16_t row = 0;
+    bool hasLab = false, sawBlank = false, hasGap = false;
     while (disk.next(cursor, Kind::Row, sample)) {
-      if (sample.temperature == Missing) return bad(Error::MissingData);
+      ++row;
+      if (sample.temperature == Missing) {
+        if (sample.fc >= 0) return {Error::MissingData, 2U * row};
+        sawBlank = true;
+        continue;
+      }
+      if (sample.fc == PendingLabFc) return {Error::MissingData, 2U * row + 1};
+      hasGap |= sawBlank;
+      hasLab |= sample.fc > 0;
       if (sample.day < day) return bad(Error::Input);
       day = sample.day;
       integral.add(sample.age, sample.temperature, record.datum);
@@ -389,7 +407,8 @@ Answer Engine::generate() {
       if (sample.fc > 0 && integral.maturity > model.maxM) model.maxM = integral.maturity;
     }
     if (cursor.remaining) return stopped();
-    if (!regression.finish(model.fit)) return bad(Error::NoFit);
+    if (!hasLab) return bad(Error::MissingData);
+    if (hasGap || !regression.finish(model.fit)) return ok(revision);
   }
   if (!disk.begin()) return stopped();
   Integral integral;
@@ -397,6 +416,7 @@ Answer Engine::generate() {
   LabRow sample;
   Factor pending{Missing, 0};
   while (disk.next(cursor, Kind::Row, sample)) {
+    if (sample.temperature == Missing) continue;
     integral.add(sample.age, sample.temperature, record.datum);
     if (sample.fc > 0 && integral.maturity > 0) {
       const Real predicted = estimate(integral.maturity, model.fit);
@@ -418,7 +438,7 @@ Answer Engine::saveBaseline(Ref revision) {
   if (revision != disk.root().draft) return disk.findSave(SaveKind::Baseline, revision);
   const Answer saved = disk.findSave(SaveKind::Baseline, revision);
   if (saved.error() != Error::NotFound) return saved;
-  if (!baseline(revision, record) || !record.model || !record.rows.count) return stopped(Error::NoFit);
+  if (!baseline(revision, record) || !record.rows.count) return stopped(Error::MissingData);
   if (!disk.begin()) return stopped();
   const Ref id = disk.add(Kind::Baseline, record);
   return id ? updateRoster(id, revision) : stopped();

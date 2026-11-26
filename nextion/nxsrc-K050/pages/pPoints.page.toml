@@ -900,6 +900,61 @@ events = [
 ]
 
 [[component]]
+name = "mPrevRows"
+x = 20
+y = 646
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "web_pPoints_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "tPageRows"
+x = 96
+y = 658
+w = 288
+h = 26
+type = "text"
+sta = 0
+picc = "web_pPoints"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "mNextRows"
+x = 396
+y = 646
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "web_pPoints_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
 name = "mBack"
 x = 20
 y = 720
@@ -917,48 +972,6 @@ ycen = 1
 events = [
     "up",
 ]
-
-[[component]]
-name = "vStartX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vStartY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vPriorX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vPriorY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vBlockTap"
-type = "variable"
-vscope = 0
-val = 0
 
 [[component]]
 name = "tRowData0"
@@ -1007,20 +1020,3 @@ vscope = 0
 sta = 1
 txt = ""
 txt_maxl = 255
-
-[[component]]
-name = "tcList"
-type = "touch-capture"
-events = [
-    "down",
-    "up",
-]
-
-[[component]]
-name = "tmDrag"
-type = "timer"
-tim = 50
-en = 0
-events = [
-    "timer",
-]

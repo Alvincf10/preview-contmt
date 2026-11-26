@@ -108,105 +108,6 @@ txt = ""
 txt_maxl = 8
 
 [[component]]
-name = "vStartX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vStartY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vBlockTap"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "tRowData0"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tRowData1"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tRowData2"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tRowData3"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tRowData4"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tcList"
-type = "touch-capture"
-events = [
-    "down",
-    "up",
-]
-
-[[component]]
-name = "tmDrag"
-type = "timer"
-tim = 50
-en = 0
-events = [
-    "timer",
-]
-
-[[component]]
-name = "vPriorX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vPriorY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
 name = "tClock"
 x = 49
 y = 69
@@ -258,17 +159,72 @@ ycen = 1
 events = []
 
 [[component]]
+name = "mPrevRows"
+x = 67
+y = 487
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "06_maturity_data_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "mNextRows"
+x = 349
+y = 487
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "06_maturity_data_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "tPageRows"
+x = 139
+y = 499
+w = 202
+h = 26
+type = "text"
+sta = 0
+picc = "06_maturity_data"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
 name = "tDay0"
-x = 68
-y = 245
-w = 55
-h = 57
+x = 70
+y = 256
+w = 51
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -278,10 +234,10 @@ events = [
 
 [[component]]
 name = "tTim0"
-x = 123
-y = 245
-w = 76
-h = 57
+x = 125
+y = 256
+w = 72
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
@@ -297,16 +253,16 @@ events = [
 
 [[component]]
 name = "tFc0"
-x = 199
-y = 245
-w = 72
-h = 57
+x = 201
+y = 256
+w = 68
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -316,16 +272,16 @@ events = [
 
 [[component]]
 name = "tT0"
-x = 271
-y = 245
-w = 93
-h = 57
+x = 273
+y = 256
+w = 89
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -335,16 +291,16 @@ events = [
 
 [[component]]
 name = "mDelete0"
-x = 364
-y = 245
-w = 48
-h = 57
+x = 366
+y = 256
+w = 44
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 1
-font = "NotoSans16"
+font = "NotoSans28"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -354,16 +310,16 @@ events = [
 
 [[component]]
 name = "tDay1"
-x = 68
-y = 302
-w = 55
-h = 57
+x = 70
+y = 313
+w = 51
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -373,10 +329,10 @@ events = [
 
 [[component]]
 name = "tTim1"
-x = 123
-y = 302
-w = 76
-h = 57
+x = 125
+y = 313
+w = 72
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
@@ -392,16 +348,16 @@ events = [
 
 [[component]]
 name = "tFc1"
-x = 199
-y = 302
-w = 72
-h = 57
+x = 201
+y = 313
+w = 68
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -411,16 +367,16 @@ events = [
 
 [[component]]
 name = "tT1"
-x = 271
-y = 302
-w = 93
-h = 57
+x = 273
+y = 313
+w = 89
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -430,16 +386,16 @@ events = [
 
 [[component]]
 name = "mDelete1"
-x = 364
-y = 302
-w = 48
-h = 57
+x = 366
+y = 313
+w = 44
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 1
-font = "NotoSans16"
+font = "NotoSans28"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -449,16 +405,16 @@ events = [
 
 [[component]]
 name = "tDay2"
-x = 68
-y = 359
-w = 55
-h = 57
+x = 70
+y = 370
+w = 51
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -468,10 +424,10 @@ events = [
 
 [[component]]
 name = "tTim2"
-x = 123
-y = 359
-w = 76
-h = 57
+x = 125
+y = 370
+w = 72
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
@@ -487,16 +443,16 @@ events = [
 
 [[component]]
 name = "tFc2"
-x = 199
-y = 359
-w = 72
-h = 57
+x = 201
+y = 370
+w = 68
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -506,16 +462,16 @@ events = [
 
 [[component]]
 name = "tT2"
-x = 271
-y = 359
-w = 93
-h = 57
+x = 273
+y = 370
+w = 89
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -525,16 +481,16 @@ events = [
 
 [[component]]
 name = "mDelete2"
-x = 364
-y = 359
-w = 48
-h = 57
+x = 366
+y = 370
+w = 44
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 1
-font = "NotoSans16"
+font = "NotoSans28"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -544,16 +500,16 @@ events = [
 
 [[component]]
 name = "tDay3"
-x = 68
-y = 416
-w = 55
-h = 57
+x = 70
+y = 427
+w = 51
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -563,10 +519,10 @@ events = [
 
 [[component]]
 name = "tTim3"
-x = 123
-y = 416
-w = 76
-h = 57
+x = 125
+y = 427
+w = 72
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
@@ -582,16 +538,16 @@ events = [
 
 [[component]]
 name = "tFc3"
-x = 199
-y = 416
-w = 72
-h = 57
+x = 201
+y = 427
+w = 68
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -601,16 +557,16 @@ events = [
 
 [[component]]
 name = "tT3"
-x = 271
-y = 416
-w = 93
-h = 57
+x = 273
+y = 427
+w = 89
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -620,111 +576,16 @@ events = [
 
 [[component]]
 name = "mDelete3"
-x = 364
-y = 416
-w = 48
-h = 57
+x = 366
+y = 427
+w = 44
+h = 52
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 1
-font = "NotoSans16"
-pco = "#ffffff"
-xcen = 1
-ycen = 1
-events = [
-    "up",
-]
-
-[[component]]
-name = "tDay4"
-x = 68
-y = 473
-w = 55
-h = 56
-type = "text"
-sta = 0
-picc = "06_maturity_data_controls"
-txt = ""
-txt_maxl = 64
-font = "NotoSans16"
-pco = "#ffffff"
-xcen = 1
-ycen = 1
-events = [
-    "up",
-]
-
-[[component]]
-name = "tTim4"
-x = 123
-y = 473
-w = 76
-h = 56
-type = "text"
-sta = 0
-picc = "06_maturity_data_controls"
-txt = ""
-txt_maxl = 64
-font = "NotoSans16"
-pco = "#ffffff"
-xcen = 1
-ycen = 1
-events = [
-    "up",
-]
-
-[[component]]
-name = "tFc4"
-x = 199
-y = 473
-w = 72
-h = 56
-type = "text"
-sta = 0
-picc = "06_maturity_data_controls"
-txt = ""
-txt_maxl = 64
-font = "NotoSans16"
-pco = "#ffffff"
-xcen = 1
-ycen = 1
-events = [
-    "up",
-]
-
-[[component]]
-name = "tT4"
-x = 271
-y = 473
-w = 93
-h = 56
-type = "text"
-sta = 0
-picc = "06_maturity_data_controls"
-txt = ""
-txt_maxl = 64
-font = "NotoSans16"
-pco = "#ffffff"
-xcen = 1
-ycen = 1
-events = [
-    "up",
-]
-
-[[component]]
-name = "mDelete4"
-x = 364
-y = 473
-w = 48
-h = 56
-type = "text"
-sta = 0
-picc = "06_maturity_data_controls"
-txt = ""
-txt_maxl = 1
-font = "NotoSans16"
+font = "NotoSans28"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -735,34 +596,15 @@ events = [
 [[component]]
 name = "mAddDay"
 x = 67
-y = 535
-w = 127
-h = 52
+y = 542
+w = 346
+h = 55
 type = "text"
 sta = 0
 picc = "06_maturity_data_controls"
 txt = ""
 txt_maxl = 1
-font = "NotoSans16"
-pco = "#ffffff"
-xcen = 1
-ycen = 1
-events = [
-    "up",
-]
-
-[[component]]
-name = "mSensor"
-x = 202
-y = 535
-w = 211
-h = 52
-type = "text"
-sta = 0
-picc = "06_maturity_data_controls"
-txt = ""
-txt_maxl = 1
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -772,8 +614,8 @@ events = [
 
 [[component]]
 name = "tPourTime"
-x = 145
-y = 597
+x = 182
+y = 607
 w = 86
 h = 48
 type = "text"
@@ -781,7 +623,7 @@ sta = 0
 picc = "06_maturity_data"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 1
 ycen = 1
@@ -792,41 +634,56 @@ events = [
 [[component]]
 name = "tDatumLab"
 x = 80
-y = 653
+y = 663
 w = 322
-h = 15
+h = 21
 type = "text"
 sta = 0
 picc = "06_maturity_data"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 0
 ycen = 1
 events = []
 
 [[component]]
-name = "tPageRows"
-x = 207
-y = 763
-w = 66
-h = 12
-type = "text"
-sta = 0
-picc = "06_maturity_data"
+name = "tRowData0"
+type = "variable"
+vscope = 0
+sta = 1
 txt = ""
-txt_maxl = 64
-font = "NotoSans16"
-pco = "#ffffff"
-xcen = 1
-ycen = 1
-events = []
+txt_maxl = 255
+
+[[component]]
+name = "tRowData1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData3"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
 
 [[component]]
 name = "mInfo"
 x = 365
-y = 130
+y = 132
 w = 48
 h = 48
 type = "hotspot"
@@ -837,9 +694,9 @@ events = [
 [[component]]
 name = "mBack"
 x = 67
-y = 707
-w = 143
-h = 52
+y = 699
+w = 94
+h = 60
 type = "hotspot"
 events = [
     "up",
@@ -847,10 +704,10 @@ events = [
 
 [[component]]
 name = "mGen"
-x = 220
-y = 707
-w = 193
-h = 52
+x = 171
+y = 699
+w = 242
+h = 60
 type = "hotspot"
 events = [
     "up",

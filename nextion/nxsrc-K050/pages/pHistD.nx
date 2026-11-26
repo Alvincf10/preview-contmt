@@ -68,131 +68,78 @@ on pHistD.loadend:
   tLog0.txt=""
   tsw tLog0,0
   vis tLog0,0
-  picq 77,460,326,42,23
+  picq 79,491,322,48,23
   tLog1.txt=""
   tsw tLog1,0
   vis tLog1,0
-  picq 77,508,326,42,23
+  picq 79,545,322,48,23
   tLog2.txt=""
   tsw tLog2,0
   vis tLog2,0
-  picq 77,556,326,42,23
-  tLog3.txt=""
-  tsw tLog3,0
-  vis tLog3,0
-  picq 77,604,326,42,23
-  tLog4.txt=""
-  tsw tLog4,0
-  vis tLog4,0
-  picq 77,652,326,42,23
-  tmDrag.en=0
-  vBlockTap.val=0
-  pInit.vTouchPhase.val=0
+  picq 79,599,322,48,23
   pInit.vListBase.val=pInit.vOffset.val
-  pInit.vListShift.val=0
-  pInit.vListReuse.val=0
   pInit.vListDirty.val=1
   pInit.vListReady.val=0
+  tsw mPrevRows,0
+  vis mPrevRows,0
+  tsw mNextRows,0
+  vis mNextRows,0
 
-on tcList.down:
-  if(pInit.vTouchPhase.val==2)
+on mPrevRows.up:
+  if(pInit.vListReady.val==1)
   {
-  pInit.vTap.val=0
-  }
-  tmDrag.en=0
-  pInit.vTouchPhase.val=0
-  vBlockTap.val=0
-  vStartX.val=tch0
-  vStartY.val=tch1
-  if(vStartX.val>=77&&vStartX.val<411&&vStartY.val>=460&&vStartY.val<694)
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
-  pInit.vTouchPhase.val=1
-  vPriorX.val=tch2
-  vPriorY.val=tch3
-  vDragX.val=0
-  vDragY.val=0
-  tmDrag.en=1
-  if(pInit.vListReady.val==0||pInit.vListShift.val!=0)
+  if(pInit.vListBase.val>0)
   {
-  vBlockTap.val=1
-  }
-  }
-
-on tcList.up:
-  if(pInit.vTouchPhase.val==1)
-  {
-  pInit.vTouchPhase.val=2
-  }
-
-on tmDrag.timer:
-  if(pInit.vTouchPhase.val==1)
-  {
-  if(tch0!=0||tch1!=0)
-  {
-  vDragX.val=tch0-vStartX.val
-  if(vDragX.val<0)
-  {
-  vDragX.val*=-1
-  }
-  vDragY.val=vStartY.val-tch1
-  if(vDragX.val>=16||vDragY.val>=16||vDragY.val<=-16)
-  {
-  vBlockTap.val=1
-  }
+  pInit.vListBase.val-=3
+  pInit.vStep.val=1
+  pInit.vListDirty.val=1
+  pInit.vListReady.val=0
   }
   }
   else
   {
-  tmDrag.en=0
-  pInit.vTouchPhase.val=0
-  if(tch0==0&&tch1==0)
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  if(tch2!=vPriorX.val||tch3!=vPriorY.val)
-  {
-  if(tch2>=0&&tch2<480&&tch3>=0&&tch3<800)
-  {
-  vDragX.val=tch2-vStartX.val
-  if(vDragX.val<0)
-  {
-  vDragX.val*=-1
+  pInit.vTap.val=2
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
   }
-  vDragY.val=vStartY.val-tch3
-  if(vDragX.val>=16||vDragY.val>=16||vDragY.val<=-16)
+  if(pInit.vTask.val==1)
   {
-  vBlockTap.val=1
+  tNotice.txt="Please wait for the current action"
   }
   }
   }
-  pInit.vTemp.val=vDragY.val
-  if(pInit.vTemp.val<0)
+
+on mNextRows.up:
+  if(pInit.vListReady.val==1)
   {
-  pInit.vTemp.val*=-1
-  }
-  if(pInit.vTemp.val>=22&&pInit.vTemp.val>vDragX.val)
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
-  pInit.vTemp.val+=24
-  pInit.vTemp.val/=48
-  if(pInit.vTemp.val<1)
+  if(pInit.vListBase.val<pInit.vListMax.val)
   {
-  pInit.vTemp.val=1
-  }
-  if(vDragY.val>0)
-  {
-  pInit.vListShift.val+=pInit.vTemp.val
-  }else
-  {
-  pInit.vListShift.val-=pInit.vTemp.val
-  }
-  vBlockTap.val=1
+  pInit.vListBase.val+=3
+  pInit.vStep.val=1
+  pInit.vListDirty.val=1
+  pInit.vListReady.val=0
   }
   }
   else
   {
-  vBlockTap.val=1
-  }
-  if(vBlockTap.val==1)
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
   {
-  pInit.vTap.val=0
+  pInit.vTap.val=3
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
   }
   }
 
@@ -375,30 +322,6 @@ on tmPoll.timer:
   pInit.vListDirty.val=1
   }
   }
-  if(pInit.vGet.val==8)
-  {
-  if(pInit.nAckCode.val!=0)
-  {
-  pInit.tData.txt=""
-  }
-  if(tRowData3.txt!=pInit.tData.txt)
-  {
-  tRowData3.txt=pInit.tData.txt
-  pInit.vListDirty.val=1
-  }
-  }
-  if(pInit.vGet.val==9)
-  {
-  if(pInit.nAckCode.val!=0)
-  {
-  pInit.tData.txt=""
-  }
-  if(tRowData4.txt!=pInit.tData.txt)
-  {
-  tRowData4.txt=pInit.tData.txt
-  pInit.vListDirty.val=1
-  }
-  }
   pInit.vStep.val+=1
   }else
   {
@@ -496,60 +419,6 @@ on tmPoll.timer:
   {
   tNotice.txt=pInit.tMsg.txt
   }
-  if(pInit.vBusy.val==0&&dp==14)
-  {
-  if(pInit.vTouchPhase.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val!=0)
-  {
-  pInit.vListMax.val=pInit.vTotal.val-5
-  if(pInit.vListMax.val<0)
-  {
-  pInit.vListMax.val=0
-  }
-  pInit.vIndex.val=pInit.vListBase.val+pInit.vListShift.val
-  if(pInit.vIndex.val<0)
-  {
-  pInit.vIndex.val=0
-  }
-  if(pInit.vIndex.val>pInit.vListMax.val)
-  {
-  pInit.vIndex.val=pInit.vListMax.val
-  }
-  if(pInit.vIndex.val!=pInit.vListBase.val)
-  {
-  pInit.vListShift.val=pInit.vIndex.val-pInit.vListBase.val
-  pInit.vListBase.val=pInit.vIndex.val
-  pInit.vListReady.val=0
-  pInit.vListDirty.val=1
-  pInit.vListReuse.val=1
-  pInit.vStep.val=5
-  if(pInit.vListShift.val>=5||pInit.vListShift.val<=-5)
-  {
-  pInit.vListReuse.val=0
-  }else
-  {
-  while(pInit.vListShift.val>0)
-  {
-  tRowData0.txt=tRowData1.txt
-  tRowData1.txt=tRowData2.txt
-  tRowData2.txt=tRowData3.txt
-  tRowData3.txt=tRowData4.txt
-  tRowData4.txt=""
-  pInit.vListShift.val-=1
-  }
-  while(pInit.vListShift.val<0)
-  {
-  tRowData4.txt=tRowData3.txt
-  tRowData3.txt=tRowData2.txt
-  tRowData2.txt=tRowData1.txt
-  tRowData1.txt=tRowData0.txt
-  tRowData0.txt=""
-  pInit.vListShift.val+=1
-  }
-  }
-  }
-  pInit.vListShift.val=0
-  }
-  }
   if(dp==14&&pInit.vBusy.val==0&&pInit.vTap.val>0&&pInit.vStatusReady.val==1)
   {
   pInit.vDispatch.val=pInit.vTap.val
@@ -559,6 +428,14 @@ on tmPoll.timer:
   if(pInit.vDispatch.val==1)
   {
   click mBack,0
+  }
+  if(pInit.vDispatch.val==2)
+  {
+  click mPrevRows,0
+  }
+  if(pInit.vDispatch.val==3)
+  {
+  click mNextRows,0
   }
   }
   else
@@ -714,16 +591,17 @@ on tmPoll.timer:
   }
   if(pInit.vStep.val==5)
   {
-  pInit.vListMax.val=pInit.vTotal.val-5
+  pInit.vListMax.val=pInit.vTotal.val-1
   if(pInit.vListMax.val<0)
   {
   pInit.vListMax.val=0
   }
+  pInit.vListMax.val/=3
+  pInit.vListMax.val*=3
   if(pInit.vListBase.val>pInit.vListMax.val)
   {
   pInit.vListBase.val=pInit.vListMax.val
   pInit.vListReady.val=0
-  pInit.vListReuse.val=0
   pInit.vListDirty.val=1
   }
   pInit.vIndex.val=pInit.vListBase.val+0
@@ -734,12 +612,6 @@ on tmPoll.timer:
   tRowData0.txt=""
   pInit.vListDirty.val=1
   }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData0.txt!="")
-  {
   pInit.vStep.val+=1
   }
   else
@@ -775,7 +647,6 @@ on tmPoll.timer:
   }
   }
   }
-  }
   if(pInit.vStep.val==6)
   {
   pInit.vIndex.val=pInit.vListBase.val+1
@@ -786,12 +657,6 @@ on tmPoll.timer:
   tRowData1.txt=""
   pInit.vListDirty.val=1
   }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData1.txt!="")
-  {
   pInit.vStep.val+=1
   }
   else
@@ -827,7 +692,6 @@ on tmPoll.timer:
   }
   }
   }
-  }
   if(pInit.vStep.val==7)
   {
   pInit.vIndex.val=pInit.vListBase.val+2
@@ -838,12 +702,6 @@ on tmPoll.timer:
   tRowData2.txt=""
   pInit.vListDirty.val=1
   }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData2.txt!="")
-  {
   pInit.vStep.val+=1
   }
   else
@@ -879,112 +737,7 @@ on tmPoll.timer:
   }
   }
   }
-  }
-  if(pInit.vStep.val==8)
-  {
-  pInit.vIndex.val=pInit.vListBase.val+3
-  if(pInit.vIndex.val>=pInit.vTotal.val)
-  {
-  if(tRowData3.txt!="")
-  {
-  tRowData3.txt=""
-  pInit.vListDirty.val=1
-  }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData3.txt!="")
-  {
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  pInit.vGet.val=8
-  pInit.tCommand.txt="GET|point"
-  covx pInit.vIndex.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+="|"
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=0
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  }
-  }
-  if(pInit.vStep.val==9)
-  {
-  pInit.vIndex.val=pInit.vListBase.val+4
-  if(pInit.vIndex.val>=pInit.vTotal.val)
-  {
-  if(tRowData4.txt!="")
-  {
-  tRowData4.txt=""
-  pInit.vListDirty.val=1
-  }
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  if(pInit.vListReuse.val==1&&tRowData4.txt!="")
-  {
-  pInit.vStep.val+=1
-  }
-  else
-  {
-  pInit.vGet.val=9
-  pInit.tCommand.txt="GET|point"
-  covx pInit.vIndex.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+="|"
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=0
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-  }
-  }
-  }
-  if(pInit.vStep.val>9)
+  if(pInit.vStep.val>7)
   {
   if(pInit.vListDirty.val==1)
   {
@@ -992,7 +745,7 @@ on tmPoll.timer:
   if(tRowData0.txt!="")
   {
   pInit.tData.txt=tRowData0.txt
-  picq 77,460,326,42,22
+  picq 79,491,322,48,22
   vis tLog0,1
   tsw tLog0,1
   tLog0.txt="Day "
@@ -1018,12 +771,12 @@ on tmPoll.timer:
   tLog0.txt=""
   tsw tLog0,0
   vis tLog0,0
-  picq 77,460,326,42,23
+  picq 79,491,322,48,23
   }
   if(tRowData1.txt!="")
   {
   pInit.tData.txt=tRowData1.txt
-  picq 77,508,326,42,22
+  picq 79,545,322,48,22
   vis tLog1,1
   tsw tLog1,1
   tLog1.txt="Day "
@@ -1049,12 +802,12 @@ on tmPoll.timer:
   tLog1.txt=""
   tsw tLog1,0
   vis tLog1,0
-  picq 77,508,326,42,23
+  picq 79,545,322,48,23
   }
   if(tRowData2.txt!="")
   {
   pInit.tData.txt=tRowData2.txt
-  picq 77,556,326,42,22
+  picq 79,599,322,48,22
   vis tLog2,1
   tsw tLog2,1
   tLog2.txt="Day "
@@ -1080,92 +833,57 @@ on tmPoll.timer:
   tLog2.txt=""
   tsw tLog2,0
   vis tLog2,0
-  picq 77,556,326,42,23
+  picq 79,599,322,48,23
   }
-  if(tRowData3.txt!="")
+  pInit.vListMax.val=pInit.vTotal.val-1
+  if(pInit.vListMax.val<0)
   {
-  pInit.tData.txt=tRowData3.txt
-  picq 77,604,326,42,22
-  vis tLog3,1
-  tsw tLog3,1
-  tLog3.txt="Day "
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
-  tLog3.txt+=""
-  tLog3.txt+=pInit.tSplit.txt
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",2
-  tLog3.txt+=" "
-  tLog3.txt+=pInit.tSplit.txt
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
-  tLog3.txt+=" T "
-  tLog3.txt+=pInit.tSplit.txt
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
-  tLog3.txt+=" M "
-  tLog3.txt+=pInit.tSplit.txt
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",5
-  tLog3.txt+=" Fc "
-  tLog3.txt+=pInit.tSplit.txt
-
+  pInit.vListMax.val=0
+  }
+  pInit.vListMax.val/=3
+  pInit.vListMax.val*=3
+  if(pInit.vListBase.val>0)
+  {
+  vis mPrevRows,1
+  tsw mPrevRows,1
   }
   else
   {
-  tLog3.txt=""
-  tsw tLog3,0
-  vis tLog3,0
-  picq 77,604,326,42,23
+  tsw mPrevRows,0
+  vis mPrevRows,0
   }
-  if(tRowData4.txt!="")
+  if(pInit.vListBase.val<pInit.vListMax.val)
   {
-  pInit.tData.txt=tRowData4.txt
-  picq 77,652,326,42,22
-  vis tLog4,1
-  tsw tLog4,1
-  tLog4.txt="Day "
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
-  tLog4.txt+=""
-  tLog4.txt+=pInit.tSplit.txt
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",2
-  tLog4.txt+=" "
-  tLog4.txt+=pInit.tSplit.txt
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
-  tLog4.txt+=" T "
-  tLog4.txt+=pInit.tSplit.txt
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
-  tLog4.txt+=" M "
-  tLog4.txt+=pInit.tSplit.txt
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",5
-  tLog4.txt+=" Fc "
-  tLog4.txt+=pInit.tSplit.txt
-
+  vis mNextRows,1
+  tsw mNextRows,1
   }
   else
   {
-  tLog4.txt=""
-  tsw tLog4,0
-  vis tLog4,0
-  picq 77,652,326,42,23
+  tsw mNextRows,0
+  vis mNextRows,0
   }
-  picq 407,460,3,234,23
-  pInit.vIndex.val=pInit.vTotal.val
-  if(pInit.vIndex.val>5)
+  tPageRows.txt=""
+  if(pInit.vTotal.val!=0)
   {
-
-  fill 407,460,3,234,19083
-  pInit.vTemp.val=1170
-  pInit.vTemp.val/=pInit.vIndex.val
-  if(pInit.vTemp.val<20)
+  pInit.vTemp.val=pInit.vOffset.val+1
+  covx pInit.vTemp.val,tPageRows.txt,0,0
+  tPageRows.txt+="-"
+  pInit.vTemp.val=pInit.vOffset.val+3
+  if(pInit.vTotal.val>0&&pInit.vTemp.val>pInit.vTotal.val)
   {
-  pInit.vTemp.val=20
+  pInit.vTemp.val=pInit.vTotal.val
   }
-  pInit.vCount.val=234-pInit.vTemp.val
-  pInit.vCount.val*=pInit.vOffset.val
-  pInit.vIndex.val-=5
-  pInit.vCount.val/=pInit.vIndex.val
-  pInit.vCount.val+=460
-  fill 407,pInit.vCount.val,3,pInit.vTemp.val,62632
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  tPageRows.txt+=pInit.tNum.txt
+  if(pInit.vTotal.val>0)
+  {
+  tPageRows.txt+=" / "
+  covx pInit.vTotal.val,pInit.tNum.txt,0,0
+  tPageRows.txt+=pInit.tNum.txt
+  }
   }
   pInit.vListDirty.val=0
   }
-  pInit.vListReuse.val=0
   pInit.vListReady.val=1
   pInit.vPoll.val+=1
   if(pInit.vPoll.val>=20)

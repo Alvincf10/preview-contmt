@@ -99,16 +99,9 @@ on tmAdd.timer:
   {
   pInit.vFocusFirst.val=0
   pInit.vFocusRow.val=pInit.nAckValue.val
-  pInit.vTemp.val=pInit.vFocusRow.val-1
-  if(pInit.vTemp.val<pInit.vOffset.val)
-  {
-  pInit.vOffset.val=pInit.vTemp.val
-  }
-  pInit.vIndex.val=pInit.vOffset.val+5
-  if(pInit.vTemp.val>=pInit.vIndex.val)
-  {
-  pInit.vOffset.val=pInit.vTemp.val-4
-  }
+  pInit.vOffset.val=pInit.vFocusRow.val-1
+  pInit.vOffset.val/=4
+  pInit.vOffset.val*=4
   }
   page pInit.vPage.val
   }

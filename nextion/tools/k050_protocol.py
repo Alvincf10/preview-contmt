@@ -20,13 +20,16 @@ PAGES = [
 POINT_COLUMNS = ("Day", "Date", "Time", "Temp", "M", "Fc")
 POINT_ROWS = 6
 HISTORY_ROWS = 3
-SCROLL_LISTS = {
+SCHEDULE_ROWS = 5
+SAVED_ROWS = 3
+DETAIL_ROWS = 3
+PAGED_LISTS = {
     "pMatu": ("labrow", LAB_ROWS, "pInit.vTotal.val"),
-    "pSchedule": ("labrow", LAB_ROWS, "pInit.vTotal.val"),
-    "pSaveB": ("savedrow", 4, "pInit.vSavedCount.val"),
-    "pSelB": ("savedrow", 4, "pInit.vSavedCount.val"),
+    "pSchedule": ("labrow", SCHEDULE_ROWS, "pInit.vTotal.val"),
+    "pSaveB": ("savedrow", SAVED_ROWS, "pInit.vSavedCount.val"),
+    "pSelB": ("savedrow", SAVED_ROWS, "pInit.vSavedCount.val"),
     "pHist": ("historyrow", HISTORY_ROWS, "pInit.vHistoryEnd.val"),
-    "pHistD": ("point", 5, "pInit.vTotal.val"),
+    "pHistD": ("point", DETAIL_ROWS, "pInit.vTotal.val"),
     "pPoints": ("point", POINT_ROWS, "pInit.vTotal.val"),
 }
 LIST_TICK_MS = 65
@@ -323,12 +326,7 @@ pInit.vTapId.val={key}"""
             "pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0", queue) + "\n" + branch(
             "pInit.vTask.val==1", 'tNotice.txt="Please wait for the current action"') + "\n}"
         if name in list_actions:
-            after_release = branch("pInit.vBusy.val==0||pInit.vTask.val==0",
-                                   branch("pInit.vTap.val==0&&pInit.nBoot.val>0", queue))
-            settled = branch("pInit.vTouchPhase.val==0", events[event_name])
-            events[event_name] = branch(
-                "vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0",
-                branch("pInit.vTouchPhase.val==2", after_release) + "\nelse\n{\n" + settled + "\n}")
+            events[event_name] = branch("pInit.vListReady.val==1", events[event_name])
         valid = (f"pInit.vTapId.val=={key}" if key != "0" else None)
         click = f"click {name},0"
         if valid:
@@ -337,8 +335,6 @@ pInit.vTapId.val={key}"""
     if not actions:
         return ""
     dispatch = f"dp=={page}&&pInit.vBusy.val==0&&pInit.vTap.val>0&&pInit.vStatusReady.val==1"
-    if list_actions:
-        dispatch += "&&pInit.vTouchPhase.val==0&&pInit.vListShift.val==0"
     return branch(dispatch, """pInit.vDispatch.val=pInit.vTap.val
 pInit.vTap.val=0
 """ + branch("pInit.vTapView.val==pInit.nView.val&&pInit.vTapBoot.val==pInit.nBoot.val",
@@ -357,6 +353,9 @@ if(pInit.vSavedCount.val==0)
 {{
 {target}.txt="Create a baseline first"
 }}
+}}else if(pInit.vSelectedModel.val==0)
+{{
+{target}.txt="Complete this draft before START"
 }}else if(pInit.tDate.txt=="")
 {{
 {target}.txt="Set the device clock first"
@@ -368,21 +367,24 @@ if(pInit.vSavedCount.val==0)
 
 def range_label(count, size):
     return f'''tPageRows.txt=""
-if({count}>0)
+if({count}!=0)
 {{
 pInit.vTemp.val=pInit.vOffset.val+1
 covx pInit.vTemp.val,tPageRows.txt,0,0
 tPageRows.txt+="-"
 pInit.vTemp.val=pInit.vOffset.val+{size}
-if(pInit.vTemp.val>{count})
+if({count}>0&&pInit.vTemp.val>{count})
 {{
 pInit.vTemp.val={count}
 }}
 covx pInit.vTemp.val,pInit.tNum.txt,0,0
 tPageRows.txt+=pInit.tNum.txt
+if({count}>0)
+{{
 tPageRows.txt+=" / "
 covx {count},pInit.tNum.txt,0,0
 tPageRows.txt+=pInit.tNum.txt
+}}
 }}'''
 
 
@@ -441,24 +443,8 @@ def lab_roster():
         *(f"vis t{prefix}0,1\ntsw t{prefix}0,1" for prefix in ("Day", "Tim", "Fc", "T")),
         *lab_cell_pictures(0, "pInit.vFocusFirst.val==1"),
     ])))
-    lines += [lab_actions_layout(), range_label("pInit.vTotal.val", LAB_ROWS)]
+    lines.append(visibility("mAddDay", "pInit.vDraft.val>0"))
     return "\n".join(lines)
-
-
-def lab_actions_layout():
-    page = "pMatu"
-    first = [visibility(name, f"pInit.vLabSlots.val=={LAB_ROWS}") for name in ("mAddDay", "mSensor")]
-    strip = region(page, "maturityActions")
-    for i, rect in enumerate(region(page, "rows")[1:], 1):
-        y = rect[1]
-        names = [*(f"t{prefix}{i}" for prefix in ("Day", "Tim", "Fc", "T")), f"mDelete{i}"]
-        # The unused row shares the two hit areas beneath the last displayed row.
-        actions = [
-            *(f'{name}.txt=""\nvis {name},1\ntsw {name},1' for name in names),
-            crop(page, rect), patch_at(page, (strip[0], y), strip),
-        ]
-        first.append(branch(f"pInit.vLabSlots.val=={i}", "\n".join(actions)))
-    return "\n".join(first)
 
 
 def saved_fields(page, i):
@@ -468,6 +454,8 @@ def saved_fields(page, i):
     lines = [column(name, 1), column(value, 2), measurement(value, " MPa"),
              column(datum, 3), measurement(datum, " °C"), column(date, 4), display_date(date),
              number_column(f"pInit.vId{i}", 0),
+             column("pInit.tSplit", 7),
+             branch('pInit.tSplit.txt=="0"', f'{date}.txt+="  |  Draft"'),
              branch(selected, crop(page, card, "alternate")) + "\nelse\n{\n" + crop(page, card, "patch") + "\n}",
              *(draw_value(page, field, field) for field in (name, value, datum, date)),
              f"tsw mPick{i},1"]
@@ -500,7 +488,17 @@ def history_state():
 def model_fields():
     data = assignments("pBaseR", {"tA": 0, "tB": 1, "tR2": 2, "tCount": 3,
                                   "tFactor": 4, "tOp": 6, "tProj": 7, "tDate": 8}, ("tDate",))
-    return data + "\n" + branch("vPlotModel.val!=pInit.nAckValue.val", f'''vPlotModel.val=pInit.nAckValue.val
+    draft = '''vPlotModel.val=0
+vPlotPhase.val=3
+tA.txt="-"
+tB.txt="-"
+tR2.txt="-"
+tFactor.txt="-"
+tEq.txt="Draft. Add more lab data for a fit."
+tsw mCurve,0'''
+    return data + "\n" + branch("pInit.nAckValue.val==0", draft) + "\nelse\n{\n" + branch(
+        "vPlotModel.val!=pInit.nAckValue.val", f'''vPlotModel.val=pInit.nAckValue.val
+tsw mCurve,1
 {number_column("pInit.vPairs", 3)}
 tEq.txt="fc = "
 tEq.txt+=tA.txt
@@ -522,7 +520,7 @@ pInit.tPlotFit.txt+=tCount.txt
 pInit.tPlotFit.txt+="    FKZ ages "
 pInit.tPlotFit.txt+=pInit.tSplit.txt
 {plot_begin("pBaseR")}
-vPlotPhase.val=1''')
+vPlotPhase.val=1''') + "\n}"
 
 
 def tasks(page):
@@ -561,10 +559,12 @@ def tasks(page):
         items.append(("detail", None, assignments(page, {"tId": 0, "tSavedAt": 1, "tOp": 3,
                                                         "tProj": 4, "tDate": 2}, ("tSavedAt",))))
     if page in ("pMatu", "pSchedule"):
-        for i in range(LAB_ROWS):
+        for i in range(PAGED_LISTS[page][1]):
             items.append(("labrow", i, lab_fields(page, i)))
     if page in ("pSaveB", "pSelB"):
-        for i in range(4):
+        if page == "pSelB":
+            items.append(("baseline", None, number_column("pInit.vSelectedModel", 7)))
+        for i in range(SAVED_ROWS):
             body = saved_fields(page, i)
             items.append(("savedrow", i, body))
     if page == "pHist":
@@ -572,7 +572,7 @@ def tasks(page):
             items.append(("historyrow", i, history_fields(i)))
         items.append(("historyrow", HISTORY_ROWS, ""))
     if page == "pHistD":
-        for i in range(5):
+        for i in range(DETAIL_ROWS):
             body = row_artwork(page, i, "patch") + f'\nvis tLog{i},1\ntsw tLog{i},1\ntLog{i}.txt="Day "\n'
             for prefix, index in (("", 0), (" ", 2), (" T ", 3), (" M ", 4), (" Fc ", 5)):
                 body += column("pInit.tSplit", index) + f'\ntLog{i}.txt+="{prefix}"\ntLog{i}.txt+=pInit.tSplit.txt\n'
@@ -621,153 +621,45 @@ def clear_row(page, source, row):
     return "\n".join(result)
 
 
-def list_geometry(page):
-    name = "cards" if page in ("pSaveB", "pSelB", "pHist") else "rows"
-    rows = region(page, name)
-    x, y, w, _ = rows[0]
-    _, last_y, _, last_h = rows[-1]
-    return x, y, w, last_y + last_h - y, rows[1][1] - y
-
-
-def mount_scroll(page, document, events):
-    _, size, _ = SCROLL_LISTS[page]
-    x, y, w, h, pitch = list_geometry(page)
-    for name in ("vStartX", "vStartY", "vPriorX", "vPriorY", "vDragX", "vDragY", "vBlockTap"):
-        update_component(document, dict(variable(name), vscope=0))
+def mount_list(page, document, events):
+    _, size, _ = PAGED_LISTS[page]
+    retired = {"vStartX", "vStartY", "vPriorX", "vPriorY", "vDragX", "vDragY", "vBlockTap", "tcList", "tmDrag"}
+    document["component"] = [c for c in document["component"]
+                             if c["name"] not in retired and not c["name"].startswith("tRowData")]
     for i in range(size):
         update_component(document, dict(variable(f"tRowData{i}", "", 255), vscope=0))
-    update_component(document, dict(name="tcList", type="touch-capture", events=["down", "up"]))
-    update_component(document, dict(name="tmDrag", type="timer", tim=50, en=0, events=["timer"]))
     next(c for c in document["component"] if c["name"] == "tmPoll")["tim"] = LIST_TICK_MS
-    events[f"{page}.loadend"] += """
-tmDrag.en=0
-vBlockTap.val=0
-pInit.vTouchPhase.val=0
-pInit.vListBase.val=pInit.vOffset.val
-pInit.vListShift.val=0
-pInit.vListReuse.val=0
+    events[f"{page}.loadend"] += "\n" + "\n".join((
+        "pInit.vListBase.val=pInit.vOffset.val",
+        "pInit.vListDirty.val=1",
+        "pInit.vListReady.val=0",
+        hide("mPrevRows"), hide("mNextRows"),
+    ))
+    for name, condition, operator in (("mPrevRows", "pInit.vListBase.val>0", "-="),
+                                      ("mNextRows", "pInit.vListBase.val<pInit.vListMax.val", "+=")):
+        next(c for c in document["component"] if c["name"] == name)["events"] = ["up"]
+        events[name + ".up"] = branch(condition, f"""pInit.vListBase.val{operator}{size}
+pInit.vStep.val=1
 pInit.vListDirty.val=1
-pInit.vListReady.val=0"""
-    events["tcList.down"] = f"""if(pInit.vTouchPhase.val==2)
-{{
-pInit.vTap.val=0
-}}
-tmDrag.en=0
-pInit.vTouchPhase.val=0
-vBlockTap.val=0
-vStartX.val=tch0
-vStartY.val=tch1
-if(vStartX.val>={x}&&vStartX.val<{x+w+8}&&vStartY.val>={y}&&vStartY.val<{y+h})
-{{
-pInit.vTouchPhase.val=1
-vPriorX.val=tch2
-vPriorY.val=tch3
-vDragX.val=0
-vDragY.val=0
-tmDrag.en=1
-if(pInit.vListReady.val==0||pInit.vListShift.val!=0)
-{{
-vBlockTap.val=1
-}}
-}}"""
-    events["tcList.up"] = branch("pInit.vTouchPhase.val==1", "pInit.vTouchPhase.val=2")
-    shift = f"""pInit.vTemp.val=vDragY.val
-if(pInit.vTemp.val<0)
-{{
-pInit.vTemp.val*=-1
-}}
-if(pInit.vTemp.val>=22&&pInit.vTemp.val>vDragX.val)
-{{
-pInit.vTemp.val+={pitch//2}
-pInit.vTemp.val/={pitch}
-if(pInit.vTemp.val<1)
-{{
-pInit.vTemp.val=1
-}}
-if(vDragY.val>0)
-{{
-pInit.vListShift.val+=pInit.vTemp.val
-}}else
-{{
-pInit.vListShift.val-=pInit.vTemp.val
-}}
-vBlockTap.val=1
-}}"""
-    # Read the release position after the touch event returns. Keep the last live sample
-    # if the panel has not advanced its last-touch coordinates.
-    settled = branch("tch2!=vPriorX.val||tch3!=vPriorY.val",
-                     branch("tch2>=0&&tch2<480&&tch3>=0&&tch3<800", measure_drag("tch2", "tch3")))
-    finish = "\n".join([
-        "tmDrag.en=0", "pInit.vTouchPhase.val=0",
-        branch("tch0==0&&tch1==0", settled + "\n" + shift) + "\nelse\n{\nvBlockTap.val=1\n}",
-        branch("vBlockTap.val==1", "pInit.vTap.val=0"),
-    ])
-    held = branch("tch0!=0||tch1!=0", measure_drag("tch0", "tch1"))
-    events["tmDrag.timer"] = branch("pInit.vTouchPhase.val==1", held) + "\nelse\n{\n" + finish + "\n}"
+pInit.vListReady.val=0""")
 
 
-def measure_drag(x, y):
-    return f"""vDragX.val={x}-vStartX.val
-if(vDragX.val<0)
+def list_bounds(page):
+    _, size, total = PAGED_LISTS[page]
+    limit = f"""pInit.vListMax.val={total}-1
+if(pInit.vListMax.val<0)
 {{
-vDragX.val*=-1
+pInit.vListMax.val=0
 }}
-vDragY.val=vStartY.val-{y}
-if(vDragX.val>=16||vDragY.val>=16||vDragY.val<=-16)
-{{
-vBlockTap.val=1
-}}"""
-
-
-def scroll_bounds(page):
-    _, size, total = SCROLL_LISTS[page]
-    limit = f"pInit.vListMax.val={total}-{size}\n" + branch("pInit.vListMax.val<0", "pInit.vListMax.val=0")
+pInit.vListMax.val/={size}
+pInit.vListMax.val*={size}"""
     if page == "pHist":
-        # A successful lookahead proves there is a record at the next full-window start.
         limit += "\n" + branch(f"{total}<0", f"pInit.vListMax.val=pInit.vListBase.val+{size}")
     return limit
 
 
-def apply_scroll(page, first):
-    _, size, _ = SCROLL_LISTS[page]
-    cache = [f"tRowData{i}.txt" for i in range(size)]
-    forward = "\n".join(f"{dst}={src}" for dst, src in zip(cache, cache[1:]))
-    backward = "\n".join(f"{dst}={src}" for dst, src in zip(reversed(cache[1:]), reversed(cache[:-1])))
-    shift = f"""pInit.vListShift.val=pInit.vIndex.val-pInit.vListBase.val
-pInit.vListBase.val=pInit.vIndex.val
-pInit.vListReady.val=0
-pInit.vListDirty.val=1
-pInit.vListReuse.val=1
-pInit.vStep.val={first}
-if(pInit.vListShift.val>={size}||pInit.vListShift.val<=-{size})
-{{
-pInit.vListReuse.val=0
-}}else
-{{
-while(pInit.vListShift.val>0)
-{{
-{forward}
-{cache[-1]}=""
-pInit.vListShift.val-=1
-}}
-while(pInit.vListShift.val<0)
-{{
-{backward}
-{cache[0]}=""
-pInit.vListShift.val+=1
-}}
-}}"""
-    return branch("pInit.vTouchPhase.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val!=0", "\n".join([
-        scroll_bounds(page), "pInit.vIndex.val=pInit.vListBase.val+pInit.vListShift.val",
-        branch("pInit.vIndex.val<0", "pInit.vIndex.val=0"),
-        branch("pInit.vIndex.val>pInit.vListMax.val", "pInit.vIndex.val=pInit.vListMax.val"),
-        branch("pInit.vIndex.val!=pInit.vListBase.val", shift),
-        "pInit.vListShift.val=0",
-    ]))
-
-
 def stage_row(page, row):
-    _, size, _ = SCROLL_LISTS[page]
+    _, size, _ = PAGED_LISTS[page]
     lines = []
     if page == "pHist":
         lines += [f"pInit.vIndex.val=pInit.vListBase.val+{row}",
@@ -783,42 +675,18 @@ def stage_row(page, row):
 
 
 def read_visible_row(page, row, read):
-    _, size, total = SCROLL_LISTS[page]
+    _, size, total = PAGED_LISTS[page]
     index = f"pInit.vListBase.val+{row}"
     skip = "pInit.vStep.val+=1"
     cache = f"tRowData{row}.txt"
     empty = branch(f'{cache}!=""', f'{cache}=""\npInit.vListDirty.val=1') + "\n" if row < size else ""
-    if row < size:
-        read = branch(f'pInit.vListReuse.val==1&&tRowData{row}.txt!=""', skip) + "\nelse\n{\n" + read + "\n}"
     out_of_range = f"pInit.vIndex.val>={total}" if page != "pHist" else f"{total}>=0&&pInit.vIndex.val>{total}"
     return (f"pInit.vIndex.val={index}\n" + branch(out_of_range, empty + skip) +
             "\nelse\n{\n" + read + "\n}")
 
 
-def scroll_indicator(page, size, total):
-    x, y, w, h, _ = list_geometry(page)
-    x += w + 4
-    count = f"pInit.vIndex.val={total}"
-    if page == "pHist":
-        count += "\n" + branch("pInit.vIndex.val<0", f"pInit.vIndex.val=pInit.vOffset.val+{size+1}")
-    return "\n".join([crop(page, (x, y, 3, h)), count, branch(f"pInit.vIndex.val>{size}", f"""
-fill {x},{y},3,{h},{rgb565("#48525f")}
-pInit.vTemp.val={h*size}
-pInit.vTemp.val/=pInit.vIndex.val
-if(pInit.vTemp.val<20)
-{{
-pInit.vTemp.val=20
-}}
-pInit.vCount.val={h}-pInit.vTemp.val
-pInit.vCount.val*=pInit.vOffset.val
-pInit.vIndex.val-={size}
-pInit.vCount.val/=pInit.vIndex.val
-pInit.vCount.val+={y}
-fill {x},pInit.vCount.val,3,pInit.vTemp.val,{rgb565("#f39443")}""")])
-
-
 def paint_list(page, items):
-    source, size, total = SCROLL_LISTS[page]
+    source, size, total = PAGED_LISTS[page]
     lines = ["pInit.vOffset.val=pInit.vListBase.val"]
     for field, row, body in items:
         if field != source or row >= size:
@@ -829,16 +697,17 @@ def paint_list(page, items):
     if page == "pMatu":
         lines.append(lab_roster())
     elif page in ("pSaveB", "pSelB"):
-        lines.append(range_label(total, size))
         if page == "pSaveB":
             lines += ['tEmptyList.txt=""', branch(f"{total}==0", 'tEmptyList.txt="No saved baselines"'),
                       branch("pInit.vStorage.val!=0", 'tEmptyList.txt="Check the microSD card"'),
                       branch('tEmptyList.txt!=""', draw_value(page, "tEmptyList", "tEmptyList"))]
     elif page == "pHist":
         lines.append(history_state())
-    lines.append(scroll_indicator(page, size, total))
+    lines += [list_bounds(page),
+              visibility("mPrevRows", "pInit.vListBase.val>0"),
+              visibility("mNextRows", "pInit.vListBase.val<pInit.vListMax.val"),
+              range_label(total, size)]
     return branch("pInit.vListDirty.val==1", "\n".join(lines + ["pInit.vListDirty.val=0"])) + """
-pInit.vListReuse.val=0
 pInit.vListReady.val=1"""
 
 
@@ -904,7 +773,7 @@ pInit.vBusy.val=0
 
 def timer(page, pending=""):
     items = tasks(page)
-    source = SCROLL_LISTS[page][0] if page in SCROLL_LISTS else None
+    source = PAGED_LISTS[page][0] if page in PAGED_LISTS else None
     first = next((i for i, (field, _, _) in enumerate(items, 1) if field == source), 0)
     tick = LIST_TICK_MS if first else 250
     data_handlers = []
@@ -924,6 +793,28 @@ def timer(page, pending=""):
     if page == "pRT":
         action_ok += column("pInit.tSplit", 5, "pInit.tReq") + "\n" + branch('pInit.tSplit.txt=="CHECK_ADD"',
             'pInit.tMsg.txt="Day saved. Tap REAL TIME MONITORING."') + "\n"
+    action_error = error_message()
+    if page == "pMatu":
+        action_error += "\n" + column("pInit.tSplit", 5, "pInit.tReq") + "\n" + branch(
+            'pInit.tSplit.txt=="BASE_GENERATE"&&pInit.nAckCode.val==2', f'''pInit.tMsg.txt="Complete required fields and one lab row"
+if(pInit.nAckValue.val>0)
+{{
+pInit.vFocusFirst.val=0
+pInit.vFocusRow.val=pInit.nAckValue.val/2
+pInit.vListBase.val=pInit.vFocusRow.val-1
+pInit.vListBase.val/={LAB_ROWS}
+pInit.vListBase.val*={LAB_ROWS}
+pInit.vListDirty.val=1
+pInit.vListReady.val=0
+pInit.vTemp.val=pInit.nAckValue.val%2
+if(pInit.vTemp.val==0)
+{{
+pInit.tMsg.txt="Fill Temperature in the highlighted row"
+}}else
+{{
+pInit.tMsg.txt="Fill Fc Lab in the highlighted row"
+}}
+}}''')
     finish = '''pInit.vBusy.val=0
 pInit.vRetry.val=0
 if(pInit.nAckCode.val==4||pInit.nAckCode.val==8)
@@ -948,7 +839,7 @@ page pConfirm
 {
 if(pInit.nAckCode.val!=0)
 {
-''' + error_message() + '''
+''' + action_error + '''
 }else
 {
 ''' + action_ok + '''
@@ -997,10 +888,9 @@ pInit.tCommand.txt+=pInit.tNum.txt'''
         if field == source:
             read = read_visible_row(page, row, read)
             if i == first:
-                read = scroll_bounds(page) + "\n" + branch("pInit.vListBase.val>pInit.vListMax.val", """
+                read = list_bounds(page) + "\n" + branch("pInit.vListBase.val>pInit.vListMax.val", """
 pInit.vListBase.val=pInit.vListMax.val
 pInit.vListReady.val=0
-pInit.vListReuse.val=0
 pInit.vListDirty.val=1""".strip()) + "\n" + read
         requests.append(branch(f"pInit.vStep.val=={i}", read))
     pause = f'''pInit.vPoll.val+=1
@@ -1012,18 +902,15 @@ pInit.vStep.val=1
     if first:
         pause = paint_list(page, items) + "\n" + pause
         if page == "pHist":
-            pause = scroll_bounds(page) + "\n" + branch("pInit.vListBase.val>pInit.vListMax.val", f"""
+            pause = list_bounds(page) + "\n" + branch("pInit.vListBase.val>pInit.vListMax.val", f"""
 pInit.vListBase.val=pInit.vListMax.val
 pInit.vListReady.val=0
-pInit.vListReuse.val=0
 pInit.vListDirty.val=1
 pInit.vStep.val={first}""".strip()) + "\nelse\n{\n" + pause + "\n}"
     requests.append(branch(f"pInit.vStep.val>{len(items)}", pause))
     page_id = {"pPoints": 20, "pSchedule": 24}.get(page)
     if page_id is None:
         page_id = PAGES.index(page)
-    if first:
-        lines.append(branch(f"pInit.vBusy.val==0&&dp=={page_id}", apply_scroll(page, first)))
     if pending:
         lines.append(pending)
     lines.append(branch(f"pInit.vBusy.val==0&&dp=={page_id}", "\n".join(requests)))
@@ -1142,9 +1029,10 @@ vPos.val+=1
                    button("kCancel", "Cancel", 20, 725, 210, 54),
                    control("kSave", "Apply", 250, 725, 210, 54, primary=True)]
     if numeric:
-        components.append(button("kProbe", "Use probe", 320, 615, 140, 52))
+        components.append(button("kProbe", "SENSOR", 320, 615, 140, 52))
         load += "\n" + visibility("kProbe", 'pInit.vEditKind.val==1&&pInit.tField.txt=="temp"')
-        events["kProbe.up"] = editor_action(indexed_request("ROW_SENSOR", "pInit.vEditRow.val"))
+        events["kProbe.up"] = editor_action('tError.txt="Reading temperature..."\n' +
+                                             indexed_request("ROW_SENSOR", "pInit.vEditRow.val"))
     events[name + ".loadend"] = load
     events["kClear.up"] = branch("pInit.vBusy.val==0", 'tInput.txt=""\ntError.txt=""')
     events["kDel.up"] = branch("pInit.vBusy.val==0", '''strlen tInput.txt,vLen.val
@@ -1390,7 +1278,10 @@ def points_page():
         events[f"mGap{i}.up"] = 'pInit.tEdit.txt="0"\n' + edit_value(
             "gap", "pInit.tEdit", "Review interval, apply 0 to reconcile", 3,
             f"pInit.vOffset.val+{i}", limit=1, return_page=20)
-    page["component"].append(button("mBack", "Back", 20, 720, 440, 52))
+    page["component"].extend((button("mPrevRows", "<", 20, 646, 64, 50),
+                              label("tPageRows", "", 96, 658, 288, 26),
+                              button("mNextRows", ">", 396, 646, 64, 50),
+                              button("mBack", "Back", 20, 720, 440, 52)))
     events["mBack.up"] = "pInit.vOffset.val=0\npage pInit.vPage.val"
     return page, events
 
@@ -1615,16 +1506,9 @@ if(pInit.nAckValue.val>0&&pInit.nAckValue.val<=pInit.vIndex.val)
 {{
 pInit.vFocusFirst.val=0
 pInit.vFocusRow.val=pInit.nAckValue.val
-pInit.vTemp.val=pInit.vFocusRow.val-1
-if(pInit.vTemp.val<pInit.vOffset.val)
-{{
-pInit.vOffset.val=pInit.vTemp.val
-}}
-pInit.vIndex.val=pInit.vOffset.val+{LAB_ROWS}
-if(pInit.vTemp.val>=pInit.vIndex.val)
-{{
-pInit.vOffset.val=pInit.vTemp.val-{LAB_ROWS-1}
-}}
+pInit.vOffset.val=pInit.vFocusRow.val-1
+pInit.vOffset.val/={LAB_ROWS}
+pInit.vOffset.val*={LAB_ROWS}
 }}
 page pInit.vPage.val"""
     events = {
@@ -1664,21 +1548,10 @@ pInit.vFocusFirst.val=1
 }}"""
 
 
-def lab_sensor():
-    active = "pInit.vFocusId.val"
-    lines = [branch("pInit.vTotal.val==0&&pInit.vDraft.val>0",
-                    "pInit.vFocusFirst.val=1\n" + request("ROW_SENSOR|0"))]
-    for i in range(LAB_ROWS):
-        lines.append(branch(f"{active}>0&&{active}==pInit.vLab{i}.val",
-                            indexed_request("ROW_SENSOR", f"pInit.vOffset.val+{i}")))
-    lines.append(branch("pInit.vBusy.val==0", 'pInit.tMsg.txt="Select a temperature row first"'))
-    return "\n".join(lines)
-
-
 def reset_lab():
     return "\n".join([*(clear_row("pMatu", "labrow", i) for i in range(LAB_ROWS)),
                       "pInit.vDraft.val=0", "pInit.vLabSlots.val=-1", 'tPageRows.txt=""',
-                      *(hide(name) for name in ("mAddDay", "mSensor"))])
+                      hide("mAddDay")])
 
 
 def schedule_page():
@@ -1695,9 +1568,9 @@ def schedule_page():
     for prefix, title, x, width in (("Day", "Day", 30, 58), ("Hari", "Hari", 96, 82),
                                      ("Date", "Date", 184, 151), ("Tim", "Time", 343, 107)):
         page["component"].append(label("h" + prefix, title, x, 216, width, 45, font="NotoSans20"))
-        for i in range(LAB_ROWS):
+        for i in range(SCHEDULE_ROWS):
             page["component"].append(label(f"t{prefix}{i}", "", x, 269 + i * 66, width, 54, font="NotoSans20"))
-    refresh = "\n".join(clear_row(name, "labrow", i) for i in range(LAB_ROWS))
+    refresh = "\n".join(clear_row(name, "labrow", i) for i in range(SCHEDULE_ROWS))
     events = {
         name + ".loadend": """pInit.vBusy.val=0
 pInit.vStep.val=0
@@ -1798,17 +1671,17 @@ def main():
     documents = {name: tomllib.loads((SOURCE / "pages" / f"{name}.page.toml").read_text(encoding="utf-8"))
                  for name in PAGES}
     init = documents["pInit"]
-    retired = {"vHistory", "vHistoryNext", "vOldSlots"}
+    retired = {"vHistory", "vHistoryNext", "vOldSlots", "vTouchPhase", "vListReuse", "vListShift"}
     init["component"] = [component for component in init["component"] if component["name"] not in retired]
     scalars = ("vPage", "vTask", "vGet", "vOffset", "vTotal", "vIndex", "vPoll", "vIdentity",
                "vProtocolReady", "vSplashStage", "vStorage", "vMask", "vSensors", "vCount", "vRevision",
                "vToken", "vEditPage", "vEditKind", "vEditRow", "vEditView", "vEditBoot", "vInputMode",
                "vMax", "vTemp", "vInterval", "vBright", "vFlags", "vChosen", "vPairs", "vSavedCount",
-               "vRun", "vStatusReady", "vHistoryOffset", "vHistoryEnd", "vDraft",
+               "vRun", "vStatusReady", "vHistoryOffset", "vHistoryEnd", "vSavedOffset", "vSelectOffset", "vDraft",
                "vTap", "vTapBoot", "vTapView", "vTapId", "vDispatch",
                "vFocusId", "vFocusFirst", "vFocusRow", "vMatuOffset", "vLabSlots", "vCrop",
-               "vListBase", "vListShift", "vListReuse", "vListDirty", "vListReady", "vListMax", "vTouchPhase")
-    for name in (*scalars, *(f"vId{i}" for i in range(4)), *(f"vLab{i}" for i in range(LAB_ROWS))):
+               "vListBase", "vListDirty", "vListReady", "vListMax", "vSelectedModel")
+    for name in (*scalars, *(f"vId{i}" for i in range(SAVED_ROWS)), *(f"vLab{i}" for i in range(LAB_ROWS))):
         update_component(init, variable(name))
     for name, capacity in (("tField", 20), ("tTitle", 48), ("tCommand", 150), ("tDate", 10),
                            ("tTime", 8), ("tStatus", 255), ("tPlotFit", 96), ("tMsg", 96),
@@ -1861,9 +1734,20 @@ def main():
     }
     for index, name in enumerate(PAGES):
         page = documents[name]
-        reset_focus = "pInit.vFocusId.val=0\npInit.vFocusFirst.val=0\npInit.vFocusRow.val=0" if name == "pMatu" else ""
-        if name == "pHist":
-            reset_focus = branch("pInit.vPage.val==14", "pInit.vOffset.val=pInit.vHistoryOffset.val")
+        reset_focus = ""
+        if name == "pMatu":
+            reset_focus = branch("pInit.vPage.val==7", "pInit.vOffset.val=pInit.vMatuOffset.val") + """
+else
+{
+pInit.vFocusId.val=0
+pInit.vFocusFirst.val=0
+pInit.vFocusRow.val=0
+}"""
+        restored = {"pSaveB": (6, "vSavedOffset"), "pSelB": (11, "vSelectOffset"),
+                    "pHist": (14, "vHistoryOffset")}
+        if name in restored:
+            parent, offset = restored[name]
+            reset_focus = branch(f"pInit.vPage.val=={parent}", f"pInit.vOffset.val=pInit.{offset}.val")
         load = f"""if(pInit.vPage.val!={index})
 {{
 pInit.vOffset.val=0
@@ -1904,18 +1788,16 @@ tProgress.txt="0%"'''
             events["mBack.up"] = branch("pInit.vIdentity.val==1", request("NAV|2")) + "\nelse\n{\n" + request("NAV|1") + "\n}"
         if name == "pMatu":
             load += "\n" + reset_lab()
+            events["mGen.up"] = "pInit.vMatuOffset.val=pInit.vOffset.val\n" + events["mGen.up"]
             events["mBack.up"] = branch("pInit.vStatusReady.val==1",
                 'spstr pInit.tStatus.txt,pInit.tSplit.txt,"|",18\n' +
                 branch('pInit.tSplit.txt=="1"', request("NAV|8")) + "\nelse\n{\n" + request("NAV|5") + "\n}")
             add = branch("pInit.vDraft.val>0", "page pAddRow")
-            sensor = lab_sensor()
             events["mAddDay.up"] = add
             events["mInfo.up"] = branch("pInit.vDraft.val>0", """pInit.vMatuOffset.val=pInit.vOffset.val
 pInit.vOffset.val=0
 page pSchedule""")
             input_binding(page, "tPourTime", "pourClock", events, limit=8, title="Start time")
-            events["mSensor.up"] = sensor
-            keys["mSensor"] = "pInit.vFocusId.val"
             for i in range(LAB_ROWS):
                 row_id = f"pInit.vLab{i}.val"
                 events[f"mDelete{i}.up"] = branch(f"pInit.vTotal.val>3&&{row_id}>0",
@@ -1931,12 +1813,6 @@ page pSchedule""")
                         events[component + ".up"] += "\nelse\n{\n" + branch(
                             "pInit.vDraft.val>0&&pInit.vTotal.val==0", edit) + "\n}"
                     keys[component] = row_id
-                if i:
-                    for target, action in ((f"tDay{i}", add), (f"tTim{i}", add),
-                                           (f"tFc{i}", sensor), (f"tT{i}", sensor), (f"mDelete{i}", sensor)):
-                        key = target + ".up"
-                        events[key] = branch(f"pInit.vLabSlots.val=={i}", action) + \
-                                      "\nelse\n{\n" + events[key] + "\n}"
         if name == "pBaseR":
             load += ("\npInit.vRevision.val=0\nvPlotModel.val=0\nvPlotPhase.val=0\nvPlotAction.val=0\n" +
                      plot_begin(name))
@@ -1946,8 +1822,8 @@ page pSchedule""")
             events["mSave.up"] = indexed_request("RESULT_SAVE", "pInit.vRevision.val")
         if name in ("pSaveB", "pSelB"):
             load += "\npInit.vChosen.val=0\npInit.vSavedCount.val=0\n" + "\n".join(
-                clear_row(name, "savedrow", i) for i in range(4))
-            for i in range(4):
+                clear_row(name, "savedrow", i) for i in range(SAVED_ROWS))
+            for i in range(SAVED_ROWS):
                 row_id = f"pInit.vId{i}.val"
                 pick = f"mPick{i}"
                 events[pick + ".up"] = branch(f"{row_id}>0", indexed_request("BASE_PICK", row_id))
@@ -1960,14 +1836,16 @@ page pSchedule""")
                     events[delete + ".up"] = branch(f"{row_id}>0", indexed_request("BASE_DELETE", row_id))
                     keys[delete] = row_id
             if name == "pSaveB":
-                events["mSelect.up"] = branch("pInit.vChosen.val>0&&pInit.vSavedCount.val>0", request("BASE_OPEN")) + \
+                events["mSelect.up"] = branch("pInit.vChosen.val>0&&pInit.vSavedCount.val>0",
+                    "pInit.vSavedOffset.val=pInit.vOffset.val\n" + request("BASE_OPEN")) + \
                     '\nelse\n{\npInit.tMsg.txt="Select a baseline first"\n}'
                 keys["mSelect"] = "pInit.vChosen.val"
             else:
-                load += "\npInit.vRun.val=0\n" + hide("mResume")
-                events["mResume.up"] = branch("pInit.vRun.val>0", request("MEASURE_RESUME"))
+                load += "\npInit.vRun.val=0\npInit.vSelectedModel.val=0\n" + hide("mResume")
+                save_offset = "pInit.vSelectOffset.val=pInit.vOffset.val\n"
+                events["mResume.up"] = branch("pInit.vRun.val>0", save_offset + request("MEASURE_RESUME"))
                 events["mStart.up"] = start_hint("pInit.tMsg") + "\n" + branch(
-                    'pInit.vStatusReady.val==1&&pInit.tMsg.txt==""', request("MEASURE_START"))
+                    'pInit.vStatusReady.val==1&&pInit.tMsg.txt==""', save_offset + request("MEASURE_START"))
                 keys["mStart"] = "pInit.vChosen.val"
                 keys["mResume"] = "pInit.vRun.val"
         if name == "pHist":
@@ -1983,7 +1861,7 @@ page pSchedule""")
             events["mDetail.up"] = events["mHistory0.up"]
             keys["mDetail"] = keys["mHistory0"]
         if name == "pHistD":
-            load += "\n" + "\n".join(clear_row(name, "point", i) for i in range(SCROLL_LISTS[name][1]))
+            load += "\n" + "\n".join(clear_row(name, "point", i) for i in range(PAGED_LISTS[name][1]))
         if name == "pRT":
             events["mPoints.up"] = "pInit.vOffset.val=0\npage pPoints"
         if name == "pSet":
@@ -1995,26 +1873,28 @@ page pSchedule""")
                 continue
             component = next(c for c in page["component"] if c["name"] == component_name)
             component["events"] = ["up"]
-        list_actions = set(keys) if name in SCROLL_LISTS else set()
+        list_actions = set(keys) if name in PAGED_LISTS else set()
         if name == "pMatu":
             list_actions.add("mAddDay")
+        if name in PAGED_LISTS:
+            mount_list(name, page, events)
+            list_actions.update(("mPrevRows", "mNextRows"))
         pending = pending_actions(events, index, keys, list_actions) if name not in ("pInit", "pBaseR") else ""
-        if name in SCROLL_LISTS:
-            mount_scroll(name, page, events)
         events["tmPoll.timer"] = timer(name, pending)
         save_page(name, page, events)
 
     pages = local_pages()
     for name, (document, events) in pages.items():
         layout(name, document)
-        if name in SCROLL_LISTS:
+        if name in PAGED_LISTS:
             COMPONENT_NAMES[name] = {c["name"] for c in document["component"]}
             actions = set()
             if name == "pPoints":
                 actions = {key.split(".")[0] for key in events if key.endswith(".up") and key != "mBack.up"}
             keys = {name: "pInit.vOffset.val" for name in actions}
+            mount_list(name, document, events)
+            actions.update(("mPrevRows", "mNextRows"))
             pending = pending_actions(events, 20 if name == "pPoints" else 24, keys, actions)
-            mount_scroll(name, document, events)
             events["tmPoll.timer"] = timer(name, pending)
         save_page(name, document, events)
     app_path = SOURCE / "app.toml"
@@ -2033,5 +1913,7 @@ def local_pages():
 if __name__ == "__main__":
     if sys.argv[1:] == ["--local-layout"]:
         print(json.dumps({name: data["component"] for name, (data, _) in local_pages().items()}))
+    elif sys.argv[1:] == ["--list-sizes"]:
+        print(json.dumps({name: specs[1] for name, specs in PAGED_LISTS.items()}))
     else:
         main()

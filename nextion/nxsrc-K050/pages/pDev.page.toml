@@ -80,16 +80,16 @@ events = []
 
 [[component]]
 name = "tDevVersion"
-x = 124
-y = 348
-w = 276
-h = 15
+x = 126
+y = 413
+w = 99
+h = 20
 type = "text"
 sta = 0
 picc = "16_device_info"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 0
 ycen = 1
@@ -105,16 +105,16 @@ txt_maxl = 64
 
 [[component]]
 name = "tDevSensor"
-x = 124
-y = 450
-w = 276
-h = 15
+x = 126
+y = 521
+w = 99
+h = 40
 type = "text"
 sta = 0
 picc = "16_device_info"
 txt = ""
 txt_maxl = 64
-font = "NotoSans16"
+font = "NotoSans20"
 pco = "#ffffff"
 xcen = 0
 ycen = 1
@@ -131,7 +131,7 @@ txt_maxl = 64
 [[component]]
 name = "tDevStatus"
 x = 276
-y = 537
+y = 601
 w = 124
 h = 48
 type = "text"
@@ -150,7 +150,7 @@ events = [
 [[component]]
 name = "tDevHealth"
 x = 67
-y = 209
+y = 217
 w = 346
 h = 16
 type = "text"

@@ -462,7 +462,9 @@ Answer readView(View source, uint16_t index) {
       if (!engine.disk.at(base.rows, index, Kind::Row, row)) return absent();
       beginData();
       digits(row.id); sep(); scaled(row.day, 3); sep(); timestamp(forward(base.pour, row.age));
-      sep(); scaled(row.temperature, 5); sep(); scaled(row.fc, 5); sep(); digits(row.age);
+      sep(); scaled(row.temperature, 5); sep();
+      if (row.fc != PendingLabFc) scaled(row.fc, 5);
+      sep(); digits(row.age);
       finishData();
       return ok(base.rows.count);
     }
@@ -470,12 +472,18 @@ Answer readView(View source, uint16_t index) {
     case CurveView:
     case ScatterView: {
       Model model;
-      if (!base.model || !engine.disk.read(base.model, Kind::Model, model)) return absent();
+      if (base.model && !engine.disk.read(base.model, Kind::Model, model)) return absent();
+      if (!base.model && source != ModelView) return absent();
       if (source != ModelView) return chart(base, model, source, index);
       beginData();
-      real(model.fit.a, 4); sep(); real(model.fit.b, 4); sep(); real(model.fit.r2, 4);
-      sep(); digits(model.fit.count); sep(); digits(model.factors.count);
-      sep(); real(model.maxM, 0); sep(); identityData(base.identity);
+      if (base.model) {
+        real(model.fit.a, 4); sep(); real(model.fit.b, 4); sep(); real(model.fit.r2, 4);
+        sep(); digits(model.fit.count); sep(); digits(model.factors.count);
+        sep(); real(model.maxM, 0); sep();
+      } else {
+        flash(FSTR("||||||"));
+      }
+      identityData(base.identity);
       finishData();
       return ok(base.model);
     }
@@ -589,9 +597,13 @@ Answer execute(Verb verb, const char* const* args, uint8_t count) {
     case Lab:
     case Fill:
       return engine.addRows(verb != Lab, verb == Fill);
-    case Generate: return go(BaseResult, engine.generate());
+    case Generate: {
+      const Answer result = engine.generate();
+      if (result.error() == Error::Ok) preview = result.value();
+      return go(BaseResult, result);
+    }
     case BaseSave:
-      if (value == root.draft) {
+      if (value == preview && value == root.draft) {
         const Answer result = engine.saveBaseline(value);
         if (result.error() == Error::Ok) selected = result.value();
         return go(Saved, result);
@@ -600,6 +612,10 @@ Answer execute(Verb verb, const char* const* args, uint8_t count) {
     case Start:
       if (engine.disk.error() != Error::Ok) return bad(engine.disk.error());
       if (!selected) return bad(Error::State);
+      if (root.active) {
+        Baseline& base = engine.workingRecords().baseline;
+        if (!engine.baseline(selected, base) || !base.model) return bad(Error::NoFit);
+      }
       return root.active ? ask(verb, selected) : go(Realtime, engine.start(selected));
     case Resume:
       return root.active ? go(Realtime, ok(root.active)) : bad(Error::State);

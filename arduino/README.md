@@ -16,17 +16,18 @@ HEX lokal `arduino/out/ConMT-ATmega328P-ISP.hex` untuk unit yang diuji via Ardui
 | HEX dengan percobaan ulang mount microSD | 30.414 byte | 1.198 byte |
 | HEX dengan indikator baterai terkalibrasi | 30.698 byte | 1.204 byte |
 | HEX revisi HMI dan baris Day 0 | 30.616 byte | 1.204 byte |
-| **HEX entri harian dan fokus baris baru** | **30.694 byte** | **1.204 byte** |
+| HEX entri harian dan fokus baris baru | 30.694 byte | 1.204 byte |
+| **HEX untuk UI K050 terbaru dan baseline Draft** | **31.108 byte** | **1.204 byte** |
 
-Flash dihitung dari `.text + .data`. Profil Arduino menyediakan 32.256 byte sehingga tersisa 1.562 byte. Kapasitas fisik chip 32.768 byte. SRAM statis mencakup `.data`, `.bss`, dan `.noinit`. Tersedia 844 byte untuk stack dan interrupt.
+Flash dihitung dari `.text + .data`. Profil Arduino menyediakan 32.256 byte sehingga tersisa 1.148 byte. Kapasitas fisik chip 32.768 byte. SRAM statis mencakup `.data`, `.bss`, dan `.noinit`. Tersedia 844 byte untuk stack dan interrupt.
 
-Ukuran rilis berada 26 byte di bawah sasaran engineering 30.720 byte. Flag AVR GCC `-fno-tree-dominator-opts` menurunkan ukuran link penuh dengan profil aritmetika 32-bit yang sama.
+Ukuran build berada 388 byte di atas sasaran engineering 30.720 byte. Flag AVR GCC `-fno-tree-dominator-opts` menurunkan ukuran link penuh dengan profil aritmetika 32-bit yang sama.
 
 Perubahan source memakai satu buffer sektor SD untuk mengakses record jurnal, satu area kerja untuk snapshot sesi, dan satu root transaksi yang diterbitkan setelah commit. Pipeline build menggabungkan rangkaian instruksi AVR yang identik sebelum link akhir dengan target ATmega328P. Link akhir memakai batas memori MCU dan pemeriksaan kedua terhadap batas profil Arduino.
 
 ## Perilaku yang diterapkan
 
-- Identitas, draft persisten, nama/target/datum, resep material dan W/C, tabel lab, pembacaan sensor ke baris, jadwal, serta pengisian slot Day 0 dari 0–6 jam. Generate mengikat data lab, regresi, R², dan faktor koreksi ke satu versi. Simpan menerbitkan baseline dengan ID baru.
+- Identitas, draft persisten, nama/target/datum, resep material dan W/C, tabel lab, pembacaan sensor ke baris, jadwal, serta pengisian slot Day 0 dari 0–6 jam. Generate menampilkan hasil setelah satu baris lab lengkap terisi. Hasil tanpa koefisien disimpan sebagai Draft. Model memerlukan sedikitnya dua pasangan dengan M positif yang berbeda. Simpan menerbitkan baseline dengan ID baru.
 - START menyimpan baseline dan Day 0. Sesi memperoleh checkpoint dari suhu valid atau catatan manual operator. NEXT mengambil versi checkpoint terakhir dan SAVE RESULT menyimpan versi itu ke riwayat. Identitas, model, pengukuran, dan waktu tetap dapat dibuka setelah baseline dihapus dari daftar.
 - Pengaturan interval, AutoSave, kecerahan, dan buzzer dipersistkan. Interval standar 300 detik. Nilai 0 dan AutoSave mati menonaktifkan checkpoint periodik. Perintah manual tetap disimpan. Pada layar hasil, AutoSave dijeda selama koneksi panel aktif agar versi yang ditampilkan tetap sama. Jika frame berhenti selama 10 detik, pencatatan dapat berjalan lagi dan versi hasil yang sudah digantikan harus dibuka ulang.
 - Hari checkpoint sensor otomatis dihitung dari bagian bulat umur terhadap Day 0. Operator dapat mengubah label hari. Sesudah gangguan sensor, perubahan jam, atau reset saat sesi aktif, pembacaan sensor berikutnya menandai interval sebagai parsial dan integral melewati interval tersebut. Operator dapat merekonsiliasi data manual dengan meninjau titik batas dan menghapus tanda gap secara eksplisit.
@@ -46,6 +47,8 @@ Pemetaan berasal dari skema Maturity Control LCD rev. 1.0 di paket rencana lokal
 | Tegangan dan baterai | A0 | Vin memakai pembagi 3:1 dan kompensasi AVCC. Persentase baterai memakai kalibrasi ADC unit sebelumnya dengan ambang kehadiran 520, kosong 877, dan penuh 991. Pembacaan difilter dan perubahan persentase dikonfirmasi selama 100 sampel. [Bukti kalibrasi](../firmware/board-evidence/battery.json) |
 | Buzzer | D3 | Keluaran aktif tinggi selama 60 ms. Perlu uji jenis buzzer fisik. |
 | Kalender | Perintah `CLOCK_SET` | RTC cadangan daya belum terlihat pada skema. Waktu lokal harus disetel ulang setiap kali daya MCU terputus. |
+
+Bus suhu dipindai ulang setiap tiga detik di sela konversi. Kanal kosong dibatalkan saat probe dilepas. Penomoran sesuai jack fisik memerlukan jalur data yang bisa dibaca terpisah.
 
 ## Penyimpanan SD
 

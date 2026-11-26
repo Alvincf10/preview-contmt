@@ -56,18 +56,18 @@ void sampleBattery() {
 
 void discover() {
   uint8_t rom[8];
+  uint8_t count = 0;
+  uint8_t unchanged = 0;
   bus.reset_search();
-  while (bus.search(rom)) {
+  while (count < 3 && bus.search(rom)) {
     if (rom[0] != 0x28 || OneWire::crc8(rom, 7) != rom[7]) continue;
-    uint8_t freeSlot = 3;
-    bool known = false;
-    for (uint8_t i = 0; i < 3; ++i) {
-      if (!addresses[i][0] && freeSlot == 3) freeSlot = i;
-      if (!memcmp(addresses[i], rom, sizeof(rom))) known = true;
-    }
-    if (!known && freeSlot < 3) memcpy(addresses[freeSlot], rom, sizeof(rom));
-    if (freeSlot == 3) break;
+    if (!memcmp(addresses[count], rom, sizeof(rom))) unchanged |= 1 << count;
+    else memcpy(addresses[count], rom, sizeof(rom));
+    ++count;
   }
+  while (count < 3) addresses[count++][0] = 0;
+  readings.valid &= unchanged;
+  previous85 &= unchanged;
 }
 
 void convert() {
@@ -139,7 +139,7 @@ void poll() {
   }
   if (tick - sensorTime < 800) return;
   readSensors();
-  if (tick - searchTime >= 30000UL && (!addresses[0][0] || !addresses[1][0] || !addresses[2][0])) {
+  if (tick - searchTime >= 3000UL) {
     discover();
     searchTime = tick;
   }

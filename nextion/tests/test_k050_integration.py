@@ -15,6 +15,23 @@ import panel_arduino_test as api
 ROOT = Path(__file__).resolve().parents[2]
 api.SRC = ROOT / "nextion" / "nxsrc-K050"
 LAYOUT = json.loads((ROOT / "nextion/tools/k050_web_layout.json").read_text())["pages"]
+PAGED_IDS = {"6", "8", "10", "13", "14", "20", "24"}
+
+
+def check_touch_rectangles():
+    for page, artwork in LAYOUT.items():
+        document = tomllib.loads((api.SRC / "pages" / f"{page}.page.toml").read_text())
+        controls = {c["name"]: c for c in document["component"] if "up" in c.get("events", [])}
+        for name, control in controls.items():
+            rect = [control[axis] for axis in ("x", "y", "w", "h")]
+            assert rect == artwork["boxes"][name]["rect"], (page, name, rect)
+            _, _, w, h = rect
+            if name == "mClockBadge":
+                x, y, _, _ = rect
+                tx, ty, tw, th = artwork["boxes"]["tClock"]["rect"]
+                assert x + w == tx and y == ty and h == th
+                w += tw
+            assert w >= 44 and h >= 48, (page, name, rect)
 
 
 class Link:
@@ -66,7 +83,8 @@ class Link:
         for _ in range(limit):
             self.pump()
             if self.value("pInit.vBusy.val") == "0":
-                return
+                if self.value("dp") not in PAGED_IDS or self.value("pInit.vListReady.val") == "1":
+                    return
         raise AssertionError("Panel did not become idle")
 
     def tap(self, name):
@@ -79,41 +97,24 @@ class Link:
         if "error" in reply.lower():
             raise AssertionError(reply)
 
-    def swipe(self, page, pixels, component=None, *, before_move=0, before_release=0):
+    def tap_at(self, page, component, *, far_edge=False):
         self.wait_idle()
-        start = len(self.requests)
-        layout = LAYOUT[page]
-        if component:
-            rect = layout["boxes"][component]["rect"]
-        else:
-            regions = layout["regions"]
-            rows = regions.get("rows", regions.get("cards"))
-            rect = rows[-1 if pixels < 0 else 0]
-        x, y, w, h = rect
-        touch = {"simulation": self.panel.simulation}
-        assert self.panel.text("press", dict(touch, x=x + w // 2, y=y + h // 2)) == "Pressed."
-        if before_move:
-            self.panel.wait(before_move)
-        assert self.panel.text("move", dict(touch, x=x + w // 2, y=y + h // 2 + pixels)) == "Moved."
-        if before_release:
-            self.panel.wait(before_release)
-        assert self.panel.text("release", touch) == "Released."
+        x, y, w, h = LAYOUT[page]["boxes"][component]["rect"]
+        touch = {"simulation": self.panel.simulation, "x": x + (w - 3 if far_edge else 2),
+                 "y": y + (h - 3 if far_edge else 2)}
+        reply = self.panel.text("tap", touch)
+        assert "error" not in reply.lower(), (page, component, reply)
         self.wait_idle()
-        return self.requests[start:]
 
-    def lab_action(self, *, sensor=False):
-        self.wait_idle()
-        slots = int(self.value("pInit.vLabSlots.val"))
-        if slots == 5:
-            self.tap("mSensor" if sensor else "mAddDay")
-            return
-        lab = LAYOUT["pMatu"]
-        _, y, _, h = lab["regions"]["rows"][slots]
-        x, _, w, button_height = lab["boxes"]["mSensor" if sensor else "mAddDay"]["rect"]
-        reply = self.panel.text("tap", {"simulation": self.panel.simulation,
-                                       "x": x + w // 2, "y": y + min(h, button_height) // 2})
-        assert "error" not in reply.lower(), reply
-        self.pump(2)
+    def probe_into(self, slot, *, far_edge=False):
+        self.tap_at("pMatu", f"tT{slot}", far_edge=far_edge)
+        assert self.value("pInit.tField.txt") == "temp"
+        self.tap_at("pNumber", "kProbe", far_edge=far_edge)
+
+    def turn_page(self, page, offset, direction="next"):
+        self.tap_at(page, "mNextRows" if direction == "next" else "mPrevRows",
+                    far_edge=direction == "next")
+        assert self.value("pInit.vOffset.val") == str(offset), (page, self.value("tPageRows.txt"))
 
     def tap_during_read(self, name):
         for _ in range(30):
@@ -204,7 +205,7 @@ def check_startup_with_missing_peripherals(executable):
         assert link.value("pInit.vPage.val") == "6"
         assert link.value("pInit.vLabSlots.val") == "1"
         assert link.value("tDay0.txt") == "0" and link.value("tT0.txt") == ""
-        link.lab_action()
+        link.tap_at("pMatu", "mAddDay")
         link.tap("mLab")
         link.wait_idle()
         assert link.value("pInit.vLabSlots.val") == "2"
@@ -215,10 +216,12 @@ def check_startup_with_missing_peripherals(executable):
         link.tap("mGen")
         link.wait_idle()
         assert link.value("pInit.vPage.val") == "6"
-        link.lab_action(sensor=True)
+        link.probe_into(1)
         link.wait_idle()
         assert any(frame.endswith("|ROW_SENSOR|1") for frame in link.requests)
-        assert "Connect a temperature probe" in link.value("tNotice.txt")
+        assert "Connect a temperature probe" in link.value("tError.txt")
+        link.tap("kCancel")
+        link.wait_idle()
         assert link.value("tT1.txt") == ""
     finally:
         link.close()
@@ -232,40 +235,38 @@ def check_long_lists(executable):
         link.tap("mBase")
         link.tap("mSaved")
         link.wait_idle()
-        assert [link.value(f"tName{i}.txt") for i in range(4)] == [
-            f"Scroll baseline {i}" for i in (6, 5, 4, 3)]
-        frames = link.swipe("pSaveB", -110, "mPick3")
-        assert not any("|BASE_PICK|" in frame for frame in frames)
-        assert link.value("pInit.vOffset.val") == "1"
-        link.swipe("pSaveB", -380, "mDelete3")
-        assert link.value("pInit.vOffset.val") == "2"
-        assert link.value("tName3.txt") == "Scroll baseline 1"
-        link.tap("mPick3")
+        assert [link.value(f"tName{i}.txt") for i in range(3)] == [
+            f"Scroll baseline {i}" for i in (6, 5, 4)]
+        link.turn_page("pSaveB", 3)
+        assert link.value("tName2.txt") == "Scroll baseline 1"
+        cursor = len(link.requests)
+        link.tap_at("pSaveB", "mPickTag2", far_edge=True)
         link.wait_idle()
-        assert link.value("pInit.vChosen.val") == link.value("pInit.vId3.val")
+        assert link.value("pInit.vChosen.val") == link.value("pInit.vId2.val")
+        assert not any("|BASE_DELETE|" in frame for frame in link.requests[cursor:])
+        link.tap_at("pSaveB", "mDelete2", far_edge=True)
+        assert link.value("tTitle.txt") == "Confirm change"
+        link.tap("mNo")
+        link.wait_idle()
+        assert link.value("pInit.vOffset.val") == "3"
         link.tap("mBack")
         link.tap("mBack")
         link.tap("mKuat")
         link.tap("mStart")
         link.wait_idle()
-        link.swipe("pSelB", -160)
-        assert link.value("pInit.vOffset.val") == "2"
-        assert link.value("tName3.txt") == "Scroll baseline 1"
+        link.turn_page("pSelB", 3)
+        assert link.value("tName2.txt") == "Scroll baseline 1"
         link.tap("mResume")
         link.tap("mPoints")
         link.wait_idle()
         assert link.value("tDay0.txt") == "0"
-        frames = link.swipe("pPoints", -155, "tTemp5")
-        assert not any("|CHECK_SET|" in frame for frame in frames)
-        assert link.value("pInit.vOffset.val") == "2"
-        assert link.value("tDay0.txt") == "2" and link.value("tDay5.txt") == "7"
-        link.swipe("pPoints", -80)
-        assert link.value("pInit.vOffset.val") == "3" and link.value("tDay5.txt") == "8"
-        link.tap("tTemp5")
+        link.turn_page("pPoints", 6)
+        assert link.value("tDay0.txt") == "6" and link.value("tDay2.txt") == "8"
+        link.tap_at("pPoints", "tTemp2", far_edge=True)
         assert link.value("pInit.vEditRow.val") == "8"
         link.tap("kCancel")
         link.wait_idle()
-        assert link.value("pInit.vOffset.val") == "3"
+        assert link.value("pInit.vOffset.val") == "6"
         link.tap("mBack")
         link.tap("mBack")
         link.tap("mBack")
@@ -273,33 +274,86 @@ def check_long_lists(executable):
         link.wait_idle()
         assert [link.value(f"tName{i}.txt") for i in range(3)] == [
             f"Scroll baseline {i}" for i in (6, 5, 4)]
-        frames = link.swipe("pHist", -270, "mHistory2")
-        assert not any("|HISTORY_PICK|" in frame for frame in frames)
-        assert link.value("pInit.vOffset.val") == "2"
+        link.turn_page("pHist", 3)
         chosen = link.value("tId2.txt")
-        assert link.value("tName2.txt") == "Scroll baseline 2"
-        link.tap("mHistory2")
+        assert link.value("tName2.txt") == "Scroll baseline 1"
+        link.tap_at("pHist", "mHistory2", far_edge=True)
         link.wait_idle()
         assert link.value("pInit.vPage.val") == "14" and link.value("tId.txt") == chosen
-        link.swipe("pHistD", -95)
-        assert link.value("pInit.vOffset.val") == "2"
-        assert link.value("tLog0.txt").startswith("Day 2 ")
-        link.swipe("pHistD", -190)
-        assert link.value("tLog4.txt").startswith("Day 8 ")
+        detail_size = len(LAYOUT["pHistD"]["regions"]["rows"])
+        link.turn_page("pHistD", detail_size)
+        assert link.value("tLog0.txt").startswith(f"Day {detail_size} ")
+        link.turn_page("pHistD", 2 * detail_size)
+        assert link.value(f"tLog{8 - 2 * detail_size}.txt").startswith("Day 8 ")
         link.tap("mBack")
         link.wait_idle()
-        assert link.value("pInit.vOffset.val") == "2" and link.value("tId2.txt") == chosen
-        link.swipe("pHist", -250)
-        assert link.value("pInit.vOffset.val") == "3"
-        assert link.value("tName2.txt") == "Scroll baseline 1"
-        link.swipe("pHist", 400)
-        assert link.value("pInit.vOffset.val") == "0"
+        assert link.value("pInit.vOffset.val") == "3" and link.value("tId2.txt") == chosen
+        link.turn_page("pHist", 0, "prev")
+    finally:
+        link.close()
+
+
+def check_one_row_draft(executable):
+    link = Link(executable)
+    try:
+        link.pump(24)
+        link.edit("tOp", "OP-1")
+        link.edit("tProj", "DAILY TEST")
+        link.edit("tDate", "24-11-2026")
+        for button in ("mSave", "mBase", "mNew"):
+            link.tap(button)
+        link.edit("tName", "DAILY DRAFT")
+        link.edit("tFc", "35")
+        link.edit("tTemp", "-20")
+        link.tap("mNext")
+        link.tap("mNext")
+        link.wait_idle()
+        assert link.value("pInit.vLabSlots.val") == "1"
+        link.edit("tPourTime", "09:00:00")
+        link.tap_at("pMatu", "mGen", far_edge=True)
+        assert "one lab row" in link.value("tNotice.txt")
+        link.edit("tFc0", "14.86")
+        link.tap_at("pMatu", "mGen")
+        assert "Fill Temperature" in link.value("tNotice.txt")
+        assert link.value("pInit.vPage.val") == "6"
+        link.edit("tT0", "29.46")
+        link.tap_at("pMatu", "mGen", far_edge=True)
+        link.pump(6)
+        assert link.value("pInit.vPage.val") == "7"
+        assert link.value("tEq.txt") == "Draft. Add more lab data for a fit."
+        assert link.value("tA.txt") == "-"
+        link.tap_at("pBaseR", "mSave", far_edge=True)
+        assert link.value("pInit.vPage.val") == "8"
+        assert "Draft" in link.value("tSavedDate0.txt")
+        link.tap("mBack")
+        link.tap("mBack")
+        link.tap("mKuat")
+        link.tap("mStart")
+        link.tap_at("pSelB", "mPick0", far_edge=True)
+        start = len(link.requests)
+        link.tap_at("pSelB", "mStart")
+        assert link.value("pInit.vPage.val") == "10"
+        assert "Complete this draft" in link.value("tStartHint.txt")
+        assert not any(frame.endswith("|MEASURE_START") for frame in link.requests[start:])
+        link.core("!RESET")
+        link.pump(40)
+        for button in ("mSave", "mBase", "mSaved"):
+            link.tap(button)
+        link.wait_idle()
+        assert "Draft" in link.value("tSavedDate0.txt")
+        link.tap_at("pSaveB", "mPick0")
+        link.tap_at("pSaveB", "mSelect")
+        assert link.value("pInit.vPage.val") == "6"
+        assert link.value("tFc0.txt") == "14.86"
+        assert link.value("tT0.txt") == "29.46"
     finally:
         link.close()
 
 
 def main(executable):
+    check_touch_rectangles()
     check_startup_with_missing_peripherals(executable)
+    check_one_row_draft(executable)
     link = Link(executable)
     try:
         init = tomllib.loads((api.SRC / "pages/pInit.page.toml").read_text(encoding="utf-8"))
@@ -319,7 +373,7 @@ def main(executable):
         assert "tLastT" not in {c["name"] for c in detail["component"]}
         matu = tomllib.loads((api.SRC / "pages/pMatu.page.toml").read_text(encoding="utf-8"))
         matu_names = {c["name"] for c in matu["component"]}
-        assert not ({"mAddEarly", "mFillEarly"} & matu_names)
+        assert not ({"mAddEarly", "mFillEarly", "mSensor"} & matu_names)
         assert (api.SRC / "pages/pAddRow.page.toml").exists()
         rt = tomllib.loads((api.SRC / "pages/pRT.page.toml").read_text(encoding="utf-8"))
         assert next(c for c in rt["component"] if c["name"] == "mAddCheck")["h"] >= 48
@@ -452,7 +506,7 @@ def main(executable):
         assert link.value("pInit.vTotal.val") == "0"
         assert link.value("tDay0.txt") == "0"
         assert link.value("tTim0.txt") == "12:01"
-        link.lab_action(sensor=True)
+        link.probe_into(0)
         link.wait_idle()
         assert any(frame.endswith("|ROW_SENSOR|0") for frame in link.requests)
         assert link.value("pInit.vTotal.val") == "1"
@@ -474,16 +528,16 @@ def main(executable):
         assert link.value("tDate1.txt") == ""
         link.tap("mClose")
         link.wait_idle()
-        link.lab_action()
+        link.tap_at("pMatu", "mAddDay", far_edge=True)
         link.wait_idle()
         link.tap("mLab")
         link.wait_idle()
         assert link.value("pInit.vFocusId.val") == link.value("pInit.vLab1.val")
-        link.lab_action(sensor=True)
+        link.probe_into(1, far_edge=True)
         link.wait_idle()
         assert any(frame.endswith("|ROW_SENSOR|1") for frame in link.requests)
         assert float(link.value("tT1.txt")) == 26
-        link.lab_action()
+        link.tap_at("pMatu", "mAddDay")
         link.wait_idle()
         link.tap("mLab")
         link.wait_idle()
@@ -491,56 +545,50 @@ def main(executable):
             link.edit(f"tT{i}", "26")
         link.edit("tFc1", "10")
         link.edit("tFc2", "20")
-        link.lab_action()
-        link.wait_idle()
-        link.tap("mLab")
-        link.wait_idle()
-        for i in range(2):
-            link.lab_action()
+        for _ in range(3):
+            link.tap_at("pMatu", "mAddDay")
             link.wait_idle()
             link.tap("mLab")
             link.wait_idle()
         assert link.value("pInit.vTotal.val") == "6"
-        assert link.value("pInit.vOffset.val") == "1"
-        assert link.value("pInit.vFocusId.val") == link.value("pInit.vLab4.val")
-        link.swipe("pMatu", 52, "tT0")
-        assert link.value("pInit.vOffset.val") == "0"
-        for i in (3, 4):
-            link.edit(f"tT{i}", "26")
-        frames = link.swipe("pMatu", -44, "mDelete4", before_release=10)
-        assert not any("|ROW_DELETE|" in frame for frame in frames)
-        assert link.value("pInit.vOffset.val") == "1" and link.value("pInit.vLabSlots.val") == "5"
-        assert [link.value(f"tDay{i}.txt") for i in range(5)] == ["1", "2", "3", "4", "5"]
-        assert any(frame.endswith("|GET|labrow|5") for frame in frames)
-        link.swipe("pMatu", 52, "tT0")
-        assert link.value("pInit.vOffset.val") == "0"
-        link.swipe("pMatu", -90, "tFc4", before_move=110, before_release=10)
-        assert link.value("pInit.vOffset.val") == "1"
-        assert link.value("tDay0.txt") == "1"
-        link.tap("mInfo")
+        assert link.value("pInit.vOffset.val") == "4"
+        assert link.value("pInit.vFocusId.val") == link.value("pInit.vLab1.val")
+        link.turn_page("pMatu", 0, "prev")
+        assert [link.value(f"tDay{i}.txt") for i in range(4)] == ["0", "1", "2", "3"]
+        cursor = len(link.requests)
+        link.turn_page("pMatu", 4)
+        assert not any("|ROW_DELETE|" in frame for frame in link.requests[cursor:])
+        assert link.value("pInit.vLabSlots.val") == "2"
+        assert link.value("tDay0.txt") == "4" and link.value("tDay1.txt") == "5"
+        link.tap_at("pMatu", "mInfo", far_edge=True)
         link.wait_idle()
         assert link.value("pInit.vOffset.val") == "0"
-        link.swipe("pSchedule", -44)
-        assert link.value("tDay0.txt") == "1"
-        assert link.value("tDay4.txt") == "5"
-        link.swipe("pSchedule", -44)
-        assert link.value("tDay4.txt") == "5"
-        link.swipe("pSchedule", 44, before_release=65)
+        link.turn_page("pSchedule", 5)
+        assert link.value("tDay0.txt") == "5"
+        assert link.value("tDay1.txt") == ""
+        link.turn_page("pSchedule", 0, "prev")
         assert link.value("tDay0.txt") == "0"
         link.tap("mClose")
         link.wait_idle()
-        assert link.value("pInit.vOffset.val") == "1"
-        link.tap("tT4")
+        assert link.value("pInit.vOffset.val") == "4"
+        link.tap_at("pMatu", "tT1", far_edge=True)
         link.tap("kCancel")
         link.wait_idle()
-        assert link.value("pInit.vOffset.val") == "1"
-        link.lab_action(sensor=True)
+        assert link.value("pInit.vOffset.val") == "4"
+        link.probe_into(1)
         link.wait_idle()
         assert any(frame.endswith("|ROW_SENSOR|5") for frame in link.requests)
-        assert float(link.value("tT4.txt")) == 26
-        link.swipe("pMatu", 52, "tT0")
-        assert link.value("pInit.vOffset.val") == "0"
-        link.tap("mDelete3")
+        assert float(link.value("tT1.txt")) == 26
+        link.turn_page("pMatu", 0, "prev")
+        link.tap_at("pMatu", "mGen", far_edge=True)
+        assert link.value("pInit.vOffset.val") == "4"
+        assert "Fill Fc Lab" in link.value("tNotice.txt")
+        assert link.value("pInit.vFocusId.val") == link.value("pInit.vLab1.val")
+        link.edit("tFc1", "0")
+        link.edit("tT0", "26")
+        link.edit("tFc0", "0")
+        link.turn_page("pMatu", 0, "prev")
+        link.tap_at("pMatu", "mDelete3", far_edge=True)
         link.wait_idle()
         assert link.value("tTitle.txt") == "Confirm change"
         link.tap("mYes")
@@ -657,5 +705,5 @@ if __name__ == "__main__":
     executable = Path(sys.argv[1]).resolve()
     main(executable)
     check_long_lists(executable)
-    print(json.dumps(dict(status="PASS", scroll_pages=["pMatu", "pSchedule", "pSaveB", "pSelB",
-                                                       "pPoints", "pHist", "pHistD"])), flush=True)
+    print(json.dumps(dict(status="PASS", paged_lists=["pMatu", "pSchedule", "pSaveB", "pSelB",
+                                                      "pPoints", "pHist", "pHistD"])), flush=True)

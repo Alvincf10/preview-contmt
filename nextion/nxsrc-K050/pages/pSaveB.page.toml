@@ -138,95 +138,36 @@ txt = ""
 txt_maxl = 24
 
 [[component]]
-name = "vStartX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vStartY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vDragY"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vBlockTap"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "tRowData0"
+name = "tName3"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 255
+txt_maxl = 64
 
 [[component]]
-name = "tRowData1"
+name = "tVal3"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 255
+txt_maxl = 64
 
 [[component]]
-name = "tRowData2"
+name = "tDatum3"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 255
+txt_maxl = 64
 
 [[component]]
-name = "tRowData3"
+name = "tSavedDate3"
 type = "variable"
 vscope = 0
 sta = 1
 txt = ""
-txt_maxl = 255
-
-[[component]]
-name = "tcList"
-type = "touch-capture"
-events = [
-    "down",
-    "up",
-]
-
-[[component]]
-name = "tmDrag"
-type = "timer"
-tim = 50
-en = 0
-events = [
-    "timer",
-]
-
-[[component]]
-name = "vPriorX"
-type = "variable"
-vscope = 0
-val = 0
-
-[[component]]
-name = "vPriorY"
-type = "variable"
-vscope = 0
-val = 0
+txt_maxl = 64
 
 [[component]]
 name = "tClock"
@@ -273,6 +214,61 @@ sta = 0
 picc = "08_saved_baseline"
 txt = ""
 txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "mPrevRows"
+x = 67
+y = 630
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "08_saved_baseline_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "mNextRows"
+x = 349
+y = 630
+w = 64
+h = 50
+type = "text"
+sta = 0
+picc = "08_saved_baseline_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "tPageRows"
+x = 139
+y = 642
+w = 202
+h = 26
+type = "text"
+sta = 0
+picc = "08_saved_baseline"
+txt = ""
+txt_maxl = 64
 font = "NotoSans16"
 pco = "#ffffff"
 xcen = 1
@@ -376,38 +372,6 @@ txt = ""
 txt_maxl = 64
 
 [[component]]
-name = "tName3"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 64
-
-[[component]]
-name = "tVal3"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 64
-
-[[component]]
-name = "tDatum3"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 64
-
-[[component]]
-name = "tSavedDate3"
-type = "variable"
-vscope = 0
-sta = 1
-txt = ""
-txt_maxl = 64
-
-[[component]]
 name = "tEmptyList"
 type = "variable"
 vscope = 0
@@ -416,28 +380,35 @@ txt = ""
 txt_maxl = 64
 
 [[component]]
-name = "tPageRows"
-x = 206
-y = 762
-w = 68
-h = 13
-type = "text"
-sta = 0
-picc = "08_saved_baseline"
+name = "tRowData0"
+type = "variable"
+vscope = 0
+sta = 1
 txt = ""
-txt_maxl = 64
-font = "NotoSans16"
-pco = "#ffffff"
-xcen = 1
-ycen = 1
-events = []
+txt_maxl = 255
+
+[[component]]
+name = "tRowData1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
 
 [[component]]
 name = "mPick0"
 x = 67
-y = 236
-w = 281
-h = 95
+y = 196
+w = 287
+h = 136
 type = "hotspot"
 events = [
     "up",
@@ -445,10 +416,10 @@ events = [
 
 [[component]]
 name = "mPickTag0"
-x = 348
-y = 236
-w = 65
-h = 38
+x = 354
+y = 252
+w = 59
+h = 80
 type = "hotspot"
 events = [
     "up",
@@ -456,10 +427,10 @@ events = [
 
 [[component]]
 name = "mDelete0"
-x = 348
-y = 274
-w = 65
-h = 57
+x = 354
+y = 204
+w = 48
+h = 48
 type = "hotspot"
 events = [
     "up",
@@ -468,9 +439,9 @@ events = [
 [[component]]
 name = "mPick1"
 x = 67
-y = 339
-w = 281
-h = 95
+y = 340
+w = 287
+h = 138
 type = "hotspot"
 events = [
     "up",
@@ -478,10 +449,10 @@ events = [
 
 [[component]]
 name = "mPickTag1"
-x = 348
-y = 339
-w = 65
-h = 38
+x = 354
+y = 397
+w = 59
+h = 81
 type = "hotspot"
 events = [
     "up",
@@ -489,10 +460,10 @@ events = [
 
 [[component]]
 name = "mDelete1"
-x = 348
-y = 377
-w = 65
-h = 57
+x = 354
+y = 349
+w = 48
+h = 48
 type = "hotspot"
 events = [
     "up",
@@ -501,9 +472,9 @@ events = [
 [[component]]
 name = "mPick2"
 x = 67
-y = 442
-w = 281
-h = 95
+y = 486
+w = 287
+h = 136
 type = "hotspot"
 events = [
     "up",
@@ -511,10 +482,10 @@ events = [
 
 [[component]]
 name = "mPickTag2"
-x = 348
-y = 442
-w = 65
-h = 38
+x = 354
+y = 542
+w = 59
+h = 80
 type = "hotspot"
 events = [
     "up",
@@ -522,43 +493,10 @@ events = [
 
 [[component]]
 name = "mDelete2"
-x = 348
-y = 480
-w = 65
-h = 57
-type = "hotspot"
-events = [
-    "up",
-]
-
-[[component]]
-name = "mPick3"
-x = 67
-y = 545
-w = 281
-h = 95
-type = "hotspot"
-events = [
-    "up",
-]
-
-[[component]]
-name = "mPickTag3"
-x = 348
-y = 545
-w = 65
-h = 38
-type = "hotspot"
-events = [
-    "up",
-]
-
-[[component]]
-name = "mDelete3"
-x = 348
-y = 583
-w = 65
-h = 57
+x = 354
+y = 494
+w = 48
+h = 48
 type = "hotspot"
 events = [
     "up",
@@ -567,9 +505,9 @@ events = [
 [[component]]
 name = "mBack"
 x = 67
-y = 662
+y = 699
 w = 143
-h = 52
+h = 60
 type = "hotspot"
 events = [
     "up",
@@ -578,9 +516,9 @@ events = [
 [[component]]
 name = "mSelect"
 x = 220
-y = 662
+y = 699
 w = 193
-h = 52
+h = 60
 type = "hotspot"
 events = [
     "up",
