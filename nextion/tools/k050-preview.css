@@ -1,0 +1,393 @@
+.phone.k050-export .size-badge {
+  display: none;
+}
+
+.phone.k050-export * {
+  scrollbar-width: none;
+}
+
+.k050-export .k050-value {
+  visibility: hidden;
+}
+
+.k050-export :is(input, select).k050-value {
+  visibility: visible;
+  color: transparent;
+}
+
+.k050-export input.k050-value::placeholder {
+  color: transparent;
+}
+
+.k050-export input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+.k050-export .status-corners {
+  right: 14px;
+  left: 14px;
+  height: 48px;
+}
+
+.k050-export .status-corners :is(.status-clock, .status-batt) {
+  height: 48px;
+}
+
+.k050-export .status-corners :is(.status-clock-ico, .status-batt-ico) {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+}
+
+.k050-export .status-clock {
+  width: 119px;
+}
+
+.k050-export .status-batt {
+  width: 108px;
+}
+
+.k050-export .status-clock-value,
+.k050-export .status-batt-pct {
+  flex: 1;
+  text-align: center;
+}
+
+.k050-export[data-k050-page="pUser"] .text-input {
+  min-height: 52px;
+}
+
+.k050-export .k050-start-hint {
+  height: 30px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.k050-export[data-k050-page="pMat"] .stack {
+  gap: 4px;
+}
+
+.k050-export[data-k050-page="pMat"] .sep {
+  margin-block: 2px;
+}
+
+.k050-export[data-k050-page="pMat"] .admix-row {
+  grid-template-columns: 98px 87px 35px minmax(0, 1fr);
+}
+
+.k050-export[data-k050-page="pMat"] .row-unit.tight {
+  grid-template-columns: minmax(48px, 1fr) 31px;
+  gap: 5px;
+}
+
+.k050-export[data-k050-page="pMatu"] .stage {
+  align-items: stretch;
+}
+
+.k050-export[data-k050-page="pMatu"] .panel-head {
+  padding-top: 9px;
+  padding-bottom: 4px;
+}
+
+.k050-export[data-k050-page="pMatu"] .panel-body {
+  padding-top: 4px;
+}
+
+.k050-export[data-k050-page="pMatu"] .stack {
+  gap: 5px;
+}
+
+.k050-export[data-k050-page="pMatu"] :is(.maturity-table th, .maturity-table td):nth-child(1) {
+  width: 16%;
+}
+
+.k050-export[data-k050-page="pMatu"] :is(.maturity-table th, .maturity-table td):nth-child(2) {
+  width: 22%;
+}
+
+.k050-export[data-k050-page="pMatu"] :is(.maturity-table th, .maturity-table td):nth-child(3) {
+  width: 21%;
+}
+
+.k050-export[data-k050-page="pMatu"] :is(.maturity-table th, .maturity-table td):nth-child(4) {
+  width: 27%;
+}
+
+.k050-export[data-k050-page="pMatu"] .maturity-table td {
+  padding: 2px;
+}
+
+.k050-export[data-k050-page="pMatu"] .maturity-table th {
+  padding-block: 5px;
+}
+
+.k050-export[data-k050-page="pMatu"] .maturity-table input,
+.k050-export[data-k050-page="pMatu"] .maturity-table .row-del {
+  height: 52px;
+}
+
+.k050-export[data-k050-page="pMatu"] .maturity-actions {
+  grid-template-columns: calc(38% - 4px) 1fr;
+  gap: 8px;
+}
+
+.k050-export[data-k050-page="pMatu"] .info-box {
+  padding: 4px 10px;
+}
+
+.k050-export[data-k050-page="pMatu"] .info-box p {
+  display: none;
+}
+
+.k050-export[data-k050-page="pMatu"] .pour-clock-input {
+  width: 86px;
+  height: 48px;
+}
+
+.k050-export[data-k050-page="pBaseR"] .br-card {
+  padding: 6px 10px;
+  gap: 4px;
+}
+
+.k050-export[data-k050-page="pBaseR"] .br-cards {
+  gap: 8px;
+}
+
+.k050-export[data-k050-page="pBaseR"] .br-kv {
+  padding-block: 1px;
+}
+
+.k050-export[data-k050-page="pBaseR"] .br-inner-chart .chart {
+  height: 145px;
+}
+
+.k050-export[data-k050-page="pBaseR"] .br-equation {
+  padding-block: 6px;
+}
+
+.k050-export[data-k050-page="pSaveB"] .baseline-card {
+  min-height: 80px;
+  column-gap: 7px;
+  grid-template-columns: 29px minmax(0, 1fr) 64px;
+  padding: 8px 9px;
+}
+
+.k050-export[data-k050-page="pSaveB"] .baseline-card .card-ico {
+  width: 28px;
+  height: 28px;
+}
+
+.k050-export[data-k050-page="pSaveB"] .card-actions .mini-btn.dark {
+  min-height: 48px;
+}
+
+.k050-export[data-k050-page="pSaveB"] .card-actions {
+  gap: 3px;
+}
+
+.k050-export .k050-resume {
+  width: 100%;
+  min-height: 48px;
+}
+
+.k050-export[data-k050-page="pRT"] .panel {
+  top: 54px;
+  height: calc(var(--hmi-h) - var(--brand-h) - 69px);
+  max-height: calc(var(--hmi-h) - var(--brand-h) - 69px);
+}
+
+.k050-export[data-k050-page="pRT"] .panel-head {
+  padding-top: 12px;
+}
+
+.k050-export[data-k050-page="pRT"] .rt-stack {
+  gap: 4px;
+}
+
+.k050-export[data-k050-page="pRT"] .rt-baseline-split {
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+.k050-export[data-k050-page="pRT"] .rt-monitor-grid .rt-cell {
+  min-height: 42px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.k050-export[data-k050-page="pHistD"] .rdh-log-accordion {
+  gap: 4px;
+}
+
+.k050-export[data-k050-page="pHistD"] .rdh-log-toggle {
+  min-height: 42px;
+  padding-block: 5px;
+}
+
+.k050-export[data-k050-page="pRT"] .monitor-head {
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  gap: 7px;
+}
+
+.k050-export[data-k050-page="pRT"] .k050-log {
+  margin-left: auto;
+  min-height: 48px;
+  min-width: 84px;
+  font-size: 12px;
+}
+
+.k050-export[data-k050-page="pSet"] .stack {
+  gap: 7px;
+}
+
+.k050-export[data-k050-page="pSet"] .boxed {
+  padding-block: 8px;
+}
+
+.k050-export[data-k050-page="pSet"] .option-row {
+  padding-block: 5px;
+}
+
+.k050-export[data-k050-page="pSet"] .stepper.compact .stepper-arrows {
+  flex-direction: row;
+}
+
+.k050-export[data-k050-page="pSet"] .stepper-arrows button {
+  font-size: 22px;
+}
+
+.k050-export[data-k050-page="pDev"] .stack {
+  gap: 5px;
+}
+
+.k050-export[data-k050-page="pDev"] .info-row {
+  padding-block: 6px;
+}
+
+.k050-export[data-k050-page="pDev"] .info-row-status .status-pill {
+  min-width: 124px;
+  min-height: 48px;
+}
+
+.k050-export[data-k050-page="pDev"] .about-box p {
+  line-height: 1.25;
+}
+
+.k050-export[data-k050-page="pDev"] .about-box {
+  padding-block: 8px;
+}
+
+.k050-export .k050-notice {
+  position: absolute;
+  z-index: 4;
+  bottom: 2px;
+  left: 14px;
+  width: 452px;
+  height: 23px;
+  text-align: center;
+  line-height: 23px;
+  font-size: 14px;
+}
+
+.k050-export .k050-local {
+  position: absolute;
+  top: 118px;
+  bottom: 17px;
+  left: 6px;
+  right: 6px;
+  width: auto;
+  max-width: none;
+  pointer-events: none;
+}
+
+.k050-export[data-k050-page="pClock"] .k050-local {
+  top: 175px;
+  bottom: 142px;
+  left: 20px;
+  right: 20px;
+}
+
+.k050-export .k050-local-rule {
+  position: absolute;
+  z-index: 3;
+  left: 20px;
+  width: 72px;
+  margin: 0;
+}
+
+.k050-export .k050-local-slot {
+  position: absolute;
+  z-index: 3;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.k050-export .k050-local-slot.k050-reading {
+  background: var(--panel-inner);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.k050-export .k050-chart-frame {
+  position: absolute;
+  left: 26px;
+  top: 194px;
+  width: 428px;
+  height: 430px;
+  margin: 0;
+  z-index: 3;
+}
+
+.k050-export .k050-dialog .confirm-actions .btn {
+  min-height: 48px;
+}
+
+.k050-export .k050-dialog .confirm-title {
+  font-size: 20px;
+}
+
+.k050-export .k050-dialog :is(.confirm-body, .add-sheet-hint) {
+  font-size: 14px;
+}
+
+.k050-export .k050-dialog .add-sheet-option {
+  min-height: 60px;
+}
+
+.k050-export .k050-dialog .add-sheet-option strong {
+  font-size: 16px;
+}
+
+.k050-export .k050-dialog .add-sheet-option span {
+  font-size: 13px;
+}
+
+.k050-export .k050-dialog .schedule-list {
+  overflow-y: visible;
+  margin: 0;
+  padding: 0;
+}
+
+.k050-export .k050-dialog .schedule-row {
+  grid-template-columns: 39px 47px minmax(96px, 1fr) 69px;
+  font-size: 14px;
+}
+
+.k050-export .k050-dialog .schedule-row-head {
+  font-size: 12px;
+}
+
+.k050-export .k050-dialog .schedule-row:not(.schedule-row-head) {
+  min-height: 44px;
+}
+
+.k050-export .k050-dialog > .k050-dialog-message {
+  height: 24px;
+  font-size: 13px;
+  line-height: 24px;
+  text-align: left;
+}

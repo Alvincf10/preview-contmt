@@ -73,7 +73,7 @@ bool Journal::mount() {
   written_ = board::usedSlots();
   open_ = true;
   error_ = Error::Ok;
-  if (!written_) return begin() && commit();
+  if (!written_) return true;
 
   for (Ref id = written_; id; --id) {
     const uint8_t* frame = load(id);

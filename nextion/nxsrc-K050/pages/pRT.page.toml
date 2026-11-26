@@ -5,14 +5,7 @@ x = 0
 y = 0
 w = 480
 h = 800
-
-[[component]]
-name = "bg"
-type = "picture"
-x = 0
-y = 0
-w = 480
-h = 800
+sta = 2
 pic = "11_realtime"
 
 [[component]]
@@ -23,246 +16,6 @@ en = 1
 events = [
     "timer",
 ]
-
-[[component]]
-name = "tClock"
-type = "text"
-x = 43
-y = 81
-w = 40
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tBatt"
-type = "text"
-x = 429
-y = 81
-w = 32
-h = 12
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tS1"
-type = "text"
-x = 69
-y = 465
-w = 75
-h = 24
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans28"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tS2"
-type = "text"
-x = 202
-y = 465
-w = 76
-h = 24
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans28"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tS3"
-type = "text"
-x = 336
-y = 465
-w = 76
-h = 24
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans28"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tAvg"
-type = "text"
-x = 173
-y = 523
-w = 134
-h = 36
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans28"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tNowD"
-type = "text"
-x = 318
-y = 644
-w = 93
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tNowT"
-type = "text"
-x = 347
-y = 696
-w = 66
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tBase"
-type = "text"
-x = 110
-y = 253
-w = 314
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tTarget"
-type = "text"
-x = 110
-y = 302
-w = 146
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tDatum"
-type = "text"
-x = 383
-y = 302
-w = 49
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tPDate"
-type = "text"
-x = 69
-y = 644
-w = 93
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tPour"
-type = "text"
-x = 69
-y = 696
-w = 66
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tM"
-type = "text"
-x = 56
-y = 364
-w = 153
-h = 18
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans28"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tFc"
-type = "text"
-x = 234
-y = 364
-w = 118
-h = 18
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "11_realtime"
-xcen = 0
-
-[[component]]
-name = "tPct"
-type = "text"
-x = 360
-y = 364
-w = 64
-h = 18
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "11_realtime"
-xcen = 0
 
 [[component]]
 name = "tMsg"
@@ -497,61 +250,368 @@ txt = ""
 txt_maxl = 24
 
 [[component]]
-name = "tNotice"
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
 type = "text"
-x = 10
-y = 775
-w = 460
-h = 24
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "11_realtime"
 txt = ""
-txt_maxl = 96
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
-name = "mAddCheck"
+name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tNotice"
+x = 14
+y = 775
+w = 452
+h = 23
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBase"
+x = 110
+y = 203
+w = 314
+h = 16
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTarget"
+x = 110
+y = 244
+w = 146
+h = 16
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDatum"
+x = 383
+y = 244
+w = 41
+h = 16
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 2
+ycen = 1
+events = []
+
+[[component]]
+name = "tM"
+x = 56
+y = 302
+w = 153
+h = 19
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tFc"
+x = 234
+y = 302
+w = 131
+h = 19
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tPct"
+x = 369
+y = 302
+w = 55
+h = 19
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 2
+ycen = 1
+events = []
+
+[[component]]
+name = "tS1"
+x = 46
+y = 381
+w = 120
+h = 24
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tS2"
+x = 180
+y = 381
+w = 120
+h = 24
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tS3"
+x = 314
+y = 381
+w = 120
+h = 24
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tAvg"
+x = 173
+y = 445
+w = 134
+h = 36
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tPDate"
+x = 69
+y = 596
+w = 107
+h = 16
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tNowD"
+x = 304
+y = 596
+w = 107
+h = 16
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 2
+ycen = 1
+events = []
+
+[[component]]
+name = "tPour"
+x = 69
+y = 643
+w = 107
+h = 16
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tNowT"
+x = 304
+y = 643
+w = 107
+h = 16
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 2
+ycen = 1
+events = []
+
+[[component]]
+name = "tInitTemp"
+x = 69
+y = 690
+w = 107
+h = 16
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tNowTemp"
+x = 304
+y = 690
+w = 107
+h = 16
+type = "text"
+sta = 0
+picc = "11_realtime"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 2
+ycen = 1
+events = []
+
+[[component]]
+name = "mPoints"
+x = 56
+y = 511
+w = 266
+h = 48
 type = "hotspot"
-x = 313
-y = 575
-w = 90
-h = 34
 events = [
     "up",
 ]
 
 [[component]]
-name = "mPoints"
+name = "mAddCheck"
+x = 326
+y = 511
+w = 90
+h = 48
 type = "hotspot"
-x = 56
-y = 585
-w = 200
-h = 30
 events = [
     "up",
 ]
 
 [[component]]
 name = "mBack"
-type = "hotspot"
 x = 43
-y = 735
+y = 720
 w = 163
-h = 40
+h = 52
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mNext"
-type = "hotspot"
 x = 216
-y = 735
+y = 720
 w = 221
-h = 40
+h = 52
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]

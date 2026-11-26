@@ -1,22 +1,3 @@
-on pInit.loadend:
-  if(pInit.vPage.val!=0)
-  {
-  pInit.vOffset.val=0
-  }
-  pInit.vPage.val=0
-  pInit.vBusy.val=0
-  pInit.vRetry.val=0
-  pInit.vStep.val=0
-  pInit.vPoll.val=0
-  pInit.tMsg.txt=""
-  pInit.nBoot.val=0
-  pInit.vProtocolReady.val=0
-  pInit.vSplashStage.val=0
-  tmSplash.en=0
-  tmSplash.tim=650
-  jLink.val=0
-  tProgress.txt="0%"
-
 on tmSplash.timer:
   if(pInit.vProtocolReady.val==1)
   {
@@ -36,6 +17,9 @@ on tmSplash.timer:
   tChkDevice.txt="Device responded"
   tmSplash.tim=700
   }
+  pInit.vTemp.val=jLink.val*338
+  pInit.vTemp.val/=100
+  picq 71,490,pInit.vTemp.val,10,0
   }
   else
   {
@@ -66,6 +50,38 @@ on tmSplash.timer:
   }
   }
 
+on pInit.loadend:
+  if(pInit.vPage.val!=0)
+  {
+  pInit.vOffset.val=0
+
+  }
+  pInit.vPage.val=0
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  pInit.vStep.val=0
+  pInit.vPoll.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
+  pInit.vTask.val=0
+  pInit.tMsg.txt=""
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,1
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
+  pInit.nBoot.val=0
+  pInit.vProtocolReady.val=0
+  pInit.vSplashStage.val=0
+  tmSplash.en=0
+  tmSplash.tim=650
+  jLink.val=0
+  tProgress.txt="0%"
+
 on tmPoll.timer:
   if(pInit.vBusy.val==1)
   {
@@ -77,6 +93,8 @@ on tmPoll.timer:
   {
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   }else
   {
   if(pInit.vTask.val==0)
@@ -86,12 +104,41 @@ on tmPoll.timer:
   if(pInit.nAckCode.val==0)
   {
   pInit.tStatus.txt=pInit.tData.txt
-  spstr pInit.tData.txt,tClock.txt,"|",1
-  spstr pInit.tData.txt,tBatt.txt,"|",3
+  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
+  tClock.txt="--:--"
+  if(pInit.tTime.txt!="")
+  {
+  substr pInit.tTime.txt,tClock.txt,0,5
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  if(pInit.tSplit.txt!="")
+  {
+  covx pInit.tSplit.txt,pInit.vTemp.val,0,0
+  tBatt.txt=pInit.tSplit.txt
+  tBatt.txt+="%"
+  if(pInit.vTemp.val<=40)
+  {
+  tBatt.pco=65132
+  }
+  if(pInit.vTemp.val<=20)
+  {
+  tBatt.pco=64329
+  }
+  pInit.vTemp.val*=11
+  pInit.vTemp.val+=50
+  pInit.vTemp.val/=100
+  }
+  picq 367,82,22,22,1
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
   covx pInit.tSplit.txt,pInit.vStorage.val,0,0
   spstr pInit.tData.txt,pInit.tDate.txt,"|",0
-  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",14
   covx pInit.tSplit.txt,pInit.vMask.val,0,0
   pInit.vSensors.val=0
@@ -110,6 +157,8 @@ on tmPoll.timer:
   {
   pInit.vSensors.val+=1
   }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",17
+  covx pInit.tSplit.txt,pInit.vIdentity.val,0,0
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",9
   pInit.vProtocolReady.val=0
   if(pInit.tSplit.txt=="1.0.1")
@@ -120,8 +169,6 @@ on tmPoll.timer:
   {
   tmSplash.en=1
   }
-  spstr pInit.tData.txt,pInit.tSplit.txt,"|",17
-  covx pInit.tSplit.txt,pInit.vIdentity.val,0,0
   tChkClock.txt="Database: OK"
   if(pInit.vStorage.val!=0)
   {
@@ -145,6 +192,7 @@ on tmPoll.timer:
   tmSplash.en=0
   pInit.vSplashStage.val=0
   }
+  pInit.vStatusReady.val=1
   }
   }
   pInit.vStep.val+=1
@@ -169,6 +217,18 @@ on tmPoll.timer:
   {
   pInit.tMsg.txt="Complete the required fields"
   }
+  if(pInit.nAckCode.val==3)
+  {
+  pInit.tMsg.txt="Complete the previous step first"
+  if(pInit.vPage.val==8||pInit.vPage.val==10)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  }
+  }
+  if(pInit.nAckCode.val==15)
+  {
+  pInit.tMsg.txt="This item is no longer available"
+  }
   if(pInit.nAckCode.val==6)
   {
   pInit.tMsg.txt="Check the microSD card"
@@ -192,6 +252,7 @@ on tmPoll.timer:
   }else
   {
   pInit.tMsg.txt=""
+
   }
   pInit.vStep.val=1
   }
@@ -211,12 +272,26 @@ on tmPoll.timer:
   pInit.vBusy.val=0
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   pInit.tMsg.txt="No answer from MCU"
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,1
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
   }
   }
   }
+  }
+  if(tNotice.txt!=pInit.tMsg.txt)
+  {
   tNotice.txt=pInit.tMsg.txt
-  if(pInit.vBusy.val==0&&dp==pInit.vPage.val)
+  }
+  if(pInit.vBusy.val==0&&dp==0)
   {
   if(pInit.vStep.val==0)
   {

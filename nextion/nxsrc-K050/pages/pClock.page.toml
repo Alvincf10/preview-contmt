@@ -6,6 +6,8 @@ y = 0
 w = 480
 h = 800
 bco = "#1e2326"
+sta = 2
+pic = "web_pClock"
 
 [[component]]
 name = "tmClock"
@@ -18,128 +20,117 @@ events = [
 
 [[component]]
 name = "tTitle"
-type = "text"
-x = 20
-y = 50
-w = 440
-h = 50
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans28"
 txt = "Device date and time"
 txt_maxl = 64
 
 [[component]]
 name = "tDateLabel"
-type = "text"
-x = 30
-y = 190
-w = 420
-h = 30
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = "Date YYYY-MM-DD"
+txt = "Date DD-MM-YYYY"
 txt_maxl = 64
 
 [[component]]
 name = "tDate"
-type = "text"
 x = 30
-y = 230
+y = 286
 w = 420
 h = 60
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+type = "text"
+sta = 0
+picc = "web_pClock"
 txt = ""
 txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTimeLabel"
-type = "text"
-x = 30
-y = 340
-w = 420
-h = 30
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
 txt = "Time HH:MM:SS"
 txt_maxl = 64
 
 [[component]]
 name = "tTime"
-type = "text"
 x = 30
-y = 380
+y = 397
 w = 420
 h = 60
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+type = "text"
+sta = 0
+picc = "web_pClock"
 txt = ""
 txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tError"
-type = "text"
 x = 30
-y = 490
+y = 474
 w = 420
-h = 50
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+h = 52
+type = "text"
+sta = 0
+picc = "web_pClock"
 txt = ""
-txt_maxl = 64
+txt_maxl = 96
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "mCancel"
-type = "button"
 x = 30
-y = 650
+y = 584
 w = 190
-h = 50
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+h = 54
+type = "text"
+sta = 0
+picc = "web_pClock"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Back"
-txt_maxl = 4
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "mSave"
-type = "button"
 x = 250
-y = 650
+y = 584
 w = 200
-h = 50
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+h = 54
+type = "text"
+sta = 0
+picc = "web_pClock"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Set clock"
-txt_maxl = 9
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]

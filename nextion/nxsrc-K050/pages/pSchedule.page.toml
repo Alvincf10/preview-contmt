@@ -1,0 +1,569 @@
+[page]
+name = "pSchedule"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+bco = "#1a2029"
+sta = 2
+pic = "web_pSchedule"
+
+[[component]]
+name = "tmPoll"
+type = "timer"
+tim = 65
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "vYear"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vMonth"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vWeek"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vPart"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
+type = "text"
+sta = 0
+picc = "web_pSchedule"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
+type = "text"
+sta = 0
+picc = "web_pSchedule"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tDay0"
+x = 91
+y = 291
+w = 39
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tHari0"
+x = 136
+y = 291
+w = 47
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDate0"
+x = 189
+y = 291
+w = 125
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTim0"
+x = 320
+y = 291
+w = 69
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDay1"
+x = 91
+y = 339
+w = 39
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tHari1"
+x = 136
+y = 339
+w = 47
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDate1"
+x = 189
+y = 339
+w = 125
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTim1"
+x = 320
+y = 339
+w = 69
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDay2"
+x = 91
+y = 387
+w = 39
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tHari2"
+x = 136
+y = 387
+w = 47
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDate2"
+x = 189
+y = 387
+w = 125
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTim2"
+x = 320
+y = 387
+w = 69
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDay3"
+x = 91
+y = 435
+w = 39
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tHari3"
+x = 136
+y = 435
+w = 47
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDate3"
+x = 189
+y = 435
+w = 125
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTim3"
+x = 320
+y = 435
+w = 69
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDay4"
+x = 91
+y = 483
+w = 39
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tHari4"
+x = 136
+y = 483
+w = 47
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDate4"
+x = 189
+y = 483
+w = 125
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTim4"
+x = 320
+y = 483
+w = 69
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule_controls"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tPour"
+x = 82
+y = 225
+w = 316
+h = 17
+type = "text"
+sta = 0
+picc = "web_pSchedule"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tNotice"
+x = 82
+y = 524
+w = 316
+h = 24
+type = "text"
+sta = 0
+picc = "web_pSchedule"
+txt = ""
+txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTitle"
+type = "variable"
+vscope = 0
+sta = 1
+txt = "Sample schedule"
+txt_maxl = 64
+
+[[component]]
+name = "vStartX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vStartY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vPriorX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vPriorY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vBlockTap"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "tRowData0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData3"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData4"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tcList"
+type = "touch-capture"
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "tmDrag"
+type = "timer"
+tim = 50
+en = 0
+events = [
+    "timer",
+]
+
+[[component]]
+name = "mClose"
+x = 82
+y = 562
+w = 316
+h = 48
+type = "hotspot"
+events = [
+    "up",
+]

@@ -1,0 +1,688 @@
+on kN1.up:
+  if(pInit.vBusy.val==0)
+  {
+  if(pInit.vInputMode.val==5)
+  {
+  tInput.txt=kN1.txt
+  }
+  else
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="1"
+  }
+  }
+  tError.txt=""
+  }
+
+on kN2.up:
+  if(pInit.vBusy.val==0)
+  {
+  if(pInit.vInputMode.val==5)
+  {
+  tInput.txt=kN2.txt
+  }
+  else
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="2"
+  }
+  }
+  tError.txt=""
+  }
+
+on kN3.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="3"
+  }
+  tError.txt=""
+  }
+
+on kN4.up:
+  if(pInit.vBusy.val==0)
+  {
+  if(pInit.vInputMode.val==5)
+  {
+  tInput.txt=kN4.txt
+  }
+  else
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="4"
+  }
+  }
+  tError.txt=""
+  }
+
+on kN5.up:
+  if(pInit.vBusy.val==0)
+  {
+  if(pInit.vInputMode.val==5)
+  {
+  tInput.txt=kN5.txt
+  }
+  else
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="5"
+  }
+  }
+  tError.txt=""
+  }
+
+on kN6.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="6"
+  }
+  tError.txt=""
+  }
+
+on kN7.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="7"
+  }
+  tError.txt=""
+  }
+
+on kN8.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="8"
+  }
+  tError.txt=""
+  }
+
+on kN9.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="9"
+  }
+  tError.txt=""
+  }
+
+on kMinus.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==0)
+  {
+  tInput.txt+="-"
+  }
+  }
+  tError.txt=""
+  }
+
+on kN0.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  if(vLen.val==2||vLen.val==5)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  tInput.txt+="-"
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  tInput.txt+=":"
+  }
+  }
+  tInput.txt+="0"
+  }
+  tError.txt=""
+  }
+
+on kDot.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val<pInit.vMax.val)
+  {
+  vPos.val=0
+  vPart.val=0
+  while(vPos.val<vLen.val)
+  {
+  substr tInput.txt,pInit.tSplit.txt,vPos.val,1
+  if(pInit.tSplit.txt==".")
+  {
+  vPart.val=1
+  }
+  vPos.val+=1
+  }
+  if(vPart.val==0)
+  {
+  tInput.txt+="."
+  }
+  }
+  tError.txt=""
+  }
+
+on kProbe.up:
+  if(pInit.vBusy.val==0)
+  {
+  if(pInit.vEditBoot.val==pInit.nBoot.val&&pInit.vEditView.val==pInit.nView.val)
+  {
+  pInit.tCommand.txt="ROW_SENSOR|"
+  pInit.vTemp.val=pInit.vEditRow.val
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  else
+  {
+  tError.txt="View updated. Cancel and reopen the field."
+  }
+  }
+
+on pNumber.loadend:
+  tTitle.txt=pInit.tTitle.txt
+  tInput.txt=pInit.tEdit.txt
+  tError.txt=""
+  vCase.val=0
+  if(pInit.vInputMode.val==5)
+  {
+  kN1.txt="-20"
+  }
+  if(pInit.vInputMode.val==5)
+  {
+  kN2.txt="-10"
+  }
+  if(pInit.vInputMode.val!=5)
+  {
+  vis kN3,1
+  tsw kN3,1
+  }
+  else
+  {
+  tsw kN3,0
+  vis kN3,0
+  }
+  if(pInit.vInputMode.val==5)
+  {
+  kN4.txt="0"
+  }
+  if(pInit.vInputMode.val==5)
+  {
+  kN5.txt="10"
+  }
+  if(pInit.vInputMode.val!=5)
+  {
+  vis kN6,1
+  tsw kN6,1
+  }
+  else
+  {
+  tsw kN6,0
+  vis kN6,0
+  }
+  if(pInit.vInputMode.val!=5)
+  {
+  vis kN7,1
+  tsw kN7,1
+  }
+  else
+  {
+  tsw kN7,0
+  vis kN7,0
+  }
+  if(pInit.vInputMode.val!=5)
+  {
+  vis kN8,1
+  tsw kN8,1
+  }
+  else
+  {
+  tsw kN8,0
+  vis kN8,0
+  }
+  if(pInit.vInputMode.val!=5)
+  {
+  vis kN9,1
+  tsw kN9,1
+  }
+  else
+  {
+  tsw kN9,0
+  vis kN9,0
+  }
+  if(pInit.vInputMode.val==2)
+  {
+  vis kMinus,1
+  tsw kMinus,1
+  }
+  else
+  {
+  tsw kMinus,0
+  vis kMinus,0
+  }
+  if(pInit.vInputMode.val!=5)
+  {
+  vis kN0,1
+  tsw kN0,1
+  }
+  else
+  {
+  tsw kN0,0
+  vis kN0,0
+  }
+  if(pInit.vInputMode.val<=2)
+  {
+  vis kDot,1
+  tsw kDot,1
+  }
+  else
+  {
+  tsw kDot,0
+  vis kDot,0
+  }
+  if(pInit.vEditKind.val==1&&pInit.tField.txt=="temp")
+  {
+  vis kProbe,1
+  tsw kProbe,1
+  }
+  else
+  {
+  tsw kProbe,0
+  vis kProbe,0
+  }
+
+on kClear.up:
+  if(pInit.vBusy.val==0)
+  {
+  tInput.txt=""
+  tError.txt=""
+  }
+
+on kDel.up:
+  if(pInit.vBusy.val==0)
+  {
+  strlen tInput.txt,vLen.val
+  if(vLen.val>0)
+  {
+  vLen.val-=1
+  substr tInput.txt,pInit.tEdit.txt,0,vLen.val
+  tInput.txt=pInit.tEdit.txt
+  tError.txt=""
+  }
+  }
+
+on kCancel.up:
+  if(pInit.vBusy.val==0)
+  {
+  page pInit.vEditPage.val
+  }
+
+on kSave.up:
+  if(pInit.vBusy.val==0)
+  {
+  if(pInit.vEditBoot.val==pInit.nBoot.val&&pInit.vEditView.val==pInit.nView.val)
+  {
+  vValid.val=1
+  strlen tInput.txt,vLen.val
+  if(pInit.vInputMode.val==3)
+  {
+  vValid.val=0
+  tError.txt="Enter a valid date DD-MM-YYYY"
+  if(vLen.val==10)
+  {
+  spstr tInput.txt,pInit.tSplit.txt,"-",0
+  covx pInit.tSplit.txt,vDay.val,0,0
+  spstr tInput.txt,pInit.tSplit.txt,"-",1
+  covx pInit.tSplit.txt,vMonth.val,0,0
+  spstr tInput.txt,pInit.tSplit.txt,"-",2
+  covx pInit.tSplit.txt,vYear.val,0,0
+  vPart.val=31
+  if(vMonth.val==4||vMonth.val==6||vMonth.val==9||vMonth.val==11)
+  {
+  vPart.val=30
+  }
+  if(vMonth.val==2)
+  {
+  vPart.val=28
+  vPos.val=vYear.val%4
+  if(vPos.val==0)
+  {
+  vPart.val=29
+  vPos.val=vYear.val%100
+  if(vPos.val==0)
+  {
+  vPos.val=vYear.val%400
+  if(vPos.val!=0)
+  {
+  vPart.val=28
+  }
+  }
+  }
+  }
+  if(vDay.val>=1&&vDay.val<=vPart.val&&vMonth.val>=1&&vMonth.val<=12&&vYear.val>=1970&&vYear.val<=2199)
+  {
+  vValid.val=1
+  }
+  }
+  }
+  if(pInit.vInputMode.val==4)
+  {
+  vValid.val=0
+  tError.txt="Enter a valid time HH:MM or HH:MM:SS"
+  if(vLen.val==5||vLen.val==8)
+  {
+  spstr tInput.txt,pInit.tSplit.txt,":",0
+  covx pInit.tSplit.txt,vDay.val,0,0
+  spstr tInput.txt,pInit.tSplit.txt,":",1
+  covx pInit.tSplit.txt,vMonth.val,0,0
+  vPart.val=0
+  if(vLen.val==8)
+  {
+  spstr tInput.txt,pInit.tSplit.txt,":",2
+  covx pInit.tSplit.txt,vPart.val,0,0
+  }
+  if(vDay.val<24&&vMonth.val<60&&vPart.val<60)
+  {
+  vValid.val=1
+  }
+  }
+  }
+  if(vValid.val==1)
+  {
+  tError.txt=""
+  }
+  if(vValid.val==1)
+  {
+  pInit.tEdit.txt=tInput.txt
+  if(pInit.vInputMode.val==3)
+  {
+  spstr tInput.txt,pInit.tNum.txt,"-",2
+  spstr tInput.txt,pInit.tSplit.txt,"-",1
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  spstr tInput.txt,pInit.tSplit.txt,"-",0
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  pInit.tEdit.txt=pInit.tNum.txt
+  }
+  if(pInit.vEditKind.val==2)
+  {
+  if(pInit.vInputMode.val==3)
+  {
+  pInit.tClockDate.txt=pInit.tEdit.txt
+  }else
+  {
+  pInit.tClockTime.txt=tInput.txt
+  }
+  page pClock
+  }else
+  {
+  pInit.tCommand.txt="FIELD_SET|"
+  if(pInit.vEditKind.val==1)
+  {
+  pInit.tCommand.txt="ROW_SET|"
+  covx pInit.vEditRow.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  pInit.tCommand.txt+="|"
+  }
+  if(pInit.vEditKind.val==3)
+  {
+  pInit.tCommand.txt="CHECK_SET|"
+  covx pInit.vEditRow.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  pInit.tCommand.txt+="|"
+  }
+  pInit.tCommand.txt+=pInit.tField.txt
+  pInit.tCommand.txt+="|"
+  pInit.tCommand.txt+=pInit.tEdit.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  }
+  }
+  else
+  {
+  tError.txt="View updated. Cancel and reopen the field."
+  }
+  }
+
+on tmEdit.timer:
+  if(pInit.vBusy.val==1)
+  {
+  if(pInit.nAckSeq.val==pInit.vSeq.val)
+  {
+  pInit.vBusy.val=0
+  if(pInit.nAckCode.val==0)
+  {
+  page pInit.vEditPage.val
+  }else
+  {
+  pInit.tMsg.txt="ConMT error "
+  covx pInit.nAckCode.val,pInit.tNum.txt,0,0
+  pInit.tMsg.txt+=pInit.tNum.txt
+  if(pInit.nAckCode.val==1)
+  {
+  pInit.tMsg.txt="Invalid input. Check the field format."
+  }
+  if(pInit.nAckCode.val==2)
+  {
+  pInit.tMsg.txt="Complete the required fields"
+  }
+  if(pInit.nAckCode.val==3)
+  {
+  pInit.tMsg.txt="Complete the previous step first"
+  if(pInit.vPage.val==8||pInit.vPage.val==10)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  }
+  }
+  if(pInit.nAckCode.val==15)
+  {
+  pInit.tMsg.txt="This item is no longer available"
+  }
+  if(pInit.nAckCode.val==6)
+  {
+  pInit.tMsg.txt="Check the microSD card"
+  }
+  if(pInit.nAckCode.val==9)
+  {
+  pInit.tMsg.txt="Connect a temperature probe"
+  }
+  if(pInit.nAckCode.val==10)
+  {
+  pInit.tMsg.txt="Set date/time before measurement"
+  }
+  if(pInit.nAckCode.val==11)
+  {
+  pInit.tMsg.txt="Enter at least two valid lab pairs"
+  }
+  if(pInit.nAckCode.val==12)
+  {
+  pInit.tMsg.txt="Add a later checkpoint before SAVE"
+  }
+  tError.txt=pInit.tMsg.txt
+  }
+  }
+  else
+  {
+  pInit.vRetry.val+=1
+  if(pInit.vRetry.val==15)
+  {
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  if(pInit.vRetry.val>=30)
+  {
+  pInit.vBusy.val=0
+  tError.txt="No answer. Return and reconnect."
+  }
+  }
+  }

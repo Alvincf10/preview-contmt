@@ -12,7 +12,7 @@ const Stamp& now();
 bool setClock(const Stamp& stamp);
 const Sensors& temperatures();
 uint16_t supplyMv();
-int16_t batteryPercent(uint16_t voltage);
+int8_t batteryPercent();
 void beep(bool enabled);
 
 int receive();

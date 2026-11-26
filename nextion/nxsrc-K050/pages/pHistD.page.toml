@@ -5,174 +5,17 @@ x = 0
 y = 0
 w = 480
 h = 800
-
-[[component]]
-name = "bg"
-type = "picture"
-x = 0
-y = 0
-w = 480
-h = 800
+sta = 2
 pic = "14_history_detail"
 
 [[component]]
 name = "tmPoll"
 type = "timer"
-tim = 250
+tim = 65
 en = 1
 events = [
     "timer",
 ]
-
-[[component]]
-name = "tClock"
-type = "text"
-x = 43
-y = 81
-w = 40
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "14_history_detail"
-xcen = 0
-
-[[component]]
-name = "tBatt"
-type = "text"
-x = 429
-y = 81
-w = 32
-h = 12
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "14_history_detail"
-xcen = 0
-
-[[component]]
-name = "tBase"
-type = "text"
-x = 108
-y = 350
-w = 294
-h = 15
-sta = 0
-txt = ""
-txt_maxl = 64
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "14_history_detail"
-xcen = 0
-
-[[component]]
-name = "tTarget"
-type = "text"
-x = 108
-y = 391
-w = 143
-h = 15
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "14_history_detail"
-xcen = 0
-
-[[component]]
-name = "tDatum"
-type = "text"
-x = 268
-y = 391
-w = 134
-h = 15
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "14_history_detail"
-xcen = 0
-
-[[component]]
-name = "tOp"
-type = "text"
-x = 75
-y = 272
-w = 157
-h = 14
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "14_history_detail"
-xcen = 0
-
-[[component]]
-name = "tProj"
-type = "text"
-x = 247
-y = 272
-w = 158
-h = 14
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "14_history_detail"
-xcen = 0
-
-[[component]]
-name = "tDate"
-type = "text"
-x = 304
-y = 212
-w = 101
-h = 14
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "14_history_detail"
-xcen = 0
-
-[[component]]
-name = "tSavedAt"
-type = "text"
-x = 190
-y = 212
-w = 100
-h = 14
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "14_history_detail"
-xcen = 0
-
-[[component]]
-name = "tLastT"
-type = "text"
-x = 304
-y = 212
-w = 101
-h = 14
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "14_history_detail"
-xcen = 0
 
 [[component]]
 name = "tMsg"
@@ -428,139 +271,383 @@ txt = ""
 txt_maxl = 24
 
 [[component]]
-name = "tNotice"
-type = "text"
-x = 10
-y = 775
-w = 460
-h = 24
+name = "vStartX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vStartY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vBlockTap"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "tRowData0"
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData3"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData4"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tcList"
+type = "touch-capture"
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "tmDrag"
+type = "timer"
+tim = 50
+en = 0
+events = [
+    "timer",
+]
+
+[[component]]
+name = "vPriorX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vPriorY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
+type = "text"
+sta = 0
+picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
 pco = "#ffffff"
-font = "NotoSans16"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
+type = "text"
+sta = 0
+picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tNotice"
+x = 14
+y = 775
+w = 452
+h = 23
+type = "text"
+sta = 0
+picc = "14_history_detail"
 txt = ""
 txt_maxl = 96
-
-[[component]]
-name = "tLog0"
-type = "text"
-x = 78
-y = 450
-w = 320
-h = 46
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
 font = "NotoSans16"
-txt = ""
-txt_maxl = 200
-xcen = 0
-
-[[component]]
-name = "tLog1"
-type = "text"
-x = 78
-y = 504
-w = 320
-h = 46
-sta = 1
-bco = "#1e2326"
 pco = "#ffffff"
-font = "NotoSans16"
-txt = ""
-txt_maxl = 200
-xcen = 0
-
-[[component]]
-name = "tLog2"
-type = "text"
-x = 78
-y = 558
-w = 320
-h = 46
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = ""
-txt_maxl = 200
-xcen = 0
-
-[[component]]
-name = "tLog3"
-type = "text"
-x = 78
-y = 612
-w = 320
-h = 46
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = ""
-txt_maxl = 200
-xcen = 0
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tId"
-type = "text"
 x = 75
-y = 212
+y = 224
 w = 100
 h = 14
+type = "text"
 sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
 picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
 xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tSavedAt"
+x = 190
+y = 224
+w = 99
+h = 14
+type = "text"
+sta = 0
+picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDate"
+x = 304
+y = 224
+w = 101
+h = 14
+type = "text"
+sta = 0
+picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tOp"
+x = 75
+y = 284
+w = 157
+h = 15
+type = "text"
+sta = 0
+picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tProj"
+x = 247
+y = 284
+w = 158
+h = 15
+type = "text"
+sta = 0
+picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tBase"
+x = 108
+y = 362
+w = 294
+h = 15
+type = "text"
+sta = 0
+picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTarget"
+x = 108
+y = 403
+w = 143
+h = 15
+type = "text"
+sta = 0
+picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDatum"
+x = 268
+y = 403
+w = 134
+h = 15
+type = "text"
+sta = 0
+picc = "14_history_detail"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tLog0"
+x = 86
+y = 462
+w = 299
+h = 38
+type = "text"
+sta = 0
+picc = "14_history_detail_controls"
+txt = ""
+txt_maxl = 200
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tLog1"
+x = 86
+y = 510
+w = 299
+h = 38
+type = "text"
+sta = 0
+picc = "14_history_detail_controls"
+txt = ""
+txt_maxl = 200
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tLog2"
+x = 86
+y = 558
+w = 299
+h = 38
+type = "text"
+sta = 0
+picc = "14_history_detail_controls"
+txt = ""
+txt_maxl = 200
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tLog3"
+x = 86
+y = 606
+w = 299
+h = 38
+type = "text"
+sta = 0
+picc = "14_history_detail_controls"
+txt = ""
+txt_maxl = 200
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
 
 [[component]]
 name = "tLog4"
+x = 86
+y = 654
+w = 299
+h = 38
 type = "text"
-x = 78
-y = 666
-w = 320
-h = 46
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "14_history_detail_controls"
 txt = ""
 txt_maxl = 200
+font = "NotoSans16"
+pco = "#ffffff"
 xcen = 0
-
-[[component]]
-name = "mPrevRows"
-type = "hotspot"
-x = 4
-y = 440
-w = 24
-h = 220
-events = [
-    "up",
-]
-
-[[component]]
-name = "mNextRows"
-type = "hotspot"
-x = 452
-y = 440
-w = 24
-h = 220
-events = [
-    "up",
-]
+ycen = 1
+events = []
 
 [[component]]
 name = "mBack"
-type = "hotspot"
 x = 67
-y = 711
+y = 707
 w = 346
-h = 48
+h = 52
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]

@@ -5,14 +5,7 @@ x = 0
 y = 0
 w = 480
 h = 800
-
-[[component]]
-name = "bg"
-type = "picture"
-x = 0
-y = 0
-w = 480
-h = 800
+sta = 2
 pic = "12_strength_result"
 
 [[component]]
@@ -23,126 +16,6 @@ en = 1
 events = [
     "timer",
 ]
-
-[[component]]
-name = "tClock"
-type = "text"
-x = 43
-y = 81
-w = 40
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "12_strength_result"
-xcen = 0
-
-[[component]]
-name = "tBatt"
-type = "text"
-x = 429
-y = 81
-w = 32
-h = 12
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "12_strength_result"
-xcen = 0
-
-[[component]]
-name = "tBase"
-type = "text"
-x = 130
-y = 302
-w = 270
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "12_strength_result"
-xcen = 0
-
-[[component]]
-name = "tTarget"
-type = "text"
-x = 130
-y = 348
-w = 130
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "12_strength_result"
-xcen = 0
-
-[[component]]
-name = "tDatum"
-type = "text"
-x = 270
-y = 348
-w = 130
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "12_strength_result"
-xcen = 0
-
-[[component]]
-name = "tM"
-type = "text"
-x = 305
-y = 547
-w = 50
-h = 32
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans28"
-picc = "12_strength_result"
-xcen = 0
-
-[[component]]
-name = "tFc"
-type = "text"
-x = 125
-y = 419
-w = 231
-h = 34
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans28"
-picc = "12_strength_result"
-xcen = 0
-
-[[component]]
-name = "tPct"
-type = "text"
-x = 261
-y = 415
-w = 95
-h = 41
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans28"
-picc = "12_strength_result"
-xcen = 0
 
 [[component]]
 name = "tMsg"
@@ -188,54 +61,193 @@ txt = ""
 txt_maxl = 24
 
 [[component]]
-name = "tNotice"
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
 type = "text"
-x = 10
-y = 775
-w = 460
-h = 24
-sta = 1
-bco = "#1e2326"
+sta = 0
+picc = "12_strength_result"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
 pco = "#ffffff"
-font = "NotoSans16"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
+type = "text"
+sta = 0
+picc = "12_strength_result"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tNotice"
+x = 14
+y = 775
+w = 452
+h = 23
+type = "text"
+sta = 0
+picc = "12_strength_result"
 txt = ""
 txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBase"
+x = 130
+y = 302
+w = 270
+h = 16
+type = "text"
+sta = 0
+picc = "12_strength_result"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTarget"
+x = 130
+y = 348
+w = 130
+h = 16
+type = "text"
+sta = 0
+picc = "12_strength_result"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tDatum"
+x = 270
+y = 348
+w = 130
+h = 16
+type = "text"
+sta = 0
+picc = "12_strength_result"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 2
+ycen = 1
+events = []
+
+[[component]]
+name = "tFc"
+x = 125
+y = 419
+w = 145
+h = 34
+type = "text"
+sta = 0
+picc = "12_strength_result"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tPct"
+x = 275
+y = 419
+w = 80
+h = 34
+type = "text"
+sta = 0
+picc = "12_strength_result"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ff9431"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tAvg"
-type = "text"
 x = 128
 y = 547
-w = 59
+w = 146
 h = 18
+type = "text"
 sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
 picc = "12_strength_result"
-xcen = 0
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tM"
+x = 305
+y = 547
+w = 146
+h = 32
+type = "text"
+sta = 0
+picc = "12_strength_result"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "mBack"
-type = "hotspot"
 x = 67
 y = 618
 w = 143
-h = 40
+h = 52
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mSave"
-type = "hotspot"
 x = 220
 y = 618
 w = 193
-h = 40
+h = 52
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]

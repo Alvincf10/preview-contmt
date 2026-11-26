@@ -67,7 +67,7 @@ class Engine {
   Answer setBaseline(Field field, const char* value);
   Answer setSettings(Field field, const char* value);
   Answer publish(Baseline& baseline);
-  bool rewriteRows(Baseline& baseline, const LabRow* insertion, Ref remove, uint16_t fill);
+  uint16_t rewriteRows(Baseline& baseline, LabRow* insertion, Ref remove, uint16_t fill);
   Answer updateRoster(Ref id, Ref savedFrom = 0);
   Answer storePoint(Session& session, Point& point, uint16_t replace);
   bool integrate(const Point& previous, Point& next, int8_t datum);

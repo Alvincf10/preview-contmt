@@ -1,0 +1,441 @@
+[page]
+name = "pNumber"
+type = "page"
+x = 0
+y = 0
+w = 480
+h = 800
+bco = "#1a2029"
+sta = 2
+pic = "web_pNumber"
+
+[[component]]
+name = "tmEdit"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "vCase"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vValid"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vLen"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vYear"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vMonth"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vDay"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vPart"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vPos"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tTitle"
+x = 20
+y = 120
+w = 440
+h = 38
+type = "text"
+sta = 0
+picc = "web_pNumber"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tInput"
+x = 20
+y = 172
+w = 440
+h = 50
+type = "text"
+sta = 0
+picc = "web_pNumber"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tError"
+x = 20
+y = 223
+w = 440
+h = 34
+type = "text"
+sta = 0
+picc = "web_pNumber"
+txt = ""
+txt_maxl = 96
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "kN1"
+x = 20
+y = 261
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "1"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kN2"
+x = 170
+y = 261
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "2"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kN3"
+x = 320
+y = 261
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "3"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kN4"
+x = 20
+y = 335
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "4"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kN5"
+x = 170
+y = 335
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "5"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kN6"
+x = 320
+y = 335
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "6"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kN7"
+x = 20
+y = 409
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "7"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kN8"
+x = 170
+y = 409
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "8"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kN9"
+x = 320
+y = 409
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "9"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kMinus"
+x = 20
+y = 483
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "-"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kN0"
+x = 170
+y = 483
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "0"
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kDot"
+x = 320
+y = 483
+w = 140
+h = 66
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = "."
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kDel"
+x = 20
+y = 615
+w = 140
+h = 52
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kClear"
+x = 170
+y = 615
+w = 140
+h = 52
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kCancel"
+x = 20
+y = 725
+w = 210
+h = 54
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kSave"
+x = 250
+y = 725
+w = 210
+h = 54
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kProbe"
+x = 320
+y = 615
+w = 140
+h = 52
+type = "text"
+sta = 0
+picc = "web_pNumber_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]

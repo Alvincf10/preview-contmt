@@ -5,129 +5,17 @@ x = 0
 y = 0
 w = 480
 h = 800
-
-[[component]]
-name = "bg"
-type = "picture"
-x = 0
-y = 0
-w = 480
-h = 800
+sta = 2
 pic = "13_history"
 
 [[component]]
 name = "tmPoll"
 type = "timer"
-tim = 250
+tim = 65
 en = 1
 events = [
     "timer",
 ]
-
-[[component]]
-name = "tClock"
-type = "text"
-x = 43
-y = 81
-w = 40
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "13_history"
-xcen = 0
-
-[[component]]
-name = "tBatt"
-type = "text"
-x = 429
-y = 81
-w = 32
-h = 12
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "13_history"
-xcen = 0
-
-[[component]]
-name = "tId0"
-type = "text"
-x = 86
-y = 405
-w = 94
-h = 31
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "13_history"
-xcen = 0
-
-[[component]]
-name = "tName0"
-type = "text"
-x = 180
-y = 405
-w = 166
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "13_history"
-xcen = 0
-
-[[component]]
-name = "tVal0"
-type = "text"
-x = 86
-y = 472
-w = 127
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "13_history"
-xcen = 0
-
-[[component]]
-name = "tDate0"
-type = "text"
-x = 233
-y = 472
-w = 84
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "13_history"
-xcen = 0
-
-[[component]]
-name = "tCount0"
-type = "text"
-x = 338
-y = 472
-w = 54
-h = 16
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "13_history"
-xcen = 0
 
 [[component]]
 name = "tMsg"
@@ -136,76 +24,6 @@ sta = 1
 txt = ""
 txt_maxl = 24
 vscope = 1
-
-[[component]]
-name = "tId1"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
-
-[[component]]
-name = "tName1"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
-
-[[component]]
-name = "tVal1"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
-
-[[component]]
-name = "tDate1"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
-
-[[component]]
-name = "tCount1"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
-
-[[component]]
-name = "tId2"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
-
-[[component]]
-name = "tName2"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
-
-[[component]]
-name = "tVal2"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
-
-[[component]]
-name = "tDate2"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
-
-[[component]]
-name = "tCount2"
-type = "variable"
-sta = 1
-txt = ""
-txt_maxl = 24
 
 [[component]]
 name = "tId3"
@@ -313,61 +131,344 @@ txt = ""
 txt_maxl = 24
 
 [[component]]
-name = "tNotice"
-type = "text"
-x = 10
-y = 775
-w = 460
-h = 24
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = ""
-txt_maxl = 96
+name = "vHist0"
+type = "variable"
+vscope = 0
+val = 0
 
 [[component]]
-name = "mPrevRows"
-type = "hotspot"
-x = 4
-y = 240
-w = 24
-h = 280
+name = "vHist1"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vHist2"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vStartX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vStartY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vBlockTap"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "tRowData0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tcList"
+type = "touch-capture"
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "tmDrag"
+type = "timer"
+tim = 50
+en = 0
+events = [
+    "timer",
+]
+
+[[component]]
+name = "vPriorX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vPriorY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
+type = "text"
+sta = 0
+picc = "13_history"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
+type = "text"
+sta = 0
+picc = "13_history"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tNotice"
+x = 14
+y = 775
+w = 452
+h = 23
+type = "text"
+sta = 0
+picc = "13_history"
+txt = ""
+txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tId0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tName0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tVal0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tDate0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tCount0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tId1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tName1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tVal1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tDate1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tCount1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tId2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tName2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tVal2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tDate2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tCount2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "mDetail"
+x = 220
+y = 652
+w = 193
+h = 52
+type = "text"
+sta = 0
+picc = "13_history_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
-name = "mNextRows"
+name = "tHistEmpty"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 70
+
+[[component]]
+name = "mHistory0"
+x = 67
+y = 250
+w = 346
+h = 120
 type = "hotspot"
-x = 452
-y = 240
-w = 24
-h = 280
+events = [
+    "up",
+]
+
+[[component]]
+name = "mHistory1"
+x = 67
+y = 380
+w = 346
+h = 120
+type = "hotspot"
+events = [
+    "up",
+]
+
+[[component]]
+name = "mHistory2"
+x = 67
+y = 510
+w = 346
+h = 120
+type = "hotspot"
 events = [
     "up",
 ]
 
 [[component]]
 name = "mBack"
-type = "hotspot"
 x = 67
-y = 521
+y = 652
 w = 143
-h = 40
-events = [
-    "down",
-    "up",
-]
-
-[[component]]
-name = "mDetail"
+h = 52
 type = "hotspot"
-x = 220
-y = 521
-w = 193
-h = 40
 events = [
-    "down",
     "up",
 ]

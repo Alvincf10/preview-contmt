@@ -1,16 +1,326 @@
-on pMat.loadend:
-  if(pInit.vPage.val!=5)
+on tCem.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
-  pInit.vOffset.val=0
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="cement"
+  pInit.tTitle.txt="Cement (kg)"
+  pInit.tEdit.txt=tCem.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=1
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pNumber
   }
-  pInit.vPage.val=5
-  pInit.vBusy.val=0
-  pInit.vRetry.val=0
-  pInit.vStep.val=0
-  pInit.vPoll.val=0
-  pInit.tMsg.txt=""
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=1
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
 
-on mBack.down:
+on tWat.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="water"
+  pInit.tTitle.txt="Water (liter)"
+  pInit.tEdit.txt=tWat.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=1
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pNumber
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=2
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on tCoa.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="coarse"
+  pInit.tTitle.txt="Coarse Aggregate (kg)"
+  pInit.tEdit.txt=tCoa.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=1
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pNumber
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=3
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on tFin.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="fine"
+  pInit.tTitle.txt="Fine Aggregate (kg)"
+  pInit.tEdit.txt=tFin.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=1
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pNumber
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=4
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on tRetP.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="retarder"
+  pInit.tTitle.txt="Retarder (%)"
+  pInit.tEdit.txt=tRetP.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=1
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pNumber
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=5
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on tAccP.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="accelerator"
+  pInit.tTitle.txt="Accelerator (%)"
+  pInit.tEdit.txt=tAccP.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=1
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pNumber
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=6
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on tFlyP.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="flyAsh"
+  pInit.tTitle.txt="Fly Ash (%)"
+  pInit.tEdit.txt=tFlyP.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=1
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pNumber
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=7
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on tRetB.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="retarderBrand"
+  pInit.tTitle.txt="Retarder Brand"
+  pInit.tEdit.txt=tRetB.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=0
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pEdit
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=8
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on tAccB.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="acceleratorBrand"
+  pInit.tTitle.txt="Accelerator Brand"
+  pInit.tEdit.txt=tAccB.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=0
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pEdit
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=9
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on tFlyB.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.tField.txt="flyAshBrand"
+  pInit.tTitle.txt="Fly Ash Brand"
+  pInit.tEdit.txt=tFlyB.txt
+  pInit.vEditKind.val=0
+  pInit.vEditPage.val=pInit.vPage.val
+  pInit.vMax.val=32
+  pInit.vInputMode.val=0
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pEdit
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=10
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on mBack.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
   if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
@@ -35,8 +345,25 @@ on mBack.down:
   prints pInit.tReq.txt,0
   printh 0A
   }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=11
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
 
-on mNext.down:
+on mNext.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
   if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
@@ -61,6 +388,46 @@ on mNext.down:
   prints pInit.tReq.txt,0
   printh 0A
   }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=12
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on pMat.loadend:
+  if(pInit.vPage.val!=5)
+  {
+  pInit.vOffset.val=0
+
+  }
+  pInit.vPage.val=5
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  pInit.vStep.val=0
+  pInit.vPoll.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
+  pInit.vTask.val=0
+  pInit.tMsg.txt=""
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,6
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
 
 on tmPoll.timer:
   if(pInit.vBusy.val==1)
@@ -73,6 +440,8 @@ on tmPoll.timer:
   {
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   }else
   {
   if(pInit.vTask.val==0)
@@ -82,12 +451,41 @@ on tmPoll.timer:
   if(pInit.nAckCode.val==0)
   {
   pInit.tStatus.txt=pInit.tData.txt
-  spstr pInit.tData.txt,tClock.txt,"|",1
-  spstr pInit.tData.txt,tBatt.txt,"|",3
+  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
+  tClock.txt="--:--"
+  if(pInit.tTime.txt!="")
+  {
+  substr pInit.tTime.txt,tClock.txt,0,5
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  if(pInit.tSplit.txt!="")
+  {
+  covx pInit.tSplit.txt,pInit.vTemp.val,0,0
+  tBatt.txt=pInit.tSplit.txt
+  tBatt.txt+="%"
+  if(pInit.vTemp.val<=40)
+  {
+  tBatt.pco=65132
+  }
+  if(pInit.vTemp.val<=20)
+  {
+  tBatt.pco=64329
+  }
+  pInit.vTemp.val*=11
+  pInit.vTemp.val+=50
+  pInit.vTemp.val/=100
+  }
+  picq 367,82,22,22,6
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
   covx pInit.tSplit.txt,pInit.vStorage.val,0,0
   spstr pInit.tData.txt,pInit.tDate.txt,"|",0
-  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",14
   covx pInit.tSplit.txt,pInit.vMask.val,0,0
   pInit.vSensors.val=0
@@ -106,6 +504,7 @@ on tmPoll.timer:
   {
   pInit.vSensors.val+=1
   }
+  pInit.vStatusReady.val=1
   }
   }
   if(pInit.vGet.val==2)
@@ -147,6 +546,18 @@ on tmPoll.timer:
   {
   pInit.tMsg.txt="Complete the required fields"
   }
+  if(pInit.nAckCode.val==3)
+  {
+  pInit.tMsg.txt="Complete the previous step first"
+  if(pInit.vPage.val==8||pInit.vPage.val==10)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  }
+  }
+  if(pInit.nAckCode.val==15)
+  {
+  pInit.tMsg.txt="This item is no longer available"
+  }
   if(pInit.nAckCode.val==6)
   {
   pInit.tMsg.txt="Check the microSD card"
@@ -170,6 +581,7 @@ on tmPoll.timer:
   }else
   {
   pInit.tMsg.txt=""
+
   }
   pInit.vStep.val=1
   }
@@ -189,12 +601,86 @@ on tmPoll.timer:
   pInit.vBusy.val=0
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   pInit.tMsg.txt="No answer from MCU"
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,6
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
   }
   }
   }
+  }
+  if(tNotice.txt!=pInit.tMsg.txt)
+  {
   tNotice.txt=pInit.tMsg.txt
-  if(pInit.vBusy.val==0&&dp==pInit.vPage.val)
+  }
+  if(dp==5&&pInit.vBusy.val==0&&pInit.vTap.val>0&&pInit.vStatusReady.val==1)
+  {
+  pInit.vDispatch.val=pInit.vTap.val
+  pInit.vTap.val=0
+  if(pInit.vTapView.val==pInit.nView.val&&pInit.vTapBoot.val==pInit.nBoot.val)
+  {
+  if(pInit.vDispatch.val==1)
+  {
+  click tCem,0
+  }
+  if(pInit.vDispatch.val==2)
+  {
+  click tWat,0
+  }
+  if(pInit.vDispatch.val==3)
+  {
+  click tCoa,0
+  }
+  if(pInit.vDispatch.val==4)
+  {
+  click tFin,0
+  }
+  if(pInit.vDispatch.val==5)
+  {
+  click tRetP,0
+  }
+  if(pInit.vDispatch.val==6)
+  {
+  click tAccP,0
+  }
+  if(pInit.vDispatch.val==7)
+  {
+  click tFlyP,0
+  }
+  if(pInit.vDispatch.val==8)
+  {
+  click tRetB,0
+  }
+  if(pInit.vDispatch.val==9)
+  {
+  click tAccB,0
+  }
+  if(pInit.vDispatch.val==10)
+  {
+  click tFlyB,0
+  }
+  if(pInit.vDispatch.val==11)
+  {
+  click mBack,0
+  }
+  if(pInit.vDispatch.val==12)
+  {
+  click mNext,0
+  }
+  }
+  else
+  {
+  pInit.tMsg.txt="View updated. Tap again."
+  }
+  }
+  if(pInit.vBusy.val==0&&dp==5)
   {
   if(pInit.vStep.val==0)
   {
@@ -291,124 +777,4 @@ on tmPoll.timer:
   pInit.vStep.val=1
   }
   }
-  }
-
-on tCem.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="cement"
-  pInit.tTitle.txt="cement"
-  pInit.tEdit.txt=tCem.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
-  }
-
-on tWat.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="water"
-  pInit.tTitle.txt="water"
-  pInit.tEdit.txt=tWat.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
-  }
-
-on tCoa.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="coarse"
-  pInit.tTitle.txt="coarse"
-  pInit.tEdit.txt=tCoa.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
-  }
-
-on tFin.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="fine"
-  pInit.tTitle.txt="fine"
-  pInit.tEdit.txt=tFin.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
-  }
-
-on tRetP.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="retarder"
-  pInit.tTitle.txt="retarder"
-  pInit.tEdit.txt=tRetP.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
-  }
-
-on tAccP.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="accelerator"
-  pInit.tTitle.txt="accelerator"
-  pInit.tEdit.txt=tAccP.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
-  }
-
-on tFlyP.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="flyAsh"
-  pInit.tTitle.txt="flyAsh"
-  pInit.tEdit.txt=tFlyP.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
-  }
-
-on tRetB.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="retarderBrand"
-  pInit.tTitle.txt="retarderBrand"
-  pInit.tEdit.txt=tRetB.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
-  }
-
-on tAccB.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="acceleratorBrand"
-  pInit.tTitle.txt="acceleratorBrand"
-  pInit.tEdit.txt=tAccB.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
-  }
-
-on tFlyB.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.tField.txt="flyAshBrand"
-  pInit.tTitle.txt="flyAshBrand"
-  pInit.tEdit.txt=tFlyB.txt
-  pInit.vEditKind.val=0
-  pInit.vEditPage.val=pInit.vPage.val
-  pInit.vMax.val=32
-  page pEdit
   }

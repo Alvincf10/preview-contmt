@@ -1,40 +1,55 @@
+on mBack.up:
+  vPlotAction.val=1
+
+on mSave.up:
+  vPlotAction.val=2
+
+on mCurve.up:
+  vPlotAction.val=3
+
 on pBaseR.loadend:
   if(pInit.vPage.val!=7)
   {
   pInit.vOffset.val=0
+
   }
   pInit.vPage.val=7
   pInit.vBusy.val=0
   pInit.vRetry.val=0
   pInit.vStep.val=0
   pInit.vPoll.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
+  pInit.vTask.val=0
   pInit.tMsg.txt=""
-
-on mBack.down:
-  if(pInit.vBusy.val==0)
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,10
+  if(pInit.vTemp.val>0)
   {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="NAV|6"
-  prints pInit.tReq.txt,0
-  printh 0A
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
   }
+  pInit.vRevision.val=0
+  vPlotModel.val=0
+  vPlotPhase.val=0
+  vPlotAction.val=0
+  vPoint.val=0
+  vMaxX.val=0
+  picq 44,367,392,145,10
+  line 91,480,409,480,16970
+  xstr 68,471,21,18,0,65535,4292,2,1,3,"0"
+  line 91,460,409,460,16970
+  xstr 68,451,21,18,0,65535,4292,2,1,3,"10"
+  line 91,439,409,439,16970
+  xstr 68,430,21,18,0,65535,4292,2,1,3,"20"
+  line 91,419,409,419,16970
+  xstr 68,410,21,18,0,65535,4292,2,1,3,"30"
+  line 91,398,409,398,16970
+  xstr 68,389,21,18,0,65535,4292,2,1,3,"40"
+  line 91,377,409,377,16970
+  xstr 68,368,21,18,0,65535,4292,2,1,3,"50"
 
 on tmPoll.timer:
   if(pInit.vBusy.val==1)
@@ -47,6 +62,8 @@ on tmPoll.timer:
   {
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   }else
   {
   if(pInit.vTask.val==0)
@@ -56,12 +73,41 @@ on tmPoll.timer:
   if(pInit.nAckCode.val==0)
   {
   pInit.tStatus.txt=pInit.tData.txt
-  spstr pInit.tData.txt,tClock.txt,"|",1
-  spstr pInit.tData.txt,tBatt.txt,"|",3
+  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
+  tClock.txt="--:--"
+  if(pInit.tTime.txt!="")
+  {
+  substr pInit.tTime.txt,tClock.txt,0,5
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  if(pInit.tSplit.txt!="")
+  {
+  covx pInit.tSplit.txt,pInit.vTemp.val,0,0
+  tBatt.txt=pInit.tSplit.txt
+  tBatt.txt+="%"
+  if(pInit.vTemp.val<=40)
+  {
+  tBatt.pco=65132
+  }
+  if(pInit.vTemp.val<=20)
+  {
+  tBatt.pco=64329
+  }
+  pInit.vTemp.val*=11
+  pInit.vTemp.val+=50
+  pInit.vTemp.val/=100
+  }
+  picq 367,82,22,22,10
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
   covx pInit.tSplit.txt,pInit.vStorage.val,0,0
   spstr pInit.tData.txt,pInit.tDate.txt,"|",0
-  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",14
   covx pInit.tSplit.txt,pInit.vMask.val,0,0
   pInit.vSensors.val=0
@@ -80,6 +126,7 @@ on tmPoll.timer:
   {
   pInit.vSensors.val+=1
   }
+  pInit.vStatusReady.val=1
   }
   }
   if(pInit.vGet.val==2)
@@ -88,7 +135,15 @@ on tmPoll.timer:
   {
   spstr pInit.tData.txt,tName.txt,"|",1
   spstr pInit.tData.txt,tTarget.txt,"|",2
+  if(tTarget.txt!="")
+  {
+  tTarget.txt+=" MPa"
+  }
   spstr pInit.tData.txt,tDatum.txt,"|",3
+  if(tDatum.txt!="")
+  {
+  tDatum.txt+=" °C"
+  }
   pInit.vRevision.val=pInit.nAckValue.val
   }
   }
@@ -117,9 +172,244 @@ on tmPoll.timer:
   spstr pInit.tData.txt,tB.txt,"|",1
   spstr pInit.tData.txt,tR2.txt,"|",2
   spstr pInit.tData.txt,tCount.txt,"|",3
+  spstr pInit.tData.txt,tFactor.txt,"|",4
   spstr pInit.tData.txt,tOp.txt,"|",6
   spstr pInit.tData.txt,tProj.txt,"|",7
   spstr pInit.tData.txt,tDate.txt,"|",8
+  strlen tDate.txt,pInit.vTemp.val
+  if(pInit.vTemp.val==10)
+  {
+  spstr tDate.txt,pInit.tNum.txt,"-",2
+  spstr tDate.txt,pInit.tSplit.txt,"-",1
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  spstr tDate.txt,pInit.tSplit.txt,"-",0
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  tDate.txt=pInit.tNum.txt
+  }
+  if(vPlotModel.val!=pInit.nAckValue.val)
+  {
+  vPlotModel.val=pInit.nAckValue.val
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+  covx pInit.tSplit.txt,pInit.vPairs.val,0,0
+  tEq.txt="fc = "
+  tEq.txt+=tA.txt
+  substr tB.txt,pInit.tSplit.txt,0,1
+  if(pInit.tSplit.txt=="-")
+  {
+  tEq.txt+=" "
+  }else
+  {
+  tEq.txt+=" + "
+  }
+  tEq.txt+=tB.txt
+  tEq.txt+=" ln(M)"
+  pInit.tPlotFit.txt="R2 "
+  pInit.tPlotFit.txt+=tR2.txt
+  pInit.tPlotFit.txt+="    Lab pairs "
+  pInit.tPlotFit.txt+=tCount.txt
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
+  pInit.tPlotFit.txt+="    FKZ ages "
+  pInit.tPlotFit.txt+=pInit.tSplit.txt
+  vPoint.val=0
+  vMaxX.val=0
+  picq 44,367,392,145,10
+  line 91,480,409,480,16970
+  xstr 68,471,21,18,0,65535,4292,2,1,3,"0"
+  line 91,460,409,460,16970
+  xstr 68,451,21,18,0,65535,4292,2,1,3,"10"
+  line 91,439,409,439,16970
+  xstr 68,430,21,18,0,65535,4292,2,1,3,"20"
+  line 91,419,409,419,16970
+  xstr 68,410,21,18,0,65535,4292,2,1,3,"30"
+  line 91,398,409,398,16970
+  xstr 68,389,21,18,0,65535,4292,2,1,3,"40"
+  line 91,377,409,377,16970
+  xstr 68,368,21,18,0,65535,4292,2,1,3,"50"
+  vPlotPhase.val=1
+  }
+  }
+  }
+  if(pInit.vGet.val==5)
+  {
+  if(pInit.nAckCode.val==0)
+  {
+  if(vMaxX.val==0)
+  {
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",2
+  covx pInit.tSplit.txt,vMaxX.val,0,0
+  if(vMaxX.val>0)
+  {
+  vTickStep.val=vMaxX.val/40000
+  vTickStep.val+=1
+  vTickStep.val*=5000
+  vTick.val=0
+  while(vTick.val<=vMaxX.val)
+  {
+  vX.val=vTick.val
+  vDiv.val=vMaxX.val
+  if(vMaxX.val>5000000)
+  {
+  vDiv.val/=1000
+  vX.val/=1000
+  }
+  vX.val*=318
+  vX.val/=vDiv.val
+  vX.val+=91
+  line vX.val,377,vX.val,480,16970
+  vX.val-=20
+  pInit.vTemp.val=vTick.val/1000
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  if(vTick.val>0)
+  {
+  pInit.tNum.txt+="k"
+  }
+  xstr vX.val,484,40,18,0,65535,0,1,1,3,pInit.tNum.txt
+  vTick.val+=vTickStep.val
+  }
+  draw 91,377,409,480,33907
+  }
+  }
+  if(vMaxX.val>0)
+  {
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
+  if(pInit.tSplit.txt!="")
+  {
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",1
+  if(pInit.tSplit.txt!="")
+  {
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
+  spstr pInit.tSplit.txt,tWhole.txt,".",0
+  covx tWhole.txt,vX.val,0,0
+  vDiv.val=vMaxX.val
+  if(vMaxX.val>5000000)
+  {
+  vDiv.val/=1000
+  vX.val/=1000
+  }
+  vX.val*=318
+  vX.val/=vDiv.val
+  vX.val+=91
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",1
+  spstr pInit.tSplit.txt,tWhole.txt,".",0
+  covx tWhole.txt,vY.val,0,0
+  if(vY.val>22000)
+  {
+  vY.val=22000
+  }
+  if(vY.val<-22000)
+  {
+  vY.val=-22000
+  }
+  vY.val*=100
+  spstr pInit.tSplit.txt,tWhole.txt,".",1
+  substr tWhole.txt,pInit.tNum.txt,0,2
+  covx pInit.tNum.txt,pInit.vTemp.val,0,0
+  substr pInit.tSplit.txt,tWhole.txt,0,1
+  if(tWhole.txt=="-")
+  {
+  vY.val-=pInit.vTemp.val
+  }else
+  {
+  vY.val+=pInit.vTemp.val
+  }
+  vY.val*=103
+  vY.val/=5000
+  vY.val=480-vY.val
+  if(vPlotPhase.val==1)
+  {
+  if(vPoint.val>0)
+  {
+  vX0.val=vLastX.val
+  vY0.val=vLastY.val
+  vX1.val=vX.val
+  vY1.val=vY.val
+  if(vY0.val<377&&vY1.val>=377)
+  {
+  vDelta.val=vX1.val-vX0.val
+  pInit.vTemp.val=377-vY0.val
+  vDelta.val*=pInit.vTemp.val
+  pInit.vTemp.val=vY1.val-vY0.val
+  vDelta.val/=pInit.vTemp.val
+  vX0.val+=vDelta.val
+  vY0.val=377
+  }
+  if(vY1.val<377&&vY0.val>=377)
+  {
+  vDelta.val=vX0.val-vX1.val
+  pInit.vTemp.val=377-vY1.val
+  vDelta.val*=pInit.vTemp.val
+  pInit.vTemp.val=vY0.val-vY1.val
+  vDelta.val/=pInit.vTemp.val
+  vX1.val+=vDelta.val
+  vY1.val=377
+  }
+  if(vY0.val>480&&vY1.val<=480)
+  {
+  vDelta.val=vX1.val-vX0.val
+  pInit.vTemp.val=480-vY0.val
+  vDelta.val*=pInit.vTemp.val
+  pInit.vTemp.val=vY1.val-vY0.val
+  vDelta.val/=pInit.vTemp.val
+  vX0.val+=vDelta.val
+  vY0.val=480
+  }
+  if(vY1.val>480&&vY0.val<=480)
+  {
+  vDelta.val=vX0.val-vX1.val
+  pInit.vTemp.val=480-vY1.val
+  vDelta.val*=pInit.vTemp.val
+  pInit.vTemp.val=vY0.val-vY1.val
+  vDelta.val/=pInit.vTemp.val
+  vX1.val+=vDelta.val
+  vY1.val=480
+  }
+  if(vY0.val>=377&&vY0.val<=480&&vY1.val>=377&&vY1.val<=480)
+  {
+  line vX0.val,vY0.val,vX1.val,vY1.val,64710
+  }
+  }
+  vLastX.val=vX.val
+  vLastY.val=vY.val
+  }else
+  {
+  if(vX.val>=91&&vX.val<=409&&vY.val>=377&&vY.val<=480)
+  {
+  cirs vX.val,vY.val,3,64710
+  cir vX.val,vY.val,3,65535
+  }
+  }
+  }
+  }
+  }
+  vPoint.val+=1
+  if(vPlotPhase.val==1&&vPoint.val==65)
+  {
+  vPlotPhase.val=2
+  vPoint.val=0
+  }
+  if(vPlotPhase.val==2&&vPoint.val>=pInit.vPairs.val)
+  {
+  vPlotPhase.val=3
+  }
+  }
+  else
+  {
+  vPlotPhase.val=3
+  tEq.txt="Chart data unavailable"
+  }
+  if(vPlotPhase.val<3)
+  {
+  pInit.vTemp.val=vPoint.val%8
+  if(pInit.vTemp.val==0)
+  {
+  pInit.vStep.val=0
+  }
+  else
+  {
+  pInit.vStep.val-=1
+  }
   }
   }
   pInit.vStep.val+=1
@@ -144,6 +434,18 @@ on tmPoll.timer:
   {
   pInit.tMsg.txt="Complete the required fields"
   }
+  if(pInit.nAckCode.val==3)
+  {
+  pInit.tMsg.txt="Complete the previous step first"
+  if(pInit.vPage.val==8||pInit.vPage.val==10)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  }
+  }
+  if(pInit.nAckCode.val==15)
+  {
+  pInit.tMsg.txt="This item is no longer available"
+  }
   if(pInit.nAckCode.val==6)
   {
   pInit.tMsg.txt="Check the microSD card"
@@ -167,6 +469,7 @@ on tmPoll.timer:
   }else
   {
   pInit.tMsg.txt=""
+
   }
   pInit.vStep.val=1
   }
@@ -186,11 +489,93 @@ on tmPoll.timer:
   pInit.vBusy.val=0
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   pInit.tMsg.txt="No answer from MCU"
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,10
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
   }
   }
   }
-  if(pInit.vBusy.val==0&&dp==pInit.vPage.val)
+  }
+  if(pInit.tMsg.txt!="")
+  {
+  tEq.txt=pInit.tMsg.txt
+  }
+  if(pInit.vBusy.val==0&&dp==7)
+  {
+  if(vPlotAction.val==1)
+  {
+  vPlotAction.val=0
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="NAV|6"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(vPlotAction.val==2&&pInit.vRevision.val>0)
+  {
+  vPlotAction.val=0
+  pInit.tCommand.txt="BASE_SAVE|"
+  covx pInit.vRevision.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  if(vPlotAction.val==3&&vPlotModel.val>0)
+  {
+  vPlotAction.val=0
+  page pChart
+  }
+  }
+  if(pInit.vBusy.val==0&&dp==7)
   {
   if(pInit.vStep.val==0)
   {
@@ -336,20 +721,17 @@ on tmPoll.timer:
   printh 0A
   }
   }
-  if(pInit.vStep.val>4)
+  if(pInit.vStep.val==5)
   {
-  pInit.vPoll.val+=1
-  if(pInit.vPoll.val>=5)
+  if(vPlotPhase.val==1||vPlotPhase.val==2)
   {
-  pInit.vPoll.val=0
-  pInit.vStep.val=1
+  pInit.vGet.val=5
+  pInit.tCommand.txt="GET|curve|"
+  if(vPlotPhase.val==2)
+  {
+  pInit.tCommand.txt="GET|scatter|"
   }
-  }
-  }
-
-on mSave.down:
-  pInit.tCommand.txt="BASE_SAVE|"
-  covx pInit.vRevision.val,pInit.tNum.txt,0,0
+  covx vPoint.val,pInit.tNum.txt,0,0
   pInit.tCommand.txt+=pInit.tNum.txt
   if(pInit.vBusy.val==0)
   {
@@ -357,7 +739,7 @@ on mSave.down:
   pInit.nAckSeq.val=0
   pInit.vBusy.val=1
   pInit.vRetry.val=0
-  pInit.vTask.val=1
+  pInit.vTask.val=0
   pInit.tReq.txt="CM1|"
   covx pInit.nBoot.val,pInit.tNum.txt,0,0
   pInit.tReq.txt+=pInit.tNum.txt
@@ -375,9 +757,19 @@ on mSave.down:
   prints pInit.tReq.txt,0
   printh 0A
   }
-
-on mCurve.up:
-  if(pInit.vBusy.val==0)
+  }
+  else
   {
-  page pChart
+  pInit.vStep.val+=1
+  }
+  }
+  if(pInit.vStep.val>5)
+  {
+  pInit.vPoll.val+=1
+  if(pInit.vPoll.val>=5)
+  {
+  pInit.vPoll.val=0
+  pInit.vStep.val=1
+  }
+  }
   }

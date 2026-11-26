@@ -4,7 +4,7 @@ Sketch berada di [ConMT.ino](ConMT/ConMT.ino). Sumber perilaku adalah [preview w
 
 ## Status
 
-**Build Arduino untuk ATmega328P lulus batas flash.** Perintah build di bawah menghasilkan `arduino/out/ConMT-ATmega328P.hex`. Pengujian fisik microSD, tiga probe sekaligus, puncak stack, dan komunikasi panel masih terbuka.
+**Build revisi HMI untuk ATmega328P lulus batas flash.** Pasangan panel lulus simulasi CM1 di 17 halaman melalui parser, engine, dan jurnal yang sama dengan sketch. Uji microSD, probe, komunikasi panel fisik, dan puncak stack saat operasi memerlukan unit dalam konfigurasi kerja.
 
 HEX lokal `arduino/out/ConMT-ATmega328P-ISP.hex` untuk unit yang diuji via Arduino as ISP menyertakan instruksi lompat ke aplikasi pada alamat reset `0x7E00` yang dipilih fuse unit.
 
@@ -12,11 +12,15 @@ HEX lokal `arduino/out/ConMT-ATmega328P-ISP.hex` untuk unit yang diuji via Ardui
 | --- | ---: | ---: |
 | Build terkecil sebelumnya | 37.718 byte | 1.090 byte |
 | HEX sebelum koreksi hasil dan driver board | 31.718 byte | 1.193 byte |
-| **HEX hasil pipeline Arduino (raw journal)** | **30.250 byte** | **1.194 byte** |
+| HEX sebelum percobaan ulang mount microSD | 30.250 byte | 1.194 byte |
+| HEX dengan percobaan ulang mount microSD | 30.414 byte | 1.198 byte |
+| HEX dengan indikator baterai terkalibrasi | 30.698 byte | 1.204 byte |
+| HEX revisi HMI dan baris Day 0 | 30.616 byte | 1.204 byte |
+| **HEX entri harian dan fokus baris baru** | **30.694 byte** | **1.204 byte** |
 
-Flash dihitung dari `.text + .data`. Profil Arduino menyediakan 32.256 byte, sehingga ruang yang tersisa adalah 2.006 byte. Kapasitas fisik chip 32.768 byte. SRAM statis mencakup `.data`, `.bss`, dan `.noinit`.
+Flash dihitung dari `.text + .data`. Profil Arduino menyediakan 32.256 byte sehingga tersisa 1.562 byte. Kapasitas fisik chip 32.768 byte. SRAM statis mencakup `.data`, `.bss`, dan `.noinit`. Tersedia 844 byte untuk stack dan interrupt.
 
-Build ini masuk kapasitas chip dan profil Arduino. Ukurannya 470 byte di bawah sasaran cadangan engineering 30.720 byte dalam paket rencana lokal.
+Ukuran rilis berada 26 byte di bawah sasaran engineering 30.720 byte. Flag AVR GCC `-fno-tree-dominator-opts` menurunkan ukuran link penuh dengan profil aritmetika 32-bit yang sama.
 
 Perubahan source memakai satu buffer sektor SD untuk mengakses record jurnal, satu area kerja untuk snapshot sesi, dan satu root transaksi yang diterbitkan setelah commit. Pipeline build menggabungkan rangkaian instruksi AVR yang identik sebelum link akhir dengan target ATmega328P. Link akhir memakai batas memori MCU dan pemeriksaan kedua terhadap batas profil Arduino.
 
@@ -39,7 +43,7 @@ Pemetaan berasal dari skema Maturity Control LCD rev. 1.0 di paket rencana lokal
 | Tiga kanal suhu | D2, bus bersama | Driver memeriksa ROM, status konversi per probe, dan CRC. Pembacaan 85 °C memerlukan dua konversi berturut-turut karena register suhu juga bernilai 85 °C saat probe reset. Kanal mengikuti urutan penemuan ROM. [Datasheet DS18B20](https://www.analog.com/media/en/technical-documentation/data-sheets/DS18B20.pdf) |
 | microSD | D10 CS, D11 MOSI, D12 MISO, D13 SCK | SPI membaca dan menulis sektor kartu serta memeriksa CRC transfer. [Spesifikasi SD SPI](https://www.sdcard.org/cms/wp-content/themes/sdcard-org/dl.php?f=Part1_Physical_Layer_Simplified_Specification_Ver6.00.pdf) |
 | UART panel | D0 RX, D1 TX | CM1 9600 baud, 8N1 sebagai default. Konfirmasi baud dan level listrik panel pada unit. |
-| Tegangan masuk | A0 | Pembagi 3:1 dengan kompensasi AVCC dari bandgap internal nominal 1.100 mV. `CONMT_BANDGAP_MV` dapat dikalibrasi per unit. Profil dengan AVCC terukur dapat menetapkan `CONMT_VIN_REF_MV`. Persentase baterai tersedia setelah ambang kosong/penuh diisi di [BoardProfile.h](ConMT/src/BoardProfile.h). |
+| Tegangan dan baterai | A0 | Vin memakai pembagi 3:1 dan kompensasi AVCC. Persentase baterai memakai kalibrasi ADC unit sebelumnya dengan ambang kehadiran 520, kosong 877, dan penuh 991. Pembacaan difilter dan perubahan persentase dikonfirmasi selama 100 sampel. [Bukti kalibrasi](../firmware/board-evidence/battery.json) |
 | Buzzer | D3 | Keluaran aktif tinggi selama 60 ms. Perlu uji jenis buzzer fisik. |
 | Kalender | Perintah `CLOCK_SET` | RTC cadangan daya belum terlihat pada skema. Waktu lokal harus disetel ulang setiap kali daya MCU terputus. |
 
@@ -47,11 +51,13 @@ Pemetaan berasal dari skema Maturity Control LCD rev. 1.0 di paket rencana lokal
 
 Firmware memakai region jurnal 1 MiB di akhir kartu, yaitu 2.048 sektor 512 byte. Tidak perlu filesystem, FAT, atau `CMTLOG.BIN`. Dua sektor pertama region adalah anchor; slot record 128 byte mengikuti, dengan kapasitas 8.184 slot. Format kartu tidak relevan karena region ditulis langsung. Gunakan kartu khusus perangkat: region ini berada di luar pembukuan partisi dan dapat menimpa data lain di kartu. Penyediaan file tidak diperlukan; validasi SD fisik masih perlu dilakukan.
 
+Setelah kegagalan I/O, firmware mencoba mount kembali dengan jeda minimal empat detik. Setelah mount berhasil, status dan sesi yang tersimpan dibaca kembali. Jurnal pada kartu kosong mulai ditulis pada transaksi simpan pertama.
+
 Jurnal menyimpan record ber-versi dengan CRC dan commit logis yang diverifikasi sebelum menulis salah satu dari dua sektor penunjuk. Baseline dan sesi lama tetap tersedia untuk riwayat. Format record tetap, tetapi firmware berbasis file FAT lama tidak kompatibel dengan region raw ini dan datanya tidak diimpor. Format firmware lama di luar folder `arduino` juga belum memiliki jalur impor.
 
 ## Build dan uji
 
-Gunakan [build.py](build.py) untuk menghasilkan HEX. Script memakai Arduino CLI dengan profil yang mematok Arduino AVR Boards 1.8.8 dan OneWire 2.3.8. Script menemukan instalasi Arduino IDE pada lokasi Windows standar atau menerima path CLI lewat `--arduino-cli`. Berikan path `bin` AVR GCC 16.1.0 yang dipakai untuk link. [Rilis AVR GCC 16.1.0](https://github.com/ZakKemble/avr-gcc-build/releases/tag/v16.1.0-1) · [Profil Arduino CLI](https://docs.arduino.cc/arduino-cli/sketch-project-file)
+Gunakan [build.py](build.py) untuk menghasilkan HEX. Script memakai Arduino CLI dengan profil yang mematok Arduino AVR Boards 1.8.8 dan OneWire 2.3.8. Script menemukan instalasi Arduino IDE pada lokasi Windows standar atau menerima path CLI lewat `--arduino-cli`. Berikan path `bin` AVR GCC 16.1.0 atau 16.2.0 untuk link. Ukuran di atas diukur dengan AVR GCC 16.2.0 di macOS. [Rilis AVR GCC 16.1.0](https://github.com/ZakKemble/avr-gcc-build/releases/tag/v16.1.0-1) · [Paket macOS AVR GCC 16.2.0](https://github.com/osx-cross/homebrew-avr/releases/tag/avr-gcc%4016-16.2.0_1)
 
 ```powershell
 python -B .\arduino\build.py --avr-bin 'C:\path\avr-gcc-16.1.0-x64-windows\bin' --output .\arduino\out\ConMT-ATmega328P.hex
@@ -70,6 +76,6 @@ Kedua dataset memverifikasi 41 observasi, 10 pasangan lab dan FKZ, M per checkpo
 
 Simulator AVR menjalankan 91 pemeriksaan komponen hitung dengan 0 kegagalan. Cakupannya adalah M untuk kedua dataset, koefisien regresi, R², dan tiga kondisi fungsi FKZ.
 
-Firmware 1.0.1 memakai alamat variabel komunikasi global di `pInit` untuk pasangan HMI K050. Paket pasangan terbaru adalah `nextion/conmt-NX8048K050-CM1-final.tft` dan `arduino/out/ConMT-ATmega328P-ISP-CM1-K050-raw.hex`. Uji integrasi menjalankan simulator panel dengan parser dan engine produksi serta image kartu raw di komputer. Riwayat 41 checkpoint tetap dapat dibaca dalam format jurnal yang sama.
+Firmware 1.0.1 memakai alamat variabel komunikasi global di `pInit` untuk pasangan HMI K050. Paket pasangan terbaru adalah `nextion/conmt-NX8048K050-CM1-final.tft` dan `arduino/out/ConMT-ATmega328P-ISP.hex`. Uji integrasi menjalankan simulator panel dengan parser dan engine produksi serta image kartu raw di komputer. Uji juga mencakup boot tanpa kartu, pemasangan kartu, penyimpanan, dan pembacaan setelah restart.
 
 Laporan SHA-256 dan batas pengujian pasangan K050 dicatat pada `nextion/conmt-NX8048K050-CM1-final.validation.json`.

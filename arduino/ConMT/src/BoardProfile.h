@@ -8,12 +8,6 @@
 #ifndef CONMT_BANDGAP_MV
 #define CONMT_BANDGAP_MV 1100UL
 #endif
-#ifndef CONMT_BATTERY_EMPTY_MV
-#define CONMT_BATTERY_EMPTY_MV 0
-#endif
-#ifndef CONMT_BATTERY_FULL_MV
-#define CONMT_BATTERY_FULL_MV 0
-#endif
 
 namespace conmt {
 namespace pins {

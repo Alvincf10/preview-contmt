@@ -8,8 +8,12 @@ Splash mengikuti urutan preview ConMT. Sesudah handshake MCU, empat tahap berjal
 
 Keyboard mengirim nilai operator, proyek, tanggal, baseline, material, dan lab melalui perintah produksi. Penyimpanan baseline serta hasil mengirim revisi yang sedang ditinjau. Konfirmasi memakai token dari MCU. Pemilihan baseline memakai ID balasan, dan BACK mempertahankan konteks draft atau sesi.
 
-Halaman utama mempertahankan ID 0–16. Lima halaman lokal menangani keyboard, konfirmasi, jam, koreksi checkpoint, dan kurva. Frame dari halaman lokal tetap memakai ID domain asal di MCU. Seluruh baris dapat dibaca melalui paginasi.
+Panel menampilkan dan menerima tanggal dalam format DD-MM-YYYY. Keyboard memakai tombol angka dan tanda hubung yang sudah ada saat kolom tanggal disentuh. Panel mengonversi tanggal ke YYYY-MM-DD untuk komunikasi CM1.
+
+Indikator pojok menampilkan HH:MM dan persentase baterai dari MCU. Teks jam di User Information dan Device Info membuka penyetelan jam yang sama. Grafik baseline memakai 65 sampel kurva dan pasangan uji lab dari MCU. Sentuh grafik untuk melihatnya lebih besar beserta R² dan jumlah pasangan.
+
+Halaman utama memakai ID 0–16. Delapan halaman lokal menangani keyboard teks dan angka, konfirmasi, jam, koreksi checkpoint, kurva, penambahan baris, dan Sample schedule. Frame dari halaman lokal memakai ID domain asal di MCU. Daftar yang melebihi area tampilan bisa digulir per baris. Panel memuat baris yang baru terlihat melalui GET CM1 dan memakai ulang baris yang masih terlihat.
 
 Uji integrasi menggunakan simulator K050 dan parser, engine, serta jurnal Arduino yang sebenarnya, dengan image kartu raw dan sensor/jam terkontrol di komputer. Cakupannya meliputi input sampai SAVE dan riwayat, koreksi checkpoint, grafik, konfirmasi hapus, balasan serial hilang, dan MCU reset/reconnect. Laporan build dan checksum ada di conmt-NX8048K050-CM1-final.validation.json.
 
-Firmware raw sudah di-upload ke unit uji lewat COM12 (Arduino as ISP); verifikasi flash, fuse, lock, dan EEPROM lulus. Upload TFT final ke panel, pengoperasian fisik pasangan baru, kestabilan probe, serta baca/tulis dan recovery microSD masih memerlukan pengujian pada unit. [Petunjuk file dan build](NX8048K050-README.txt)
+Firmware dipasang lewat Arduino CLI dan lolos baca-balik seluruh flash. TFT terbaru tersedia untuk pemasangan ke layar. Pemeriksaan fisik baterai, UART panel, dan baca/tulis microSD dicatat terpisah dari hasil simulator. [Petunjuk file dan build](NX8048K050-README.txt)

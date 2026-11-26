@@ -6,107 +6,83 @@ y = 0
 w = 480
 h = 800
 bco = "#1e2326"
+sta = 2
+pic = "web_pAddRow"
+
+[[component]]
+name = "tmAdd"
+type = "timer"
+tim = 250
+en = 1
+events = [
+    "timer",
+]
+
+[[component]]
+name = "tError"
+x = 67
+y = 500
+w = 346
+h = 24
+type = "text"
+sta = 0
+picc = "web_pAddRow"
+txt = ""
+txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
 
 [[component]]
 name = "tTitle"
-type = "text"
-x = 20
-y = 40
-w = 440
-h = 45
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans28"
 txt = "Add row"
 txt_maxl = 64
 
 [[component]]
-name = "tHint"
-type = "text"
-x = 20
-y = 100
-w = 440
-h = 30
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = "Choose early-age temperature or a lab day."
-txt_maxl = 64
-
-[[component]]
 name = "mEarly"
-type = "button"
-x = 20
-y = 180
-w = 440
-h = 50
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Day 0 - early temp"
-txt_maxl = 18
-events = [
-    "up",
-]
-
-[[component]]
-name = "mFill"
-type = "button"
-x = 20
-y = 250
-w = 440
-h = 50
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Fill 0-6 h (0.5 step)"
-txt_maxl = 21
+x = 67
+y = 276
+w = 346
+h = 66
+type = "hotspot"
 events = [
     "up",
 ]
 
 [[component]]
 name = "mLab"
-type = "button"
-x = 20
-y = 320
-w = 440
-h = 50
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Lab day"
-txt_maxl = 7
+x = 67
+y = 350
+w = 346
+h = 66
+type = "hotspot"
+events = [
+    "up",
+]
+
+[[component]]
+name = "mFill"
+x = 67
+y = 424
+w = 346
+h = 66
+type = "hotspot"
 events = [
     "up",
 ]
 
 [[component]]
 name = "mClose"
-type = "button"
-x = 20
-y = 650
-w = 440
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "CANCEL"
-txt_maxl = 6
+x = 67
+y = 538
+w = 168
+h = 48
+type = "hotspot"
 events = [
     "up",
 ]

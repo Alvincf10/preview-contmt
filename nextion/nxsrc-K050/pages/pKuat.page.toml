@@ -5,14 +5,7 @@ x = 0
 y = 0
 w = 480
 h = 800
-
-[[component]]
-name = "bg"
-type = "picture"
-x = 0
-y = 0
-w = 480
-h = 800
+sta = 2
 pic = "09_kuat_tekan"
 
 [[component]]
@@ -25,36 +18,6 @@ events = [
 ]
 
 [[component]]
-name = "tClock"
-type = "text"
-x = 43
-y = 81
-w = 40
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "09_kuat_tekan"
-xcen = 0
-
-[[component]]
-name = "tBatt"
-type = "text"
-x = 429
-y = 81
-w = 32
-h = 12
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "09_kuat_tekan"
-xcen = 0
-
-[[component]]
 name = "tMsg"
 type = "variable"
 sta = 1
@@ -63,96 +26,136 @@ txt_maxl = 24
 vscope = 1
 
 [[component]]
-name = "tNotice"
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
 type = "text"
-x = 10
-y = 775
-w = 460
-h = 24
-sta = 1
-bco = "#1e2326"
+sta = 0
+picc = "09_kuat_tekan"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
 pco = "#ffffff"
-font = "NotoSans16"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
+type = "text"
+sta = 0
+picc = "09_kuat_tekan"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tNotice"
+x = 14
+y = 775
+w = 452
+h = 23
+type = "text"
+sta = 0
+picc = "09_kuat_tekan"
 txt = ""
 txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tS1"
+x = 71
+y = 380
+w = 109
+h = 21
 type = "text"
-x = 115
-y = 377
-w = 41
-h = 17
 sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
 picc = "09_kuat_tekan"
-xcen = 0
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tS2"
+x = 186
+y = 380
+w = 108
+h = 21
 type = "text"
-x = 230
-y = 377
-w = 41
-h = 17
 sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
 picc = "09_kuat_tekan"
-xcen = 0
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tS3"
+x = 300
+y = 380
+w = 109
+h = 21
 type = "text"
-x = 345
-y = 377
-w = 41
-h = 17
 sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
 picc = "09_kuat_tekan"
-xcen = 0
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "mStart"
-type = "hotspot"
 x = 67
-y = 416
+y = 422
 w = 346
 h = 58
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mHist"
-type = "hotspot"
 x = 67
-y = 486
+y = 492
 w = 346
 h = 58
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mBack"
-type = "hotspot"
 x = 67
-y = 556
+y = 562
 w = 346
 h = 58
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]

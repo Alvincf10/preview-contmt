@@ -5,14 +5,7 @@ x = 0
 y = 0
 w = 480
 h = 800
-
-[[component]]
-name = "bg"
-type = "picture"
-x = 0
-y = 0
-w = 480
-h = 800
+sta = 2
 pic = "00_init"
 
 [[component]]
@@ -131,104 +124,6 @@ name = "vStep"
 type = "variable"
 vscope = 1
 val = 0
-
-[[component]]
-name = "tClock"
-type = "text"
-x = 14
-y = 70
-w = 88
-h = 28
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "00_init"
-
-[[component]]
-name = "tBatt"
-type = "text"
-x = 378
-y = 70
-w = 88
-h = 28
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "00_init"
-
-[[component]]
-name = "statusArea"
-type = "text"
-x = 96
-y = 523
-w = 300
-h = 141
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = ""
-txt_maxl = 1
-
-[[component]]
-name = "tChkSensors"
-type = "text"
-x = 98
-y = 595
-w = 295
-h = 30
-sta = 1
-bco = "#1e2326"
-txt = "Checking sensors: --"
-txt_maxl = 40
-pco = "#ffffff"
-font = "NotoSans16"
-
-[[component]]
-name = "tChkClock"
-type = "text"
-x = 98
-y = 560
-w = 295
-h = 30
-sta = 1
-bco = "#1e2326"
-txt = "Loading database: --"
-txt_maxl = 40
-pco = "#ffffff"
-font = "NotoSans16"
-
-[[component]]
-name = "tChkDevice"
-type = "text"
-x = 98
-y = 630
-w = 295
-h = 30
-sta = 1
-bco = "#1e2326"
-txt = "Checking hardware: --"
-txt_maxl = 40
-pco = "#ffffff"
-font = "NotoSans16"
-
-[[component]]
-name = "tReady"
-type = "text"
-x = 98
-y = 525
-w = 295
-h = 30
-sta = 1
-bco = "#1e2326"
-txt = "Starting application: --"
-txt_maxl = 40
-pco = "#ffffff"
-font = "NotoSans16"
 
 [[component]]
 name = "tMsg"
@@ -423,20 +318,6 @@ txt = ""
 txt_maxl = 8
 
 [[component]]
-name = "tNotice"
-type = "text"
-x = 10
-y = 775
-w = 460
-h = 24
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = ""
-txt_maxl = 96
-
-[[component]]
 name = "tStatus"
 type = "variable"
 vscope = 1
@@ -449,32 +330,6 @@ name = "vChosen"
 type = "variable"
 vscope = 1
 val = 0
-
-[[component]]
-name = "tProgress"
-type = "text"
-x = 350
-y = 464
-w = 55
-h = 28
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = "0%"
-txt_maxl = 8
-
-[[component]]
-name = "jLink"
-type = "progress-bar"
-x = 100
-y = 494
-w = 294
-h = 18
-sta = 0
-val = 0
-bco = "#343c42"
-pco = "#ff8814"
 
 [[component]]
 name = "vProtocolReady"
@@ -508,3 +363,382 @@ name = "vCount"
 type = "variable"
 vscope = 1
 val = 0
+
+[[component]]
+name = "vPairs"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tPlotFit"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 96
+
+[[component]]
+name = "vEditView"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vEditBoot"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vInputMode"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vSavedCount"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vRun"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vStatusReady"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vDraft"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vTap"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vTapBoot"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vTapView"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vTapId"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vDispatch"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vFocusId"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vFocusFirst"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vMatuOffset"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vLab0"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vLab1"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vLab2"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vLab3"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vLab4"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tClockDate"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 10
+
+[[component]]
+name = "tClockTime"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 8
+
+[[component]]
+name = "tPourDate"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 10
+
+[[component]]
+name = "tPourClock"
+type = "variable"
+vscope = 1
+sta = 1
+txt = ""
+txt_maxl = 8
+
+[[component]]
+name = "vLabSlots"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vCrop"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "jLink"
+type = "variable"
+val = 0
+
+[[component]]
+name = "vHistoryOffset"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vHistoryEnd"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vListBase"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vListShift"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vListReuse"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vListDirty"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vListReady"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vListMax"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vTouchPhase"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vFocusRow"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
+type = "text"
+sta = 0
+picc = "00_init"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
+type = "text"
+sta = 0
+picc = "00_init"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tNotice"
+x = 14
+y = 775
+w = 452
+h = 23
+type = "text"
+sta = 0
+picc = "00_init"
+txt = ""
+txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tProgress"
+x = 359
+y = 459
+w = 50
+h = 17
+type = "text"
+sta = 0
+picc = "00_init"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#f27c0a"
+xcen = 2
+ycen = 1
+events = []
+
+[[component]]
+name = "tReady"
+x = 105
+y = 524
+w = 304
+h = 22
+type = "text"
+sta = 0
+picc = "00_init"
+txt = "Starting application: --"
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tChkClock"
+x = 105
+y = 558
+w = 304
+h = 22
+type = "text"
+sta = 0
+picc = "00_init"
+txt = "Loading database: --"
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tChkSensors"
+x = 105
+y = 592
+w = 304
+h = 22
+type = "text"
+sta = 0
+picc = "00_init"
+txt = "Checking sensors: --"
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tChkDevice"
+x = 105
+y = 626
+w = 304
+h = 22
+type = "text"
+sta = 0
+picc = "00_init"
+txt = "Checking hardware: --"
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []

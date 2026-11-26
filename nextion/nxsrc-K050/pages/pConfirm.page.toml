@@ -6,6 +6,8 @@ y = 0
 w = 480
 h = 800
 bco = "#1e2326"
+sta = 2
+pic = "web_pConfirm"
 
 [[component]]
 name = "tmConfirm"
@@ -17,81 +19,65 @@ events = [
 ]
 
 [[component]]
-name = "tTitle"
+name = "tBody"
+x = 67
+y = 361
+w = 346
+h = 17
 type = "text"
-x = 30
-y = 170
-w = 420
-h = 60
-sta = 1
-bco = "#1e2326"
+sta = 0
+picc = "web_pConfirm"
+txt = "Replace the active session or delete this item?"
+txt_maxl = 64
+font = "NotoSans16"
 pco = "#ffffff"
-font = "NotoSans28"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tError"
+x = 67
+y = 388
+w = 346
+h = 24
+type = "text"
+sta = 0
+picc = "web_pConfirm"
+txt = ""
+txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tTitle"
+type = "variable"
+vscope = 0
+sta = 1
 txt = "Confirm change"
 txt_maxl = 64
 
 [[component]]
-name = "tBody"
-type = "text"
-x = 30
-y = 260
-w = 420
-h = 110
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = "Replace the active session or delete this item?"
-txt_maxl = 64
-
-[[component]]
-name = "tError"
-type = "text"
-x = 30
-y = 400
-w = 420
-h = 60
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = ""
-txt_maxl = 64
-
-[[component]]
 name = "mNo"
-type = "button"
-x = 30
-y = 530
-w = 190
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Cancel"
-txt_maxl = 6
+x = 67
+y = 426
+w = 168
+h = 48
+type = "hotspot"
 events = [
     "up",
 ]
 
 [[component]]
 name = "mYes"
-type = "button"
-x = 250
-y = 530
-w = 200
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Confirm"
-txt_maxl = 7
+x = 245
+y = 426
+w = 168
+h = 48
+type = "hotspot"
 events = [
     "up",
 ]

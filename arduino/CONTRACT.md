@@ -51,12 +51,12 @@ Indeks baris dimulai dari 0. Panel dapat mengelompokkan enam baris per tampilan 
 | `USER_SAVE` | Validasi identitas dan buka menu |
 | `BASE_NEW` | Pertahankan isi draft, ambil konteks identitas dan waktu awal |
 | `ROW_FOCUS\|i` | ACK memuat ID baris |
-| `ROW_SET\|i\|field\|value` | Ubah baris lab, kemudian bangun ulang urutan yang stabil |
-| `ROW_SENSOR\|i` | Masukkan rerata suhu saat tombol ditekan |
+| `ROW_SET\|i\|field\|value` | Ubah baris lab dan urutkan hasil. Indeks 0 pada draft kosong membuat baris Day 0 dalam transaksi yang sama |
+| `ROW_SENSOR\|i` | Masukkan rerata suhu ke baris yang dituju. Indeks 0 pada draft kosong dapat menyimpan pembacaan pertama ke Day 0 |
 | `ROW_SCHEDULE\|i` | Format `labrow` dengan tanggal/jam jadwal |
-| `ROW_ADD_EARLY` | Tambah slot Day 0 berikutnya dari 0–6 jam |
-| `ROW_FILL_EARLY` | Tambah slot Day 0 yang kosong tanpa mengganti data yang sudah ada |
-| `ROW_ADD_LAB` | Tambah hari lab positif yang berikutnya tersedia |
+| `ROW_ADD_EARLY` | Tambah slot Day 0 berikutnya dari 0–6 jam. Nilai ACK adalah posisi baris baru mulai dari 1 |
+| `ROW_FILL_EARLY` | Tambah slot Day 0 yang kosong tanpa mengganti data. Nilai ACK adalah posisi baris pertama yang ditambah, atau 0 bila semua slot sudah ada |
+| `ROW_ADD_LAB` | Tambah hari lab positif yang berikutnya tersedia. Draft kosong menyimpan Day 0 kosong bersama hari baru dalam satu transaksi. Nilai ACK adalah posisi baris hari baru mulai dari 1 |
 | `ROW_DELETE\|i` | Meminta konfirmasi. Tabel dipertahankan minimal tiga baris |
 | `BASE_GENERATE` | Simpan model yang dihitung dan buka `pBaseR` |
 | `BASE_SAVE\|revision` | Pakai revisi dari `GET\|baseline`. ACK memuat ID baseline tersimpan |

@@ -1,16 +1,77 @@
-on pDev.loadend:
-  if(pInit.vPage.val!=16)
+on tClock.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
-  pInit.vOffset.val=0
+  pInit.tClockDate.txt=pInit.tDate.txt
+  pInit.tClockTime.txt=pInit.tTime.txt
+  page pClock
   }
-  pInit.vPage.val=16
-  pInit.vBusy.val=0
-  pInit.vRetry.val=0
-  pInit.vStep.val=0
-  pInit.vPoll.val=0
-  pInit.tMsg.txt=""
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=1
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
 
-on mBack.down:
+on mClockBadge.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  pInit.tClockDate.txt=pInit.tDate.txt
+  pInit.tClockTime.txt=pInit.tTime.txt
+  page pClock
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=2
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on tDevStatus.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(tDevStatus.txt=="SET CLOCK")
+  {
+  pInit.tClockDate.txt=pInit.tDate.txt
+  pInit.tClockTime.txt=pInit.tTime.txt
+  page pClock
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=3
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on mBack.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vIdentity.val==1)
+  {
   if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
@@ -35,6 +96,74 @@ on mBack.down:
   prints pInit.tReq.txt,0
   printh 0A
   }
+  }
+  else
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="NAV|1"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=4
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+
+on pDev.loadend:
+  if(pInit.vPage.val!=16)
+  {
+  pInit.vOffset.val=0
+
+  }
+  pInit.vPage.val=16
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  pInit.vStep.val=0
+  pInit.vPoll.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
+  pInit.vTask.val=0
+  pInit.tMsg.txt=""
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,26
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
 
 on tmPoll.timer:
   if(pInit.vBusy.val==1)
@@ -47,6 +176,8 @@ on tmPoll.timer:
   {
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   }else
   {
   if(pInit.vTask.val==0)
@@ -56,12 +187,41 @@ on tmPoll.timer:
   if(pInit.nAckCode.val==0)
   {
   pInit.tStatus.txt=pInit.tData.txt
-  spstr pInit.tData.txt,tClock.txt,"|",1
-  spstr pInit.tData.txt,tBatt.txt,"|",3
+  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
+  tClock.txt="--:--"
+  if(pInit.tTime.txt!="")
+  {
+  substr pInit.tTime.txt,tClock.txt,0,5
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  if(pInit.tSplit.txt!="")
+  {
+  covx pInit.tSplit.txt,pInit.vTemp.val,0,0
+  tBatt.txt=pInit.tSplit.txt
+  tBatt.txt+="%"
+  if(pInit.vTemp.val<=40)
+  {
+  tBatt.pco=65132
+  }
+  if(pInit.vTemp.val<=20)
+  {
+  tBatt.pco=64329
+  }
+  pInit.vTemp.val*=11
+  pInit.vTemp.val+=50
+  pInit.vTemp.val/=100
+  }
+  picq 367,82,22,22,26
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
   covx pInit.tSplit.txt,pInit.vStorage.val,0,0
   spstr pInit.tData.txt,pInit.tDate.txt,"|",0
-  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",14
   covx pInit.tSplit.txt,pInit.vMask.val,0,0
   pInit.vSensors.val=0
@@ -80,6 +240,31 @@ on tmPoll.timer:
   {
   pInit.vSensors.val+=1
   }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",17
+  covx pInit.tSplit.txt,pInit.vIdentity.val,0,0
+  spstr pInit.tData.txt,tDevVersion.txt,"|",9
+  covx pInit.vSensors.val,tDevSensor.txt,0,0
+  tDevSensor.txt+="/3 connected"
+  tDevStatus.txt="READY"
+  tDevHealth.txt="microSD ready"
+  if(pInit.vStorage.val!=0)
+  {
+  tDevHealth.txt="Check the microSD card"
+  }
+  tDevStatus.pco=65535
+  if(pInit.vSensors.val==0)
+  {
+  tDevStatus.txt="NO SENSOR"
+  }
+  if(pInit.vStorage.val!=0)
+  {
+  tDevStatus.txt="SD ERROR"
+  }
+  if(pInit.tDate.txt=="")
+  {
+  tDevStatus.txt="SET CLOCK"
+  }
+  pInit.vStatusReady.val=1
   }
   }
   pInit.vStep.val+=1
@@ -104,6 +289,18 @@ on tmPoll.timer:
   {
   pInit.tMsg.txt="Complete the required fields"
   }
+  if(pInit.nAckCode.val==3)
+  {
+  pInit.tMsg.txt="Complete the previous step first"
+  if(pInit.vPage.val==8||pInit.vPage.val==10)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  }
+  }
+  if(pInit.nAckCode.val==15)
+  {
+  pInit.tMsg.txt="This item is no longer available"
+  }
   if(pInit.nAckCode.val==6)
   {
   pInit.tMsg.txt="Check the microSD card"
@@ -127,6 +324,7 @@ on tmPoll.timer:
   }else
   {
   pInit.tMsg.txt=""
+
   }
   pInit.vStep.val=1
   }
@@ -146,12 +344,56 @@ on tmPoll.timer:
   pInit.vBusy.val=0
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   pInit.tMsg.txt="No answer from MCU"
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,26
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
+  tDevStatus.txt="NO LINK"
+  tDevSensor.txt="--"
   }
   }
   }
+  if(tNotice.txt!=pInit.tMsg.txt)
+  {
   tNotice.txt=pInit.tMsg.txt
-  if(pInit.vBusy.val==0&&dp==pInit.vPage.val)
+  }
+  if(dp==16&&pInit.vBusy.val==0&&pInit.vTap.val>0&&pInit.vStatusReady.val==1)
+  {
+  pInit.vDispatch.val=pInit.vTap.val
+  pInit.vTap.val=0
+  if(pInit.vTapView.val==pInit.nView.val&&pInit.vTapBoot.val==pInit.nBoot.val)
+  {
+  if(pInit.vDispatch.val==1)
+  {
+  click tClock,0
+  }
+  if(pInit.vDispatch.val==2)
+  {
+  click mClockBadge,0
+  }
+  if(pInit.vDispatch.val==3)
+  {
+  click tDevStatus,0
+  }
+  if(pInit.vDispatch.val==4)
+  {
+  click mBack,0
+  }
+  }
+  else
+  {
+  pInit.tMsg.txt="View updated. Tap again."
+  }
+  }
+  if(pInit.vBusy.val==0&&dp==16)
   {
   if(pInit.vStep.val==0)
   {
@@ -219,36 +461,4 @@ on tmPoll.timer:
   pInit.vStep.val=1
   }
   }
-  }
-
-on mClock.up:
-  if(pInit.vBusy.val==0)
-  {
-  page pClock
-  }
-
-on mStorage.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="STORAGE_RETRY"
-  prints pInit.tReq.txt,0
-  printh 0A
   }

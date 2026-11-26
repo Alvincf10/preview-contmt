@@ -1,18 +1,33 @@
 on pClock.loadend:
-  tDate.txt=pInit.tDate.txt
-  tTime.txt=pInit.tTime.txt
+  tDate.txt=pInit.tClockDate.txt
+  strlen tDate.txt,pInit.vTemp.val
+  if(pInit.vTemp.val==10)
+  {
+  spstr tDate.txt,pInit.tNum.txt,"-",2
+  spstr tDate.txt,pInit.tSplit.txt,"-",1
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  spstr tDate.txt,pInit.tSplit.txt,"-",0
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  tDate.txt=pInit.tNum.txt
+  }
+  tTime.txt=pInit.tClockTime.txt
   tError.txt=""
 
 on tDate.up:
   if(pInit.vBusy.val==0)
   {
   pInit.tField.txt="date"
-  pInit.tTitle.txt="Date YYYY-MM-DD"
+  pInit.tTitle.txt="Date DD-MM-YYYY"
   pInit.tEdit.txt=tDate.txt
   pInit.vEditKind.val=2
   pInit.vEditPage.val=19
   pInit.vMax.val=10
-  page pEdit
+  pInit.vInputMode.val=3
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pNumber
   }
 
 on tTime.up:
@@ -24,15 +39,21 @@ on tTime.up:
   pInit.vEditKind.val=2
   pInit.vEditPage.val=19
   pInit.vMax.val=8
-  page pEdit
+  pInit.vInputMode.val=4
+  pInit.vEditView.val=pInit.nView.val
+  pInit.vEditBoot.val=pInit.nBoot.val
+  page pNumber
   }
 
 on mCancel.up:
+  if(pInit.vBusy.val==0)
+  {
   page pInit.vPage.val
+  }
 
 on mSave.up:
   pInit.tCommand.txt="CLOCK_SET|"
-  pInit.tCommand.txt+=tDate.txt
+  pInit.tCommand.txt+=pInit.tClockDate.txt
   pInit.tCommand.txt+="|"
   pInit.tCommand.txt+=tTime.txt
   if(pInit.vBusy.val==0)
@@ -82,6 +103,18 @@ on tmClock.timer:
   {
   pInit.tMsg.txt="Complete the required fields"
   }
+  if(pInit.nAckCode.val==3)
+  {
+  pInit.tMsg.txt="Complete the previous step first"
+  if(pInit.vPage.val==8||pInit.vPage.val==10)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  }
+  }
+  if(pInit.nAckCode.val==15)
+  {
+  pInit.tMsg.txt="This item is no longer available"
+  }
   if(pInit.nAckCode.val==6)
   {
   pInit.tMsg.txt="Check the microSD card"
@@ -101,6 +134,10 @@ on tmClock.timer:
   if(pInit.nAckCode.val==12)
   {
   pInit.tMsg.txt="Add a later checkpoint before SAVE"
+  }
+  if(pInit.nAckCode.val==6)
+  {
+  pInit.tMsg.txt="Insert microSD to set the device clock"
   }
   tError.txt=pInit.tMsg.txt
   }

@@ -71,7 +71,7 @@ function readScreenParam(): ScreenId {
 
 export default function App() {
   const [screen, setScreen] = useState<ScreenId>(() => readScreenParam())
-  const [state, setStateRaw] = useState<AppState>(() => loadAppState())
+  const [state, setStateRaw] = useState<AppState>(() => loadAppState(screen === 'baselineResult'))
   const [compare, setCompare] = useState(() =>
     new URLSearchParams(window.location.search).get('compare') === '1',
   )

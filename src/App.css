@@ -20,8 +20,8 @@
   --hmi-h: 800px;
   --brand-h: 64px;
   /* Status HUD band below brand strip (offset + pill height + gap) */
-  --status-top: 10px;
-  --status-h: 26px;
+  --status-top: 5px;
+  --status-h: 43px;
   --status-clear: calc(var(--status-top) + var(--status-h) + 8px);
   --panel-x: 50px;
   --panel-w: 380px;
@@ -163,27 +163,27 @@ select {
 }
 
 .status-clock-ico {
-  width: 13px;
-  height: 13px;
+  width: 22px;
+  height: 22px;
   color: #fff;
   flex-shrink: 0;
 }
 
 .status-clock-value {
-  font-size: 13px;
+  font-size: 22px;
   font-weight: var(--fw-bold);
   letter-spacing: 0.05em;
   font-variant-numeric: tabular-nums;
 }
 
 .status-batt-ico {
-  width: 15px;
-  height: 15px;
+  width: 24px;
+  height: 24px;
   color: #fff;
 }
 
 .status-batt-pct {
-  font-size: 12px;
+  font-size: 20px;
   font-weight: var(--fw-semibold);
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
@@ -311,8 +311,8 @@ select {
 }
 
 .title-info-btn {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: rgba(0, 0, 0, 0.35);
@@ -512,13 +512,14 @@ select {
 
 .temp-strip-cell {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr;
   grid-template-rows: auto auto;
   column-gap: 5px;
   row-gap: 1px;
   align-items: center;
   justify-content: center;
   padding: 8px 6px;
+  text-align: center;
   border-right: 1px solid rgba(255, 255, 255, 0.14);
 }
 
@@ -526,15 +527,8 @@ select {
   border-right: none;
 }
 
-.temp-strip-ico {
-  grid-row: 1 / 3;
-  width: 16px;
-  height: 16px;
-  align-self: center;
-}
-
 .temp-strip-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: var(--fw-semibold);
   color: var(--orange);
   letter-spacing: 0.04em;
@@ -542,7 +536,7 @@ select {
 }
 
 .temp-strip-value {
-  font-size: 15px;
+  font-size: 19px;
   font-weight: var(--fw-heavy);
   color: #fff;
   letter-spacing: 0.01em;
@@ -552,13 +546,6 @@ select {
 
 /* Baseline Calculation Result — measured from design PNG 480×800
    cards x≈28 w≈424; SAVE ≈277×36; title rule ≈82px short */
-.br-back {
-  position: absolute;
-  z-index: 3;
-  top: calc(var(--brand-h) + var(--status-clear) + 4px);
-  left: 28px;
-}
-
 .br-stage {
   position: relative;
   z-index: 2;
@@ -572,8 +559,7 @@ select {
 
 .br-title-block {
   flex-shrink: 0;
-  /* Clear status band + BACK chip (~34px) + gap */
-  margin-top: calc(var(--status-clear) + 42px);
+  margin-top: calc(var(--status-clear) + 9px);
   margin-bottom: 10px;
 }
 
@@ -732,14 +718,15 @@ select {
 .br-save {
   flex-shrink: 0;
   margin-top: 8px;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 10px;
 }
 
 .btn.btn-orange.br-save-btn {
-  width: 277px;
-  min-height: 40px;
-  height: 40px;
+  width: 100%;
+  min-height: 52px;
+  height: 52px;
   border-radius: 10px;
   gap: 0;
   padding: 0 0 0 14px;
@@ -1213,7 +1200,7 @@ select {
 .maturity-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .maturity-table th {
@@ -1224,14 +1211,14 @@ select {
 }
 
 .maturity-table td {
-  padding: 4px;
+  padding: 3px;
   text-align: center;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .maturity-table input {
   width: 100%;
-  height: 30px;
+  height: 54px;
   border-radius: 6px;
   border: 1px solid var(--line);
   background: rgba(0, 0, 0, 0.35);
@@ -1250,7 +1237,7 @@ select {
 
 .maturity-table-edit th:nth-child(2),
 .maturity-table-edit td:nth-child(2) {
-  width: 20%;
+  width: 21%;
 }
 
 .pour-clock-row {
@@ -1287,7 +1274,7 @@ select {
 .maturity-table-edit td:nth-child(3),
 .maturity-table-edit th:nth-child(4),
 .maturity-table-edit td:nth-child(4) {
-  width: 27%;
+  width: 25%;
 }
 
 .maturity-table-edit th:nth-child(5),
@@ -1304,7 +1291,7 @@ select {
 
 .maturity-table .time-select {
   width: 100%;
-  height: 30px;
+  height: 54px;
   border-radius: 6px;
   border: 1px solid var(--line);
   background: rgba(0, 0, 0, 0.35);
@@ -1313,7 +1300,7 @@ select {
   padding: 0 4px;
   font-variant-numeric: tabular-nums;
   font: inherit;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .maturity-table .time-select:focus {
@@ -1326,8 +1313,8 @@ select {
 }
 
 .row-del {
-  width: 34px;
-  height: 30px;
+  width: 44px;
+  height: 54px;
   border-radius: 6px;
   border: 1px solid var(--line);
   background: rgba(0, 0, 0, 0.35);
@@ -1365,10 +1352,10 @@ select {
 
 .add-day-btn,
 .sensor-btn {
-  min-height: 44px;
-  height: 44px;
+  min-height: 52px;
+  height: 52px;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: var(--fw-bold);
   letter-spacing: 0.04em;
   cursor: pointer;
@@ -3486,7 +3473,7 @@ select {
 
 .screen-device-info .panel-title {
   text-align: left;
-  font-size: 22px;
+  font-size: 28px;
   font-weight: var(--fw-heavy);
   letter-spacing: 0.04em;
 }
@@ -3543,7 +3530,7 @@ select {
 
 .about-box p {
   margin: 4px 0 0;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: var(--fw-light);
   color: var(--muted);
   line-height: 1.4;
@@ -3617,10 +3604,10 @@ select {
   color: var(--orange);
   cursor: pointer;
   line-height: 1;
-  min-width: 28px;
-  min-height: 22px;
+  min-width: 44px;
+  min-height: 48px;
   padding: 0 4px;
-  font-size: 12px;
+  font-size: 20px;
   display: grid;
   place-items: center;
   -webkit-tap-highlight-color: transparent;
@@ -3656,8 +3643,8 @@ select {
 }
 
 .toggle {
-  min-width: 64px;
-  height: 30px;
+  min-width: 84px;
+  height: 48px;
   border-radius: 999px;
   border: none;
   background: #555;
@@ -3794,3 +3781,42 @@ select {
 }
 
 /* Keep exact 480×800 even on small windows — desk scrolls instead of scaling */
+
+.screen-new-baseline :is(.text-input, .select-input, .unit-box),
+.screen-material-data :is(.text-input.compact, .unit-box) {
+  min-height: 52px;
+  font-size: 16px;
+}
+
+.screen-material-data .material-row.readonly .unit-box {
+  font-size: 12px;
+}
+
+.screen-maturity .table-scroll {
+  max-height: 365px;
+}
+
+.screen-maturity .maturity-table th {
+  position: sticky;
+  top: 0;
+  white-space: normal;
+}
+
+.panel-footer .btn,
+.br-save .btn {
+  min-height: 52px;
+}
+
+.screen-history .panel-title,
+.screen-kuat-tekan-menu .dark-menu-row strong {
+  font-size: 24px;
+}
+
+.screen-device-info .panel-body {
+  scroll-padding-bottom: 12px;
+}
+
+.screen :is(button, input, select):focus-visible {
+  outline: 2px solid #ffb566;
+  outline-offset: 1px;
+}

@@ -1,3 +1,18 @@
+on pConfirm.loadend:
+  spstr pInit.tReq.txt,pInit.tSplit.txt,"|",5
+  if(pInit.tSplit.txt=="ROW_DELETE")
+  {
+  tBody.txt="Delete this maturity row?"
+  }
+  if(pInit.tSplit.txt=="BASE_DELETE")
+  {
+  tBody.txt="Delete this saved baseline?"
+  }
+  if(pInit.tSplit.txt=="MEASURE_START")
+  {
+  tBody.txt="Replace the active measurement?"
+  }
+
 on mNo.up:
   pInit.tCommand.txt="CANCEL|"
   covx pInit.vToken.val,pInit.tNum.txt,0,0
@@ -77,6 +92,18 @@ on tmConfirm.timer:
   if(pInit.nAckCode.val==2)
   {
   pInit.tMsg.txt="Complete the required fields"
+  }
+  if(pInit.nAckCode.val==3)
+  {
+  pInit.tMsg.txt="Complete the previous step first"
+  if(pInit.vPage.val==8||pInit.vPage.val==10)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  }
+  }
+  if(pInit.nAckCode.val==15)
+  {
+  pInit.tMsg.txt="This item is no longer available"
   }
   if(pInit.nAckCode.val==6)
   {

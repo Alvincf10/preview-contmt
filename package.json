@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "validate:nextion": "node nextion/validate.mjs",
     "hmi:source": "python nextion/tools/arduino_events.py && python nextion/tools/arduino_actions.py && python nextion/tools/rebuild.py",
+    "hmi:k050:source": "npm run build && node nextion/tools/export_k050_web.mjs --source",
     "hmi:check": "nxwright check nextion/nxsrc && python nextion/tools/check_layout.py && python nextion/tools/check_nav.py && python nextion/tools/crosscheck.py && python nextion/tools/check_coverage.py && python nextion/tools/check_hotspot_fit.py && python nextion/tools/check_bindings.py && python nextion/tools/check_corners.py && python nextion/tools/find_narrow.py && python nextion/tests/test_values.py",
     "hmi:test": "python nextion/tools/tap_all.py && python nextion/tests/panel_arduino_test.py",
     "hmi:build": "nxwright build nextion/nxsrc nextion/conmt.HMI --overwrite --no-lock",

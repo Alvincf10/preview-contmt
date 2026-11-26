@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Battery.h"
 #include "Engine.h"
 #include "Panel.h"
 #include "SpiCard.h"
@@ -26,6 +27,7 @@ std::string output;
 uint32_t tick = 0;
 Stamp wall{NoDate, 0};
 Sensors live{};
+int8_t batteryValue = -1;
 
 enum Fault { None, TearBody, TearAnchor, LostCommitAck };
 Fault fault = None;
@@ -104,6 +106,22 @@ void numericLimits() {
   assert(!labAge(49710270, false, value));
 }
 
+void batteryCalibration() {
+  BatteryGauge gauge;
+  gauge.sample(519);
+  assert(gauge.percent() == -1);
+  gauge.sample(877);
+  assert(gauge.percent() == 0);
+  for (uint8_t i = 0; i < 99; ++i) gauge.sample(991);
+  assert(gauge.percent() == 0);
+  for (uint16_t i = 0; i < 700; ++i) gauge.sample(991);
+  assert(gauge.percent() == 100);
+  gauge.sample(0);
+  assert(gauge.percent() == -1);
+  gauge.sample(934);
+  assert(gauge.percent() == 50);
+}
+
 Stamp setUser(Engine& engine) {
   uint32_t day;
   assert(date("2026-11-01", day));
@@ -120,6 +138,7 @@ Stamp setUser(Engine& engine) {
 }
 
 Ref author(Engine& engine, const Fixture& fixture) {
+  assert(engine.row(0, Field::Temperature, "26").error() == Error::NotFound);
   success(engine.draft(0));
   success(engine.set(Field::Name, "Referensi Excel"));
   success(engine.set(Field::Target, "35"));
@@ -127,6 +146,24 @@ Ref author(Engine& engine, const Fixture& fixture) {
   success(engine.set(Field::Cement, "380.07"));
   success(engine.set(Field::Water, "190"));
   success(engine.set(Field::RetarderBrand, "R-Test"));
+  const Ref empty = engine.disk.root().draft;
+  assert(engine.row(1, Field::Temperature, "26").error() == Error::NotFound);
+  assert(engine.row(0, Field::Temperature, "abc").error() == Error::Input);
+  const auto sensors = live;
+  live.valid = 0;
+  assert(engine.row(0, Field::Temperature, "", true).error() == Error::Sensor);
+  live = sensors;
+  assert(engine.disk.root().draft == empty);
+  Baseline first;
+  LabRow row;
+  success(engine.row(0, Field::Temperature, "36.00"));
+  assert(engine.baseline(engine.disk.root().draft, first) && first.rows.count == 1);
+  assert(engine.disk.at(first.rows, 0, Kind::Row, row) && row.day == 0 && row.age == 0);
+  const Ref firstId = row.id;
+  assert(firstId && row.temperature == 3600000L && row.fc == Missing);
+  success(engine.row(0, Field::Temperature, "36.01"));
+  assert(engine.baseline(engine.disk.root().draft, first) && first.rows.count == 1);
+  assert(engine.disk.at(first.rows, 0, Kind::Row, row) && row.id == firstId);
   success(engine.addRows(true, true));
   success(engine.addRows(true, true));
   assert(engine.addRows(true, false).error() == Error::Full);
@@ -415,7 +452,7 @@ bool setClock(const Stamp& stamp) {
 }
 const Sensors& temperatures() { return live; }
 uint16_t supplyMv() { return 8500; }
-int16_t batteryPercent(uint16_t) { return -1; }
+int8_t batteryPercent() { return batteryValue; }
 void beep(bool) {}
 int receive() {
   if (incoming.empty()) return -1;
@@ -453,6 +490,7 @@ bool write(uint32_t sector, const uint8_t* data) {
 
 int main() {
   numericLimits();
+  batteryCalibration();
   const Fixture data(std::cin);
   near(correction(0.25f), 0.8, 0.00001);
   near(correction(-0.05f), 1, 0.00001);

@@ -1,16 +1,6 @@
-on pSelB.loadend:
-  if(pInit.vPage.val!=10)
+on mBack.up:
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
   {
-  pInit.vOffset.val=0
-  }
-  pInit.vPage.val=10
-  pInit.vBusy.val=0
-  pInit.vRetry.val=0
-  pInit.vStep.val=0
-  pInit.vPoll.val=0
-  pInit.tMsg.txt=""
-
-on mBack.down:
   if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
@@ -35,8 +25,420 @@ on mBack.down:
   prints pInit.tReq.txt,0
   printh 0A
   }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=1
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=0
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
 
-on mStart.down:
+on mPick0.up:
+  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
+  {
+  if(pInit.vTouchPhase.val==2)
+  {
+  if(pInit.vBusy.val==0||pInit.vTask.val==0)
+  {
+  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=2
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vId0.val
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTouchPhase.val==0)
+  {
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vId0.val>0)
+  {
+  pInit.tCommand.txt="BASE_PICK|"
+  pInit.vTemp.val=pInit.vId0.val
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=2
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vId0.val
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+  }
+  }
+  }
+
+on mPick1.up:
+  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
+  {
+  if(pInit.vTouchPhase.val==2)
+  {
+  if(pInit.vBusy.val==0||pInit.vTask.val==0)
+  {
+  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=3
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vId1.val
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTouchPhase.val==0)
+  {
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vId1.val>0)
+  {
+  pInit.tCommand.txt="BASE_PICK|"
+  pInit.vTemp.val=pInit.vId1.val
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=3
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vId1.val
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+  }
+  }
+  }
+
+on mPick2.up:
+  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
+  {
+  if(pInit.vTouchPhase.val==2)
+  {
+  if(pInit.vBusy.val==0||pInit.vTask.val==0)
+  {
+  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=4
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vId2.val
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTouchPhase.val==0)
+  {
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vId2.val>0)
+  {
+  pInit.tCommand.txt="BASE_PICK|"
+  pInit.vTemp.val=pInit.vId2.val
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=4
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vId2.val
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+  }
+  }
+  }
+
+on mPick3.up:
+  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
+  {
+  if(pInit.vTouchPhase.val==2)
+  {
+  if(pInit.vBusy.val==0||pInit.vTask.val==0)
+  {
+  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=5
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vId3.val
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTouchPhase.val==0)
+  {
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vId3.val>0)
+  {
+  pInit.tCommand.txt="BASE_PICK|"
+  pInit.vTemp.val=pInit.vId3.val
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  pInit.tCommand.txt+=pInit.tNum.txt
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+=pInit.tCommand.txt
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=5
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vId3.val
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+  }
+  }
+  }
+
+on mResume.up:
+  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
+  {
+  if(pInit.vTouchPhase.val==2)
+  {
+  if(pInit.vBusy.val==0||pInit.vTask.val==0)
+  {
+  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=6
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vRun.val
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTouchPhase.val==0)
+  {
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  if(pInit.vRun.val>0)
+  {
+  if(pInit.vBusy.val==0)
+  {
+  pInit.vSeq.val+=1
+  pInit.nAckSeq.val=0
+  pInit.vBusy.val=1
+  pInit.vRetry.val=0
+  pInit.vTask.val=1
+  pInit.tReq.txt="CM1|"
+  covx pInit.nBoot.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vSeq.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.vPage.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  covx pInit.nView.val,pInit.tNum.txt,0,0
+  pInit.tReq.txt+=pInit.tNum.txt
+  pInit.tReq.txt+="|"
+  pInit.tReq.txt+="MEASURE_RESUME"
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=6
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vRun.val
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+  }
+  }
+  }
+
+on mStart.up:
+  if(vBlockTap.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val==0)
+  {
+  if(pInit.vTouchPhase.val==2)
+  {
+  if(pInit.vBusy.val==0||pInit.vTask.val==0)
+  {
+  if(pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=7
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vChosen.val
+  }
+  }
+  }
+  else
+  {
+  if(pInit.vTouchPhase.val==0)
+  {
+  if(pInit.vBusy.val==0&&pInit.vStatusReady.val==1)
+  {
+  pInit.tMsg.txt=""
+  if(pInit.vStorage.val!=0)
+  {
+  pInit.tMsg.txt="Check the microSD card"
+  }else if(pInit.vChosen.val==0)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  if(pInit.vSavedCount.val==0)
+  {
+  pInit.tMsg.txt="Create a baseline first"
+  }
+  }else if(pInit.tDate.txt=="")
+  {
+  pInit.tMsg.txt="Set the device clock first"
+  }else if(pInit.vMask.val==0)
+  {
+  pInit.tMsg.txt="Connect a temperature probe"
+  }
+  if(pInit.vStatusReady.val==1&&pInit.tMsg.txt=="")
+  {
   if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
@@ -61,6 +463,193 @@ on mStart.down:
   prints pInit.tReq.txt,0
   printh 0A
   }
+  }
+  }
+  else
+  {
+  if(pInit.vTask.val==0&&pInit.vTap.val==0&&pInit.nBoot.val>0)
+  {
+  pInit.vTap.val=7
+  pInit.vTapBoot.val=pInit.nBoot.val
+  pInit.vTapView.val=pInit.nView.val
+  pInit.vTapId.val=pInit.vChosen.val
+  }
+  if(pInit.vTask.val==1)
+  {
+  tNotice.txt="Please wait for the current action"
+  }
+  }
+  }
+  }
+  }
+
+on pSelB.loadend:
+  if(pInit.vPage.val!=10)
+  {
+  pInit.vOffset.val=0
+
+  }
+  pInit.vPage.val=10
+  pInit.vBusy.val=0
+  pInit.vRetry.val=0
+  pInit.vStep.val=0
+  pInit.vPoll.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
+  pInit.vTask.val=0
+  pInit.tMsg.txt=""
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,17
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
+  pInit.vChosen.val=0
+  pInit.vSavedCount.val=0
+  tName0.txt=""
+  tVal0.txt=""
+  tDatum0.txt=""
+  tSavedDate0.txt=""
+  pInit.vId0.val=0
+  tsw mPick0,0
+  picq 67,301,346,67,17
+  tName1.txt=""
+  tVal1.txt=""
+  tDatum1.txt=""
+  tSavedDate1.txt=""
+  pInit.vId1.val=0
+  tsw mPick1,0
+  picq 67,376,346,67,17
+  tName2.txt=""
+  tVal2.txt=""
+  tDatum2.txt=""
+  tSavedDate2.txt=""
+  pInit.vId2.val=0
+  tsw mPick2,0
+  picq 67,451,346,67,17
+  tName3.txt=""
+  tVal3.txt=""
+  tDatum3.txt=""
+  tSavedDate3.txt=""
+  pInit.vId3.val=0
+  tsw mPick3,0
+  picq 67,526,346,67,17
+  pInit.vRun.val=0
+  tsw mResume,0
+  vis mResume,0
+  tmDrag.en=0
+  vBlockTap.val=0
+  pInit.vTouchPhase.val=0
+  pInit.vListBase.val=pInit.vOffset.val
+  pInit.vListShift.val=0
+  pInit.vListReuse.val=0
+  pInit.vListDirty.val=1
+  pInit.vListReady.val=0
+
+on tcList.down:
+  if(pInit.vTouchPhase.val==2)
+  {
+  pInit.vTap.val=0
+  }
+  tmDrag.en=0
+  pInit.vTouchPhase.val=0
+  vBlockTap.val=0
+  vStartX.val=tch0
+  vStartY.val=tch1
+  if(vStartX.val>=67&&vStartX.val<421&&vStartY.val>=301&&vStartY.val<593)
+  {
+  pInit.vTouchPhase.val=1
+  vPriorX.val=tch2
+  vPriorY.val=tch3
+  vDragX.val=0
+  vDragY.val=0
+  tmDrag.en=1
+  if(pInit.vListReady.val==0||pInit.vListShift.val!=0)
+  {
+  vBlockTap.val=1
+  }
+  }
+
+on tcList.up:
+  if(pInit.vTouchPhase.val==1)
+  {
+  pInit.vTouchPhase.val=2
+  }
+
+on tmDrag.timer:
+  if(pInit.vTouchPhase.val==1)
+  {
+  if(tch0!=0||tch1!=0)
+  {
+  vDragX.val=tch0-vStartX.val
+  if(vDragX.val<0)
+  {
+  vDragX.val*=-1
+  }
+  vDragY.val=vStartY.val-tch1
+  if(vDragX.val>=16||vDragY.val>=16||vDragY.val<=-16)
+  {
+  vBlockTap.val=1
+  }
+  }
+  }
+  else
+  {
+  tmDrag.en=0
+  pInit.vTouchPhase.val=0
+  if(tch0==0&&tch1==0)
+  {
+  if(tch2!=vPriorX.val||tch3!=vPriorY.val)
+  {
+  if(tch2>=0&&tch2<480&&tch3>=0&&tch3<800)
+  {
+  vDragX.val=tch2-vStartX.val
+  if(vDragX.val<0)
+  {
+  vDragX.val*=-1
+  }
+  vDragY.val=vStartY.val-tch3
+  if(vDragX.val>=16||vDragY.val>=16||vDragY.val<=-16)
+  {
+  vBlockTap.val=1
+  }
+  }
+  }
+  pInit.vTemp.val=vDragY.val
+  if(pInit.vTemp.val<0)
+  {
+  pInit.vTemp.val*=-1
+  }
+  if(pInit.vTemp.val>=22&&pInit.vTemp.val>vDragX.val)
+  {
+  pInit.vTemp.val+=37
+  pInit.vTemp.val/=75
+  if(pInit.vTemp.val<1)
+  {
+  pInit.vTemp.val=1
+  }
+  if(vDragY.val>0)
+  {
+  pInit.vListShift.val+=pInit.vTemp.val
+  }else
+  {
+  pInit.vListShift.val-=pInit.vTemp.val
+  }
+  vBlockTap.val=1
+  }
+  }
+  else
+  {
+  vBlockTap.val=1
+  }
+  if(vBlockTap.val==1)
+  {
+  pInit.vTap.val=0
+  }
+  }
 
 on tmPoll.timer:
   if(pInit.vBusy.val==1)
@@ -73,6 +662,8 @@ on tmPoll.timer:
   {
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   }else
   {
   if(pInit.vTask.val==0)
@@ -81,13 +672,43 @@ on tmPoll.timer:
   {
   if(pInit.nAckCode.val==0)
   {
+  pInit.vIndex.val=pInit.vStorage.val
   pInit.tStatus.txt=pInit.tData.txt
-  spstr pInit.tData.txt,tClock.txt,"|",1
-  spstr pInit.tData.txt,tBatt.txt,"|",3
+  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
+  tClock.txt="--:--"
+  if(pInit.tTime.txt!="")
+  {
+  substr pInit.tTime.txt,tClock.txt,0,5
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",3
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  if(pInit.tSplit.txt!="")
+  {
+  covx pInit.tSplit.txt,pInit.vTemp.val,0,0
+  tBatt.txt=pInit.tSplit.txt
+  tBatt.txt+="%"
+  if(pInit.vTemp.val<=40)
+  {
+  tBatt.pco=65132
+  }
+  if(pInit.vTemp.val<=20)
+  {
+  tBatt.pco=64329
+  }
+  pInit.vTemp.val*=11
+  pInit.vTemp.val+=50
+  pInit.vTemp.val/=100
+  }
+  picq 367,82,22,22,17
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
+  }
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",4
   covx pInit.tSplit.txt,pInit.vStorage.val,0,0
   spstr pInit.tData.txt,pInit.tDate.txt,"|",0
-  spstr pInit.tData.txt,pInit.tTime.txt,"|",1
   spstr pInit.tData.txt,pInit.tSplit.txt,"|",14
   covx pInit.tSplit.txt,pInit.vMask.val,0,0
   pInit.vSensors.val=0
@@ -106,66 +727,98 @@ on tmPoll.timer:
   {
   pInit.vSensors.val+=1
   }
+  pInit.vTemp.val=pInit.vChosen.val
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",15
+  covx pInit.tSplit.txt,pInit.vChosen.val,0,0
+  if(pInit.vTemp.val!=pInit.vChosen.val)
+  {
+  pInit.vListDirty.val=1
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",19
+  covx pInit.tSplit.txt,pInit.vSavedCount.val,0,0
+  if(pInit.vIndex.val!=pInit.vStorage.val)
+  {
+  pInit.vListDirty.val=1
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",5
+  covx pInit.tSplit.txt,pInit.vRun.val,0,0
+  if(pInit.vRun.val!=0)
+  {
+  vis mResume,1
+  tsw mResume,1
+  }
+  else
+  {
+  tsw mResume,0
+  vis mResume,0
+  }
+  tStartHint.txt=""
+  if(pInit.vStorage.val!=0)
+  {
+  tStartHint.txt="Check the microSD card"
+  }else if(pInit.vChosen.val==0)
+  {
+  tStartHint.txt="Select a baseline first"
+  if(pInit.vSavedCount.val==0)
+  {
+  tStartHint.txt="Create a baseline first"
+  }
+  }else if(pInit.tDate.txt=="")
+  {
+  tStartHint.txt="Set the device clock first"
+  }else if(pInit.vMask.val==0)
+  {
+  tStartHint.txt="Connect a temperature probe"
+  }
+  pInit.vStatusReady.val=1
   }
   }
   if(pInit.vGet.val==2)
   {
-  if(pInit.nAckCode.val==0)
+  if(pInit.nAckCode.val!=0)
   {
-  spstr pInit.tData.txt,tName0.txt,"|",1
-  spstr pInit.tData.txt,tVal0.txt,"|",2
-  pInit.vId0.val=pInit.nAckValue.val
+  pInit.tData.txt=""
   }
-  else
+  if(tRowData0.txt!=pInit.tData.txt)
   {
-  tName0.txt=""
-  tVal0.txt=""
-  pInit.vId0.val=0
+  tRowData0.txt=pInit.tData.txt
+  pInit.vListDirty.val=1
   }
   }
   if(pInit.vGet.val==3)
   {
-  if(pInit.nAckCode.val==0)
+  if(pInit.nAckCode.val!=0)
   {
-  spstr pInit.tData.txt,tName1.txt,"|",1
-  spstr pInit.tData.txt,tVal1.txt,"|",2
-  pInit.vId1.val=pInit.nAckValue.val
+  pInit.tData.txt=""
   }
-  else
+  if(tRowData1.txt!=pInit.tData.txt)
   {
-  tName1.txt=""
-  tVal1.txt=""
-  pInit.vId1.val=0
+  tRowData1.txt=pInit.tData.txt
+  pInit.vListDirty.val=1
   }
   }
   if(pInit.vGet.val==4)
   {
-  if(pInit.nAckCode.val==0)
+  if(pInit.nAckCode.val!=0)
   {
-  spstr pInit.tData.txt,tName2.txt,"|",1
-  spstr pInit.tData.txt,tVal2.txt,"|",2
-  pInit.vId2.val=pInit.nAckValue.val
+  pInit.tData.txt=""
   }
-  else
+  if(tRowData2.txt!=pInit.tData.txt)
   {
-  tName2.txt=""
-  tVal2.txt=""
-  pInit.vId2.val=0
+  tRowData2.txt=pInit.tData.txt
+  pInit.vListDirty.val=1
   }
   }
   if(pInit.vGet.val==5)
   {
-  if(pInit.nAckCode.val==0)
+  if(pInit.nAckCode.val!=0)
   {
-  spstr pInit.tData.txt,tName3.txt,"|",1
-  spstr pInit.tData.txt,tVal3.txt,"|",2
-  pInit.vId3.val=pInit.nAckValue.val
+  pInit.tData.txt=""
   }
-  else
+  if(tRowData3.txt!=pInit.tData.txt)
   {
-  tName3.txt=""
-  tVal3.txt=""
-  pInit.vId3.val=0
+  tRowData3.txt=pInit.tData.txt
+  pInit.vListDirty.val=1
   }
   }
   pInit.vStep.val+=1
@@ -190,6 +843,18 @@ on tmPoll.timer:
   {
   pInit.tMsg.txt="Complete the required fields"
   }
+  if(pInit.nAckCode.val==3)
+  {
+  pInit.tMsg.txt="Complete the previous step first"
+  if(pInit.vPage.val==8||pInit.vPage.val==10)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  }
+  }
+  if(pInit.nAckCode.val==15)
+  {
+  pInit.tMsg.txt="This item is no longer available"
+  }
   if(pInit.nAckCode.val==6)
   {
   pInit.tMsg.txt="Check the microSD card"
@@ -213,7 +878,9 @@ on tmPoll.timer:
   }else
   {
   pInit.tMsg.txt=""
+
   }
+  pInit.vListDirty.val=1
   pInit.vStep.val=1
   }
   }
@@ -222,22 +889,170 @@ on tmPoll.timer:
   else
   {
   pInit.vRetry.val+=1
-  if(pInit.vRetry.val==15)
+  if(pInit.vRetry.val==58)
   {
   prints pInit.tReq.txt,0
   printh 0A
   }
-  if(pInit.vRetry.val>=30)
+  if(pInit.vRetry.val>=116)
   {
   pInit.vBusy.val=0
   pInit.nBoot.val=0
   pInit.vStep.val=0
+  pInit.vTap.val=0
+  pInit.vStatusReady.val=0
   pInit.tMsg.txt="No answer from MCU"
+  tClock.txt="--:--"
+  tBatt.txt="--%"
+  tBatt.pco=65535
+  pInit.vTemp.val=0
+  picq 367,82,22,22,17
+  if(pInit.vTemp.val>0)
+  {
+  fill 371,90,pInit.vTemp.val,6,tBatt.pco
   }
   }
   }
+  }
+  if(tNotice.txt!=pInit.tMsg.txt)
+  {
   tNotice.txt=pInit.tMsg.txt
-  if(pInit.vBusy.val==0&&dp==pInit.vPage.val)
+  }
+  if(pInit.vBusy.val==0&&dp==10)
+  {
+  if(pInit.vTouchPhase.val==0&&pInit.vListReady.val==1&&pInit.vListShift.val!=0)
+  {
+  pInit.vListMax.val=pInit.vSavedCount.val-4
+  if(pInit.vListMax.val<0)
+  {
+  pInit.vListMax.val=0
+  }
+  pInit.vIndex.val=pInit.vListBase.val+pInit.vListShift.val
+  if(pInit.vIndex.val<0)
+  {
+  pInit.vIndex.val=0
+  }
+  if(pInit.vIndex.val>pInit.vListMax.val)
+  {
+  pInit.vIndex.val=pInit.vListMax.val
+  }
+  if(pInit.vIndex.val!=pInit.vListBase.val)
+  {
+  pInit.vListShift.val=pInit.vIndex.val-pInit.vListBase.val
+  pInit.vListBase.val=pInit.vIndex.val
+  pInit.vListReady.val=0
+  pInit.vListDirty.val=1
+  pInit.vListReuse.val=1
+  pInit.vStep.val=2
+  if(pInit.vListShift.val>=4||pInit.vListShift.val<=-4)
+  {
+  pInit.vListReuse.val=0
+  }else
+  {
+  while(pInit.vListShift.val>0)
+  {
+  tRowData0.txt=tRowData1.txt
+  tRowData1.txt=tRowData2.txt
+  tRowData2.txt=tRowData3.txt
+  tRowData3.txt=""
+  pInit.vListShift.val-=1
+  }
+  while(pInit.vListShift.val<0)
+  {
+  tRowData3.txt=tRowData2.txt
+  tRowData2.txt=tRowData1.txt
+  tRowData1.txt=tRowData0.txt
+  tRowData0.txt=""
+  pInit.vListShift.val+=1
+  }
+  }
+  }
+  pInit.vListShift.val=0
+  }
+  }
+  if(dp==10&&pInit.vBusy.val==0&&pInit.vTap.val>0&&pInit.vStatusReady.val==1&&pInit.vTouchPhase.val==0&&pInit.vListShift.val==0)
+  {
+  pInit.vDispatch.val=pInit.vTap.val
+  pInit.vTap.val=0
+  if(pInit.vTapView.val==pInit.nView.val&&pInit.vTapBoot.val==pInit.nBoot.val)
+  {
+  if(pInit.vDispatch.val==1)
+  {
+  click mBack,0
+  }
+  if(pInit.vDispatch.val==2)
+  {
+  if(pInit.vTapId.val==pInit.vId0.val)
+  {
+  click mPick0,0
+  }
+  else
+  {
+  pInit.tMsg.txt="List updated. Tap the item again."
+  }
+  }
+  if(pInit.vDispatch.val==3)
+  {
+  if(pInit.vTapId.val==pInit.vId1.val)
+  {
+  click mPick1,0
+  }
+  else
+  {
+  pInit.tMsg.txt="List updated. Tap the item again."
+  }
+  }
+  if(pInit.vDispatch.val==4)
+  {
+  if(pInit.vTapId.val==pInit.vId2.val)
+  {
+  click mPick2,0
+  }
+  else
+  {
+  pInit.tMsg.txt="List updated. Tap the item again."
+  }
+  }
+  if(pInit.vDispatch.val==5)
+  {
+  if(pInit.vTapId.val==pInit.vId3.val)
+  {
+  click mPick3,0
+  }
+  else
+  {
+  pInit.tMsg.txt="List updated. Tap the item again."
+  }
+  }
+  if(pInit.vDispatch.val==6)
+  {
+  if(pInit.vTapId.val==pInit.vRun.val)
+  {
+  click mResume,0
+  }
+  else
+  {
+  pInit.tMsg.txt="List updated. Tap the item again."
+  }
+  }
+  if(pInit.vDispatch.val==7)
+  {
+  if(pInit.vTapId.val==pInit.vChosen.val)
+  {
+  click mStart,0
+  }
+  else
+  {
+  pInit.tMsg.txt="List updated. Tap the item again."
+  }
+  }
+  }
+  else
+  {
+  pInit.tMsg.txt="View updated. Tap again."
+  }
+  }
+  if(pInit.vBusy.val==0&&dp==10)
   {
   if(pInit.vStep.val==0)
   {
@@ -298,9 +1113,38 @@ on tmPoll.timer:
   }
   if(pInit.vStep.val==2)
   {
+  pInit.vListMax.val=pInit.vSavedCount.val-4
+  if(pInit.vListMax.val<0)
+  {
+  pInit.vListMax.val=0
+  }
+  if(pInit.vListBase.val>pInit.vListMax.val)
+  {
+  pInit.vListBase.val=pInit.vListMax.val
+  pInit.vListReady.val=0
+  pInit.vListReuse.val=0
+  pInit.vListDirty.val=1
+  }
+  pInit.vIndex.val=pInit.vListBase.val+0
+  if(pInit.vIndex.val>=pInit.vSavedCount.val)
+  {
+  if(tRowData0.txt!="")
+  {
+  tRowData0.txt=""
+  pInit.vListDirty.val=1
+  }
+  pInit.vStep.val+=1
+  }
+  else
+  {
+  if(pInit.vListReuse.val==1&&tRowData0.txt!="")
+  {
+  pInit.vStep.val+=1
+  }
+  else
+  {
   pInit.vGet.val=2
   pInit.tCommand.txt="GET|savedrow"
-  pInit.vIndex.val=pInit.vOffset.val+0
   covx pInit.vIndex.val,pInit.tNum.txt,0,0
   pInit.tCommand.txt+="|"
   pInit.tCommand.txt+=pInit.tNum.txt
@@ -327,13 +1171,32 @@ on tmPoll.timer:
   pInit.tReq.txt+=pInit.tCommand.txt
   prints pInit.tReq.txt,0
   printh 0A
+  }
+  }
   }
   }
   if(pInit.vStep.val==3)
   {
+  pInit.vIndex.val=pInit.vListBase.val+1
+  if(pInit.vIndex.val>=pInit.vSavedCount.val)
+  {
+  if(tRowData1.txt!="")
+  {
+  tRowData1.txt=""
+  pInit.vListDirty.val=1
+  }
+  pInit.vStep.val+=1
+  }
+  else
+  {
+  if(pInit.vListReuse.val==1&&tRowData1.txt!="")
+  {
+  pInit.vStep.val+=1
+  }
+  else
+  {
   pInit.vGet.val=3
   pInit.tCommand.txt="GET|savedrow"
-  pInit.vIndex.val=pInit.vOffset.val+1
   covx pInit.vIndex.val,pInit.tNum.txt,0,0
   pInit.tCommand.txt+="|"
   pInit.tCommand.txt+=pInit.tNum.txt
@@ -360,13 +1223,32 @@ on tmPoll.timer:
   pInit.tReq.txt+=pInit.tCommand.txt
   prints pInit.tReq.txt,0
   printh 0A
+  }
+  }
   }
   }
   if(pInit.vStep.val==4)
   {
+  pInit.vIndex.val=pInit.vListBase.val+2
+  if(pInit.vIndex.val>=pInit.vSavedCount.val)
+  {
+  if(tRowData2.txt!="")
+  {
+  tRowData2.txt=""
+  pInit.vListDirty.val=1
+  }
+  pInit.vStep.val+=1
+  }
+  else
+  {
+  if(pInit.vListReuse.val==1&&tRowData2.txt!="")
+  {
+  pInit.vStep.val+=1
+  }
+  else
+  {
   pInit.vGet.val=4
   pInit.tCommand.txt="GET|savedrow"
-  pInit.vIndex.val=pInit.vOffset.val+2
   covx pInit.vIndex.val,pInit.tNum.txt,0,0
   pInit.tCommand.txt+="|"
   pInit.tCommand.txt+=pInit.tNum.txt
@@ -393,13 +1275,32 @@ on tmPoll.timer:
   pInit.tReq.txt+=pInit.tCommand.txt
   prints pInit.tReq.txt,0
   printh 0A
+  }
+  }
   }
   }
   if(pInit.vStep.val==5)
   {
+  pInit.vIndex.val=pInit.vListBase.val+3
+  if(pInit.vIndex.val>=pInit.vSavedCount.val)
+  {
+  if(tRowData3.txt!="")
+  {
+  tRowData3.txt=""
+  pInit.vListDirty.val=1
+  }
+  pInit.vStep.val+=1
+  }
+  else
+  {
+  if(pInit.vListReuse.val==1&&tRowData3.txt!="")
+  {
+  pInit.vStep.val+=1
+  }
+  else
+  {
   pInit.vGet.val=5
   pInit.tCommand.txt="GET|savedrow"
-  pInit.vIndex.val=pInit.vOffset.val+3
   covx pInit.vIndex.val,pInit.tNum.txt,0,0
   pInit.tCommand.txt+="|"
   pInit.tCommand.txt+=pInit.tNum.txt
@@ -428,169 +1329,270 @@ on tmPoll.timer:
   printh 0A
   }
   }
+  }
+  }
   if(pInit.vStep.val>5)
   {
+  if(pInit.vListDirty.val==1)
+  {
+  pInit.vOffset.val=pInit.vListBase.val
+  if(tRowData0.txt!="")
+  {
+  pInit.tData.txt=tRowData0.txt
+  spstr pInit.tData.txt,tName0.txt,"|",1
+  spstr pInit.tData.txt,tVal0.txt,"|",2
+  if(tVal0.txt!="")
+  {
+  tVal0.txt+=" MPa"
+  }
+  spstr pInit.tData.txt,tDatum0.txt,"|",3
+  if(tDatum0.txt!="")
+  {
+  tDatum0.txt+=" °C"
+  }
+  spstr pInit.tData.txt,tSavedDate0.txt,"|",4
+  strlen tSavedDate0.txt,pInit.vTemp.val
+  if(pInit.vTemp.val==10)
+  {
+  spstr tSavedDate0.txt,pInit.tNum.txt,"-",2
+  spstr tSavedDate0.txt,pInit.tSplit.txt,"-",1
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  spstr tSavedDate0.txt,pInit.tSplit.txt,"-",0
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  tSavedDate0.txt=pInit.tNum.txt
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
+  covx pInit.tSplit.txt,pInit.vId0.val,0,0
+  if(pInit.vId0.val==pInit.vChosen.val)
+  {
+  picq 67,301,346,67,16
+  }
+  else
+  {
+  picq 67,301,346,67,15
+  }
+  xstr 118,312,212,14,0,65535,0,0,1,3,tName0.txt
+  xstr 118,344,77,13,0,65535,0,0,1,3,tVal0.txt
+  xstr 195,344,70,13,0,65535,0,0,1,3,tDatum0.txt
+  xstr 265,344,65,13,0,65535,0,0,1,3,tSavedDate0.txt
+  tsw mPick0,1
+  }
+  else
+  {
+  tName0.txt=""
+  tVal0.txt=""
+  tDatum0.txt=""
+  tSavedDate0.txt=""
+  pInit.vId0.val=0
+  tsw mPick0,0
+  picq 67,301,346,67,17
+  }
+  if(tRowData1.txt!="")
+  {
+  pInit.tData.txt=tRowData1.txt
+  spstr pInit.tData.txt,tName1.txt,"|",1
+  spstr pInit.tData.txt,tVal1.txt,"|",2
+  if(tVal1.txt!="")
+  {
+  tVal1.txt+=" MPa"
+  }
+  spstr pInit.tData.txt,tDatum1.txt,"|",3
+  if(tDatum1.txt!="")
+  {
+  tDatum1.txt+=" °C"
+  }
+  spstr pInit.tData.txt,tSavedDate1.txt,"|",4
+  strlen tSavedDate1.txt,pInit.vTemp.val
+  if(pInit.vTemp.val==10)
+  {
+  spstr tSavedDate1.txt,pInit.tNum.txt,"-",2
+  spstr tSavedDate1.txt,pInit.tSplit.txt,"-",1
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  spstr tSavedDate1.txt,pInit.tSplit.txt,"-",0
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  tSavedDate1.txt=pInit.tNum.txt
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
+  covx pInit.tSplit.txt,pInit.vId1.val,0,0
+  if(pInit.vId1.val==pInit.vChosen.val)
+  {
+  picq 67,376,346,67,16
+  }
+  else
+  {
+  picq 67,376,346,67,15
+  }
+  xstr 118,387,212,14,0,65535,0,0,1,3,tName1.txt
+  xstr 118,419,70,13,0,65535,0,0,1,3,tVal1.txt
+  xstr 188,419,70,13,0,65535,0,0,1,3,tDatum1.txt
+  xstr 258,419,72,13,0,65535,0,0,1,3,tSavedDate1.txt
+  tsw mPick1,1
+  }
+  else
+  {
+  tName1.txt=""
+  tVal1.txt=""
+  tDatum1.txt=""
+  tSavedDate1.txt=""
+  pInit.vId1.val=0
+  tsw mPick1,0
+  picq 67,376,346,67,17
+  }
+  if(tRowData2.txt!="")
+  {
+  pInit.tData.txt=tRowData2.txt
+  spstr pInit.tData.txt,tName2.txt,"|",1
+  spstr pInit.tData.txt,tVal2.txt,"|",2
+  if(tVal2.txt!="")
+  {
+  tVal2.txt+=" MPa"
+  }
+  spstr pInit.tData.txt,tDatum2.txt,"|",3
+  if(tDatum2.txt!="")
+  {
+  tDatum2.txt+=" °C"
+  }
+  spstr pInit.tData.txt,tSavedDate2.txt,"|",4
+  strlen tSavedDate2.txt,pInit.vTemp.val
+  if(pInit.vTemp.val==10)
+  {
+  spstr tSavedDate2.txt,pInit.tNum.txt,"-",2
+  spstr tSavedDate2.txt,pInit.tSplit.txt,"-",1
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  spstr tSavedDate2.txt,pInit.tSplit.txt,"-",0
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  tSavedDate2.txt=pInit.tNum.txt
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
+  covx pInit.tSplit.txt,pInit.vId2.val,0,0
+  if(pInit.vId2.val==pInit.vChosen.val)
+  {
+  picq 67,451,346,67,16
+  }
+  else
+  {
+  picq 67,451,346,67,15
+  }
+  xstr 118,462,212,14,0,65535,0,0,1,3,tName2.txt
+  xstr 118,494,73,13,0,65535,0,0,1,3,tVal2.txt
+  xstr 191,494,69,13,0,65535,0,0,1,3,tDatum2.txt
+  xstr 260,494,70,13,0,65535,0,0,1,3,tSavedDate2.txt
+  tsw mPick2,1
+  }
+  else
+  {
+  tName2.txt=""
+  tVal2.txt=""
+  tDatum2.txt=""
+  tSavedDate2.txt=""
+  pInit.vId2.val=0
+  tsw mPick2,0
+  picq 67,451,346,67,17
+  }
+  if(tRowData3.txt!="")
+  {
+  pInit.tData.txt=tRowData3.txt
+  spstr pInit.tData.txt,tName3.txt,"|",1
+  spstr pInit.tData.txt,tVal3.txt,"|",2
+  if(tVal3.txt!="")
+  {
+  tVal3.txt+=" MPa"
+  }
+  spstr pInit.tData.txt,tDatum3.txt,"|",3
+  if(tDatum3.txt!="")
+  {
+  tDatum3.txt+=" °C"
+  }
+  spstr pInit.tData.txt,tSavedDate3.txt,"|",4
+  strlen tSavedDate3.txt,pInit.vTemp.val
+  if(pInit.vTemp.val==10)
+  {
+  spstr tSavedDate3.txt,pInit.tNum.txt,"-",2
+  spstr tSavedDate3.txt,pInit.tSplit.txt,"-",1
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  spstr tSavedDate3.txt,pInit.tSplit.txt,"-",0
+  pInit.tNum.txt+="-"
+  pInit.tNum.txt+=pInit.tSplit.txt
+  tSavedDate3.txt=pInit.tNum.txt
+  }
+  spstr pInit.tData.txt,pInit.tSplit.txt,"|",0
+  covx pInit.tSplit.txt,pInit.vId3.val,0,0
+  if(pInit.vId3.val==pInit.vChosen.val)
+  {
+  picq 67,526,346,67,16
+  }
+  else
+  {
+  picq 67,526,346,67,15
+  }
+  xstr 118,537,212,14,0,65535,0,0,1,3,tName3.txt
+  xstr 118,569,73,13,0,65535,0,0,1,3,tVal3.txt
+  xstr 191,569,70,13,0,65535,0,0,1,3,tDatum3.txt
+  xstr 261,569,69,13,0,65535,0,0,1,3,tSavedDate3.txt
+  tsw mPick3,1
+  }
+  else
+  {
+  tName3.txt=""
+  tVal3.txt=""
+  tDatum3.txt=""
+  tSavedDate3.txt=""
+  pInit.vId3.val=0
+  tsw mPick3,0
+  picq 67,526,346,67,17
+  }
+  tPageRows.txt=""
+  if(pInit.vSavedCount.val>0)
+  {
+  pInit.vTemp.val=pInit.vOffset.val+1
+  covx pInit.vTemp.val,tPageRows.txt,0,0
+  tPageRows.txt+="-"
+  pInit.vTemp.val=pInit.vOffset.val+4
+  if(pInit.vTemp.val>pInit.vSavedCount.val)
+  {
+  pInit.vTemp.val=pInit.vSavedCount.val
+  }
+  covx pInit.vTemp.val,pInit.tNum.txt,0,0
+  tPageRows.txt+=pInit.tNum.txt
+  tPageRows.txt+=" / "
+  covx pInit.vSavedCount.val,pInit.tNum.txt,0,0
+  tPageRows.txt+=pInit.tNum.txt
+  }
+  picq 417,301,3,292,17
+  pInit.vIndex.val=pInit.vSavedCount.val
+  if(pInit.vIndex.val>4)
+  {
+
+  fill 417,301,3,292,19083
+  pInit.vTemp.val=1168
+  pInit.vTemp.val/=pInit.vIndex.val
+  if(pInit.vTemp.val<20)
+  {
+  pInit.vTemp.val=20
+  }
+  pInit.vCount.val=292-pInit.vTemp.val
+  pInit.vCount.val*=pInit.vOffset.val
+  pInit.vIndex.val-=4
+  pInit.vCount.val/=pInit.vIndex.val
+  pInit.vCount.val+=301
+  fill 417,pInit.vCount.val,3,pInit.vTemp.val,62632
+  }
+  pInit.vListDirty.val=0
+  }
+  pInit.vListReuse.val=0
+  pInit.vListReady.val=1
   pInit.vPoll.val+=1
-  if(pInit.vPoll.val>=5)
+  if(pInit.vPoll.val>=20)
   {
   pInit.vPoll.val=0
   pInit.vStep.val=1
   }
   }
-  }
-
-on mPick0.up:
-  pInit.tCommand.txt="BASE_PICK|"
-  covx pInit.vId0.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-
-on mPick1.up:
-  pInit.tCommand.txt="BASE_PICK|"
-  covx pInit.vId1.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-
-on mPick2.up:
-  pInit.tCommand.txt="BASE_PICK|"
-  covx pInit.vId2.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-
-on mPick3.up:
-  pInit.tCommand.txt="BASE_PICK|"
-  covx pInit.vId3.val,pInit.tNum.txt,0,0
-  pInit.tCommand.txt+=pInit.tNum.txt
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+=pInit.tCommand.txt
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-
-on mResume.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vSeq.val+=1
-  pInit.nAckSeq.val=0
-  pInit.vBusy.val=1
-  pInit.vRetry.val=0
-  pInit.vTask.val=1
-  pInit.tReq.txt="CM1|"
-  covx pInit.nBoot.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vSeq.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.vPage.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  covx pInit.nView.val,pInit.tNum.txt,0,0
-  pInit.tReq.txt+=pInit.tNum.txt
-  pInit.tReq.txt+="|"
-  pInit.tReq.txt+="MEASURE_RESUME"
-  prints pInit.tReq.txt,0
-  printh 0A
-  }
-
-on mNextRows.up:
-  if(pInit.vBusy.val==0)
-  {
-  pInit.vOffset.val+=4
-  pInit.vStep.val=1
-  }
-
-on mPrevRows.up:
-  if(pInit.vBusy.val==0&&pInit.vOffset.val>=4)
-  {
-  pInit.vOffset.val-=4
-  pInit.vStep.val=1
   }

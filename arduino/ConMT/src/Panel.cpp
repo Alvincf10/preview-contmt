@@ -85,6 +85,7 @@ uint32_t sequence = 0;
 uint32_t fingerprint = 0;
 uint32_t lastByte = 0;
 uint32_t lastFrame = 0;
+uint32_t lastStorageProbe = 0;
 Answer previous{Error::Ok, 0};
 char line[192];
 uint8_t received = 0;
@@ -242,6 +243,16 @@ void publish() {
   id(FSTR("pInit.nView.val="), view);
 }
 
+bool recoverStorage() {
+  const bool recovered = engine.recover();
+  lastStorageProbe = board::ticks();
+  if (recovered) {
+    selected = selectedHistory = preview = 0;
+    pending = VerbCount;
+  }
+  return recovered;
+}
+
 void ack(uint32_t seq, Answer answer) {
   id(FSTR("pInit.nAckValue.val="), answer.value());
   id(FSTR("pInit.nAckCode.val="), static_cast<uint8_t>(answer.error()));
@@ -389,7 +400,7 @@ Answer readView(View source, uint16_t index) {
       const Sensors sensor = board::temperatures();
       beginData();
       timestamp(now); sep(); digits(supply); sep();
-      const int16_t battery = board::batteryPercent(supply);
+      const int8_t battery = board::batteryPercent();
       if (battery >= 0) digits(battery);
       sep(); digits(static_cast<uint8_t>(engine.disk.error())); sep(); digits(root.active);
       sep(); digits(engine.config.interval); sep(); digits(engine.config.brightness);
@@ -587,6 +598,7 @@ Answer execute(Verb verb, const char* const* args, uint8_t count) {
       }
       return bad(Error::Stale);
     case Start:
+      if (engine.disk.error() != Error::Ok) return bad(engine.disk.error());
       if (!selected) return bad(Error::State);
       return root.active ? ask(verb, selected) : go(Realtime, engine.start(selected));
     case Resume:
@@ -637,8 +649,7 @@ Answer execute(Verb verb, const char* const* args, uint8_t count) {
       if (confirmation != VerbCount && value == view) return verb == Cancel ? ok() : confirmed(confirmation);
       return bad(Error::Stale);
     case Storage:
-      if (!engine.recover()) return absent();
-      selected = selectedHistory = preview = 0;
+      if (!recoverStorage()) return absent();
       return go(root.identityReady ? Main : User);
     default: break;
   }
@@ -706,7 +717,7 @@ void dispatch() {
 }  // namespace
 
 void begin() {
-  engine.recover();
+  recoverStorage();
   boot = (engine.disk.committed() * 2654435761UL + board::ticks() + 1) & INT32_MAX;
   if (!boot) boot = 1;
   page = Init;
@@ -733,11 +744,16 @@ void poll() {
     } else overflow = true;
   }
   engine.tick(page != Strength || !ready || now - lastFrame >= 10000);
-  if (knownActive != engine.disk.root().active) {
+  const bool recovered = !received && !overflow && engine.disk.error() == Error::Storage &&
+                         now - lastStorageProbe >= 4000 && recoverStorage();
+  if (recovered || knownActive != engine.disk.root().active) {
     knownActive = engine.disk.root().active;
     advanceView();
     pending = VerbCount;
-    if (ready) publish();
+    if (ready) {
+      if (recovered) dim();
+      publish();
+    }
   }
 }
 }  // namespace panel

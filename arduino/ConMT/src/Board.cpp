@@ -4,6 +4,7 @@
 
 #include "Board.h"
 #include "BoardProfile.h"
+#include "Battery.h"
 
 #if !defined(__AVR_ATmega328P__) || F_CPU != 16000000UL
 #error Select the 16 MHz ATmega328P profile for ConMT revision 1.0
@@ -40,9 +41,18 @@ uint32_t sensorTime = 0;
 uint32_t searchTime = 0;
 uint32_t clockTick = 0;
 uint32_t buzzerTick = 0;
+uint16_t batteryTick = 0;
+BatteryGauge battery;
 uint8_t converting = 0;
 uint8_t previous85 = 0;
 Stamp current{NoDate, 0};
+
+void sampleBattery() {
+  analogRead(pins::VinSense);
+  uint16_t total = 0;
+  for (uint8_t i = 0; i < 8; ++i) total += analogRead(pins::VinSense);
+  battery.sample((total + 4) >> 3);
+}
 
 void discover() {
   uint8_t rom[8];
@@ -122,6 +132,11 @@ void poll() {
     if (current.day != NoDate) current = forward(current, seconds);
   }
   if ((PORTD & _BV(PD3)) && tick - buzzerTick >= 60) PORTD &= ~_BV(PD3);
+  const uint16_t batteryNow = static_cast<uint16_t>(tick);
+  if (static_cast<uint16_t>(batteryNow - batteryTick) >= 100) {
+    batteryTick = batteryNow;
+    sampleBattery();
+  }
   if (tick - sensorTime < 800) return;
   readSensors();
   if (tick - searchTime >= 30000UL && (!addresses[0][0] || !addresses[1][0] || !addresses[2][0])) {
@@ -158,17 +173,7 @@ uint16_t supplyMv() {
 #endif
 }
 
-int16_t batteryPercent(uint16_t voltage) {
-#if CONMT_BATTERY_FULL_MV > CONMT_BATTERY_EMPTY_MV && CONMT_BATTERY_EMPTY_MV > 0
-  if (voltage <= CONMT_BATTERY_EMPTY_MV) return 0;
-  if (voltage >= CONMT_BATTERY_FULL_MV) return 100;
-  return (100UL * (voltage - CONMT_BATTERY_EMPTY_MV)) /
-         (CONMT_BATTERY_FULL_MV - CONMT_BATTERY_EMPTY_MV);
-#else
-  (void)voltage;
-  return -1;
-#endif
-}
+int8_t batteryPercent() { return battery.percent(); }
 
 void beep(bool enabled) {
   if (enabled) {

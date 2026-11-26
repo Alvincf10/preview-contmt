@@ -5,174 +5,17 @@ x = 0
 y = 0
 w = 480
 h = 800
-
-[[component]]
-name = "bg"
-type = "picture"
-x = 0
-y = 0
-w = 480
-h = 800
+sta = 2
 pic = "08_saved_baseline"
 
 [[component]]
 name = "tmPoll"
 type = "timer"
-tim = 250
+tim = 65
 en = 1
 events = [
     "timer",
 ]
-
-[[component]]
-name = "tClock"
-type = "text"
-x = 43
-y = 81
-w = 40
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "08_saved_baseline"
-xcen = 0
-
-[[component]]
-name = "tBatt"
-type = "text"
-x = 429
-y = 81
-w = 32
-h = 12
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "08_saved_baseline"
-xcen = 0
-
-[[component]]
-name = "tName0"
-type = "text"
-x = 118
-y = 285
-w = 203
-h = 14
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "08_saved_baseline"
-xcen = 0
-
-[[component]]
-name = "tVal0"
-type = "text"
-x = 118
-y = 317
-w = 63
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "08_saved_baseline"
-xcen = 0
-
-[[component]]
-name = "tName1"
-type = "text"
-x = 118
-y = 372
-w = 203
-h = 14
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "08_saved_baseline"
-xcen = 0
-
-[[component]]
-name = "tVal1"
-type = "text"
-x = 118
-y = 404
-w = 61
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "08_saved_baseline"
-xcen = 0
-
-[[component]]
-name = "tName2"
-type = "text"
-x = 118
-y = 459
-w = 203
-h = 14
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "08_saved_baseline"
-xcen = 0
-
-[[component]]
-name = "tVal2"
-type = "text"
-x = 118
-y = 491
-w = 63
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "08_saved_baseline"
-xcen = 0
-
-[[component]]
-name = "tName3"
-type = "text"
-x = 118
-y = 546
-w = 203
-h = 14
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "08_saved_baseline"
-xcen = 0
-
-[[component]]
-name = "tVal3"
-type = "text"
-x = 118
-y = 578
-w = 63
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "08_saved_baseline"
-xcen = 0
 
 [[component]]
 name = "tMsg"
@@ -295,149 +138,450 @@ txt = ""
 txt_maxl = 24
 
 [[component]]
-name = "tNotice"
-type = "text"
-x = 10
-y = 775
-w = 460
-h = 24
+name = "vStartX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vStartY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vBlockTap"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "tRowData0"
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
 txt = ""
-txt_maxl = 96
+txt_maxl = 255
 
 [[component]]
-name = "mPrevRows"
-type = "hotspot"
-x = 4
-y = 268
-w = 24
-h = 340
-events = [
-    "up",
-]
+name = "tRowData1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
 
 [[component]]
-name = "mNextRows"
-type = "hotspot"
-x = 452
-y = 268
-w = 24
-h = 340
-events = [
-    "up",
-]
+name = "tRowData2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
 
 [[component]]
-name = "mBack"
-type = "hotspot"
-x = 67
-y = 630
-w = 143
-h = 40
+name = "tRowData3"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tcList"
+type = "touch-capture"
 events = [
     "down",
     "up",
 ]
 
 [[component]]
+name = "tmDrag"
+type = "timer"
+tim = 50
+en = 0
+events = [
+    "timer",
+]
+
+[[component]]
+name = "vPriorX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vPriorY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
+type = "text"
+sta = 0
+picc = "08_saved_baseline"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
+type = "text"
+sta = 0
+picc = "08_saved_baseline"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tNotice"
+x = 14
+y = 775
+w = 452
+h = 23
+type = "text"
+sta = 0
+picc = "08_saved_baseline"
+txt = ""
+txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tName0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tVal0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tDatum0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tSavedDate0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tName1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tVal1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tDatum1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tSavedDate1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tName2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tVal2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tDatum2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tSavedDate2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tName3"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tVal3"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tDatum3"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tSavedDate3"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tEmptyList"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 64
+
+[[component]]
+name = "tPageRows"
+x = 206
+y = 762
+w = 68
+h = 13
+type = "text"
+sta = 0
+picc = "08_saved_baseline"
+txt = ""
+txt_maxl = 64
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
 name = "mPick0"
-type = "hotspot"
 x = 67
-y = 268
-w = 346
-h = 79
+y = 236
+w = 281
+h = 95
+type = "hotspot"
+events = [
+    "up",
+]
+
+[[component]]
+name = "mPickTag0"
+x = 348
+y = 236
+w = 65
+h = 38
+type = "hotspot"
 events = [
     "up",
 ]
 
 [[component]]
 name = "mDelete0"
+x = 348
+y = 274
+w = 65
+h = 57
 type = "hotspot"
-x = 338
-y = 310
-w = 64
-h = 26
 events = [
     "up",
 ]
 
 [[component]]
 name = "mPick1"
-type = "hotspot"
 x = 67
-y = 355
-w = 346
-h = 79
+y = 339
+w = 281
+h = 95
+type = "hotspot"
+events = [
+    "up",
+]
+
+[[component]]
+name = "mPickTag1"
+x = 348
+y = 339
+w = 65
+h = 38
+type = "hotspot"
 events = [
     "up",
 ]
 
 [[component]]
 name = "mDelete1"
+x = 348
+y = 377
+w = 65
+h = 57
 type = "hotspot"
-x = 338
-y = 397
-w = 64
-h = 26
 events = [
     "up",
 ]
 
 [[component]]
 name = "mPick2"
-type = "hotspot"
 x = 67
 y = 442
-w = 346
-h = 79
+w = 281
+h = 95
+type = "hotspot"
+events = [
+    "up",
+]
+
+[[component]]
+name = "mPickTag2"
+x = 348
+y = 442
+w = 65
+h = 38
+type = "hotspot"
 events = [
     "up",
 ]
 
 [[component]]
 name = "mDelete2"
+x = 348
+y = 480
+w = 65
+h = 57
 type = "hotspot"
-x = 338
-y = 484
-w = 64
-h = 26
 events = [
     "up",
 ]
 
 [[component]]
 name = "mPick3"
-type = "hotspot"
 x = 67
-y = 529
-w = 346
-h = 79
+y = 545
+w = 281
+h = 95
+type = "hotspot"
+events = [
+    "up",
+]
+
+[[component]]
+name = "mPickTag3"
+x = 348
+y = 545
+w = 65
+h = 38
+type = "hotspot"
 events = [
     "up",
 ]
 
 [[component]]
 name = "mDelete3"
+x = 348
+y = 583
+w = 65
+h = 57
 type = "hotspot"
-x = 338
-y = 571
-w = 64
-h = 26
+events = [
+    "up",
+]
+
+[[component]]
+name = "mBack"
+x = 67
+y = 662
+w = 143
+h = 52
+type = "hotspot"
 events = [
     "up",
 ]
 
 [[component]]
 name = "mSelect"
-type = "hotspot"
 x = 220
-y = 630
+y = 662
 w = 193
-h = 40
+h = 52
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]

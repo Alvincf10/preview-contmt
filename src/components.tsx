@@ -1,5 +1,5 @@
 import { useEffect, useId, useState, type InputHTMLAttributes, type ReactNode } from 'react'
-import { IconBattery, IconChevronRight, IconClock, IconThermo, UiIcon } from './icons'
+import { IconBattery, IconChevronRight, IconClock, UiIcon } from './icons'
 
 function pad2(n: number) {
   return String(n).padStart(2, '0')
@@ -68,9 +68,8 @@ export function TempStrip({
     <div className="temp-strip" aria-label="Live sensor temperatures">
       {values.map((t, i) => (
         <div key={i} className="temp-strip-cell">
-          <IconThermo className="ico ico-accent temp-strip-ico" />
           <span className="temp-strip-label">S{i + 1}</span>
-          <strong className="temp-strip-value">{t.toFixed(1)}°</strong>
+          <strong className="temp-strip-value">{Number.isFinite(t) ? `${t.toFixed(1)} °C` : '—'}</strong>
         </div>
       ))}
     </div>

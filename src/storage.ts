@@ -85,15 +85,17 @@ function sensorAvg(temps: unknown): number | null {
 }
 
 /** Merge persisted JSON onto defaults so older saves stay loadable. */
-export function loadAppState(): AppState {
+export function loadAppState(referenceResult = false): AppState {
+  const baselineDraft = referenceResult ? initialState.baselineDraft : { ...initialState.baselineDraft, rows: [] }
+  const defaults = { ...initialState, baselineDraft }
   try {
     const raw =
       localStorage.getItem(STORAGE_KEY) ??
       LEGACY_STORAGE_KEYS.map((k) => localStorage.getItem(k)).find((v) => v != null) ??
       null
-    if (!raw) return initialState
+    if (!raw) return defaults
     const parsed: unknown = JSON.parse(raw)
-    if (!isObject(parsed)) return initialState
+    if (!isObject(parsed)) return defaults
 
     const draft = isObject(parsed.baselineDraft) ? parsed.baselineDraft : {}
     const measurement = isObject(parsed.measurement) ? parsed.measurement : {}
@@ -136,7 +138,7 @@ export function loadAppState(): AppState {
           typeof draft.pourClock === 'string' && draft.pourClock.trim()
             ? draft.pourClock
             : initialState.baselineDraft.pourClock,
-        rows: Array.isArray(draft.rows) ? draft.rows : initialState.baselineDraft.rows,
+        rows: Array.isArray(draft.rows) ? draft.rows : baselineDraft.rows,
       },
       baselines,
       history,
@@ -169,7 +171,7 @@ export function loadAppState(): AppState {
 
     return next
   } catch {
-    return initialState
+    return defaults
   }
 }
 

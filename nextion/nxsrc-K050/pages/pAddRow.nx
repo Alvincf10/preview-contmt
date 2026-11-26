@@ -1,9 +1,8 @@
 on pAddRow.loadend:
   pInit.tMsg.txt=""
+  tError.txt=""
 
 on mEarly.up:
-  if(pInit.vBusy.val==0)
-  {
   if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
@@ -28,12 +27,8 @@ on mEarly.up:
   prints pInit.tReq.txt,0
   printh 0A
   }
-  page pInit.vPage.val
-  }
 
 on mFill.up:
-  if(pInit.vBusy.val==0)
-  {
   if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
@@ -58,12 +53,8 @@ on mFill.up:
   prints pInit.tReq.txt,0
   printh 0A
   }
-  page pInit.vPage.val
-  }
 
 on mLab.up:
-  if(pInit.vBusy.val==0)
-  {
   if(pInit.vBusy.val==0)
   {
   pInit.vSeq.val+=1
@@ -88,8 +79,99 @@ on mLab.up:
   prints pInit.tReq.txt,0
   printh 0A
   }
+
+on mClose.up:
+  if(pInit.vBusy.val==0)
+  {
   page pInit.vPage.val
   }
 
-on mClose.up:
+on tmAdd.timer:
+  if(pInit.vBusy.val==1)
+  {
+  if(pInit.nAckSeq.val==pInit.vSeq.val)
+  {
+  pInit.vBusy.val=0
+  if(pInit.nAckCode.val==0)
+  {
+  pInit.vIndex.val=pInit.vTotal.val+13
+  if(pInit.nAckValue.val>0&&pInit.nAckValue.val<=pInit.vIndex.val)
+  {
+  pInit.vFocusFirst.val=0
+  pInit.vFocusRow.val=pInit.nAckValue.val
+  pInit.vTemp.val=pInit.vFocusRow.val-1
+  if(pInit.vTemp.val<pInit.vOffset.val)
+  {
+  pInit.vOffset.val=pInit.vTemp.val
+  }
+  pInit.vIndex.val=pInit.vOffset.val+5
+  if(pInit.vTemp.val>=pInit.vIndex.val)
+  {
+  pInit.vOffset.val=pInit.vTemp.val-4
+  }
+  }
   page pInit.vPage.val
+  }
+  else
+  {
+  pInit.tMsg.txt="ConMT error "
+  covx pInit.nAckCode.val,pInit.tNum.txt,0,0
+  pInit.tMsg.txt+=pInit.tNum.txt
+  if(pInit.nAckCode.val==1)
+  {
+  pInit.tMsg.txt="Invalid input. Check the field format."
+  }
+  if(pInit.nAckCode.val==2)
+  {
+  pInit.tMsg.txt="Complete the required fields"
+  }
+  if(pInit.nAckCode.val==3)
+  {
+  pInit.tMsg.txt="Complete the previous step first"
+  if(pInit.vPage.val==8||pInit.vPage.val==10)
+  {
+  pInit.tMsg.txt="Select a baseline first"
+  }
+  }
+  if(pInit.nAckCode.val==15)
+  {
+  pInit.tMsg.txt="This item is no longer available"
+  }
+  if(pInit.nAckCode.val==6)
+  {
+  pInit.tMsg.txt="Check the microSD card"
+  }
+  if(pInit.nAckCode.val==9)
+  {
+  pInit.tMsg.txt="Connect a temperature probe"
+  }
+  if(pInit.nAckCode.val==10)
+  {
+  pInit.tMsg.txt="Set date/time before measurement"
+  }
+  if(pInit.nAckCode.val==11)
+  {
+  pInit.tMsg.txt="Enter at least two valid lab pairs"
+  }
+  if(pInit.nAckCode.val==12)
+  {
+  pInit.tMsg.txt="Add a later checkpoint before SAVE"
+  }
+  tError.txt=pInit.tMsg.txt
+  }
+  }
+  else
+  {
+  pInit.vRetry.val+=1
+  if(pInit.vRetry.val==15)
+  {
+  prints pInit.tReq.txt,0
+  printh 0A
+  }
+  if(pInit.vRetry.val>=30)
+  {
+  pInit.vBusy.val=0
+  tError.txt="No answer. Return and reconnect."
+  }
+  }
+  }

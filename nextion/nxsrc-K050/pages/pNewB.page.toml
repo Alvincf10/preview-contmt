@@ -5,14 +5,7 @@ x = 0
 y = 0
 w = 480
 h = 800
-
-[[component]]
-name = "bg"
-type = "picture"
-x = 0
-y = 0
-w = 480
-h = 800
+sta = 2
 pic = "04_new_baseline"
 
 [[component]]
@@ -23,91 +16,6 @@ en = 1
 events = [
     "timer",
 ]
-
-[[component]]
-name = "tClock"
-type = "text"
-x = 14
-y = 70
-w = 88
-h = 28
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "04_new_baseline"
-
-[[component]]
-name = "tBatt"
-type = "text"
-x = 378
-y = 70
-w = 88
-h = 28
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "04_new_baseline"
-
-[[component]]
-name = "tName"
-type = "text"
-x = 80
-y = 396
-w = 310
-h = 27
-sta = 0
-txt = ""
-txt_maxl = 64
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "04_new_baseline"
-events = [
-    "up",
-]
-xcen = 0
-ycen = 1
-
-[[component]]
-name = "tFc"
-type = "text"
-x = 80
-y = 474
-w = 250
-h = 30
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans28"
-picc = "04_new_baseline"
-events = [
-    "up",
-]
-xcen = 0
-ycen = 1
-
-[[component]]
-name = "tTemp"
-type = "text"
-x = 80
-y = 552
-w = 250
-h = 27
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "04_new_baseline"
-events = [
-    "up",
-]
-xcen = 0
-ycen = 1
 
 [[component]]
 name = "tMsg"
@@ -132,39 +40,131 @@ txt = ""
 txt_maxl = 24
 
 [[component]]
-name = "tNotice"
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
 type = "text"
-x = 10
-y = 775
-w = 460
-h = 24
-sta = 1
-bco = "#1e2326"
+sta = 0
+picc = "04_new_baseline"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
 pco = "#ffffff"
-font = "NotoSans16"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
+type = "text"
+sta = 0
+picc = "04_new_baseline"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tNotice"
+x = 14
+y = 775
+w = 452
+h = 23
+type = "text"
+sta = 0
+picc = "04_new_baseline"
 txt = ""
 txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tName"
+x = 67
+y = 333
+w = 346
+h = 52
+type = "text"
+sta = 0
+picc = "04_new_baseline"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "tFc"
+x = 67
+y = 426
+w = 280
+h = 52
+type = "text"
+sta = 0
+picc = "04_new_baseline"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "tTemp"
+x = 67
+y = 519
+w = 280
+h = 52
+type = "text"
+sta = 0
+picc = "04_new_baseline"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = [
+    "up",
+]
 
 [[component]]
 name = "mBack"
-type = "hotspot"
 x = 67
-y = 597
-w = 168
-h = 35
+y = 593
+w = 143
+h = 52
+type = "hotspot"
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mNext"
+x = 220
+y = 593
+w = 193
+h = 52
 type = "hotspot"
-x = 245
-y = 597
-w = 164
-h = 35
 events = [
-    "down",
     "up",
 ]

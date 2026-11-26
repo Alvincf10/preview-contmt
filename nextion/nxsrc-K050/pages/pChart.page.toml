@@ -6,6 +6,8 @@ y = 0
 w = 480
 h = 800
 bco = "#1e2326"
+sta = 2
+pic = "web_pChart"
 
 [[component]]
 name = "tmChart"
@@ -17,100 +19,165 @@ events = [
 ]
 
 [[component]]
-name = "tTitle"
-type = "text"
-x = 20
-y = 40
-w = 440
-h = 45
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans20"
-txt = "Baseline curve, 0-50 MPa"
-txt_maxl = 64
-
-[[component]]
-name = "tError"
-type = "text"
-x = 30
-y = 660
-w = 420
-h = 35
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
-txt = ""
-txt_maxl = 64
-
-[[component]]
-name = "mBack"
-type = "button"
-x = 65
-y = 715
-w = 350
-h = 36
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Back"
-txt_maxl = 4
-events = [
-    "up",
-]
+name = "vPlotPhase"
+type = "variable"
+val = 0
 
 [[component]]
 name = "vPoint"
 type = "variable"
-vscope = 1
+val = 0
+
+[[component]]
+name = "vPlotAction"
+type = "variable"
 val = 0
 
 [[component]]
 name = "vX"
 type = "variable"
-vscope = 1
 val = 0
 
 [[component]]
 name = "vY"
 type = "variable"
-vscope = 1
 val = 0
 
 [[component]]
 name = "vLastX"
 type = "variable"
-vscope = 1
 val = 0
 
 [[component]]
 name = "vLastY"
 type = "variable"
-vscope = 1
 val = 0
 
 [[component]]
-name = "vScale"
+name = "vMaxX"
 type = "variable"
-vscope = 1
 val = 0
 
 [[component]]
-name = "tNumber"
+name = "vDiv"
 type = "variable"
-vscope = 1
-sta = 1
-txt = ""
-txt_maxl = 32
+val = 0
+
+[[component]]
+name = "vTick"
+type = "variable"
+val = 0
+
+[[component]]
+name = "vTickStep"
+type = "variable"
+val = 0
+
+[[component]]
+name = "vX0"
+type = "variable"
+val = 0
+
+[[component]]
+name = "vY0"
+type = "variable"
+val = 0
+
+[[component]]
+name = "vX1"
+type = "variable"
+val = 0
+
+[[component]]
+name = "vY1"
+type = "variable"
+val = 0
+
+[[component]]
+name = "vDelta"
+type = "variable"
+val = 0
 
 [[component]]
 name = "tWhole"
 type = "variable"
-vscope = 1
 sta = 1
 txt = ""
-txt_maxl = 32
+txt_maxl = 16
+
+[[component]]
+name = "tTitle"
+type = "variable"
+vscope = 0
+sta = 1
+txt = "Maturity vs Compressive Strength"
+txt_maxl = 64
+
+[[component]]
+name = "tAxes"
+type = "variable"
+vscope = 0
+sta = 1
+txt = "Compressive Strength (MPa)"
+txt_maxl = 64
+
+[[component]]
+name = "tMaturity"
+type = "variable"
+vscope = 0
+sta = 1
+txt = "Maturity Index, M (°C·hour)"
+txt_maxl = 64
+
+[[component]]
+name = "tFit"
+x = 20
+y = 649
+w = 440
+h = 28
+type = "text"
+sta = 0
+picc = "web_pChart"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "tError"
+x = 20
+y = 678
+w = 440
+h = 37
+type = "text"
+sta = 0
+picc = "web_pChart"
+txt = ""
+txt_maxl = 96
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
+
+[[component]]
+name = "mBack"
+x = 65
+y = 725
+w = 350
+h = 48
+type = "text"
+sta = 0
+picc = "web_pChart"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]

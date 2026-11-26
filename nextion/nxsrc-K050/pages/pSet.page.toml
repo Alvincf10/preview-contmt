@@ -5,14 +5,7 @@ x = 0
 y = 0
 w = 480
 h = 800
-
-[[component]]
-name = "bg"
-type = "picture"
-x = 0
-y = 0
-w = 480
-h = 800
+sta = 2
 pic = "15_settings"
 
 [[component]]
@@ -23,92 +16,6 @@ en = 1
 events = [
     "timer",
 ]
-
-[[component]]
-name = "tClock"
-type = "text"
-x = 43
-y = 81
-w = 40
-h = 13
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "15_settings"
-xcen = 0
-
-[[component]]
-name = "tBatt"
-type = "text"
-x = 429
-y = 81
-w = 32
-h = 12
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans16"
-picc = "15_settings"
-xcen = 0
-
-[[component]]
-name = "tBright"
-type = "text"
-x = 320
-y = 510
-w = 37
-h = 20
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "15_settings"
-
-[[component]]
-name = "tHour"
-type = "text"
-x = 89
-y = 324
-w = 49
-h = 26
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "15_settings"
-
-[[component]]
-name = "tMin"
-type = "text"
-x = 198
-y = 324
-w = 49
-h = 26
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "15_settings"
-
-[[component]]
-name = "tSec"
-type = "text"
-x = 308
-y = 324
-w = 49
-h = 26
-sta = 0
-txt = ""
-txt_maxl = 32
-pco = "#ffffff"
-font = "NotoSans20"
-picc = "15_settings"
 
 [[component]]
 name = "tMsg"
@@ -126,187 +33,252 @@ txt = ""
 txt_maxl = 24
 
 [[component]]
-name = "tSound"
+name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
 type = "text"
-x = 336
-y = 562
-w = 64
-h = 30
-sta = 1
-bco = "#ed792e"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "15_settings"
 txt = ""
-txt_maxl = 8
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
-name = "tAuto"
-type = "text"
-x = 336
-y = 611
+name = "tBatt"
+x = 393
+y = 69
 w = 64
-h = 30
-sta = 1
-bco = "#ed792e"
-pco = "#ffffff"
-font = "NotoSans16"
+h = 48
+type = "text"
+sta = 0
+picc = "15_settings"
 txt = ""
-txt_maxl = 8
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tNotice"
-type = "text"
-x = 10
+x = 14
 y = 775
-w = 460
-h = 24
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+w = 452
+h = 23
+type = "text"
+sta = 0
+picc = "15_settings"
 txt = ""
 txt_maxl = 96
+font = "NotoSans16"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
-name = "mBack"
-type = "hotspot"
-x = 67
-y = 685
-w = 143
-h = 40
-events = [
-    "down",
-    "up",
-]
+name = "tHour"
+x = 89
+y = 323
+w = 33
+h = 26
+type = "text"
+sta = 0
+picc = "15_settings"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
 
 [[component]]
-name = "mSave"
-type = "hotspot"
-x = 220
-y = 685
-w = 193
-h = 40
-events = [
-    "down",
-    "up",
-]
+name = "tMin"
+x = 198
+y = 323
+w = 34
+h = 26
+type = "text"
+sta = 0
+picc = "15_settings"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tSec"
+x = 308
+y = 323
+w = 33
+h = 26
+type = "text"
+sta = 0
+picc = "15_settings"
+txt = ""
+txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
+
+[[component]]
+name = "tBright"
+x = 258
+y = 518
+w = 37
+h = 20
+type = "text"
+sta = 0
+picc = "15_settings"
+txt = ""
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 0
+ycen = 1
+events = []
 
 [[component]]
 name = "mTap0"
+x = 130
+y = 287
+w = 44
+h = 48
 type = "hotspot"
-x = 146
-y = 314
-w = 28
-h = 22
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mTap1"
+x = 130
+y = 337
+w = 44
+h = 48
 type = "hotspot"
-x = 146
-y = 338
-w = 28
-h = 22
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mTap2"
+x = 240
+y = 287
+w = 44
+h = 48
 type = "hotspot"
-x = 256
-y = 314
-w = 28
-h = 22
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mTap3"
+x = 240
+y = 337
+w = 44
+h = 48
 type = "hotspot"
-x = 256
-y = 338
-w = 28
-h = 22
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mTap4"
+x = 349
+y = 287
+w = 44
+h = 48
 type = "hotspot"
-x = 365
-y = 314
-w = 28
-h = 22
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mTap5"
+x = 349
+y = 337
+w = 44
+h = 48
 type = "hotspot"
-x = 365
-y = 338
-w = 28
-h = 22
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mTap6"
+x = 303
+y = 504
+w = 44
+h = 48
 type = "hotspot"
-x = 365
-y = 497
-w = 28
-h = 22
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mTap7"
+x = 349
+y = 504
+w = 44
+h = 48
 type = "hotspot"
-x = 365
-y = 521
-w = 28
-h = 22
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mTap8"
+x = 316
+y = 564
+w = 84
+h = 48
 type = "hotspot"
-x = 336
-y = 562
-w = 64
-h = 30
 events = [
-    "down",
     "up",
 ]
 
 [[component]]
 name = "mTap9"
+x = 316
+y = 623
+w = 84
+h = 48
 type = "hotspot"
-x = 336
-y = 611
-w = 64
-h = 30
 events = [
-    "down",
+    "up",
+]
+
+[[component]]
+name = "mBack"
+x = 67
+y = 707
+w = 143
+h = 52
+type = "hotspot"
+events = [
+    "up",
+]
+
+[[component]]
+name = "mSave"
+x = 220
+y = 707
+w = 193
+h = 52
+type = "hotspot"
+events = [
     "up",
 ]

@@ -18,7 +18,7 @@ FLOAT_FLAGS = "-mdouble=32 -mlong-double=32"
 CLI_FLAGS = (
     f"-Oz {FLOAT_FLAGS} -mrelax -mcall-prologues "
     "-fno-inline-functions-called-once -fno-tree-scev-cprop -fipa-pta "
-    "-ftree-loop-optimize -fno-tree-loop-im -flto-partition=one "
+    "-ftree-loop-optimize -fno-tree-loop-im -fno-tree-dominator-opts -flto-partition=one "
     "-fmerge-all-constants -g0"
 )
 
@@ -44,8 +44,8 @@ def compiler_tools(binary_dir):
     suffix = ".exe" if os.name == "nt" else ""
     gcc, size, objcopy = (binary_dir / (name + suffix) for name in ("avr-gcc", "avr-size", "avr-objcopy"))
     version = command(gcc, "--version", capture_output=True).stdout.splitlines()[0]
-    if not re.search(r"\b16\.1\.0\b", version):
-        raise RuntimeError("This build uses AVR GCC 16.1.0 and its final LTO assembly format.")
+    if not re.search(r"\b16\.[12]\.0\b", version):
+        raise RuntimeError("This build uses AVR GCC 16.1.0 or 16.2.0 and its final LTO assembly format.")
     return gcc, size, objcopy
 
 
@@ -114,7 +114,7 @@ def build(args, work):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--avr-bin", type=Path, required=True, help="AVR GCC 16.1.0 bin directory")
+    parser.add_argument("--avr-bin", type=Path, required=True, help="AVR GCC 16.1.0 or 16.2.0 bin directory")
     parser.add_argument("--output", type=Path, required=True, help="Intel HEX output")
     parser.add_argument("--arduino-cli", type=Path)
     parser.add_argument("--config", type=Path, help="Optional Arduino CLI configuration")

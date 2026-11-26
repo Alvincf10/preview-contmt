@@ -236,39 +236,48 @@ Answer Engine::setSettings(Field field, const char* value) {
   return ok(id);
 }
 
-bool Engine::rewriteRows(Baseline& record, const LabRow* insertion, Ref remove, uint16_t fill) {
+uint16_t Engine::rewriteRows(Baseline& record, LabRow* insertion, Ref remove, uint16_t fill) {
   Cursor cursor(record.rows);
   record.rows = {};
   uint16_t slotAge = 0;
+  uint16_t inserted = 0;
   LabRow current;
   for (;;) {
     const bool hasRow = disk.next(cursor, Kind::Row, current);
-    if (!hasRow && cursor.remaining) return false;
+    if (!hasRow && cursor.remaining) return 0;
     if (hasRow && current.id == remove) continue;
     while (fill && (!hasRow || slotAge <= current.age)) {
       if (fill & 1) {
+        if (!inserted) inserted = record.rows.count + 1;
         const LabRow added{disk.nextId(), 0, slotAge, Missing, Missing};
-        if (!disk.extend(record.rows, Kind::Row, added)) return false;
+        if (!disk.extend(record.rows, Kind::Row, added)) return 0;
       }
       fill >>= 1;
       slotAge += 1800;
     }
     if (insertion && (!hasRow || precedes(*insertion, current))) {
-      if (!disk.extend(record.rows, Kind::Row, *insertion)) return false;
+      inserted = record.rows.count + 1;
+      if (!insertion->id) insertion->id = disk.nextId();
+      if (!disk.extend(record.rows, Kind::Row, *insertion)) return 0;
       insertion = nullptr;
     }
     if (!hasRow) break;
-    if (!disk.extend(record.rows, Kind::Row, current)) return false;
+    if (!disk.extend(record.rows, Kind::Row, current)) return 0;
   }
   record.model = 0;
-  return true;
+  return inserted ? inserted : 1;
 }
 
 Answer Engine::row(uint16_t index, Field field, const char* value, bool sensor) {
   Baseline& record = work_.baseline;
+  const Ref draft = disk.root().draft;
+  if (!draft || !baseline(draft, record)) return stopped(Error::NotFound);
   LabRow changed;
-  if (!baseline(disk.root().draft, record) || !disk.at(record.rows, index, Kind::Row, changed))
-    return stopped(Error::NotFound);
+  const bool first = !record.rows.count && !index;
+  if (first) {
+    changed.id = changed.day = changed.age = 0;
+    changed.temperature = changed.fc = Missing;
+  } else if (!disk.at(record.rows, index, Kind::Row, changed)) return stopped(Error::NotFound);
   Scaled parsed;
   if (sensor) {
     changed.temperature = average(board::temperatures(), true);
@@ -304,7 +313,8 @@ Answer Engine::row(uint16_t index, Field field, const char* value, bool sensor) 
     if (other.id != changed.id && other.day == changed.day && (other.day || other.age == changed.age))
       return bad(Error::Input);
   }
-  if (cursor.remaining || !disk.begin() || !rewriteRows(record, &changed, changed.id, 0)) return stopped();
+  if (cursor.remaining || !disk.begin()) return stopped();
+  if (!rewriteRows(record, &changed, changed.id, 0)) return stopped();
   return publish(record);
 }
 
@@ -323,10 +333,12 @@ Answer Engine::addRows(bool early, bool fill) {
     }
   }
   if (cursor.remaining) return stopped();
+  uint16_t inserted;
   if (fill) {
     const uint16_t missing = 0x1fff & ~used;
-    if (!missing) return ok(disk.root().draft);
-    if (!disk.begin() || !rewriteRows(record, nullptr, 0, missing)) return stopped();
+    if (!missing) return ok();
+    if (!disk.begin()) return stopped();
+    inserted = rewriteRows(record, nullptr, 0, missing);
   } else {
     uint32_t age;
     if (early) {
@@ -337,10 +349,13 @@ Answer Engine::addRows(bool early, bool fill) {
       age = slot * 1800UL;
     } else if (!labAge(day, false, age)) return bad(Error::Full);
     if (!disk.begin()) return stopped();
-    LabRow added{disk.nextId(), day, age, Missing, Missing};
-    if (!rewriteRows(record, &added, 0, 0)) return stopped();
+    LabRow added{0, day, age, Missing, Missing};
+    const uint16_t keepDayZero = !early && !record.rows.count ? 1 : 0;
+    inserted = rewriteRows(record, &added, 0, keepDayZero);
   }
-  return publish(record);
+  if (!inserted) return stopped();
+  const Answer result = publish(record);
+  return result.error() == Error::Ok ? ok(inserted) : result;
 }
 
 Answer Engine::deleteRow(uint16_t index) {

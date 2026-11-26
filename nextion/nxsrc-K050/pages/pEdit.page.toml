@@ -5,7 +5,9 @@ x = 0
 y = 0
 w = 480
 h = 800
-bco = "#1e2326"
+bco = "#1a2029"
+sta = 2
+pic = "web_pEdit"
 
 [[component]]
 name = "tmEdit"
@@ -23,917 +25,949 @@ vscope = 1
 val = 0
 
 [[component]]
+name = "vValid"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vLen"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vYear"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vMonth"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vDay"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vPart"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
+name = "vPos"
+type = "variable"
+vscope = 1
+val = 0
+
+[[component]]
 name = "tTitle"
-type = "text"
 x = 20
-y = 45
+y = 124
 w = 440
-h = 45
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans28"
+h = 40
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = ""
 txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tInput"
-type = "text"
 x = 20
-y = 110
+y = 179
 w = 440
-h = 90
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans20"
+h = 50
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = ""
 txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tError"
-type = "text"
 x = 20
-y = 210
+y = 231
 w = 440
-h = 45
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+h = 33
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = ""
-txt_maxl = 64
+txt_maxl = 96
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "k00"
-type = "button"
-x = 12
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 10
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "1"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k01"
-type = "button"
-x = 58
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 56
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "2"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k02"
-type = "button"
-x = 104
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 102
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "3"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k03"
-type = "button"
-x = 150
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 148
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "4"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k04"
-type = "button"
-x = 196
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 194
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "5"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k05"
-type = "button"
-x = 242
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 240
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "6"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k06"
-type = "button"
-x = 288
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 286
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "7"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k07"
-type = "button"
-x = 334
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 332
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "8"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k08"
-type = "button"
-x = 380
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 378
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "9"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k09"
-type = "button"
-x = 426
-y = 280
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 424
+y = 275
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "0"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k10"
-type = "button"
-x = 12
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 10
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "Q"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k11"
-type = "button"
-x = 58
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 56
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "W"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k12"
-type = "button"
-x = 104
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 102
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "E"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k13"
-type = "button"
-x = 150
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 148
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "R"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k14"
-type = "button"
-x = 196
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 194
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "T"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k15"
-type = "button"
-x = 242
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 240
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "Y"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k16"
-type = "button"
-x = 288
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 286
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "U"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k17"
-type = "button"
-x = 334
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 332
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "I"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k18"
-type = "button"
-x = 380
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 378
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "O"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k19"
-type = "button"
-x = 426
-y = 340
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 424
+y = 339
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "P"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k20"
-type = "button"
-x = 12
-y = 400
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 10
+y = 403
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "A"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k21"
-type = "button"
-x = 58
-y = 400
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 56
+y = 403
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "S"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k22"
-type = "button"
-x = 104
-y = 400
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 102
+y = 403
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "D"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k23"
-type = "button"
-x = 150
-y = 400
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 148
+y = 403
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "F"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k24"
-type = "button"
-x = 196
-y = 400
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 194
+y = 403
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "G"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k25"
-type = "button"
-x = 242
-y = 400
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 240
+y = 403
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "H"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k26"
-type = "button"
-x = 288
-y = 400
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 286
+y = 403
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "J"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k27"
-type = "button"
-x = 334
-y = 400
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 332
+y = 403
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "K"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k28"
-type = "button"
-x = 380
-y = 400
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 378
+y = 403
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "L"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k30"
-type = "button"
-x = 12
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 10
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "Z"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k31"
-type = "button"
-x = 58
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 56
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "X"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k32"
-type = "button"
-x = 104
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 102
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "C"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k33"
-type = "button"
-x = 150
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 148
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "V"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k34"
-type = "button"
-x = 196
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 194
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "B"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k35"
-type = "button"
-x = 242
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 240
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "N"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k36"
-type = "button"
-x = 288
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 286
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "M"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k37"
-type = "button"
-x = 334
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 332
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "-"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k38"
-type = "button"
-x = 380
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 378
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = "."
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "k39"
-type = "button"
-x = 426
-y = 460
-w = 43
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
+x = 424
+y = 467
+w = 44
+h = 56
+type = "text"
+sta = 0
+picc = "web_pEdit"
 txt = ":"
-txt_maxl = 4
+txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "kSpace"
-type = "button"
-x = 12
-y = 525
-w = 210
-h = 50
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+x = 20
+y = 554
+w = 220
+h = 54
+type = "text"
+sta = 0
+picc = "web_pEdit"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Space"
-txt_maxl = 5
-events = [
-    "up",
-]
-
-[[component]]
-name = "kDel"
-type = "button"
-x = 230
-y = 525
-w = 110
-h = 50
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Delete"
-txt_maxl = 6
-events = [
-    "up",
-]
-
-[[component]]
-name = "kClear"
-type = "button"
-x = 348
-y = 525
-w = 120
-h = 50
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Clear"
-txt_maxl = 5
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "kCase"
-type = "button"
-x = 12
-y = 585
-w = 100
-h = 45
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+x = 252
+y = 554
+w = 208
+h = 54
+type = "text"
+sta = 0
+picc = "web_pEdit"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Aa"
-txt_maxl = 4
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
-name = "kProbe"
-type = "button"
-x = 130
-y = 585
-w = 220
-h = 45
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+name = "kDel"
+x = 20
+y = 615
+w = 140
+h = 52
+type = "text"
+sta = 0
+picc = "web_pEdit"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Use probe"
-txt_maxl = 9
+xcen = 1
+ycen = 1
+events = [
+    "up",
+]
+
+[[component]]
+name = "kClear"
+x = 170
+y = 615
+w = 140
+h = 52
+type = "text"
+sta = 0
+picc = "web_pEdit"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "kCancel"
-type = "button"
 x = 20
-y = 650
+y = 725
 w = 210
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+h = 54
+type = "text"
+sta = 0
+picc = "web_pEdit"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Cancel"
-txt_maxl = 6
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "kSave"
-type = "button"
 x = 250
-y = 650
+y = 725
 w = 210
-h = 52
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+h = 54
+type = "text"
+sta = 0
+picc = "web_pEdit"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Apply"
-txt_maxl = 5
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]

@@ -217,10 +217,8 @@ export function BaselineMenuScreen({ state, setState, go }: Props) {
     <Screen
       title="BASELINE"
       className="screen-baseline-menu"
-      topLeft={
-        <button type="button" className="back-chip" onClick={() => go('main')}>
-          <UiIcon name="back-chevron" size="back" className="ico-accent" /> BACK
-        </button>
+      footer={
+        <BtnGhost block withChevron onClick={() => go('main')}>BACK</BtnGhost>
       }
     >
       <div className="stack baseline-menu-stack">
@@ -259,6 +257,7 @@ export function NewBaselineScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="NEW BASELINE"
+      className="screen-new-baseline"
       rule="short"
       footer={<NavFooter onBack={() => go('baselineMenu')} onNext={() => go('materialData')} />}
     >
@@ -275,6 +274,7 @@ export function NewBaselineScreen({ state, setState, go }: Props) {
           <div className="row-unit">
             <TextInput
               value={d.targetFc}
+              inputMode="decimal"
               onChange={(e) =>
                 setState((s) => ({
                   ...s,
@@ -329,6 +329,7 @@ export function MaterialDataScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="MATERIAL DATA"
+      className="screen-material-data"
       rule="short"
       footer={
         <NavFooter
@@ -404,7 +405,8 @@ function MaterialRow({
   return (
     <div className="material-row">
       <span>{label}</span>
-      <input className="text-input compact" value={value} onChange={(e) => onChange(e.target.value)} />
+      <input className="text-input compact" aria-label={label} inputMode="decimal" value={value}
+        onChange={(e) => onChange(e.target.value)} />
       <UnitBox>{unit}</UnitBox>
     </div>
   )
@@ -427,11 +429,13 @@ function AdmixRow({
     <div className="admix-row">
       <span>{label}</span>
       <div className="row-unit tight">
-        <input className="text-input compact" value={pct} onChange={(e) => onPct(e.target.value)} />
+        <input className="text-input compact" aria-label={`${label} percentage`} inputMode="decimal" value={pct}
+          onChange={(e) => onPct(e.target.value)} />
         <UnitBox>%</UnitBox>
       </div>
       <span className="brand-label">Brand</span>
-      <input className="text-input compact" value={brand} onChange={(e) => onBrand(e.target.value)} />
+      <input className="text-input compact" aria-label={`${label} brand`} value={brand}
+        onChange={(e) => onBrand(e.target.value)} />
     </div>
   )
 }
@@ -483,6 +487,11 @@ function formatHHMM(totalMinutes: number): string {
   const h = Math.floor(mins / 60)
   const min = mins % 60
   return `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`
+}
+
+function clockDigits(value: string): string {
+  const digits = value.replace(/\D/g, '').slice(0, 4)
+  return digits.length > 2 ? `${digits.slice(0, 2)}:${digits.slice(2)}` : digits
 }
 
 /** Device clock → HH:MM (default Start time = jam sekarang). */
@@ -581,7 +590,8 @@ function sortMaturityRows(rows: MaturityRow[]): MaturityRow[] {
 }
 
 export function MaturityDataScreen({ state, setState, go }: Props) {
-  const rows = state.baselineDraft.rows
+  const records = state.baselineDraft.rows
+  const rows = records.length ? records : [{ day: 0, timeH: 0, fcLab: '', temperature: '' }]
   const pourDate =
     state.baselineDraft.pourDate && /^\d{4}-\d{2}-\d{2}$/.test(state.baselineDraft.pourDate)
       ? state.baselineDraft.pourDate
@@ -640,7 +650,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
       dayDraft?.i === i && dayDraft.value.trim() !== '' ? Number(dayDraft.value) : NaN
     const day = Number.isFinite(draftDay) && draftDay >= 0 ? draftDay : row.day
     const timeH = clockToTimeH(pourClock, raw, day)
-    if (timeH != null) {
+    if (timeH != null && timeH !== row.timeH) {
       setRows(
         sortMaturityRows(rows.map((r, idx) => (idx === i ? { ...r, timeH } : r))),
       )
@@ -666,7 +676,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
         return { ...r, day, timeH }
       })
     }
-    setRows(sortMaturityRows(next))
+    if (records.length || next[0]?.day !== 0) setRows(sortMaturityRows(next))
     setDayDraft(null)
   }
 
@@ -679,9 +689,9 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
   }
 
   const addDay0 = () => {
-    const timeH = nextDay0Time(rows)
+    const timeH = nextDay0Time(records)
     const next = sortMaturityRows([
-      ...rows,
+      ...records,
       { day: 0, timeH, fcLab: '', temperature: '' },
     ])
     focusNewRow(
@@ -694,7 +704,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
   const addLabDay = () => {
     const day = nextLabDay(rows)
     const next = sortMaturityRows([
-      ...rows,
+      ...records,
       { day, timeH: timeFromDay(day), fcLab: '', temperature: '' },
     ])
     focusNewRow(next, (r) => r.day === day && r.fcLab === '' && r.temperature === '')
@@ -712,7 +722,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
 
   const fillEarly0to6h = () => {
     const used = new Set(
-      rows.filter((r) => r.day === 0).map((r) => snapDay0Time(r.timeH)),
+      records.filter((r) => r.day === 0).map((r) => snapDay0Time(r.timeH)),
     )
     const toAdd = EARLY_0_TO_6H.filter((h) => !used.has(h)).map((timeH) => ({
       day: 0,
@@ -725,7 +735,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
       setAddSheetOpen(false)
       return
     }
-    const next = sortMaturityRows([...rows, ...toAdd])
+    const next = sortMaturityRows([...records, ...toAdd])
     const firstNew = toAdd[0].timeH
     focusNewRow(
       next,
@@ -755,7 +765,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
         ...s,
         baselineDraft: {
           ...s.baselineDraft,
-          rows: s.baselineDraft.rows.map((r, idx) =>
+          rows: (s.baselineDraft.rows.length ? s.baselineDraft.rows : rows).map((r, idx) =>
             idx === target ? { ...r, temperature: reading } : r,
           ),
         },
@@ -781,6 +791,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
   return (
     <Screen
       title="MATURITY DATA INPUT"
+      className="screen-maturity"
       titleAside={
         <button
           type="button"
@@ -798,8 +809,6 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
           }
           onNext={() => go('baselineResult')}
           nextLabel="GENERATE BASELINE"
-          nextClassName="btn-fs-10"
-          backClassName="btn-fs-10"
           backWithChevron={false}
         />
       }
@@ -927,6 +936,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
                         dayInputRefs.current[i] = el
                       }}
                       className="day-input"
+                      aria-label={`Day row ${i + 1}`}
                       inputMode="decimal"
                       value={dayDraft?.i === i ? dayDraft.value : String(r.day)}
                       onFocus={() => {
@@ -958,7 +968,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
                         setActiveRow(i)
                         setTimeDraft({ i, value: clockLabel(r.timeH) })
                       }}
-                      onChange={(e) => setTimeDraft({ i, value: e.target.value })}
+                      onChange={(e) => setTimeDraft({ i, value: clockDigits(e.target.value) })}
                       onBlur={() =>
                         commitTime(
                           i,
@@ -969,6 +979,8 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
                   </td>
                   <td>
                     <input
+                      inputMode="decimal"
+                      aria-label={`Fc Lab row ${i + 1}`}
                       value={r.fcLab}
                       onFocus={() => setActiveRow(i)}
                       onChange={(e) => updateField(i, 'fcLab', e.target.value)}
@@ -976,6 +988,8 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
                   </td>
                   <td>
                     <input
+                      inputMode="decimal"
+                      aria-label={`Temperature row ${i + 1}`}
                       value={r.temperature}
                       onFocus={() => setActiveRow(i)}
                       onChange={(e) => updateField(i, 'temperature', e.target.value)}
@@ -1025,7 +1039,7 @@ export function MaturityDataScreen({ state, setState, go }: Props) {
               aria-label="Pour start clock time"
               value={clockDraft ?? pourClock}
               onFocus={() => setClockDraft(pourClock)}
-              onChange={(e) => setClockDraft(e.target.value)}
+              onChange={(e) => setClockDraft(clockDigits(e.target.value))}
               onBlur={() => commitPourClock(clockDraft ?? pourClock)}
             />
             <span className="pour-clock-eq">= jam 0</span>
@@ -1130,9 +1144,6 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
       <div className="screen-bg" aria-hidden />
       <div className="brand-bar" aria-hidden />
       <StatusCorners />
-      <button type="button" className="back-chip br-back" onClick={() => go('maturityData')}>
-        <UiIcon name="back-chevron" size="back" className="ico-accent" /> BACK
-      </button>
       <div className="br-stage">
         <header className="br-title-block">
           <h1 className="br-title">BASELINE CALCULATION RESULT</h1>
@@ -1201,6 +1212,7 @@ export function BaselineResultScreen({ state, setState, go }: Props) {
         </div>
 
         <div className="br-save">
+          <BtnGhost withChevron onClick={() => go('maturityData')}>BACK</BtnGhost>
           <BtnPrimary
             className="br-save-btn"
             iconLeft={<IconSave className="ico ico-xl ico-white" />}
@@ -1847,8 +1859,7 @@ export function RealtimeScreen({ state, setState, go }: Props) {
         <div className="sensor-row">
           {temps.map((t, i) => (
             <div key={i} className="sensor-box">
-              <IconThermo className="ico ico-accent ico-md" />
-              <span>Sensor {i + 1}</span>
+              <span>S{i + 1}</span>
               <strong>{t.toFixed(1)} °C</strong>
             </div>
           ))}

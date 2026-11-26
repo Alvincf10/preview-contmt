@@ -6,11 +6,13 @@ y = 0
 w = 480
 h = 800
 bco = "#1e2326"
+sta = 2
+pic = "web_pPoints"
 
 [[component]]
 name = "tmPoll"
 type = "timer"
-tim = 250
+tim = 65
 en = 1
 events = [
     "timer",
@@ -18,887 +20,1007 @@ events = [
 
 [[component]]
 name = "tClock"
+x = 49
+y = 69
+w = 75
+h = 48
 type = "text"
-x = 12
-y = 15
-w = 180
-h = 30
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints"
 txt = ""
 txt_maxl = 64
+font = "NotoSans28"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tBatt"
+x = 393
+y = 69
+w = 64
+h = 48
 type = "text"
-x = 360
-y = 15
-w = 100
-h = 30
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tTitle"
-type = "text"
-x = 20
-y = 60
-w = 440
-h = 45
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans20"
-txt = "Measurement checkpoints"
+txt = "Logged days"
 txt_maxl = 64
 
 [[component]]
 name = "tNotice"
-type = "text"
 x = 10
 y = 775
 w = 460
 h = 24
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+type = "text"
+sta = 0
+picc = "web_pPoints"
 txt = ""
 txt_maxl = 96
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "hDay"
-type = "text"
-x = 15
-y = 130
-w = 45
-h = 28
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
 txt = "Day"
 txt_maxl = 64
 
 [[component]]
 name = "tDay0"
+x = 20
+y = 205
+w = 44
+h = 48
 type = "text"
-x = 15
-y = 180
-w = 45
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDay1"
+x = 20
+y = 281
+w = 44
+h = 48
 type = "text"
-x = 15
-y = 260
-w = 45
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDay2"
+x = 20
+y = 357
+w = 44
+h = 48
 type = "text"
-x = 15
-y = 340
-w = 45
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDay3"
+x = 20
+y = 433
+w = 44
+h = 48
 type = "text"
-x = 15
-y = 420
-w = 45
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDay4"
+x = 20
+y = 509
+w = 44
+h = 48
 type = "text"
-x = 15
-y = 500
-w = 45
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDay5"
+x = 20
+y = 585
+w = 44
+h = 48
 type = "text"
-x = 15
-y = 580
-w = 45
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "hDate"
-type = "text"
-x = 65
-y = 130
-w = 110
-h = 28
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
 txt = "Date"
 txt_maxl = 64
 
 [[component]]
 name = "tDate0"
+x = 68
+y = 205
+w = 91
+h = 48
 type = "text"
-x = 65
-y = 180
-w = 110
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDate1"
+x = 68
+y = 281
+w = 91
+h = 48
 type = "text"
-x = 65
-y = 260
-w = 110
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDate2"
+x = 68
+y = 357
+w = 91
+h = 48
 type = "text"
-x = 65
-y = 340
-w = 110
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDate3"
+x = 68
+y = 433
+w = 91
+h = 48
 type = "text"
-x = 65
-y = 420
-w = 110
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDate4"
+x = 68
+y = 509
+w = 91
+h = 48
 type = "text"
-x = 65
-y = 500
-w = 110
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tDate5"
+x = 68
+y = 585
+w = 91
+h = 48
 type = "text"
-x = 65
-y = 580
-w = 110
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "hTime"
-type = "text"
-x = 175
-y = 130
-w = 80
-h = 28
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
 txt = "Time"
 txt_maxl = 64
 
 [[component]]
 name = "tTime0"
+x = 163
+y = 205
+w = 70
+h = 48
 type = "text"
-x = 175
-y = 180
-w = 80
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTime1"
+x = 163
+y = 281
+w = 70
+h = 48
 type = "text"
-x = 175
-y = 260
-w = 80
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTime2"
+x = 163
+y = 357
+w = 70
+h = 48
 type = "text"
-x = 175
-y = 340
-w = 80
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTime3"
+x = 163
+y = 433
+w = 70
+h = 48
 type = "text"
-x = 175
-y = 420
-w = 80
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTime4"
+x = 163
+y = 509
+w = 70
+h = 48
 type = "text"
-x = 175
-y = 500
-w = 80
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTime5"
+x = 163
+y = 585
+w = 70
+h = 48
 type = "text"
-x = 175
-y = 580
-w = 80
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "hTemp"
-type = "text"
-x = 255
-y = 130
-w = 70
-h = 28
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
 txt = "Temp"
 txt_maxl = 64
 
 [[component]]
 name = "tTemp0"
+x = 237
+y = 205
+w = 62
+h = 48
 type = "text"
-x = 255
-y = 180
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTemp1"
+x = 237
+y = 281
+w = 62
+h = 48
 type = "text"
-x = 255
-y = 260
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTemp2"
+x = 237
+y = 357
+w = 62
+h = 48
 type = "text"
-x = 255
-y = 340
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTemp3"
+x = 237
+y = 433
+w = 62
+h = 48
 type = "text"
-x = 255
-y = 420
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTemp4"
+x = 237
+y = 509
+w = 62
+h = 48
 type = "text"
-x = 255
-y = 500
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "tTemp5"
+x = 237
+y = 585
+w = 62
+h = 48
 type = "text"
-x = 255
-y = 580
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "hM"
-type = "text"
-x = 325
-y = 130
-w = 70
-h = 28
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
 txt = "M"
 txt_maxl = 64
 
 [[component]]
 name = "tM0"
+x = 303
+y = 205
+w = 50
+h = 48
 type = "text"
-x = 325
-y = 180
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tM1"
+x = 303
+y = 281
+w = 50
+h = 48
 type = "text"
-x = 325
-y = 260
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tM2"
+x = 303
+y = 357
+w = 50
+h = 48
 type = "text"
-x = 325
-y = 340
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tM3"
+x = 303
+y = 433
+w = 50
+h = 48
 type = "text"
-x = 325
-y = 420
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tM4"
+x = 303
+y = 509
+w = 50
+h = 48
 type = "text"
-x = 325
-y = 500
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tM5"
+x = 303
+y = 585
+w = 50
+h = 48
 type = "text"
-x = 325
-y = 580
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "hFc"
-type = "text"
-x = 395
-y = 130
-w = 70
-h = 28
+type = "variable"
+vscope = 0
 sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
 txt = "Fc"
 txt_maxl = 64
 
 [[component]]
 name = "tFc0"
+x = 357
+y = 205
+w = 46
+h = 48
 type = "text"
-x = 395
-y = 180
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tFc1"
+x = 357
+y = 281
+w = 46
+h = 48
 type = "text"
-x = 395
-y = 260
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tFc2"
+x = 357
+y = 357
+w = 46
+h = 48
 type = "text"
-x = 395
-y = 340
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tFc3"
+x = 357
+y = 433
+w = 46
+h = 48
 type = "text"
-x = 395
-y = 420
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tFc4"
+x = 357
+y = 509
+w = 46
+h = 48
 type = "text"
-x = 395
-y = 500
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "tFc5"
+x = 357
+y = 585
+w = 46
+h = 48
 type = "text"
-x = 395
-y = 580
-w = 70
-h = 32
-sta = 1
-bco = "#1e2326"
-pco = "#ffffff"
-font = "NotoSans16"
+sta = 0
+picc = "web_pPoints_controls"
 txt = ""
 txt_maxl = 64
+font = "NotoSans20"
+pco = "#ffffff"
+xcen = 1
+ycen = 1
+events = []
 
 [[component]]
 name = "mGap0"
-type = "button"
-x = 395
-y = 217
-w = 65
-h = 25
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+x = 407
+y = 205
+w = 53
+h = 48
+type = "text"
+sta = 0
+picc = "web_pPoints_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Gap"
-txt_maxl = 4
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "mGap1"
-type = "button"
-x = 395
-y = 297
-w = 65
-h = 25
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+x = 407
+y = 281
+w = 53
+h = 48
+type = "text"
+sta = 0
+picc = "web_pPoints_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Gap"
-txt_maxl = 4
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "mGap2"
-type = "button"
-x = 395
-y = 377
-w = 65
-h = 25
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+x = 407
+y = 357
+w = 53
+h = 48
+type = "text"
+sta = 0
+picc = "web_pPoints_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Gap"
-txt_maxl = 4
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "mGap3"
-type = "button"
-x = 395
-y = 457
-w = 65
-h = 25
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+x = 407
+y = 433
+w = 53
+h = 48
+type = "text"
+sta = 0
+picc = "web_pPoints_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Gap"
-txt_maxl = 4
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "mGap4"
-type = "button"
-x = 395
-y = 537
-w = 65
-h = 25
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+x = 407
+y = 509
+w = 53
+h = 48
+type = "text"
+sta = 0
+picc = "web_pPoints_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Gap"
-txt_maxl = 4
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "mGap5"
-type = "button"
-x = 395
-y = 617
-w = 65
-h = 25
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+x = 407
+y = 585
+w = 53
+h = 48
+type = "text"
+sta = 0
+picc = "web_pPoints_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Gap"
-txt_maxl = 4
-events = [
-    "up",
-]
-
-[[component]]
-name = "mPrevious"
-type = "button"
-x = 15
-y = 710
-w = 130
-h = 42
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Previous"
-txt_maxl = 8
-events = [
-    "up",
-]
-
-[[component]]
-name = "mNext"
-type = "button"
-x = 175
-y = 710
-w = 130
-h = 42
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
-pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Next rows"
-txt_maxl = 9
+xcen = 1
+ycen = 1
 events = [
     "up",
 ]
 
 [[component]]
 name = "mBack"
-type = "button"
-x = 335
-y = 710
-w = 130
-h = 42
-sta = 1
-bco = "#343c42"
-bco2 = "#ed792e"
+x = 20
+y = 720
+w = 440
+h = 52
+type = "text"
+sta = 0
+picc = "web_pPoints_controls"
+txt = ""
+txt_maxl = 1
+font = "NotoSans20"
 pco = "#ffffff"
-pco2 = "#ffffff"
-font = "NotoSans16"
-txt = "Back"
-txt_maxl = 4
+xcen = 1
+ycen = 1
 events = [
     "up",
+]
+
+[[component]]
+name = "vStartX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vStartY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vPriorX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vPriorY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragX"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vDragY"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "vBlockTap"
+type = "variable"
+vscope = 0
+val = 0
+
+[[component]]
+name = "tRowData0"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData1"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData2"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData3"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData4"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tRowData5"
+type = "variable"
+vscope = 0
+sta = 1
+txt = ""
+txt_maxl = 255
+
+[[component]]
+name = "tcList"
+type = "touch-capture"
+events = [
+    "down",
+    "up",
+]
+
+[[component]]
+name = "tmDrag"
+type = "timer"
+tim = 50
+en = 0
+events = [
+    "timer",
 ]
